@@ -2,7 +2,7 @@
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.1 (aprobado técnicamente el 10-nov-2026; v1.1 con C-01 a C-04 resueltas).  
-**Estado del corte:** T-CORE-01 hecha (scaffold React + TypeScript + Vite; `npm install`/`build`/`dev` OK; reviewer APROBADO el 10-nov-2026); T-CORE-02…10 pendientes.  
+**Estado del corte:** T-CORE-01, T-CORE-02 y T-CORE-03 hechas; T-CORE-04…10 pendientes.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -33,7 +33,7 @@
 - **Hecho cuando:** los contratos compilan y representan responsabilidades y entradas/salidas de plan §2, sin dependencias de endpoints concretos.
 
 ### T-CORE-03 — Adaptadores mock de contrato del contenedor (fixtures)
-- [ ] Hecha
+- [x] Hecha — Evidencia: fixtures en `src/container/fixtures/` (mock/identifiers/session/catalog/navigation/sign-out/store/scenarios); 15 pruebas Vitest OK; `npm run build` OK; parametrización por `Capability` sin roles; reviewer APROBADO el 10-nov-2026; commit `74ef493` mergeado a `main`.
 - **Depende de:** T-CORE-02.
 - **Traza:** plan §2 y §3 (P-04); decisión técnica (mocks de contrato).
 - **Entrada:** contratos de T-CORE-02.
