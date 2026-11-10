@@ -1,15 +1,16 @@
-import { defineConfig, mergeConfig } from 'vitest/config'
-import viteConfig from './vite.config.ts'
+import { defineConfig } from 'vitest/config'
 
-// Configuración mínima del runner de tests. Reutiliza la configuración de Vite
-// (React + TypeScript) y añade únicamente el bloque `test` con entorno `node`:
-// las pruebas de contratos no tocan el DOM, así que no se instala `jsdom`.
-export default mergeConfig(
-  viteConfig,
-  defineConfig({
-    test: {
-      environment: 'node',
-      include: ['src/**/*.test.ts'],
-    },
-  }),
-)
+// Configuración propia del runner, independiente de la de la aplicación
+// (Next.js no usa Vite). `esbuild.jsx: 'automatic'` es obligatorio: el
+// `tsconfig.json` de Next usa `jsx: "preserve"` y sin esto Vitest no
+// transforma el JSX de las pruebas de componente.
+//
+// Entorno `node` por defecto para contratos y fixtures; las pruebas de
+// componente declaran `jsdom` por archivo con `@vitest-environment jsdom`.
+export default defineConfig({
+  esbuild: { jsx: 'automatic' },
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.{ts,tsx}'],
+  },
+})

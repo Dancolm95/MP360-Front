@@ -24,7 +24,7 @@ pnpm-debug.log*
 
 # Dependencias y artefactos de build (aplican cuando se defina el stack)
 node_modules/
-dist/
+.next/
 build/
 coverage/
 *.tsbuildinfo
