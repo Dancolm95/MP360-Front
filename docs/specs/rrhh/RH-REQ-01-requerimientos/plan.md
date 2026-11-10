@@ -3,7 +3,7 @@
 **ID:** RH-REQ-01  
 **Versión del plan:** 1.0 (aprobado técnicamente el 10-nov-2026).  
 **Cubre:** RH-REQ-01 v0.7 «Requerimientos de personal» (aprobada funcionalmente el 10-nov-2026). Se integra con CORE-01 v0.6 «Contenedor ERP compartido» a través de su plan ([`../../core/CORE-01-contenedor-erp/plan.md`](../../core/CORE-01-contenedor-erp/plan.md)).  
-**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado y se concreta en `tasks.md`.  
+**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes.  
 **Fecha:** 10 de noviembre de 2026.
 
 ## Decisiones técnicas adoptadas (10 de noviembre de 2026)
@@ -117,10 +117,10 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 **Resueltas (10 de noviembre de 2026):**
 
-1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado y el mecanismo de persistencia intra-sesión se concretan en `tasks.md` (no se deducen del ZIP ni de la maqueta).
+1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado y el mecanismo de persistencia intra-sesión quedan como decisión técnica abierta a resolver antes de cerrar T-RH-06 y las tareas que dependan de persistencia; no se deducen del ZIP ni de la maqueta ni los concreta `tasks.md`.
 2. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
 
-**Se concretan en `tasks.md` (contratos técnicos; sin eliminar las obligaciones funcionales):**
+**Decisiones técnicas abiertas (a resolver antes de cerrar las tareas dependientes; `tasks.md` ya existe pero no las concreta):**
 
 3. **INT-01:** contratos técnicos con Selección/Alta y resolución de casos límite (duplicidad/reintento de apertura, concurrencia, reversión rechazada).
 4. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional.
@@ -137,4 +137,4 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 ---
 
-**Siguiente punto:** `tasks.md` de esta capacidad, desde este plan aprobado técnicamente.
+**Siguiente punto:** implementación por tareas (`tasks.md` ya creado); las decisiones técnicas abiertas de §5 se resuelven antes de cerrar las tareas que dependen de esos contratos.

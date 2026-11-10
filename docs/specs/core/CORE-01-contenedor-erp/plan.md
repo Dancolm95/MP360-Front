@@ -3,7 +3,7 @@
 **ID:** CORE-01  
 **Versión del plan:** 1.0 (aprobado técnicamente el 10-nov-2026).  
 **Cubre:** CORE-01 v0.6 «Contenedor ERP compartido» (aprobada funcionalmente el 10-nov-2026). Se integra con RH-REQ-01 v0.7 «Requerimientos de personal» a través de su plan ([`../../rrhh/RH-REQ-01-requerimientos/plan.md`](../../rrhh/RH-REQ-01-requerimientos/plan.md)).  
-**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado y se concreta en `tasks.md`.  
+**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes.  
 **Fecha:** 10 de noviembre de 2026.
 
 ## Decisiones técnicas adoptadas (10 de noviembre de 2026)
@@ -123,10 +123,10 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 **Resueltas (10 de noviembre de 2026):**
 
-1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado y el mecanismo de persistencia intra-sesión se concretan en `tasks.md` (no se deducen del ZIP ni de la maqueta).
+1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado y el mecanismo de persistencia intra-sesión quedan como decisión técnica abierta (C-04) a resolver antes de cerrar T-CORE-05/T-CORE-07; no se deducen del ZIP ni de la maqueta ni los concreta `tasks.md`.
 2. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
 
-**Se concretan en `tasks.md` (contratos técnicos; sin eliminar las obligaciones funcionales):**
+**Decisiones técnicas abiertas (a resolver antes de cerrar las tareas dependientes; `tasks.md` ya existe pero no las concreta):**
 
 3. **C-01:** mecanismo de transporte de sesión, mecanismo de comunicación de expiración/actualización/fallo y mecanismo de recuperación de acceso del proveedor (sin login local).
 4. **C-02:** acción concreta de cierre de sesión en el proveedor, destino de confirmación tras salir y manejo de errores del proveedor.
@@ -146,4 +146,4 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 ---
 
-**Siguiente punto:** `tasks.md` de esta capacidad, desde este plan aprobado técnicamente.
+**Siguiente punto:** implementación por tareas (`tasks.md` ya creado); las decisiones técnicas abiertas de §5 se resuelven antes de cerrar las tareas que dependen de esos contratos.

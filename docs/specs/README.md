@@ -10,7 +10,7 @@
 
 | Capacidad | Estado | Documento |
 |---|---|---|
-| Requerimientos de personal (RR. HH.) | RH-REQ-01 v0.7, aprobada funcionalmente el 10-nov-2026; P-04 provisional (matriz final externa); C-05 y criterio 18 diferidos; plan aprobado técnicamente el 10-nov-2026; sin tareas | [spec.md](rrhh/RH-REQ-01-requerimientos/spec.md) · [plan.md](rrhh/RH-REQ-01-requerimientos/plan.md) |
-| Contenedor ERP compartido | CORE-01 v0.6, aprobada funcionalmente el 10-nov-2026; contratos C-01/C-03/C-04 y C-02 al plan; C-05 diferido (verificación diferida); P-04 provisional (matriz final externa); plan aprobado técnicamente el 10-nov-2026; sin tareas | [spec.md](core/CORE-01-contenedor-erp/spec.md) · [plan.md](core/CORE-01-contenedor-erp/plan.md) |
+| Requerimientos de personal (RR. HH.) | RH-REQ-01 v0.7, aprobada funcionalmente el 10-nov-2026; P-04 provisional (matriz final externa); C-05 y criterio 18 diferidos; plan aprobado técnicamente el 10-nov-2026; tareas creadas (T-RH-01…24) | [spec.md](rrhh/RH-REQ-01-requerimientos/spec.md) · [plan.md](rrhh/RH-REQ-01-requerimientos/plan.md) · [tasks.md](rrhh/RH-REQ-01-requerimientos/tasks.md) |
+| Contenedor ERP compartido | CORE-01 v0.6, aprobada funcionalmente el 10-nov-2026; contratos C-01/C-03/C-04 y C-02 al plan; C-05 diferido (verificación diferida); P-04 provisional (matriz final externa); plan aprobado técnicamente el 10-nov-2026; tareas creadas (T-CORE-01…10) | [spec.md](core/CORE-01-contenedor-erp/spec.md) · [plan.md](core/CORE-01-contenedor-erp/plan.md) · [tasks.md](core/CORE-01-contenedor-erp/tasks.md) |
 
-Planes por capacidad aprobados técnicamente el 10-nov-2026: [CORE-01](core/CORE-01-contenedor-erp/plan.md) y [RH-REQ-01](rrhh/RH-REQ-01-requerimientos/plan.md). Aún sin `tasks.md`: se creará desde los planes aprobados.
+Planes por capacidad aprobados técnicamente el 10-nov-2026 y sus tareas creadas: [CORE-01 plan](core/CORE-01-contenedor-erp/plan.md) · [CORE-01 tasks](core/CORE-01-contenedor-erp/tasks.md) y [RH-REQ-01 plan](rrhh/RH-REQ-01-requerimientos/plan.md) · [RH-REQ-01 tasks](rrhh/RH-REQ-01-requerimientos/tasks.md).

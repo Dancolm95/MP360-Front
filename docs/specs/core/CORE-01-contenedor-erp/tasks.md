@@ -12,10 +12,12 @@
 - Cada tarea cita criterios de aceptación (CORE-01 §7) y secciones del plan.
 - **Entrada** = insumos; **Salida** = artefactos verificables; **Hecho cuando** = criterio de verificación demostrable.
 - No se fijan URLs, endpoints ni payloads. Los mocks respetan los contratos y son distinguibles de operaciones reales (sin autorización ni persistencia falsas).
+- **Límite de evidencia con mocks:** las pruebas con fixtures demuestran el contrato y los estados de interfaz, no la integración real con el proveedor. La verificación contra servicios reales queda pendiente hasta disponer de ellos.
 
 ## Fase A — Andamiaje y contratos base
 
 ### T-CORE-01 — Andamiaje del proyecto React + TypeScript (Vite)
+- [ ] Hecha
 - **Depende de:** — (primera tarea).
 - **Traza:** constitución §Arquitectura; plan §1; decisión técnica (React + TS + Vite).
 - **Entrada:** decisión técnica de stack aprobada (10-nov-2026).
@@ -23,6 +25,7 @@
 - **Hecho cuando:** el proyecto instala dependencias, compila y arranca sin errores; la estructura de carpetas separa contenedor/común de módulos.
 
 ### T-CORE-02 — Contratos TypeScript del contenedor (puertos)
+- [ ] Hecha
 - **Depende de:** T-CORE-01.
 - **Traza:** plan §2 (C-01, C-03, C-04, C-02); CORE-01 §3 y §4.
 - **Entrada:** decisiones funcionales de C-01/C-02/C-03/C-04 (plan §2).
@@ -30,6 +33,7 @@
 - **Hecho cuando:** los contratos compilan y representan responsabilidades y entradas/salidas de plan §2, sin dependencias de endpoints concretos.
 
 ### T-CORE-03 — Adaptadores mock de contrato del contenedor (fixtures)
+- [ ] Hecha
 - **Depende de:** T-CORE-02.
 - **Traza:** plan §2 y §3 (P-04); decisión técnica (mocks de contrato).
 - **Entrada:** contratos de T-CORE-02.
@@ -39,6 +43,7 @@
 ## Fase B — Contenedor
 
 ### T-CORE-04 — Cabecera, identidad y selector de módulos
+- [ ] Hecha
 - **Depende de:** T-CORE-03.
 - **Traza:** CORE-01 §7 criterios 1, 2, 3, 8; plan §2.1 y §2.2.
 - **Entrada:** contratos y fixtures de contexto/capacidades/catálogo.
@@ -46,6 +51,7 @@
 - **Hecho cuando:** criterios 1 y 2 observables con fixtures (con y sin UX-02); navegación operable por teclado con activo identificable (criterio 8).
 
 ### T-CORE-05 — Estados de sesión/contexto y limpieza ante vencimiento/terminación
+- [ ] Hecha
 - **Depende de:** T-CORE-03, T-CORE-04.
 - **Traza:** CORE-01 §5; §7 criterios 5 y 6; plan §2.1 (C-01).
 - **Entrada:** fixtures de carga/error/vencimiento/terminación.
@@ -53,13 +59,15 @@
 - **Hecho cuando:** criterios 5 y 6 verificables; nueva autenticación no hereda estado; sin datos sensibles en `localStorage`.
 
 ### T-CORE-06 — Acción «Salir» (C-02)
+- [ ] Hecha
 - **Depende de:** T-CORE-05.
 - **Traza:** CORE-01 §7 criterios 6 y 7; plan §2.4.
 - **Entrada:** contrato de salida de T-CORE-02 y fixtures.
 - **Salida:** acción «Salir» que inicia el cierre de la sesión real en el proveedor; al terminar limpia estado/contexto local; destino de confirmación y manejo de errores del proveedor conforme a lo concretado en esta tarea (sin fijar endpoint/URL).
-- **Hecho cuando:** criterio 7 verificable (cierre real → limpieza); un error del proveedor conserva el estado y explica cómo continuar.
+- **Hecho cuando:** criterio 7 verificable contra el adaptador mock (cierre simulado → limpieza); un error del proveedor simulado conserva el estado y explica cómo continuar. La integración real de cierre con el proveedor queda pendiente.
 
 ### T-CORE-07 — Entrada a RR. HH., retorno y «Próximamente» (C-03/C-04)
+- [ ] Hecha
 - **Depende de:** T-CORE-04, T-CORE-05.
 - **Traza:** CORE-01 §4; §7 criterios 1, 2, 3; plan §2.2 y §2.3.
 - **Entrada:** fixtures de catálogo y capacidades.
@@ -67,6 +75,7 @@
 - **Hecho cuando:** criterios 1, 2 y 3 verificables; la visibilidad sola no opera ni accede a vistas inexistentes.
 
 ### T-CORE-08 — Accesibilidad del contenedor
+- [ ] Hecha
 - **Depende de:** T-CORE-04, T-CORE-05, T-CORE-06, T-CORE-07.
 - **Traza:** CORE-01 §5; §7 criterio 8.
 - **Entrada:** vistas del contenedor implementadas.
@@ -74,6 +83,7 @@
 - **Hecho cuando:** criterio 8 verificable en selector, navegación, estados informativos y «Salir».
 
 ### T-CORE-09 — Integración con UX-02/03/04 sin alterar el dominio (con RH-REQ-01)
+- [ ] Hecha
 - **Depende de:** T-CORE-07 y de las tareas de RH-REQ-01 (vistas UX-02/03/04).
 - **Traza:** CORE-01 §7 criterio 4; plan §4.1 criterio 4.
 - **Entrada:** vistas de Requerimientos de RH-REQ-01 en la zona central.
@@ -83,6 +93,7 @@
 ## Fase C — Verificación y traza
 
 ### T-CORE-10 — Verificación funcional y traza de criterios (incl. P-04)
+- [ ] Hecha
 - **Depende de:** T-CORE-04 a T-CORE-09.
 - **Traza:** plan §3 (P-04) y §4; CORE-01 §7 criterios 1–8.
 - **Entrada:** todas las tareas anteriores.

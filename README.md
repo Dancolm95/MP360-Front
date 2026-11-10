@@ -4,14 +4,14 @@ Frontend administrativo **modular** del ERP MP 360. **RR. HH. es el primer módu
 
 ## Estado del proyecto
 
-Fase de **definición por especificaciones (SDD)**: todavía no hay aplicación implementada ni `plan.md`/`tasks.md`.
+Fase de **definición por especificaciones (SDD)**: specs aprobadas, planes aprobados técnicamente y tareas creadas; todavía no hay aplicación implementada.
 
 | Capacidad | Módulo | Spec | Estado | Documento |
 |---|---|---|---|---|
-| Requerimientos de personal | RR. HH. | RH-REQ-01 v0.7 | Aprobada funcionalmente (10-nov-2026); sin plan ni tareas | [spec.md](docs/specs/rrhh/RH-REQ-01-requerimientos/spec.md) |
-| Contenedor ERP compartido | Core | CORE-01 v0.5 | Aprobada funcionalmente (10-nov-2026); sin plan ni tareas | [spec.md](docs/specs/core/CORE-01-contenedor-erp/spec.md) |
+| Requerimientos de personal | RR. HH. | RH-REQ-01 v0.7 | Aprobada funcionalmente (10-nov-2026); plan aprobado técnicamente (10-nov-2026); tareas creadas | [spec.md](docs/specs/rrhh/RH-REQ-01-requerimientos/spec.md) · [plan.md](docs/specs/rrhh/RH-REQ-01-requerimientos/plan.md) · [tasks.md](docs/specs/rrhh/RH-REQ-01-requerimientos/tasks.md) |
+| Contenedor ERP compartido | Core | CORE-01 v0.6 | Aprobada funcionalmente (10-nov-2026); plan aprobado técnicamente (10-nov-2026); tareas creadas | [spec.md](docs/specs/core/CORE-01-contenedor-erp/spec.md) · [plan.md](docs/specs/core/CORE-01-contenedor-erp/plan.md) · [tasks.md](docs/specs/core/CORE-01-contenedor-erp/tasks.md) |
 
-> Corte propuesto: contenedor ERP compartido + `UX-02`/`UX-03`/`UX-04`. La planificación se acordará una vez resueltas o excluidas expresamente las pendientes (C-01 a C-05 y P-04).
+> Corte propuesto: contenedor ERP compartido + `UX-02`/`UX-03`/`UX-04`. Stack decidido: React + TypeScript (Vite), con mocks/adaptadores de contrato. C-05 y el criterio 18 de RH-REQ-01 quedan diferidos; las decisiones técnicas abiertas (C-01 a C-04, INT-01, P-04) se resuelven antes de cerrar las tareas dependientes.
 
 ## Estructura del repositorio
 
