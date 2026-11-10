@@ -10,7 +10,8 @@
 - Primera capacidad: `RH-REQ-01`, Requerimientos de personal.
 - Spec vigente: `docs/specs/rrhh/RH-REQ-01-requerimientos/spec.md`, versión 0.7 con las cuatro decisiones funcionales de integración Selección/Alta (INT-01) y las correcciones B-01 a B-04 y H-01 a H-03; **aprobada funcionalmente** por confirmación explícita del usuario el 10 de noviembre de 2026, tras revisión QA con veredicto APROBADO. La v0.4 fue aprobada el 9 de noviembre de 2026; esa aprobación es histórica.
 - `CORE-01` v0.6 incorpora la salida voluntaria (C-02) y la resolución/exclusión de los bloqueos del corte (C-01/C-03/C-04 al plan, C-05 diferido); **aprobada funcionalmente** por confirmación explícita del usuario el 10 de noviembre de 2026, tras veredicto APROBADO del reviewer. La v0.5 fue aprobada el mismo día y es histórica. Sin aprobación de contratos, visual, arquitectura técnica ni plan.
-- Existen `plan.md` desdoblados por capacidad (CORE-01 y RH-REQ-01), pendientes de aprobación técnica; aún no existen `tasks.md`.
+- Planes por capacidad (autoritativos, según convención vigente del README): `core/CORE-01-contenedor-erp/plan.md` y `rrhh/RH-REQ-01-requerimientos/plan.md`, **aprobados técnicamente el 10-nov-2026**. Aún no existe `tasks.md`.
+- Decisiones técnicas del corte (10-nov-2026): stack React + TypeScript (Vite); construcción contra mocks/adaptadores de contrato (sin autorización ni persistencia falsas); RH-REQ-01 criterio 18 (comparación visual páginas 6–9) diferido junto con C-05.
 - Configuración de agentes (10-nov-2026): `.opencode/agents/implementer.md` usa `mode: all`, así que `/sdd-implement` corre en la sesión actual en vez de abrir una sesión hija. Medido con 9 invocaciones de prueba: 0 sesiones hijas por invocación frente a 1; en la segunda invocación consecutiva, −82 % de tokens de entrada frescos y −64 % de latencia; sin diferencia medible en la primera invocación.
 - Corte propuesto: contenedor ERP compartido + UX-02, UX-03 y UX-04.
 
@@ -41,12 +42,12 @@
 - Se consultó directamente la exportación de texto UX/UI V1.2 para core. El enlace PDF abrió el visor, pero no permitió cotejo directo de páginas con las herramientas disponibles; la referencia de páginas del borrador procede del inventario.
 - CORE-01 v0.2 incorpora las decisiones transmitidas tras QA sobre entrada condicionada a lectura UX-02, visibilidad explícita de «Próximamente» y limpieza de sesión/contexto al vencer o terminar externamente, sin alterar RH-REQ-01.
 - El reviewer dio APROBADO para solicitar aprobación funcional de CORE-01 v0.2 y el usuario confirmó explícitamente «Sí, aprobar v0.2» el 9 de noviembre de 2026. Solo queda aprobada funcionalmente esta spec; no los contratos, el contraste visual ni la arquitectura técnica.
-- RH-REQ-01 v0.7 incorpora las cuatro decisiones funcionales de INT-01 y las correcciones de dos ciclos (B-01 a B-04, S-02 a S-04, H-01 a H-03) sin fijar eventos, payloads, URLs ni stack. CORE-01 v0.5 solo actualiza referencias, la fila INT-01 de §8 y la atribución de contratos, sin alterar su alcance funcional. Ninguna de las dos queda aprobada.
-- El reviewer auditó CORE-01 v0.6 con veredicto APROBADO y el usuario confirmó explícitamente «Sí, aprobar v0.6» el 10 de noviembre de 2026. Ambas specs (RH-REQ-01 v0.7 y CORE-01 v0.6) quedan aprobadas funcionalmente y los bloqueos del corte resueltos o excluidos. No existen `plan.md` ni `tasks.md`.
+- RH-REQ-01 v0.7 incorpora las cuatro decisiones funcionales de INT-01 y las correcciones de dos ciclos (B-01 a B-04, S-02 a S-04, H-01 a H-03) sin fijar eventos, payloads, URLs ni stack; aprobada funcionalmente el 10-nov-2026. CORE-01 v0.6 incorpora la salida voluntaria (C-02) y la resolución/exclusión de C-01/C-03/C-04/C-05; aprobada funcionalmente el 10-nov-2026.
+- El usuario aprobó técnicamente los planes por capacidad el 10-nov-2026 con las decisiones: React + TypeScript (Vite), mocks/adaptadores de contrato y criterio 18 diferido junto con C-05.
 
 ## Próximo paso
 
-Aprobar técnicamente los planes por capacidad ya generados (`core/CORE-01-contenedor-erp/plan.md` y `rrhh/RH-REQ-01-requerimientos/plan.md`), que definen los contratos C-01/C-02/C-03/C-04, la integración INT-01 y la traza P-04 con contrato provisional, junto con las decisiones abiertas de §5 de cada plan. `tasks.md` solo tras plan aprobado técnicamente.
+`tasks.md` generados y aprobados en bloque: `core/CORE-01-contenedor-erp/tasks.md` (T-CORE-01…10) y `rrhh/RH-REQ-01-requerimientos/tasks.md` (T-RH-01…24). Iniciar implementación con la primera tarea pendiente (T-CORE-01, andamiaje React + TypeScript/Vite), una tarea por vez, con evidencia y sin encadenar tareas sin confirmación del usuario; el reviewer valida cada criterio de aceptación.
 
 ## Regla de actualización
 

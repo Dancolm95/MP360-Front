@@ -1,10 +1,16 @@
 # Plan técnico — Requerimientos de personal (RH-REQ-01)
 
 **ID:** RH-REQ-01  
-**Versión del plan:** 0.1 (borrador pendiente de aprobación técnica).  
+**Versión del plan:** 1.0 (aprobado técnicamente el 10-nov-2026).  
 **Cubre:** RH-REQ-01 v0.7 «Requerimientos de personal» (aprobada funcionalmente el 10-nov-2026). Se integra con CORE-01 v0.6 «Contenedor ERP compartido» a través de su plan ([`../../core/CORE-01-contenedor-erp/plan.md`](../../core/CORE-01-contenedor-erp/plan.md)).  
-**Estado:** borrador pendiente de aprobación técnica del usuario. No fija stack final, URLs, endpoints ni payloads; toda decisión que requiera elección de stack o de proveedor real queda señalada como decisión pendiente del usuario.  
+**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado y se concreta en `tasks.md`.  
 **Fecha:** 10 de noviembre de 2026.
+
+## Decisiones técnicas adoptadas (10 de noviembre de 2026)
+
+- **Stack:** React + TypeScript (Vite).
+- **Operaciones:** se construye contra mocks/adaptadores de contrato, distinguibles de operaciones reales, sin autorización ni persistencia falsas.
+- **Diferido:** RH-REQ-01 §10 criterio 18 (comparación visual de páginas 6–9) y C-05 quedan diferidos en este corte.
 
 ---
 
@@ -14,7 +20,7 @@
 
 **Exclusiones de este corte.**
 
-- **C-05 (diferido):** comparación visual directa con el PDF (RH-REQ-01 §10 criterio 18) comparte el mismo límite de lectura del PDF que motiva C-05 y queda pendiente de decisión (véase §4); la comparación visual del contenedor (CORE-01 §7 criterio 9) se remite al plan de CORE-01. Se mantiene la regla de no adoptar datos ilustrativos del PDF como reglas y no reproducir composiciones no legibles desde el visor.
+- **C-05 y criterio 18 (diferidos):** la comparación visual directa con el PDF (RH-REQ-01 §10 criterio 18) comparte el mismo límite de lectura del PDF que motiva C-05 y queda **diferida** en este corte junto con C-05 (véase §4); la comparación visual del contenedor (CORE-01 §7 criterio 9) se remite al plan de CORE-01. Se mantiene la regla de no adoptar datos ilustrativos del PDF como reglas y no reproducir composiciones no legibles desde el visor.
 - **P-04 (externo):** la matriz técnica final de roles, ámbitos y permisos es dependencia externa; este corte usa el contrato provisional autorizado (RH-REQ-01 §3, CORE-01 §3).
 - **Módulos/vistas no incluidos:** candidatos UX-05/06, Alta UX-07 operativa, ficha/legajo UX-08 y el resto de vistas RR. HH. Los módulos de dominio (Selección, Alta) solo aparecen como proveedores de resultados de integración, no como vistas operativas de este corte.
 
@@ -87,7 +93,7 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 | 15 | Carga, vacío, sin resultados, error recuperable, sin permisos, conflicto y éxito persistido verificables por separado. |
 | 16 | Sin capacidad no se ve la acción y el intento directo es rechazado por backend; registros limitados por ámbito. |
 | 17 | Flujo completo solo con teclado; foco, nombres, errores, orden y alertas conforme a §8. |
-| 18 | Comparación visual de páginas 6–9 (1920×1080): véase §4.2; su exigibilidad en este corte es una decisión abierta (mismo límite de lectura del PDF que C-05). |
+| 18 | **Diferido (junto a C-05):** comparación visual de páginas 6–9 (1920×1080) no exigible en este corte; se mantiene la regla de no adoptar datos ilustrativos ni composiciones no legibles del visor. |
 | 19 | Días objetivo aún en plazo; incumplimiento al iniciar el siguiente día computable; alerta ≠ vencimiento; comunicación por texto/icono + color. |
 | 20 | «Cancelar edición» con cambios no guardados → confirmación de descarte (aceptar vuelve sin persistir; rechazar conserva); «Cancelar requerimiento» es otra transición. |
 | 21 | Observado: el creador ve el comentario de observación antes de corregir. |
@@ -98,10 +104,10 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 | 26 | «Abrir proceso en Selección» solo en detalle de Aprobado; permanece Aprobado hasta confirmación; fallo → error y reintento; «Asociar candidato» solo en En reclutamiento. |
 | 27 | Solicitud de reversión solo con motivo; contadores solo cambian con el evento confirmado; rechazo/fallo conserva e informa; solicitud y evento auditados. |
 
-### 4.2 Nota sobre RH-REQ-01 criterio 18 y C-05 diferido
+### 4.2 Diferido: RH-REQ-01 §10 criterio 18 y C-05
 
-- **RH-REQ-01 criterio 18:** exige comparar visualmente las páginas 6–9, que comparten el mismo PDF que no pudo contrastarse directamente (el mismo límite de lectura que motiva C-05). Se requiere confirmación del usuario sobre si ese criterio también se difiere en este corte (junto a C-05) o si existe una vía alternativa de verificación visual.
-- **C-05 (CORE-01):** queda diferido y se remite al plan de CORE-01 (CORE-01 §7 criterio 9), sin adoptar composición no legible desde el visor.
+- **RH-REQ-01 §10 criterio 18 (DIFERIDO):** la comparación visual de páginas 6–9 se difiere en este corte junto con C-05 (mismo límite de lectura del PDF). Se mantiene la regla de no adoptar datos ilustrativos ni composiciones no legibles del visor.
+- **C-05 (CORE-01):** queda diferido (CORE-01 §7 criterio 9), sin adoptar composición no legible desde el visor.
 
 ---
 
@@ -109,11 +115,19 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 **Decisiones abiertas (requieren decisión del usuario).**
 
-1. **Elección de stack y tooling** del frontend (framework, gestor de estado, persistencia intra-sesión): no se deduce del ZIP ni de la maqueta; se decide aquí, no se asume.
-2. **Existencia de backend/proveedores reales:** no hay backend de autorización, Selección ni Alta implementados. Decidir si este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas) o contra servicios reales. Los mocks, si se autorizan, deben respetar los mismos contratos y escenarios.
-3. **INT-01:** si los contratos con Selección/Alta son reales o adaptados, y resolución de casos límite (duplicidad/reintento de apertura, concurrencia, reversión rechazada).
-4. **RH-REQ-01 criterio 18:** confirmar si la comparación visual de páginas 6–9 se difiere junto con C-05 o se verifica por otra vía.
-5. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional.
+**Resueltas (10 de noviembre de 2026):**
+
+1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado y el mecanismo de persistencia intra-sesión se concretan en `tasks.md` (no se deducen del ZIP ni de la maqueta).
+2. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
+
+**Se concretan en `tasks.md` (contratos técnicos; sin eliminar las obligaciones funcionales):**
+
+3. **INT-01:** contratos técnicos con Selección/Alta y resolución de casos límite (duplicidad/reintento de apertura, concurrencia, reversión rechazada).
+4. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional.
+
+**Diferido (fuera de este corte):**
+
+5. **RH-REQ-01 §10 criterio 18** — DIFERIDO junto a C-05: la comparación visual de páginas 6–9 no es exigible en este corte (mismo límite de lectura del PDF).
 
 **Riesgos principales.**
 
@@ -123,4 +137,4 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 ---
 
-**Siguiente punto:** aprobación técnica; `tasks.md` solo tras aprobación.
+**Siguiente punto:** `tasks.md` de esta capacidad, desde este plan aprobado técnicamente.

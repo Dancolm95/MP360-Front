@@ -10,7 +10,7 @@
 
 | Capacidad | Estado | Documento |
 |---|---|---|
-| Requerimientos de personal (RR. HH.) | RH-REQ-01 v0.7, aprobada funcionalmente el 10-nov-2026; P-04 provisional (matriz final externa); C-05 diferido; plan de la capacidad en curso (pendiente de aprobación técnica); sin tareas | [spec.md](rrhh/RH-REQ-01-requerimientos/spec.md) · [plan.md](rrhh/RH-REQ-01-requerimientos/plan.md) |
-| Contenedor ERP compartido | CORE-01 v0.6, aprobada funcionalmente el 10-nov-2026; bloqueos del corte: C-01/C-03/C-04 contratos al plan, C-02 contrato al plan, C-05 diferido (verificación diferida), P-04 provisional (matriz final externa); plan de la capacidad en curso (pendiente de aprobación técnica); sin tareas | [spec.md](core/CORE-01-contenedor-erp/spec.md) · [plan.md](core/CORE-01-contenedor-erp/plan.md) |
+| Requerimientos de personal (RR. HH.) | RH-REQ-01 v0.7, aprobada funcionalmente el 10-nov-2026; P-04 provisional (matriz final externa); C-05 y criterio 18 diferidos; plan aprobado técnicamente el 10-nov-2026; sin tareas | [spec.md](rrhh/RH-REQ-01-requerimientos/spec.md) · [plan.md](rrhh/RH-REQ-01-requerimientos/plan.md) |
+| Contenedor ERP compartido | CORE-01 v0.6, aprobada funcionalmente el 10-nov-2026; contratos C-01/C-03/C-04 y C-02 al plan; C-05 diferido (verificación diferida); P-04 provisional (matriz final externa); plan aprobado técnicamente el 10-nov-2026; sin tareas | [spec.md](core/CORE-01-contenedor-erp/spec.md) · [plan.md](core/CORE-01-contenedor-erp/plan.md) |
 
-Planes por capacidad en curso (pendientes de aprobación técnica): [CORE-01](core/CORE-01-contenedor-erp/plan.md) y [RH-REQ-01](rrhh/RH-REQ-01-requerimientos/plan.md). `tasks.md` solo se crea tras la aprobación técnica de cada plan.
+Planes por capacidad aprobados técnicamente el 10-nov-2026: [CORE-01](core/CORE-01-contenedor-erp/plan.md) y [RH-REQ-01](rrhh/RH-REQ-01-requerimientos/plan.md). Aún sin `tasks.md`: se creará desde los planes aprobados.

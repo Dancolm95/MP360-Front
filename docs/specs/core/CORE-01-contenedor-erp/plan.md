@@ -1,10 +1,16 @@
 # Plan técnico — Contenedor ERP compartido (CORE-01)
 
 **ID:** CORE-01  
-**Versión del plan:** 0.1 (borrador pendiente de aprobación técnica).  
+**Versión del plan:** 1.0 (aprobado técnicamente el 10-nov-2026).  
 **Cubre:** CORE-01 v0.6 «Contenedor ERP compartido» (aprobada funcionalmente el 10-nov-2026). Se integra con RH-REQ-01 v0.7 «Requerimientos de personal» a través de su plan ([`../../rrhh/RH-REQ-01-requerimientos/plan.md`](../../rrhh/RH-REQ-01-requerimientos/plan.md)).  
-**Estado:** borrador pendiente de aprobación técnica del usuario. No fija stack final, URLs, endpoints ni payloads; toda decisión que requiera elección de stack o de proveedor real queda señalada como decisión pendiente del usuario.  
+**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado y se concreta en `tasks.md`.  
 **Fecha:** 10 de noviembre de 2026.
+
+## Decisiones técnicas adoptadas (10 de noviembre de 2026)
+
+- **Stack:** React + TypeScript (Vite).
+- **Operaciones:** se construye contra mocks/adaptadores de contrato, distinguibles de operaciones reales, sin autorización ni persistencia falsas.
+- **Diferido:** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 quedan diferidos en este corte (verificación visual directa con el PDF).
 
 ---
 
@@ -104,10 +110,10 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 | 8 | Accesibilidad: operación por teclado, foco visible y gestionado en cambios, nombres accesibles, activo identificable, errores por texto (no solo color). |
 | 9 | **Diferido (C-05):** comparación visual directa con el PDF no exigible en este corte; se verifica solo que no se adoptan datos ilustrativos ni composiciones no legibles del visor. |
 
-### 4.2 Diferido (C-05) y nota sobre RH-REQ-01 criterio 18
+### 4.2 Diferido (C-05) y RH-REQ-01 §10 criterio 18
 
 - **C-05** queda diferido: la comparación visual directa con el PDF no es exigible en este corte (CORE-01 §7 criterio 9), sin adoptar composición no legible desde el visor.
-- **Nota/relación:** RH-REQ-01 §10 criterio 18 exige comparar visualmente las páginas 6–9, que comparten el mismo PDF que no pudo contrastarse directamente. Esa decisión (diferir junto a C-05 o verificar por otra vía) se remite al plan de RH-REQ-01.
+- **RH-REQ-01 §10 criterio 18 (DIFERIDO junto a C-05):** la comparación visual de las páginas 6–9 se difiere en este corte (mismo límite de lectura del PDF); se mantiene la regla de no adoptar datos ilustrativos ni composiciones no legibles del visor. Véase el plan de RH-REQ-01.
 
 ---
 
@@ -115,14 +121,22 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 **Decisiones abiertas (requieren decisión del usuario).**
 
-1. **Elección de stack y tooling** del frontend (framework, gestor de estado, persistencia intra-sesión): no se deduce del ZIP ni de la maqueta; se decide aquí, no se asume.
-2. **Existencia de backend/proveedores reales:** no hay backend de autorización, Selección ni Alta implementados. Decidir si este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas) o contra servicios reales. Los mocks, si se autorizan, deben respetar los mismos contratos y escenarios.
+**Resueltas (10 de noviembre de 2026):**
+
+1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado y el mecanismo de persistencia intra-sesión se concretan en `tasks.md` (no se deducen del ZIP ni de la maqueta).
+2. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
+
+**Se concretan en `tasks.md` (contratos técnicos; sin eliminar las obligaciones funcionales):**
+
 3. **C-01:** mecanismo de transporte de sesión, mecanismo de comunicación de expiración/actualización/fallo y mecanismo de recuperación de acceso del proveedor (sin login local).
 4. **C-02:** acción concreta de cierre de sesión en el proveedor, destino de confirmación tras salir y manejo de errores del proveedor.
 5. **C-03:** estructura/granularidad del catálogo de secciones y distinción visibilidad vs. capacidad operativa.
 6. **C-04:** mecanismo de persistencia intra-sesión (sin `localStorage` sensible) y semántica de destinos desconocidos.
 7. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional.
-8. **C-05 (diferido):** confirmar la verificación visual diferida del PDF para el contenedor (CORE-01 §7 criterio 9); el criterio 18 de RH-REQ-01 se resuelve en el plan de RH-REQ-01.
+
+**Diferido (fuera de este corte):**
+
+8. **C-05** — DIFERIDO: la comparación visual directa con el PDF queda fuera de este corte (CORE-01 §7 criterio 9); el criterio 18 de RH-REQ-01 se difiere junto con C-05 (véase el plan de RH-REQ-01).
 
 **Riesgos principales.**
 
@@ -132,4 +146,4 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 ---
 
-**Siguiente punto:** aprobación técnica de este plan; `tasks.md` solo tras aprobación.
+**Siguiente punto:** `tasks.md` de esta capacidad, desde este plan aprobado técnicamente.
