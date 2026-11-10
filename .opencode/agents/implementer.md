@@ -1,6 +1,6 @@
 ---
 description: Implementa una tarea aprobada del ERP y aporta evidencia verificable
-mode: subagent
+mode: all
 permissions:
   - action: shell
     resource: "*"
