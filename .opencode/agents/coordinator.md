@@ -44,14 +44,16 @@ Lee `memory.md` y haz que cada agente lea `AGENTS.md`, `docs/constitution.md`,
    responsable funcional. Un borrador nunca se considera aprobado por inferencia.
 5. **Plan y tareas:** planner genera `plan.md` y después `tasks.md` desde la spec aprobada.
 6. **Aprobación técnica:** muestra el resumen y detente hasta la aprobación explícita.
-7. **Implementación:** implementer ejecuta una sola tarea pendiente cada vez y presenta
-   evidencia. No inicies automáticamente la siguiente tarea sin confirmación.
-   Exige que el implementer reporte el hash del commit de la tarea y el árbol limpio
-   (`git status --porcelain` vacío); si no los reporta, la tarea no está cerrada y no se
-   lanza la siguiente. El push lo hace el usuario tras verificar; nunca lo pidas.
-8. **Validación:** reviewer verifica cada criterio de aceptación y emite veredicto.
+7. **Implementación:** implementer ejecuta una sola tarea pendiente cada vez en su rama
+   `task/<capacidad>-<T-ID>` y presenta evidencia. No inicies automáticamente la siguiente
+   tarea sin confirmación. Exige que reporte rama, hash del commit y árbol limpio
+   (`git status --porcelain` vacío); si falta alguno, la tarea no está cerrada y no se
+   lanza la siguiente. El merge y el push los hace el usuario; nunca los pidas.
+8. **Validación:** reviewer verifica cada criterio de aceptación sobre el diff de la rama
+   contra `main` y emite veredicto.
 9. **Corrección:** devuelve hallazgos concretos al implementer, con un máximo de dos
-   ciclos antes de escalar el bloqueo al usuario.
+   ciclos antes de escalar el bloqueo al usuario. Las correcciones van a la misma rama;
+   nunca a `main`.
 
 Los cambios de requisitos vuelven primero a `spec.md`; después se reconcilian plan,
 tareas e implementación. No uses la maqueta ni sus datos de ejemplo como requisitos.

@@ -23,3 +23,20 @@ Lee `memory.md` al retomar el trabajo y actualízalo solo después de un avance 
 - **El agente llega hasta el commit y reporta su hash. El push lo hace el usuario** tras la
   verificación correspondiente. El agente no hace push, no usa `--force` y no reescribe
   commits ya publicados.
+
+## Ramas y merges
+
+- **`main` solo contiene trabajo verificado:** lo que ya pasó el veredicto del reviewer, más
+  cambios de documentación y de proceso.
+- **Una rama por tarea de código:** `task/<capacidad>-<T-ID en minúsculas>` (`T-CORE-02` →
+  `task/core-01-t02`; `T-RH-05` → `task/rh-req-01-t05`), creada desde `main` limpio y
+  sincronizado (`git switch main && git pull --ff-only`).
+- **El agente implementa y commitea en esa rama.** No cambia de rama, no mergea y no hace
+  push. Si la rama pertenece a otra tarea, se detiene.
+- **El merge a `main` lo hace el usuario, solo tras `APROBADO`, y en lineal:**
+  `git merge --ff-only task/<...>`. Si el veredicto es `CAMBIOS NECESARIOS`, se corrige en la
+  misma rama y se repite la validación; nunca se publica a medias.
+- **Documentación, proceso y agentes** (`.opencode/`, `AGENTS.md`, `memory.md`) van directos
+  en `main` con su propio commit.
+- **Dos tareas en paralelo exigen dos worktrees** (`git worktree add`), no dos ramas en la
+  misma carpeta.

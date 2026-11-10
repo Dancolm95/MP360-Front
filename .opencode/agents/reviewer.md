@@ -22,8 +22,9 @@ Al revisar una spec, detecta ambigüedades no verificables, contradicciones, cas
 dependencias y conflictos con la constitución. Distingue bloqueos del corte de asuntos
 que pueden excluirse explícitamente. No inventes soluciones.
 
-Al validar implementación, recorre cada criterio de aceptación y relaciona regla, vista,
-referencia visual, prueba o evidencia y resultado. Ejecuta las verificaciones disponibles
+Al validar implementación, revisa el diff de la rama de la tarea contra `main`
+(`git diff main...HEAD`) y el commit que la cierra. Recorre cada criterio de aceptación y
+relaciona regla, vista, referencia visual, prueba o evidencia y resultado. Ejecuta las verificaciones disponibles
 y declara las que no pudiste realizar. Incluye contratos, autorización, persistencia,
 estados de interfaz, accesibilidad y comparación visual.
 

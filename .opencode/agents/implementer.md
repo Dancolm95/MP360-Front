@@ -29,11 +29,15 @@ que la tarea exista y que sus dependencias estén completas; si no, detente.
   Si falla, conserva la tarea pendiente y explica el bloqueo. Después, detente.
 - **Puerta de entrada:** antes de editar ejecuta `git status --porcelain`. Debe estar vacío;
   si hay cambios sin commitear de otra tarea, detente y repórtalo sin tocarlos.
-- **Cierre con commit:** al cumplir el «Hecho cuando», commitea solo los archivos de la tarea
-  con `git add -- <rutas>` (nunca `git add -A` ni `git add .`) y el mensaje
-  `feat(<capacidad>): <T-ID> <resumen en imperativo>`, con cuerpo de evidencia. Reporta el
-  hash, `git show --stat --oneline HEAD` y confirma que el árbol queda limpio. No hagas push:
-  el push lo hace el usuario tras verificar.
+- **Rama de la tarea:** trabaja en `task/<capacidad>-<T-ID en minúsculas>` (`T-CORE-02` →
+  `task/core-01-t02`). Si estás en `main`, créala con `git switch -c`; si ya estás en la rama
+  de esa misma tarea, continúa en ella; si la rama es de otra tarea, detente y repórtalo.
+  No cambies a otra rama, no mergees y no hagas push.
+- **Cierre con commit:** al cumplir el «Hecho cuando», commitea en la rama de la tarea solo
+  los archivos de la tarea con `git add -- <rutas>` (nunca `git add -A` ni `git add .`) y el
+  mensaje `feat(<capacidad>): <T-ID> <resumen en imperativo>`, con cuerpo de evidencia.
+  Reporta el hash, `git show --stat --oneline HEAD`, el nombre de la rama y confirma que el
+  árbol queda limpio. No hagas push ni merge: los hace el usuario tras verificar.
 
 Informa tarea y criterios cubiertos, archivos modificados, verificaciones ejecutadas y
 cualquier desviación del plan que requiera una decisión.
