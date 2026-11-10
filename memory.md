@@ -59,7 +59,7 @@
 
 ## Próximo paso
 
-T-CORE-02 (puertos TypeScript del contenedor) implementada y validada APROBADO el 10-nov-2026: commit `b36a956` en `task/core-01-t02`, lineal sobre `main`, árbol limpio. Acción del usuario: `git switch main && git merge --ff-only task/core-01-t02` y push (el merge/push los hace el usuario conforme a `AGENTS.md`). Después: incorporar el runner de tests (Vitest) antes de T-CORE-03 (fixtures) y continuar con T-CORE-03 → T-CORE-10. Siguen abiertas INT-01 (contratos técnicos Selección/Alta y casos límite) y P-04 (plazo de la matriz final de permisos y criterio de migración). Implementar una sola tarea por vez, con evidencia, sin encadenar sin confirmación del usuario; el reviewer valida cada criterio de aceptación.
+T-CORE-02 (puertos TypeScript del contenedor) implementada, validada APROBADO y **mergeada a `main` el 10-nov-2026 por el usuario (`--ff-only`)**; commit `b36a956`. Siguiente paso: incorporar el runner de tests (Vitest) en `task/core-01-chore-vitest`, y después T-CORE-03 (fixtures) → T-CORE-10. Siguen abiertas INT-01 (contratos técnicos Selección/Alta y casos límite) y P-04 (plazo de la matriz final de permisos y criterio de migración). Implementar una sola tarea por vez, con evidencia, sin encadenar sin confirmación del usuario; el reviewer valida cada criterio de aceptación.
 
 ## Regla de actualización
 
