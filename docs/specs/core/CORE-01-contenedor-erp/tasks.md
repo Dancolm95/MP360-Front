@@ -1,8 +1,8 @@
 # Tareas — Contenedor ERP compartido (CORE-01)
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
-**Plan:** [`plan.md`](plan.md) v1.1 (aprobado técnicamente el 10-nov-2026; v1.1 con C-01 a C-04 resueltas).  
-**Estado del corte:** T-CORE-01, T-CORE-02 y T-CORE-03 hechas; T-CORE-04…10 pendientes.  
+**Plan:** [`plan.md`](plan.md) v1.2 (propuesto el 10-nov-2026 por cambio de stack; **pendiente de aprobación técnica**). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
+**Estado del corte:** tareas vigentes — T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02 y T-CORE-03 hechas (`b36a956` y `74ef493`, ambas en `main`); T-CORE-04…10 pendientes y sin iniciar hasta aprobar la v1.2 y cerrar T-CORE-11. **Propuesta, no ejecutable hasta la aprobación del plan v1.2:** T-CORE-11.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -17,7 +17,7 @@
 ## Fase A — Andamiaje y contratos base
 
 ### T-CORE-01 — Andamiaje del proyecto React + TypeScript (Vite)
-- [x] Hecha — Evidencia: scaffold React + TypeScript + Vite en `src/` (`container/`, `shared/`, `modules/rrhh/`); `npm install` sin vulnerabilidades, `npm run build` (tsc + vite) sin errores y `npm run dev` arrancando (HTTP 200); reviewer APROBADO el 10-nov-2026.
+- [x] Hecha — Evidencia: scaffold React + TypeScript + Vite en `src/` (`container/`, `shared/`, `modules/rrhh/`); `npm install` sin vulnerabilidades, `npm run build` (tsc + vite) sin errores y `npm run dev` arrancando (HTTP 200); reviewer APROBADO el 10-nov-2026. **Sustituida por T-CORE-11** (cambio de stack a Next.js, 10-nov-2026); el commit se conserva como traza histórica.
 - **Depende de:** — (primera tarea).
 - **Traza:** constitución §Arquitectura; plan §1; decisión técnica (React + TS + Vite).
 - **Entrada:** decisión técnica de stack aprobada (10-nov-2026).
@@ -25,7 +25,7 @@
 - **Hecho cuando:** el proyecto instala dependencias, compila y arranca sin errores; la estructura de carpetas separa contenedor/común de módulos.
 
 ### T-CORE-02 — Contratos TypeScript del contenedor (puertos)
-- [ ] Hecha
+- [x] Hecha — Evidencia: puertos C-01 `SessionPort`, C-03 `CatalogPort`+`Capability`, C-04 `NavigationPort`+`SessionScopedStore`, C-02 `SignOutPort`; identificadores opacos, sin URLs/endpoints/payloads; `npm run build` sin errores; reviewer APROBADO el 10-nov-2026; commit `b36a956`, lineal sobre `main` (verificado en la reflog de `main`). Sin cambios por el cambio de stack.
 - **Depende de:** T-CORE-01.
 - **Traza:** plan §2 (C-01, C-03, C-04, C-02); CORE-01 §3 y §4.
 - **Entrada:** decisiones funcionales de C-01/C-02/C-03/C-04 (plan §2).
@@ -40,11 +40,30 @@
 - **Salida:** fixtures parametrizables por capacidades: sesión válida con/sin lectura UX-02, catálogo con secciones implementadas/no implementadas y visibilidad, expiración/terminación, y salida. Distinguibles de operaciones reales; sin autorización ni persistencia falsas; sin datos sensibles en `localStorage`.
 - **Hecho cuando:** cada escenario de CORE-01 §5/§7 se puede inyectar por fixture; la parametrización es por capacidad, no por nombre de rol ni etiqueta del PDF.
 
+### T-CORE-11 — Sustituir el andamiaje Vite por Next.js
+- [ ] Hecha — **Propuesta, no ejecutable** hasta la aprobación del plan v1.2.
+- **Depende de:** T-CORE-02 y T-CORE-03 (sus fixtures se re-verifican en esta tarea); sustituye el andamiaje de T-CORE-01, que queda como traza histórica; requiere la aprobación técnica del plan v1.2.
+- **Traza:** plan §6 «Revisión de stack (10-nov-2026)» y plan §5 «Decisiones propuestas» (stack); constitución §Arquitectura; decisión técnica del 10-nov-2026 (Next.js 16 + React 19 + TypeScript, Node 24 LTS).
+- **Entrada:** andamiaje Vite de T-CORE-01; contratos y fixtures de T-CORE-02/T-CORE-03. Propuesta, no ejecutable hasta la aprobación del plan v1.2.
+- **Salida:**
+  - **Se retira:** `vite.config.ts`, `index.html`, `src/main.tsx`, `src/app/App.tsx` (su contenido demostrativo se traslada) y `src/vite-env.d.ts`; dependencias `vite` y `@vitejs/plugin-react`; scripts `dev`/`build`/`preview` de Vite (sustituidos abajo).
+  - **Next.js:** `next.config.ts` (sin `output: 'export'`) y `next-env.d.ts`; scripts `dev` (`next dev`), `build` (`next build`) y `start` (`next start`). No se crea `proxy.ts` ni `middleware.ts` de autorización.
+  - **App:** `src/app/layout.tsx` como Server Component (`lang="es"`, `metadata` con título «ERP MP 360», importa `globals.css`); `src/app/page.tsx` como Client Component (`'use client'`) que conserva el contenido demostrativo actual (título + capas), sin datos de ejemplo ni identidad ficticia; `src/app/not-found.tsx` informativo, sin datos ni acciones.
+  - **CSS:** `src/styles/global.css` se migra a `src/app/globals.css`, adaptando o eliminando el selector `#root`, y conserva `font-family`, `box-sizing` y `color-scheme`.
+  - **Frontera:** sin SSR de datos ni de sesión; sin `proxy.ts` (antes `middleware.ts`) de autorización.
+  - **Tests:** `src/__tests__/smoke.test.ts` (importa los contratos) conserva su función con destino explícito en la nueva estructura; se añade una prueba de humo **de componente** con React Testing Library + jsdom sobre `page.tsx`; `vitest.config.ts` se reescribe sin `mergeConfig(viteConfig)`, con entorno `node` por defecto para contratos/fixtures y `jsdom` solo para las pruebas de componente (por archivo o por proyecto).
+  - **`package.json`:** altas `next`, `@testing-library/react` y `jsdom`; bajas `vite` y `@vitejs/plugin-react`; scripts `dev`, `build`, `start`, `test` y `test:watch`; `engines.node` `>=20.9`.
+  - **`tsconfig.json`:** configuración de Next (`jsx: "preserve"`, plugin de Next, `include` de `next-env.d.ts` y `.next/types/**/*.ts`, `moduleResolution: "bundler"`), retirando lo específico de Vite.
+  - **Entorno:** `.nvmrc` con 24 (Node 24 LTS).
+  - **`.gitignore`:** `.next/` en lugar de `dist/`.
+  - **Se conservan sin cambios:** `src/container/`, `src/shared/`, `src/modules/rrhh/` y los contratos de T-CORE-02.
+- **Hecho cuando:** `npm run build` termina sin errores; `npm start` responde HTTP 200 tras `next build`, con el árbol limpio de `dist/`/`.next/`; `npm test` pasa completo (contratos, fixtures y prueba de humo de componente); la comprobación acotada de Vite se cumple —no existen `vite.config.ts` ni `index.html`, y no hay referencias a Vite en `package.json`, `tsconfig.json`, `next.config.ts` ni `src/`, excluyendo `vitest.config.ts` y las coincidencias de la cadena «vitest»—; la evidencia se registra bajo **Node 24 LTS** (el entorno local tiene 25.9.0).
+
 ## Fase B — Contenedor
 
 ### T-CORE-04 — Cabecera, identidad y selector de módulos
 - [ ] Hecha
-- **Depende de:** T-CORE-03.
+- **Depende de:** T-CORE-03, T-CORE-11 (ninguna vista se implementa sobre el andamiaje Vite; T-CORE-11 debe estar cerrada).
 - **Traza:** CORE-01 §7 criterios 1, 2, 3, 8; plan §2.1 y §2.2.
 - **Entrada:** contratos y fixtures de contexto/capacidades/catálogo.
 - **Salida:** cabecera con marca ERP e identidad/contexto solo si se reciben y pueden mostrarse; navegación horizontal; selector que muestra solo RR. HH. con lectura UX-02; indicación de módulo/sección activa; sin identidad de ejemplo.

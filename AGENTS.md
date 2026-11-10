@@ -17,7 +17,7 @@ Lee `memory.md` al retomar el trabajo y actualízalo solo después de un avance 
   enumere la evidencia (verificaciones ejecutadas, veredicto del reviewer, fecha).
   Tipos admitidos: `feat`, `fix`, `docs`, `chore`, `test`, `refactor`. Ámbito: la capacidad en
   minúsculas (`core-01`, `rh-req-01`) o `sdd`/`opencode` para cambios de proceso y de agentes.
-  Ejemplo: `feat(core-01): T-CORE-01 andamiaje React + TypeScript + Vite`.
+  Ejemplo: `feat(core-01): T-CORE-11 sustituir el andamiaje por Next.js`.
 - **Rutas explícitas:** se commitea con `git add -- <rutas>` y nunca con `git add -A` ni
   `git add .`, para no arrastrar trabajo de otra tarea en el mismo árbol.
 - **El agente llega hasta el commit y reporta su hash. El push lo hace el usuario** tras la

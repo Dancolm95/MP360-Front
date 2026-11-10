@@ -1,14 +1,26 @@
 # Plan técnico — Contenedor ERP compartido (CORE-01)
 
 **ID:** CORE-01  
-**Versión del plan:** 1.1 (aprobado técnicamente el 10-nov-2026; v1.1 registra las decisiones C-01 a C-04 el 10-nov-2026).  
+**Versión del plan:** 1.2 (propuesto el 10-nov-2026 por cambio de stack; **pendiente de aprobación técnica explícita del usuario**). La v1.1 (React + TypeScript con Vite) es histórica: su aprobación del 10-nov-2026 sigue siendo el registro de lo aprobado hasta que el usuario apruebe esta v1.2.  
 **Cubre:** CORE-01 v0.6 «Contenedor ERP compartido» (aprobada funcionalmente el 10-nov-2026). Se integra con RH-REQ-01 v0.7 «Requerimientos de personal» a través de su plan ([`../../rrhh/RH-REQ-01-requerimientos/plan.md`](../../rrhh/RH-REQ-01-requerimientos/plan.md)).  
-**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 quedan resueltas a nivel de contrato (10-nov-2026); solo P-04 sigue abierta (plazo de la matriz final de permisos y criterio de migración).  
+**Estado:** **Propuesto** el 10 de noviembre de 2026 por cambio de stack; **pendiente de aprobación técnica explícita del usuario**. Hasta esa aprobación, la v1.1 aprobada el 10-nov-2026 (React + TypeScript + Vite) es el registro vigente de lo aprobado. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 quedan resueltas a nivel de contrato (10-nov-2026); P-04 y la aprobación de esta v1.2 siguen abiertos.  
 **Fecha:** 10 de noviembre de 2026.
 
 ## Decisiones técnicas adoptadas (10 de noviembre de 2026)
 
-- **Stack:** React + TypeScript (Vite).
+- **Stack (revisado el 10-nov-2026; sustituye a la decisión de la v1.1):** Next.js 16 (App Router) + React 19 + TypeScript, con Node 24 LTS fijado como runtime; entrega con `next start` (servidor Node), sin `output: 'export'` en este MVP.
+  - **Renderizado:** **sin SSR de datos ni de sesión**. `src/app/layout.tsx` es Server Component (exporta `metadata`, fija `lang`) y `page.tsx`/el shell del contenedor son Client Components (`'use client'`); Next sigue prerenderizando el HTML inicial, pero no se resuelve contexto ni capacidades en el servidor porque la sesión (C-01) es un puerto opaco: el frontend no ve credenciales ni token.
+  - **Entrega:** `output: 'export'` queda explícitamente **revisable** para cuando exista backend real. La reversibilidad es asimétrica (Node → estático es trivial; estático → Node rompe enrutado avanzado y route handlers). Un BFF/proxy que evite CORS y no exponga la URL interna del backend es una **posibilidad futura**, no una decisión adoptada.
+  - **Autorización:** no se implementa en `proxy.ts` (antes `middleware.ts`); la revalida el backend (constitución §Seguridad). Si se usa, es solo para redirecciones de UX.
+  - **Rutas y resultados (C-04):**
+    - `ok` → vista autorizada.
+    - `not-found` → `app/not-found.tsx`, sin datos.
+    - `forbidden` → estado/componente propio de «sin permisos», **distinto** de la 404, sin datos ni vista ficticia.
+    - `session-ended` → estado sin acceso, con limpieza inmediata del estado de sesión.
+    - Los destinos directos se resuelven por `NavigationPort` antes de renderizar contenido; ningún resultado se convierte en «Próximamente».
+  - **Persistencia:** `sessionStorage` (C-04) solo se lee en efectos/cliente, nunca durante el render, para evitar hydration mismatch; `SessionScopedStore<T>` se mantiene sin cambios de contrato.
+  - **Tests:** un único runner, **Vitest**, con React Testing Library y jsdom para componentes; se descarta Jest. El runner conserva su propio pipeline (hoy apoyado en Vite) y su configuración es independiente de la de la aplicación; la aplicación no usa Vite.
+  - **Estructura:** `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/not-found.tsx` y `src/app/globals.css`; se conservan `src/container/`, `src/shared/` y `src/modules/rrhh/`.
 - **Operaciones:** se construye contra mocks/adaptadores de contrato, distinguibles de operaciones reales, sin autorización ni persistencia falsas.
 - **Diferido:** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 quedan diferidos en este corte (verificación visual directa con el PDF).
 - **C-01 (sesión):** puerto de sesión opaco — el frontend solicita contexto/capacidades y escucha el fin de sesión, sin ver credenciales ni token; el transporte lo resuelve el adaptador; estados `loading`/`authenticated`/`expired`/`terminated`/`error`.
@@ -33,7 +45,7 @@
 
 ## 2. Contratos por acordar o resolver en este plan
 
-Cada contrato define responsabilidades por parte (frontend, backend ERP, proveedor externo), entrada y salida esperadas, y criterio de verificación. No se fijan APIs concretas, URLs ni payloads; lo que depende del transporte o del proveedor real lo resuelve el adaptador, con las decisiones registradas en §5 (C-01 a C-04 resueltas el 10-nov-2026; solo P-04 abierta).
+Cada contrato define responsabilidades por parte (frontend, backend ERP, proveedor externo), entrada y salida esperadas, y criterio de verificación. No se fijan APIs concretas, URLs ni payloads; lo que depende del transporte o del proveedor real lo resuelve el adaptador, con las decisiones registradas en §5 (C-01 a C-04 resueltas el 10-nov-2026; P-04 y la aprobación de esta v1.2 abiertas).
 
 ### 2.1 C-01 — Sesión, identidad, contexto y capacidades efectivas; expiración, terminación, actualización y fallos
 
@@ -124,21 +136,23 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 ## 5. Riesgos y decisiones abiertas para el usuario
 
-**Decisiones abiertas (requieren decisión del usuario).**
+**Decisiones propuestas (pendiente de aprobación del usuario).**
+
+- **Stack y tooling (10-nov-2026)** — Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS; entrega con `next start` y `output: 'export'` revisable cuando exista backend real; sin SSR de datos ni de sesión; sin autorización en `proxy.ts` (antes `middleware.ts`); un único runner de tests (Vitest + React Testing Library + jsdom). El gestor de estado concreto queda a criterio de la implementación y no se deduce del ZIP ni de la maqueta; la persistencia intra-sesión queda resuelta en C-04 (10-nov-2026). **No aprobada:** la aprobación técnica del 10-nov-2026 corresponde a la v1.1 (React + TypeScript con Vite); el detalle está en las «Decisiones técnicas adoptadas» y en §6.
 
 **Resueltas (10 de noviembre de 2026):**
 
-1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado concreto queda a criterio de la implementación y no se deduce del ZIP ni de la maqueta; la persistencia intra-sesión queda resuelta en C-04 (10-nov-2026).
-2. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
-3. **C-01 (sesión):** puerto de sesión opaco con estados `loading`/`authenticated`/`expired`/`terminated`/`error`; el frontend solicita contexto/capacidades sin ver credenciales ni token y el transporte lo resuelve el adaptador (10-nov-2026).
-4. **C-02 (salida):** `signOut()` devuelve éxito con destino `provider | local` o error `retryable`; la acción de cierre y el destino los resuelve el adaptador, sin fijar URL ni endpoint (10-nov-2026).
-5. **C-03 (catálogo):** catálogo jerárquico módulo → sección con `status: 'implemented' | 'not-implemented'`, `visible: boolean` y `capabilities: Capability[]` (vacío = visible pero no operable); `Capability` es cadena opaca con prefijo, nunca nombre de rol (10-nov-2026).
-6. **C-04 (persistencia intra-sesión y destinos):** `sessionStorage` solo con datos no sensibles, encapsulado en `SessionScopedStore<T>` y borrado al terminar la sesión; destinos desconocidos devuelven `ok | forbidden | not-found | session-ended`, distintos de «Próximamente» (10-nov-2026).
-7. **C-01 (fin de sesión y recuperación):** expiración/terminación por suscripción `onEnded` y recuperación vía `recoverAccess()` delegada en el proveedor, sin URL tipada ni login local (10-nov-2026).
+1. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
+2. **C-01 (sesión):** puerto de sesión opaco con estados `loading`/`authenticated`/`expired`/`terminated`/`error`; el frontend solicita contexto/capacidades sin ver credenciales ni token y el transporte lo resuelve el adaptador (10-nov-2026).
+3. **C-02 (salida):** `signOut()` devuelve éxito con destino `provider | local` o error `retryable`; la acción de cierre y el destino los resuelve el adaptador, sin fijar URL ni endpoint (10-nov-2026).
+4. **C-03 (catálogo):** catálogo jerárquico módulo → sección con `status: 'implemented' | 'not-implemented'`, `visible: boolean` y `capabilities: Capability[]` (vacío = visible pero no operable); `Capability` es cadena opaca con prefijo, nunca nombre de rol (10-nov-2026).
+5. **C-04 (persistencia intra-sesión y destinos):** `sessionStorage` solo con datos no sensibles, encapsulado en `SessionScopedStore<T>` y borrado al terminar la sesión; destinos desconocidos devuelven `ok | forbidden | not-found | session-ended`, distintos de «Próximamente» (10-nov-2026).
+6. **C-01 (fin de sesión y recuperación):** expiración/terminación por suscripción `onEnded` y recuperación vía `recoverAccess()` delegada en el proveedor, sin URL tipada ni login local (10-nov-2026).
 
 **Decisiones técnicas abiertas (a resolver antes de cerrar las tareas dependientes; `tasks.md` ya existe pero no las concreta):**
 
-8. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional; se resolverán antes de cerrar T-CORE-10.
+7. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional; se resolverán antes de cerrar T-CORE-10.
+8. **Aprobación de esta v1.2:** aprobación técnica explícita del usuario sobre el cambio de stack; hasta entonces no se ejecuta T-CORE-11.
 
 **Diferido (fuera de este corte):**
 
@@ -149,7 +163,23 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 - **Dependencia de proveedores sin contrato real** (identidad): riesgo de bloqueo; mitigación con adaptadores de contrato definido, sin autorización/persistencia falsa.
 - **C-05 diferido:** riesgo de divergencia visual acumulada; mitigación con verificación diferida planificada y regla de no adoptar datos ilustrativos.
 - **Matriz de permisos externa (P-04):** riesgo de retrabajo en autorización; mitigación parametrizando por capacidades, sin codificar por nombre de rol.
+- **`tsconfig` de Vite incompatible con Next y sus tipos generados (`.next/types`):** mitigación: reconfigurar `tsconfig.json` en T-CORE-11 y verificarlo con `npm run build`.
+- **Desaparición de `dist/` y entrega con `.next/` + `next start` sobre Node 24:** mitigación: `.nvmrc`, `engines.node` y evidencia registrada bajo LTS.
+- **Cambio de entorno de pruebas (`node` → `jsdom` solo para componentes) y acoplamiento Vitest–Vite:** mitigación: configuración de test independiente de la configuración de la aplicación.
+- **Frontera Server/Client e hidratación (`sessionStorage` leído en render):** mitigación: `layout.tsx` servidor y shell cliente; lectura del almacenamiento solo en efectos.
+- **Foco y accesibilidad en cambios de ruta del App Router:** mitigación: se verifica en T-CORE-08.
+- **Node 25.9.0 local frente a Node 24 LTS exigido:** mitigación: `.nvmrc`, `engines.node` y evidencia registrada bajo LTS.
 
 ---
 
-**Siguiente punto:** implementación por tareas (`tasks.md` ya creado); las decisiones técnicas abiertas de §5 se resuelven antes de cerrar las tareas que dependen de esos contratos.
+## 6. Revisión de stack (10-nov-2026)
+
+- **Motivo:** el equipo exige Next.js. Las specs funcionales **no requieren cambios**: ambas excluyen el stack de su alcance (CORE-01 `spec.md` línea 25 (§2): «Tampoco define … stack»; RH-REQ-01 `spec.md` línea 191 (§9): «Sin fijar rutas HTTP, nombres técnicos ni stack»). Los criterios de aceptación quedan intactos y la aprobación de esta v1.2 corresponde al usuario. Next aquí aporta enrutado, convenciones y pipeline, **sin SSR de datos ni de sesión**: es un ERP administrativo interno, sin SEO ni primera pintura crítica.
+- **Qué NO cambia:** requisitos y criterios de aceptación; contratos y puertos de T-CORE-02 (`SessionPort`, `CatalogPort`, `Capability`, `SignOutPort`, `SessionScopedStore<T>`, destinos `ok | forbidden | not-found | session-ended`); adaptadores/mocks de contrato; separación `container/` + `shared/` + `modules/<módulo>`.
+- **Vite y Vitest:** la **aplicación** deja de usar Vite (sin `vite.config.ts`, sin `index.html`, sin scripts de Vite y sin las dependencias `vite`/`@vitejs/plugin-react`); el **runner** sigue siendo Vitest, con configuración propia sin `mergeConfig` sobre la config de la app, y su Vite llega como dependencia transitiva del runner. La comprobación se acota a la aplicación, no al runner.
+- **Coste:** es el momento más barato. Solo existen andamiaje (T-CORE-01), contratos (T-CORE-02) y fixtures de contrato (T-CORE-03); no hay vistas ni lógica de dominio que migrar.
+- **Consecuencia operativa:** se añade **T-CORE-11** (sustituir el andamiaje Vite por Next.js) y T-CORE-01 queda sustituida por ella, conservando su commit como traza histórica. T-CORE-02 y T-CORE-03 ya están cerradas en `main` y no se reabren; T-CORE-11 incluye re-verificar los contratos y fixtures con el runner definitivo (Vitest + React Testing Library + jsdom). Ninguna tarea de vistas (T-CORE-04…10) se inicia hasta que el usuario apruebe esta v1.2 y se cierre T-CORE-11.
+
+---
+
+**Siguiente punto:** implementación por tareas (`tasks.md` ya creado); las decisiones técnicas abiertas de §5 se resuelven antes de cerrar las tareas que dependen de esos contratos. La v1.2 está **propuesta** y requiere aprobación técnica explícita del usuario antes de ejecutar T-CORE-11.

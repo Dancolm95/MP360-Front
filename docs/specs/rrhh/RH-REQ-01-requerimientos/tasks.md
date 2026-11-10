@@ -1,8 +1,8 @@
 # Tareas — Requerimientos de personal (RH-REQ-01)
 
 **Spec:** RH-REQ-01 v0.7 (aprobada funcionalmente el 10-nov-2026).  
-**Plan:** [`plan.md`](plan.md) v1.1 (aprobado técnicamente el 10-nov-2026; v1.1 con persistencia intra-sesión resuelta y C-01 a C-04 heredadas).  
-**Estado del corte:** sin tareas iniciadas; ninguna tarea marcada como hecha.  
+**Plan:** [`plan.md`](plan.md) v1.2 (propuesto el 10-nov-2026 por cambio de stack; **pendiente de aprobación técnica**). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
+**Estado del corte:** sin tareas iniciadas; ninguna tarea marcada como hecha. T-RH-01 queda a la espera de la aprobación del plan v1.2 y de T-CORE-11 (base Next.js).  
 **Alcance activo:** RH-REQ-01 §10 criterios 1–17 y 19–27.  
 **Diferido (fuera del alcance activo):** RH-REQ-01 §10 criterio 18 y C-05 (verificación diferida).
 
@@ -16,11 +16,11 @@
 
 ## Fase A — Andamiaje y contratos base
 
-### T-RH-01 — Andamiaje del módulo RR. HH. sobre la base React + TypeScript (Vite)
+### T-RH-01 — Andamiaje del módulo RR. HH. sobre la base Next.js
 - [ ] Hecha
-- **Depende de:** T-CORE-01 (andamiaje compartido del contenedor).
-- **Traza:** constitución §Arquitectura; plan §1.
-- **Entrada:** base React + TypeScript (Vite) de CORE-01.
+- **Depende de:** T-CORE-11 (base Next.js del contenedor; sustituye al andamiaje Vite de T-CORE-01).
+- **Traza:** constitución §Arquitectura; CORE-01 plan §6 «Revisión de stack» y §5 «Decisiones propuestas» (stack).
+- **Entrada:** base Next.js de CORE-01 (T-CORE-11).
 - **Salida:** estructura de carpetas del dominio Requerimientos integrada con el contenedor.
 - **Hecho cuando:** el módulo compila junto al contenedor sin errores.
 

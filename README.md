@@ -4,14 +4,14 @@ Frontend administrativo **modular** del ERP MP 360. **RR. HH. es el primer módu
 
 ## Estado del proyecto
 
-Fase de **definición por especificaciones (SDD)**: specs aprobadas, planes aprobados técnicamente y tareas creadas; todavía no hay aplicación implementada.
+Fase de **implementación por tareas (SDD)**: specs aprobadas funcionalmente, planes aprobados técnicamente (v1.1) con una revisión v1.2 propuesta por cambio de stack, y tareas creadas. Hay andamiaje, contratos y fixtures del contenedor; las vistas aún no existen.
 
 | Capacidad | Módulo | Spec | Estado | Documento |
 |---|---|---|---|---|
-| Requerimientos de personal | RR. HH. | RH-REQ-01 v0.7 | Aprobada funcionalmente (10-nov-2026); plan aprobado técnicamente (10-nov-2026); tareas creadas | [spec.md](docs/specs/rrhh/RH-REQ-01-requerimientos/spec.md) · [plan.md](docs/specs/rrhh/RH-REQ-01-requerimientos/plan.md) · [tasks.md](docs/specs/rrhh/RH-REQ-01-requerimientos/tasks.md) |
-| Contenedor ERP compartido | Core | CORE-01 v0.6 | Aprobada funcionalmente (10-nov-2026); plan aprobado técnicamente (10-nov-2026); tareas creadas | [spec.md](docs/specs/core/CORE-01-contenedor-erp/spec.md) · [plan.md](docs/specs/core/CORE-01-contenedor-erp/plan.md) · [tasks.md](docs/specs/core/CORE-01-contenedor-erp/tasks.md) |
+| Requerimientos de personal | RR. HH. | RH-REQ-01 v0.7 | Aprobada funcionalmente (10-nov-2026); plan v1.1 aprobado técnicamente (10-nov-2026) y v1.2 propuesto (pendiente de aprobación); tareas creadas | [spec.md](docs/specs/rrhh/RH-REQ-01-requerimientos/spec.md) · [plan.md](docs/specs/rrhh/RH-REQ-01-requerimientos/plan.md) · [tasks.md](docs/specs/rrhh/RH-REQ-01-requerimientos/tasks.md) |
+| Contenedor ERP compartido | Core | CORE-01 v0.6 | Aprobada funcionalmente (10-nov-2026); plan v1.1 aprobado técnicamente (10-nov-2026) y v1.2 propuesto (pendiente de aprobación); tareas creadas (T-CORE-01…10 vigentes; T-CORE-11 propuesta) | [spec.md](docs/specs/core/CORE-01-contenedor-erp/spec.md) · [plan.md](docs/specs/core/CORE-01-contenedor-erp/plan.md) · [tasks.md](docs/specs/core/CORE-01-contenedor-erp/tasks.md) |
 
-> Corte propuesto: contenedor ERP compartido + `UX-02`/`UX-03`/`UX-04`. Stack decidido: React + TypeScript (Vite), con mocks/adaptadores de contrato. C-05 y el criterio 18 de RH-REQ-01 quedan diferidos; las decisiones técnicas abiertas (C-01 a C-04, INT-01, P-04) se resuelven antes de cerrar las tareas dependientes.
+> Corte propuesto: contenedor ERP compartido + `UX-02`/`UX-03`/`UX-04`. Stack: **Next.js 16 (App Router) + React + TypeScript**, con mocks/adaptadores de contrato. El cambio de stack está **propuesto el 10-nov-2026 y pendiente de aprobación técnica**; sustituye a la decisión anterior de React + TypeScript con Vite (plan v1.1, histórica). C-05 y el criterio 18 de RH-REQ-01 quedan diferidos; las decisiones abiertas (INT-01, P-04 y la aprobación de la v1.2) se resuelven antes de cerrar las tareas dependientes.
 
 ## Estructura del repositorio
 
