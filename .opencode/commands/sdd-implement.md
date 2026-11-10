@@ -15,3 +15,10 @@ el plan; no asumas `node --test` ni un framework. Verifica los estados y la
 comparación visual si aplican. Marca la tarea como hecha únicamente si su
 «Hecho cuando» se cumple y hay evidencia; de lo contrario, déjala pendiente
 y comunica el bloqueo. No avances a la tarea siguiente.
+
+Antes de editar, ejecuta `git status --porcelain`: si hay cambios sin commitear
+de otra tarea, detente y repórtalo sin tocarlos. Al cerrar, commitea solo los
+archivos de la tarea con `git add -- <rutas>` (nunca `git add -A`) y el mensaje
+`feat(<capacidad>): <T-ID> <resumen en imperativo>` con cuerpo de evidencia.
+Reporta el hash y deja el árbol limpio. No hagas push: lo hace el usuario tras
+verificar.

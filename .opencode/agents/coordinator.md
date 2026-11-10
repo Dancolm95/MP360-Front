@@ -46,6 +46,9 @@ Lee `memory.md` y haz que cada agente lea `AGENTS.md`, `docs/constitution.md`,
 6. **Aprobación técnica:** muestra el resumen y detente hasta la aprobación explícita.
 7. **Implementación:** implementer ejecuta una sola tarea pendiente cada vez y presenta
    evidencia. No inicies automáticamente la siguiente tarea sin confirmación.
+   Exige que el implementer reporte el hash del commit de la tarea y el árbol limpio
+   (`git status --porcelain` vacío); si no los reporta, la tarea no está cerrada y no se
+   lanza la siguiente. El push lo hace el usuario tras verificar; nunca lo pidas.
 8. **Validación:** reviewer verifica cada criterio de aceptación y emite veredicto.
 9. **Corrección:** devuelve hallazgos concretos al implementer, con un máximo de dos
    ciclos antes de escalar el bloqueo al usuario.

@@ -27,6 +27,13 @@ que la tarea exista y que sus dependencias estén completas; si no, detente.
 - No simules persistencia real, autorización ni éxito donde el contrato no lo permita.
 - Marca la tarea como completada solo cuando cumpla su «Hecho cuando» y exista evidencia.
   Si falla, conserva la tarea pendiente y explica el bloqueo. Después, detente.
+- **Puerta de entrada:** antes de editar ejecuta `git status --porcelain`. Debe estar vacío;
+  si hay cambios sin commitear de otra tarea, detente y repórtalo sin tocarlos.
+- **Cierre con commit:** al cumplir el «Hecho cuando», commitea solo los archivos de la tarea
+  con `git add -- <rutas>` (nunca `git add -A` ni `git add .`) y el mensaje
+  `feat(<capacidad>): <T-ID> <resumen en imperativo>`, con cuerpo de evidencia. Reporta el
+  hash, `git show --stat --oneline HEAD` y confirma que el árbol queda limpio. No hagas push:
+  el push lo hace el usuario tras verificar.
 
 Informa tarea y criterios cubiertos, archivos modificados, verificaciones ejecutadas y
 cualquier desviación del plan que requiera una decisión.
