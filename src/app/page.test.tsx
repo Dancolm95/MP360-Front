@@ -15,9 +15,7 @@ describe('página de inicio (humo de componente)', () => {
   it('muestra el título y las tres capas del andamiaje', () => {
     render(<Page />)
 
-    expect(
-      screen.getByRole('heading', { level: 1, name: 'ERP MP 360' }),
-    ).toBeDefined()
+    screen.getByRole('heading', { level: 1, name: 'ERP MP 360' })
 
     const items = screen.getAllByRole('listitem')
     expect(items).toHaveLength(3)
