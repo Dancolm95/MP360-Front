@@ -1,0 +1,135 @@
+# Plan técnico — Contenedor ERP compartido (CORE-01)
+
+**ID:** CORE-01  
+**Versión del plan:** 0.1 (borrador pendiente de aprobación técnica).  
+**Cubre:** CORE-01 v0.6 «Contenedor ERP compartido» (aprobada funcionalmente el 10-nov-2026). Se integra con RH-REQ-01 v0.7 «Requerimientos de personal» a través de su plan ([`../../rrhh/RH-REQ-01-requerimientos/plan.md`](../../rrhh/RH-REQ-01-requerimientos/plan.md)).  
+**Estado:** borrador pendiente de aprobación técnica del usuario. No fija stack final, URLs, endpoints ni payloads; toda decisión que requiera elección de stack o de proveedor real queda señalada como decisión pendiente del usuario.  
+**Fecha:** 10 de noviembre de 2026.
+
+---
+
+## 1. Alcance y exclusiones
+
+**Alcance.** Contenedor ERP de escritorio (CORE-01 §2, §4): cabecera con identidad/contexto recibidos, navegación horizontal y selector de módulos, entrada a RR. HH. solo con lectura UX-02, navegación secundaria de Requerimientos y tratamiento informativo de secciones no implementadas («Próximamente» con visibilidad explícita del backend). El dominio de Requerimientos (RH-REQ-01 §2) se cubre en su propio plan.
+
+**Exclusiones de este corte.**
+
+- **C-05 (diferido):** comparación visual directa con el PDF (CORE-01 §7 criterio 9) queda diferida y no es exigible en este corte. Se mantiene la regla de no adoptar datos ilustrativos del PDF como reglas y no reproducir composiciones no legibles desde el visor.
+- **P-04 (externo):** la matriz técnica final de roles, ámbitos y permisos es dependencia externa; este corte usa el contrato provisional autorizado (RH-REQ-01 §3, CORE-01 §3).
+- **Módulos/vistas no incluidos:** login local y selección de perfil, dashboard UX-01, candidatos UX-05/06, Alta UX-07 operativa, ficha/legajo UX-08 y el resto de vistas RR. HH.; panel contextual derecho, búsqueda global, notificaciones globales; interfaz móvil/responsive. Los módulos de dominio (Selección, Alta) solo aparecen como proveedores de resultados de integración, no como vistas operativas de este corte.
+
+---
+
+## 2. Contratos por acordar o resolver en este plan
+
+Cada contrato define responsabilidades por parte (frontend, backend ERP, proveedor externo), entrada y salida esperadas, y criterio de verificación. No se fijan APIs concretas, URLs ni payloads; lo que depende de elección de stack o del proveedor real queda como decisión pendiente del usuario (señalado en cada caso y recogido en §5).
+
+### 2.1 C-01 — Sesión, identidad, contexto y capacidades efectivas; expiración, terminación, actualización y fallos
+
+**Responsabilidades.**
+
+- **Frontend (contenedor):** solicita contexto/capacidades solo tras disponer de una sesión ya autenticada; representa los estados de carga, error, sin permisos y sesión vencida/terminada; **no** implementa login local ni captura credenciales; ante expiración/terminación limpia de inmediato identidad, contexto, capacidades, filtros y contexto de bandeja y toda persistencia de sesión; no persiste datos sensibles en `localStorage`; comunica que la recuperación del acceso se hace por el proveedor externo, sin afirmar una redirección o cierre no acordados.
+- **Backend ERP (autorización):** entrega el contexto y las capacidades efectivas del usuario; revalida acceso y comandos; comunica la expiración o terminación de la sesión; aplica el ámbito del contrato provisional P-04.
+- **Proveedor externo de identidad:** mantiene la sesión real; comunica vencimiento/terminación al ERP; ofrece el mecanismo de recuperación de acceso (re-login) sin que el ERP muestre login local.
+
+**Entrada esperada:** una sesión externa válida (o la notificación de expiración/terminación).  
+**Salida esperada:** contexto + capacidades efectivas (o un estado explícito de error/expiración); y, al vencer o terminar, la limpieza inmediata y aislada del estado local.  
+**Criterio de verificación:** CORE-01 §7 criterios 5 y 6 (y 7 para la salida). Sin herencia de estado entre autenticaciones; sin datos sensibles en `localStorage`; indicación de recuperación por proveedor.  
+**Decisiones pendientes del usuario (stack/proveedor):** mecanismo por el que el frontend conoce la sesión válida (no se fija cookie/header/token); mecanismo de comunicación de expiración/actualización/fallo (no se fija polling/push/error de API); mecanismo de recuperación de acceso del proveedor (no se fija URL de re-login).
+
+### 2.2 C-03 — Catálogo de secciones, estado implementado y visibilidad/capacidades efectivas
+
+**Responsabilidades.**
+
+- **Backend ERP:** expone un catálogo de secciones RR. HH. con su estado (implementada / no implementada) y la visibilidad/capacidades efectivas por usuario; es la única fuente que decide qué es visible y qué es operable.
+- **Frontend (contenedor):** renderiza la navegación secundaria y el «Próximamente» **solo** según ese catálogo; sin lectura UX-02 deniega el módulo; visibilidad no concede operaciones ni acceso a vistas inexistentes.
+- **Proveedor externo:** no aplica (la autorización es del backend ERP).
+
+**Entrada esperada:** contexto/capacidades del usuario (C-01).  
+**Salida esperada:** lista de secciones con estado implementado y visibilidad/capacidades efectivas; el frontend la refleja sin inferir permisos del nombre de rol ni de etiquetas del PDF.  
+**Criterio de verificación:** CORE-01 §7 criterios 1, 2, 3 y 5.  
+**Decisiones pendientes del usuario (contrato de catálogo):** estructura y granularidad del catálogo; cómo se marca «implementada» frente a «no implementada»; cómo se distingue visibilidad de capacidad operativa.
+
+### 2.3 C-04 — Semántica de rutas lógicas, destinos directos/desconocidos, retorno y aislamiento de persistencia intra-sesión
+
+**Responsabilidades.**
+
+- **Frontend (contenedor + Requerimientos):** resuelve las rutas lógicas (entrada → bandeja; bandeja → nuevo/editar/detalle → retorno; sección no implementada visible → «Próximamente» → retorno autorizado); ante un **destino directo** valida sesión y autorización antes de exponer contenido; un **destino desconocido** no se convierte en «Próximamente» ni en vista ficticia; ante **pérdida de sesión** en navegación limpia y devuelve a un estado sin acceso; aísla la persistencia intra-sesión (filtros y contexto de bandeja) para que solo viva durante la sesión autenticada y se borre al finalizar.
+- **Backend ERP:** valida acceso a destinos directos y deniega destinos no autorizados o inexistentes sin filtrar datos.
+- **Proveedor externo:** no aplica.
+
+**Entrada esperada:** una ruta lógica o un destino directo, con sesión y capacidades.  
+**Salida esperada:** la vista autorizada o un estado de sin permisos/error; el contexto de bandeja (filtros, orden, página) preservado solo dentro de la sesión y limpiado al finalizar.  
+**Criterio de verificación:** CORE-01 §7 criterios 1–4, 6 y 8; RH-REQ-01 §10 criterios 14, 22 y 23 (retorno de contexto de bandeja y persistencia de filtros).  
+**Decisiones pendientes del usuario (stack):** mecanismo de persistencia intra-sesión sin `localStorage` sensible (no se fija memoria/almacenamiento concreto); semántica exacta de destinos desconocidos.
+
+### 2.4 C-02 — Salida voluntaria («Salir»)
+
+**Responsabilidades.**
+
+- **Frontend (contenedor):** ofrece la acción «Salir»; inicia el cierre de la sesión real en el proveedor; al terminar, limpia de inmediato estado y contexto local conforme a §2.1; muestra el destino de confirmación acordado; ante un error del proveedor conserva el estado y explica cómo continuar.
+- **Proveedor externo de identidad:** ejecuta el cierre de la sesión real y comunica el resultado (éxito/error).
+- **Backend ERP:** invalida el contexto local asociado al finalizar; no es la autoridad del cierre en el proveedor.
+
+**Entrada esperada:** activación de «Salir».  
+**Salida esperada:** sesión real cerrada en el proveedor y limpieza local inmediata (o, en caso de error del proveedor, estado conservado con mensaje y opción de reintento si procede).  
+**Criterio de verificación:** CORE-01 §7 criterios 6 y 7.  
+**Decisiones pendientes del usuario (proveedor):** la acción concreta de cierre de sesión en el proveedor (no se fija endpoint/URL); el destino de confirmación tras salir (no se fija pantalla); el manejo de errores del proveedor (no se fija reintento ni mensaje).
+
+---
+
+## 3. Traza de P-04 (autorización provisional y matriz final)
+
+- **Contrato provisional autorizado** (CORE-01 §3, RH-REQ-01 §3): el backend limita el ámbito efectivo (módulos y secciones visibles/operables) y es la única fuente de lo que es visible y operable; el frontend (contenedor) presenta navegación, selector y «Próximamente» a partir de esas capacidades y contempla lectura/sin permisos; el backend revalida autorización, ámbito, estado y versión en cada comando. Ocultar una acción no constituye autorización.
+- **Dependencia externa:** la matriz técnica final de roles/ámbitos/permisos sigue fuera de este repositorio y no bloquea el plan. Los adaptadores/mocks de este corte deben parametrizarse por capacidades y no codificar permisos por nombre de rol ni por etiquetas del PDF, para poder migrar a la matriz final sin reescribir reglas.
+- **Verificación de la traza:** CORE-01 §7 criterios 2 y 3 (sin permisos y visibilidad sin operación); los criterios 15 y 16 de RH-REQ-01 §10 (ámbito por registro y revalidación de comandos) se cubren en el plan de RH-REQ-01.
+
+---
+
+## 4. Verificación
+
+Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el diferido explícito (C-05). La verificación es funcional (fixtures de sesión/capacidades) y de accesibilidad (teclado, foco, nombres, mensajes por texto). El criterio de accesibilidad transversal aplica a CORE-01 §5/§7-8; la verificación de reglas, integración y concurrencia del dominio de Requerimientos se cubre en el plan de RH-REQ-01.
+
+### 4.1 CORE-01 §7
+
+| Criterio | Verificación |
+|---|---|
+| 1 | Fixture con sesión válida + lectura UX-02: selector muestra solo RR. HH., entrada abre UX-02 (bandeja), no dashboard. |
+| 2 | Fixture con sesión válida sin UX-02: sin RR. HH. en selector, sin «Próximamente» sustituto, entrada directa → sin permisos sin datos. |
+| 3 | Fixture con lectura UX-02 + una sección no implementada visible explícitamente: «Próximamente» sin datos/acciones y regreso a UX-02; visibilidad sola no opera ni accede a vistas inexistentes. |
+| 4 | Integración: UX-02/03/04 intactas en la zona central; retorno de bandeja, filtros y acciones de RH-REQ-01 sin alterar; alerta real de plazo visible (RH-REQ-01 §5/§7). |
+| 5 | Fixture de carga/fallo de contexto/capacidades: no se muestran identidad/navegación/datos previos como vigentes; error con explicación y reintento si procede. |
+| 6 | Fixture de vencimiento o terminación externa: limpieza inmediata de identidad, contexto, capacidades, filtros y contexto de bandeja y de toda persistencia; nueva autenticación no hereda; sin datos sensibles en `localStorage`; indicación de recuperación por proveedor. |
+| 7 | Fixture de «Salir»: inicia cierre de sesión real en el proveedor y, al terminar, limpia conforme al criterio 6 (acción/destino/errores dependen de C-02). |
+| 8 | Accesibilidad: operación por teclado, foco visible y gestionado en cambios, nombres accesibles, activo identificable, errores por texto (no solo color). |
+| 9 | **Diferido (C-05):** comparación visual directa con el PDF no exigible en este corte; se verifica solo que no se adoptan datos ilustrativos ni composiciones no legibles del visor. |
+
+### 4.2 Diferido (C-05) y nota sobre RH-REQ-01 criterio 18
+
+- **C-05** queda diferido: la comparación visual directa con el PDF no es exigible en este corte (CORE-01 §7 criterio 9), sin adoptar composición no legible desde el visor.
+- **Nota/relación:** RH-REQ-01 §10 criterio 18 exige comparar visualmente las páginas 6–9, que comparten el mismo PDF que no pudo contrastarse directamente. Esa decisión (diferir junto a C-05 o verificar por otra vía) se remite al plan de RH-REQ-01.
+
+---
+
+## 5. Riesgos y decisiones abiertas para el usuario
+
+**Decisiones abiertas (requieren decisión del usuario).**
+
+1. **Elección de stack y tooling** del frontend (framework, gestor de estado, persistencia intra-sesión): no se deduce del ZIP ni de la maqueta; se decide aquí, no se asume.
+2. **Existencia de backend/proveedores reales:** no hay backend de autorización, Selección ni Alta implementados. Decidir si este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas) o contra servicios reales. Los mocks, si se autorizan, deben respetar los mismos contratos y escenarios.
+3. **C-01:** mecanismo de transporte de sesión, mecanismo de comunicación de expiración/actualización/fallo y mecanismo de recuperación de acceso del proveedor (sin login local).
+4. **C-02:** acción concreta de cierre de sesión en el proveedor, destino de confirmación tras salir y manejo de errores del proveedor.
+5. **C-03:** estructura/granularidad del catálogo de secciones y distinción visibilidad vs. capacidad operativa.
+6. **C-04:** mecanismo de persistencia intra-sesión (sin `localStorage` sensible) y semántica de destinos desconocidos.
+7. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional.
+8. **C-05 (diferido):** confirmar la verificación visual diferida del PDF para el contenedor (CORE-01 §7 criterio 9); el criterio 18 de RH-REQ-01 se resuelve en el plan de RH-REQ-01.
+
+**Riesgos principales.**
+
+- **Dependencia de proveedores sin contrato real** (identidad): riesgo de bloqueo; mitigación con adaptadores de contrato definido, sin autorización/persistencia falsa.
+- **C-05 diferido:** riesgo de divergencia visual acumulada; mitigación con verificación diferida planificada y regla de no adoptar datos ilustrativos.
+- **Matriz de permisos externa (P-04):** riesgo de retrabajo en autorización; mitigación parametrizando por capacidades, sin codificar por nombre de rol.
+
+---
+
+**Siguiente punto:** aprobación técnica de este plan; `tasks.md` solo tras aprobación.

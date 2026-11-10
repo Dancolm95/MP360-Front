@@ -10,7 +10,8 @@
 - Primera capacidad: `RH-REQ-01`, Requerimientos de personal.
 - Spec vigente: `docs/specs/rrhh/RH-REQ-01-requerimientos/spec.md`, versión 0.7 con las cuatro decisiones funcionales de integración Selección/Alta (INT-01) y las correcciones B-01 a B-04 y H-01 a H-03; **aprobada funcionalmente** por confirmación explícita del usuario el 10 de noviembre de 2026, tras revisión QA con veredicto APROBADO. La v0.4 fue aprobada el 9 de noviembre de 2026; esa aprobación es histórica.
 - `CORE-01` v0.6 incorpora la salida voluntaria (C-02) y la resolución/exclusión de los bloqueos del corte (C-01/C-03/C-04 al plan, C-05 diferido); **aprobada funcionalmente** por confirmación explícita del usuario el 10 de noviembre de 2026, tras veredicto APROBADO del reviewer. La v0.5 fue aprobada el mismo día y es histórica. Sin aprobación de contratos, visual, arquitectura técnica ni plan.
-- Aún no existen `plan.md` ni `tasks.md` para esta capacidad.
+- Existen `plan.md` desdoblados por capacidad (CORE-01 y RH-REQ-01), pendientes de aprobación técnica; aún no existen `tasks.md`.
+- Configuración de agentes (10-nov-2026): `.opencode/agents/implementer.md` usa `mode: all`, así que `/sdd-implement` corre en la sesión actual en vez de abrir una sesión hija. Medido con 9 invocaciones de prueba: 0 sesiones hijas por invocación frente a 1; en la segunda invocación consecutiva, −82 % de tokens de entrada frescos y −64 % de latencia; sin diferencia medible en la primera invocación.
 - Corte propuesto: contenedor ERP compartido + UX-02, UX-03 y UX-04.
 
 ## Decisiones vigentes
@@ -45,7 +46,7 @@
 
 ## Próximo paso
 
-Generar `plan.md` desde las specs aprobadas (RH-REQ-01 v0.7 y CORE-01 v0.6), definiendo en el plan los contratos técnicos C-01/C-02/C-03/C-04, la integración INT-01 y la traza P-04 con contrato provisional, sin prejuzgar si el plan es conjunto o desdoblado. `tasks.md` solo tras plan aprobado técnicamente.
+Aprobar técnicamente los planes por capacidad ya generados (`core/CORE-01-contenedor-erp/plan.md` y `rrhh/RH-REQ-01-requerimientos/plan.md`), que definen los contratos C-01/C-02/C-03/C-04, la integración INT-01 y la traza P-04 con contrato provisional, junto con las decisiones abiertas de §5 de cada plan. `tasks.md` solo tras plan aprobado técnicamente.
 
 ## Regla de actualización
 
