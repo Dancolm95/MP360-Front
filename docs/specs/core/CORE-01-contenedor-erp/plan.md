@@ -1,9 +1,9 @@
 # Plan técnico — Contenedor ERP compartido (CORE-01)
 
 **ID:** CORE-01  
-**Versión del plan:** 1.2 (propuesto el 10-nov-2026 por cambio de stack; **pendiente de aprobación técnica explícita del usuario**). La v1.1 (React + TypeScript con Vite) es histórica: su aprobación del 10-nov-2026 sigue siendo el registro de lo aprobado hasta que el usuario apruebe esta v1.2.  
+**Versión del plan:** 1.2 (**aprobada técnicamente el 10 de noviembre de 2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript con Vite) queda como registro histórico.  
 **Cubre:** CORE-01 v0.6 «Contenedor ERP compartido» (aprobada funcionalmente el 10-nov-2026). Se integra con RH-REQ-01 v0.7 «Requerimientos de personal» a través de su plan ([`../../rrhh/RH-REQ-01-requerimientos/plan.md`](../../rrhh/RH-REQ-01-requerimientos/plan.md)).  
-**Estado:** **Propuesto** el 10 de noviembre de 2026 por cambio de stack; **pendiente de aprobación técnica explícita del usuario**. Hasta esa aprobación, la v1.1 aprobada el 10-nov-2026 (React + TypeScript + Vite) es el registro vigente de lo aprobado. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 quedan resueltas a nivel de contrato (10-nov-2026); P-04 y la aprobación de esta v1.2 siguen abiertos.  
+**Estado:** **Aprobado técnicamente el 10 de noviembre de 2026** (v1.2, cambio de stack a Next.js). La v1.1 aprobada el 10-nov-2026 (React + TypeScript + Vite) queda como registro histórico. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 quedan resueltas a nivel de contrato (10-nov-2026); P-04 sigue abierta.  
 **Fecha:** 10 de noviembre de 2026.
 
 ## Decisiones técnicas adoptadas (10 de noviembre de 2026)
@@ -45,7 +45,7 @@
 
 ## 2. Contratos por acordar o resolver en este plan
 
-Cada contrato define responsabilidades por parte (frontend, backend ERP, proveedor externo), entrada y salida esperadas, y criterio de verificación. No se fijan APIs concretas, URLs ni payloads; lo que depende del transporte o del proveedor real lo resuelve el adaptador, con las decisiones registradas en §5 (C-01 a C-04 resueltas el 10-nov-2026; P-04 y la aprobación de esta v1.2 abiertas).
+Cada contrato define responsabilidades por parte (frontend, backend ERP, proveedor externo), entrada y salida esperadas, y criterio de verificación. No se fijan APIs concretas, URLs ni payloads; lo que depende del transporte o del proveedor real lo resuelve el adaptador, con las decisiones registradas en §5 (C-01 a C-04 resueltas el 10-nov-2026; P-04 abierta).
 
 ### 2.1 C-01 — Sesión, identidad, contexto y capacidades efectivas; expiración, terminación, actualización y fallos
 
@@ -136,9 +136,9 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 ## 5. Riesgos y decisiones abiertas para el usuario
 
-**Decisiones propuestas (pendiente de aprobación del usuario).**
+**Aprobadas el 10-nov-2026 (v1.2).**
 
-- **Stack y tooling (10-nov-2026)** — Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS; entrega con `next start` y `output: 'export'` revisable cuando exista backend real; sin SSR de datos ni de sesión; sin autorización en `proxy.ts` (antes `middleware.ts`); un único runner de tests (Vitest + React Testing Library + jsdom). El gestor de estado concreto queda a criterio de la implementación y no se deduce del ZIP ni de la maqueta; la persistencia intra-sesión queda resuelta en C-04 (10-nov-2026). **No aprobada:** la aprobación técnica del 10-nov-2026 corresponde a la v1.1 (React + TypeScript con Vite); el detalle está en las «Decisiones técnicas adoptadas» y en §6.
+- **Stack y tooling (10-nov-2026)** — Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS; entrega con `next start` y `output: 'export'` revisable cuando exista backend real; sin SSR de datos ni de sesión; sin autorización en `proxy.ts` (antes `middleware.ts`); un único runner de tests (Vitest + React Testing Library + jsdom). El gestor de estado concreto queda a criterio de la implementación y no se deduce del ZIP ni de la maqueta; la persistencia intra-sesión queda resuelta en C-04 (10-nov-2026). El detalle está en las «Decisiones técnicas adoptadas» y en §6.
 
 **Resueltas (10 de noviembre de 2026):**
 
@@ -152,11 +152,10 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 **Decisiones técnicas abiertas (a resolver antes de cerrar las tareas dependientes; `tasks.md` ya existe pero no las concreta):**
 
 7. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional; se resolverán antes de cerrar T-CORE-10.
-8. **Aprobación de esta v1.2:** aprobación técnica explícita del usuario sobre el cambio de stack; hasta entonces no se ejecuta T-CORE-11.
 
 **Diferido (fuera de este corte):**
 
-9. **C-05** — DIFERIDO: la comparación visual directa con el PDF queda fuera de este corte (CORE-01 §7 criterio 9); el criterio 18 de RH-REQ-01 se difiere junto con C-05 (véase el plan de RH-REQ-01).
+8. **C-05** — DIFERIDO: la comparación visual directa con el PDF queda fuera de este corte (CORE-01 §7 criterio 9); el criterio 18 de RH-REQ-01 se difiere junto con C-05 (véase el plan de RH-REQ-01).
 
 **Riesgos principales.**
 
@@ -174,12 +173,12 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 ## 6. Revisión de stack (10-nov-2026)
 
-- **Motivo:** el equipo exige Next.js. Las specs funcionales **no requieren cambios**: ambas excluyen el stack de su alcance (CORE-01 `spec.md` línea 25 (§2): «Tampoco define … stack»; RH-REQ-01 `spec.md` línea 191 (§9): «Sin fijar rutas HTTP, nombres técnicos ni stack»). Los criterios de aceptación quedan intactos y la aprobación de esta v1.2 corresponde al usuario. Next aquí aporta enrutado, convenciones y pipeline, **sin SSR de datos ni de sesión**: es un ERP administrativo interno, sin SEO ni primera pintura crítica.
+- **Motivo:** el equipo exige Next.js. Las specs funcionales **no requieren cambios**: ambas excluyen el stack de su alcance (CORE-01 `spec.md` línea 25 (§2): «Tampoco define … stack»; RH-REQ-01 `spec.md` línea 191 (§9): «Sin fijar rutas HTTP, nombres técnicos ni stack»). Los criterios de aceptación quedan intactos y la v1.2 quedó **aprobada técnicamente el 10-nov-2026**. Next aquí aporta enrutado, convenciones y pipeline, **sin SSR de datos ni de sesión**: es un ERP administrativo interno, sin SEO ni primera pintura crítica.
 - **Qué NO cambia:** requisitos y criterios de aceptación; contratos y puertos de T-CORE-02 (`SessionPort`, `CatalogPort`, `Capability`, `SignOutPort`, `SessionScopedStore<T>`, destinos `ok | forbidden | not-found | session-ended`); adaptadores/mocks de contrato; separación `container/` + `shared/` + `modules/<módulo>`.
 - **Vite y Vitest:** la **aplicación** deja de usar Vite (sin `vite.config.ts`, sin `index.html`, sin scripts de Vite y sin las dependencias `vite`/`@vitejs/plugin-react`); el **runner** sigue siendo Vitest, con configuración propia sin `mergeConfig` sobre la config de la app, y su Vite llega como dependencia transitiva del runner. La comprobación se acota a la aplicación, no al runner.
 - **Coste:** es el momento más barato. Solo existen andamiaje (T-CORE-01), contratos (T-CORE-02) y fixtures de contrato (T-CORE-03); no hay vistas ni lógica de dominio que migrar.
-- **Consecuencia operativa:** se añade **T-CORE-11** (sustituir el andamiaje Vite por Next.js) y T-CORE-01 queda sustituida por ella, conservando su commit como traza histórica. T-CORE-02 y T-CORE-03 ya están cerradas en `main` y no se reabren; T-CORE-11 incluye re-verificar los contratos y fixtures con el runner definitivo (Vitest + React Testing Library + jsdom). Ninguna tarea de vistas (T-CORE-04…10) se inicia hasta que el usuario apruebe esta v1.2 y se cierre T-CORE-11.
+- **Consecuencia operativa:** se añade **T-CORE-11** (sustituir el andamiaje Vite por Next.js) y T-CORE-01 queda sustituida por ella, conservando su commit como traza histórica. T-CORE-02 y T-CORE-03 ya están cerradas en `main` y no se reabren; T-CORE-11 incluye re-verificar los contratos y fixtures con el runner definitivo (Vitest + React Testing Library + jsdom). Con la v1.2 **aprobada el 10-nov-2026**, T-CORE-11 es la siguiente tarea y las tareas de vistas (T-CORE-04…10) se inician al cerrarse T-CORE-11.
 
 ---
 
-**Siguiente punto:** implementación por tareas (`tasks.md` ya creado); las decisiones técnicas abiertas de §5 se resuelven antes de cerrar las tareas que dependen de esos contratos. La v1.2 está **propuesta** y requiere aprobación técnica explícita del usuario antes de ejecutar T-CORE-11.
+**Siguiente punto:** la v1.2 está **aprobada técnicamente el 10-nov-2026**; sigue la implementación de **T-CORE-11** (sustituir el andamiaje Vite por Next.js) sobre `tasks.md`. Las decisiones técnicas abiertas de §5 (P-04) se resuelven antes de cerrar las tareas que dependen de esos contratos.

@@ -1,8 +1,8 @@
 # Tareas — Contenedor ERP compartido (CORE-01)
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
-**Plan:** [`plan.md`](plan.md) v1.2 (propuesto el 10-nov-2026 por cambio de stack; **pendiente de aprobación técnica**). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** tareas vigentes — T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02 y T-CORE-03 hechas (`b36a956` y `74ef493`, ambas en `main`); T-CORE-04…10 pendientes y sin iniciar hasta aprobar la v1.2 y cerrar T-CORE-11. **Propuesta, no ejecutable hasta la aprobación del plan v1.2:** T-CORE-11.  
+**Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
+**Estado del corte:** tareas vigentes — T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02 y T-CORE-03 hechas (`b36a956` y `74ef493`, ambas en `main`); **T-CORE-11 vigente y siguiente tarea** (plan v1.2 aprobado técnicamente el 10-nov-2026); T-CORE-04…10 pendientes y sin iniciar hasta cerrar T-CORE-11.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -41,10 +41,10 @@
 - **Hecho cuando:** cada escenario de CORE-01 §5/§7 se puede inyectar por fixture; la parametrización es por capacidad, no por nombre de rol ni etiqueta del PDF.
 
 ### T-CORE-11 — Sustituir el andamiaje Vite por Next.js
-- [ ] Hecha — **Propuesta, no ejecutable** hasta la aprobación del plan v1.2.
-- **Depende de:** T-CORE-02 y T-CORE-03 (sus fixtures se re-verifican en esta tarea); sustituye el andamiaje de T-CORE-01, que queda como traza histórica; requiere la aprobación técnica del plan v1.2.
-- **Traza:** plan §6 «Revisión de stack (10-nov-2026)» y plan §5 «Decisiones propuestas» (stack); constitución §Arquitectura; decisión técnica del 10-nov-2026 (Next.js 16 + React 19 + TypeScript, Node 24 LTS).
-- **Entrada:** andamiaje Vite de T-CORE-01; contratos y fixtures de T-CORE-02/T-CORE-03. Propuesta, no ejecutable hasta la aprobación del plan v1.2.
+- [ ] Hecha
+- **Depende de:** T-CORE-02 y T-CORE-03 (sus fixtures se re-verifican en esta tarea); sustituye el andamiaje de T-CORE-01, que queda como traza histórica.
+- **Traza:** plan §6 «Revisión de stack (10-nov-2026)» y plan §5 «Aprobadas el 10-nov-2026 (v1.2)» (stack); constitución §Arquitectura; decisión técnica del 10-nov-2026 (Next.js 16 + React 19 + TypeScript, Node 24 LTS).
+- **Entrada:** andamiaje Vite de T-CORE-01; contratos y fixtures de T-CORE-02/T-CORE-03.
 - **Salida:**
   - **Se retira:** `vite.config.ts`, `index.html`, `src/main.tsx`, `src/app/App.tsx` (su contenido demostrativo se traslada) y `src/vite-env.d.ts`; dependencias `vite` y `@vitejs/plugin-react`; scripts `dev`/`build`/`preview` de Vite (sustituidos abajo).
   - **Next.js:** `next.config.ts` (sin `output: 'export'`) y `next-env.d.ts`; scripts `dev` (`next dev`), `build` (`next build`) y `start` (`next start`). No se crea `proxy.ts` ni `middleware.ts` de autorización.

@@ -1,14 +1,14 @@
 # Plan técnico — Requerimientos de personal (RH-REQ-01)
 
 **ID:** RH-REQ-01  
-**Versión del plan:** 1.2 (propuesto el 10-nov-2026 por cambio de stack; **pendiente de aprobación técnica explícita del usuario**). La v1.1 (React + TypeScript con Vite) es histórica: su aprobación del 10-nov-2026 sigue siendo el registro de lo aprobado hasta que el usuario apruebe esta v1.2.  
+**Versión del plan:** 1.2 (**aprobada técnicamente el 10 de noviembre de 2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript con Vite) queda como registro histórico.  
 **Cubre:** RH-REQ-01 v0.7 «Requerimientos de personal» (aprobada funcionalmente el 10-nov-2026). Se integra con CORE-01 v0.6 «Contenedor ERP compartido» a través de su plan ([`../../core/CORE-01-contenedor-erp/plan.md`](../../core/CORE-01-contenedor-erp/plan.md)).  
-**Estado:** **Propuesto** el 10 de noviembre de 2026 por cambio de stack; **pendiente de aprobación técnica explícita del usuario**. Hasta esa aprobación, la v1.1 aprobada el 10-nov-2026 (React + TypeScript + Vite) es el registro vigente de lo aprobado. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 heredadas del contenedor y la persistencia intra-sesión quedan resueltas a nivel de contrato (10-nov-2026); INT-01 (contratos técnicos Selección/Alta y casos límite), P-04 (matriz final de permisos) y la aprobación de esta v1.2 siguen abiertos.  
+**Estado:** **Aprobado técnicamente el 10 de noviembre de 2026** (v1.2, cambio de stack a Next.js). La v1.1 aprobada el 10-nov-2026 (React + TypeScript + Vite) queda como registro histórico. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 heredadas del contenedor y la persistencia intra-sesión quedan resueltas a nivel de contrato (10-nov-2026); INT-01 (contratos técnicos Selección/Alta y casos límite) y P-04 (matriz final de permisos) siguen abiertos.  
 **Fecha:** 10 de noviembre de 2026.
 
 ## Decisiones técnicas adoptadas (10 de noviembre de 2026)
 
-- **Stack (revisado el 10-nov-2026; propuesto, pendiente de aprobación):** Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS, entregado con `next start`; **sin SSR de datos ni de sesión** (`layout.tsx` servidor, shell cliente); sin autorización en `proxy.ts` (antes `middleware.ts`); runner único Vitest con React Testing Library + jsdom. Detalle y rationale: plan de CORE-01 §6, que es la **fuente canónica**.
+- **Stack (revisado el 10-nov-2026; aprobado con la v1.2):** Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS, entregado con `next start`; **sin SSR de datos ni de sesión** (`layout.tsx` servidor, shell cliente); sin autorización en `proxy.ts` (antes `middleware.ts`); runner único Vitest con React Testing Library + jsdom. Detalle y rationale: plan de CORE-01 §6, que es la **fuente canónica**.
 - **Nota (10-nov-2026):** el cambio de stack no altera ningún requisito, criterio ni la decisión de persistencia intra-sesión; se registra en el plan de CORE-01 §6.
 - **Operaciones:** se construye contra mocks/adaptadores de contrato, distinguibles de operaciones reales, sin autorización ni persistencia falsas.
 - **Diferido:** RH-REQ-01 §10 criterio 18 (comparación visual de páginas 6–9) y C-05 quedan diferidos en este corte.
@@ -116,9 +116,9 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 ## 5. Riesgos y decisiones abiertas para el usuario
 
-**Decisiones propuestas (pendiente de aprobación del usuario).**
+**Aprobadas el 10-nov-2026 (v1.2).**
 
-- **Stack y tooling (10-nov-2026)** — Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS; sin SSR de datos ni de sesión; sin autorización en `proxy.ts` (antes `middleware.ts`); runner único Vitest con React Testing Library + jsdom. Detalle, rationale y riesgos: plan de CORE-01 §6, **fuente canónica**. **No aprobada:** la aprobación técnica del 10-nov-2026 corresponde a la v1.1 (React + TypeScript con Vite).
+- **Stack y tooling (10-nov-2026)** — Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS; sin SSR de datos ni de sesión; sin autorización en `proxy.ts` (antes `middleware.ts`); runner único Vitest con React Testing Library + jsdom. Detalle, rationale y riesgos: plan de CORE-01 §6, **fuente canónica**.
 
 **Resueltas (10 de noviembre de 2026):**
 
@@ -129,11 +129,10 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 3. **INT-01:** contratos técnicos con Selección/Alta y resolución de casos límite (duplicidad/reintento de apertura, concurrencia, reversión rechazada).
 4. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional.
-5. **Aprobación de esta v1.2:** aprobación técnica explícita del usuario sobre el cambio de stack; hasta entonces no se ejecuta la tarea de andamiaje sobre Next.js.
 
 **Diferido (fuera de este corte):**
 
-6. **RH-REQ-01 §10 criterio 18** — DIFERIDO junto a C-05: la comparación visual de páginas 6–9 no es exigible en este corte (mismo límite de lectura del PDF).
+5. **RH-REQ-01 §10 criterio 18** — DIFERIDO junto a C-05: la comparación visual de páginas 6–9 no es exigible en este corte (mismo límite de lectura del PDF).
 
 **Riesgos principales.**
 
@@ -144,4 +143,4 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 ---
 
-**Siguiente punto:** implementación por tareas (`tasks.md` ya creado); las decisiones técnicas abiertas de §5 se resuelven antes de cerrar las tareas que dependen de esos contratos. La v1.2 está **propuesta** y requiere aprobación técnica explícita del usuario antes de ejecutar las tareas que dependen del stack (T-RH-01 sobre T-CORE-11).
+**Siguiente punto:** la v1.2 está **aprobada técnicamente el 10-nov-2026**; sigue la implementación de T-CORE-11 (base Next.js) y después las tareas de este plan. Las decisiones técnicas abiertas de §5 (INT-01 y P-04) se resuelven antes de cerrar las tareas que dependen de esos contratos.
