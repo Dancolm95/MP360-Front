@@ -1,9 +1,9 @@
 # Plan técnico — Contenedor ERP compartido (CORE-01)
 
 **ID:** CORE-01  
-**Versión del plan:** 1.0 (aprobado técnicamente el 10-nov-2026).  
+**Versión del plan:** 1.1 (aprobado técnicamente el 10-nov-2026; v1.1 registra las decisiones C-01 a C-04 el 10-nov-2026).  
 **Cubre:** CORE-01 v0.6 «Contenedor ERP compartido» (aprobada funcionalmente el 10-nov-2026). Se integra con RH-REQ-01 v0.7 «Requerimientos de personal» a través de su plan ([`../../rrhh/RH-REQ-01-requerimientos/plan.md`](../../rrhh/RH-REQ-01-requerimientos/plan.md)).  
-**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes.  
+**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 quedan resueltas a nivel de contrato (10-nov-2026); solo P-04 sigue abierta (plazo de la matriz final de permisos y criterio de migración).  
 **Fecha:** 10 de noviembre de 2026.
 
 ## Decisiones técnicas adoptadas (10 de noviembre de 2026)
@@ -11,6 +11,11 @@
 - **Stack:** React + TypeScript (Vite).
 - **Operaciones:** se construye contra mocks/adaptadores de contrato, distinguibles de operaciones reales, sin autorización ni persistencia falsas.
 - **Diferido:** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 quedan diferidos en este corte (verificación visual directa con el PDF).
+- **C-01 (sesión):** puerto de sesión opaco — el frontend solicita contexto/capacidades y escucha el fin de sesión, sin ver credenciales ni token; el transporte lo resuelve el adaptador; estados `loading`/`authenticated`/`expired`/`terminated`/`error`.
+- **C-01 (fin de sesión y recuperación):** expiración/terminación por suscripción `onEnded`; recuperación mediante `recoverAccess()` delegada en el proveedor, sin URL tipada ni login local.
+- **C-03 (catálogo):** jerárquico módulo → sección con `status: 'implemented' | 'not-implemented'`, `visible: boolean` y `capabilities: Capability[]` (vacío = visible pero no operable); `Capability` es cadena opaca con prefijo, nunca nombre de rol.
+- **C-04 (persistencia intra-sesión y destinos):** `sessionStorage` solo con datos no sensibles, encapsulado en `SessionScopedStore<T>` y borrado al terminar la sesión; destinos desconocidos devuelven `ok | forbidden | not-found | session-ended`, distintos de «Próximamente».
+- **C-02 (salida):** `signOut()` tipado con resultado de éxito (destino `provider | local`) o error `retryable`; acción y destino concretos los resuelve el adaptador, sin fijar URL ni endpoint.
 
 ---
 
@@ -28,7 +33,7 @@
 
 ## 2. Contratos por acordar o resolver en este plan
 
-Cada contrato define responsabilidades por parte (frontend, backend ERP, proveedor externo), entrada y salida esperadas, y criterio de verificación. No se fijan APIs concretas, URLs ni payloads; lo que depende de elección de stack o del proveedor real queda como decisión pendiente del usuario (señalado en cada caso y recogido en §5).
+Cada contrato define responsabilidades por parte (frontend, backend ERP, proveedor externo), entrada y salida esperadas, y criterio de verificación. No se fijan APIs concretas, URLs ni payloads; lo que depende del transporte o del proveedor real lo resuelve el adaptador, con las decisiones registradas en §5 (C-01 a C-04 resueltas el 10-nov-2026; solo P-04 abierta).
 
 ### 2.1 C-01 — Sesión, identidad, contexto y capacidades efectivas; expiración, terminación, actualización y fallos
 
@@ -41,7 +46,7 @@ Cada contrato define responsabilidades por parte (frontend, backend ERP, proveed
 **Entrada esperada:** una sesión externa válida (o la notificación de expiración/terminación).  
 **Salida esperada:** contexto + capacidades efectivas (o un estado explícito de error/expiración); y, al vencer o terminar, la limpieza inmediata y aislada del estado local.  
 **Criterio de verificación:** CORE-01 §7 criterios 5 y 6 (y 7 para la salida). Sin herencia de estado entre autenticaciones; sin datos sensibles en `localStorage`; indicación de recuperación por proveedor.  
-**Decisiones pendientes del usuario (stack/proveedor):** mecanismo por el que el frontend conoce la sesión válida (no se fija cookie/header/token); mecanismo de comunicación de expiración/actualización/fallo (no se fija polling/push/error de API); mecanismo de recuperación de acceso del proveedor (no se fija URL de re-login).
+**Resuelto (10-nov-2026):** puerto de sesión opaco (D1), fin de sesión por suscripción `onEnded` y recuperación vía `recoverAccess()` sin URL tipada (D2); el transporte concreto lo resuelve el adaptador.
 
 ### 2.2 C-03 — Catálogo de secciones, estado implementado y visibilidad/capacidades efectivas
 
@@ -54,7 +59,7 @@ Cada contrato define responsabilidades por parte (frontend, backend ERP, proveed
 **Entrada esperada:** contexto/capacidades del usuario (C-01).  
 **Salida esperada:** lista de secciones con estado implementado y visibilidad/capacidades efectivas; el frontend la refleja sin inferir permisos del nombre de rol ni de etiquetas del PDF.  
 **Criterio de verificación:** CORE-01 §7 criterios 1, 2, 3 y 5.  
-**Decisiones pendientes del usuario (contrato de catálogo):** estructura y granularidad del catálogo; cómo se marca «implementada» frente a «no implementada»; cómo se distingue visibilidad de capacidad operativa.
+**Resuelto (10-nov-2026):** catálogo jerárquico módulo → sección con `status: 'implemented' | 'not-implemented'`, `visible: boolean` y `capabilities: Capability[]` (vacío = visible pero no operable); `Capability` es cadena opaca con prefijo, nunca nombre de rol.
 
 ### 2.3 C-04 — Semántica de rutas lógicas, destinos directos/desconocidos, retorno y aislamiento de persistencia intra-sesión
 
@@ -67,7 +72,7 @@ Cada contrato define responsabilidades por parte (frontend, backend ERP, proveed
 **Entrada esperada:** una ruta lógica o un destino directo, con sesión y capacidades.  
 **Salida esperada:** la vista autorizada o un estado de sin permisos/error; el contexto de bandeja (filtros, orden, página) preservado solo dentro de la sesión y limpiado al finalizar.  
 **Criterio de verificación:** CORE-01 §7 criterios 1–4, 6 y 8; RH-REQ-01 §10 criterios 14, 22 y 23 (retorno de contexto de bandeja y persistencia de filtros).  
-**Decisiones pendientes del usuario (stack):** mecanismo de persistencia intra-sesión sin `localStorage` sensible (no se fija memoria/almacenamiento concreto); semántica exacta de destinos desconocidos.
+**Resuelto (10-nov-2026):** persistencia intra-sesión en `sessionStorage` solo con datos no sensibles, encapsulada en `SessionScopedStore<T>` y borrada al terminar la sesión; destinos desconocidos como resultado discriminado `ok | forbidden | not-found | session-ended`, sin datos y sin vista ficticia.
 
 ### 2.4 C-02 — Salida voluntaria («Salir»)
 
@@ -80,7 +85,7 @@ Cada contrato define responsabilidades por parte (frontend, backend ERP, proveed
 **Entrada esperada:** activación de «Salir».  
 **Salida esperada:** sesión real cerrada en el proveedor y limpieza local inmediata (o, en caso de error del proveedor, estado conservado con mensaje y opción de reintento si procede).  
 **Criterio de verificación:** CORE-01 §7 criterios 6 y 7.  
-**Decisiones pendientes del usuario (proveedor):** la acción concreta de cierre de sesión en el proveedor (no se fija endpoint/URL); el destino de confirmación tras salir (no se fija pantalla); el manejo de errores del proveedor (no se fija reintento ni mensaje).
+**Resuelto (10-nov-2026):** `signOut()` devuelve éxito con destino `provider | local` o error `retryable`; la acción de cierre y el destino los resuelve el adaptador, sin fijar URL ni endpoint.
 
 ---
 
@@ -123,20 +128,21 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 **Resueltas (10 de noviembre de 2026):**
 
-1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado y el mecanismo de persistencia intra-sesión quedan como decisión técnica abierta (C-04) a resolver antes de cerrar T-CORE-05/T-CORE-07; no se deducen del ZIP ni de la maqueta ni los concreta `tasks.md`.
+1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado concreto queda a criterio de la implementación y no se deduce del ZIP ni de la maqueta; la persistencia intra-sesión queda resuelta en C-04 (10-nov-2026).
 2. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
+3. **C-01 (sesión):** puerto de sesión opaco con estados `loading`/`authenticated`/`expired`/`terminated`/`error`; el frontend solicita contexto/capacidades sin ver credenciales ni token y el transporte lo resuelve el adaptador (10-nov-2026).
+4. **C-02 (salida):** `signOut()` devuelve éxito con destino `provider | local` o error `retryable`; la acción de cierre y el destino los resuelve el adaptador, sin fijar URL ni endpoint (10-nov-2026).
+5. **C-03 (catálogo):** catálogo jerárquico módulo → sección con `status: 'implemented' | 'not-implemented'`, `visible: boolean` y `capabilities: Capability[]` (vacío = visible pero no operable); `Capability` es cadena opaca con prefijo, nunca nombre de rol (10-nov-2026).
+6. **C-04 (persistencia intra-sesión y destinos):** `sessionStorage` solo con datos no sensibles, encapsulado en `SessionScopedStore<T>` y borrado al terminar la sesión; destinos desconocidos devuelven `ok | forbidden | not-found | session-ended`, distintos de «Próximamente» (10-nov-2026).
+7. **C-01 (fin de sesión y recuperación):** expiración/terminación por suscripción `onEnded` y recuperación vía `recoverAccess()` delegada en el proveedor, sin URL tipada ni login local (10-nov-2026).
 
 **Decisiones técnicas abiertas (a resolver antes de cerrar las tareas dependientes; `tasks.md` ya existe pero no las concreta):**
 
-3. **C-01:** mecanismo de transporte de sesión, mecanismo de comunicación de expiración/actualización/fallo y mecanismo de recuperación de acceso del proveedor (sin login local).
-4. **C-02:** acción concreta de cierre de sesión en el proveedor, destino de confirmación tras salir y manejo de errores del proveedor.
-5. **C-03:** estructura/granularidad del catálogo de secciones y distinción visibilidad vs. capacidad operativa.
-6. **C-04:** mecanismo de persistencia intra-sesión (sin `localStorage` sensible) y semántica de destinos desconocidos.
-7. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional.
+8. **P-04:** plazo de disponibilidad de la matriz final de permisos y criterio de migración desde el contrato provisional; se resolverán antes de cerrar T-CORE-10.
 
 **Diferido (fuera de este corte):**
 
-8. **C-05** — DIFERIDO: la comparación visual directa con el PDF queda fuera de este corte (CORE-01 §7 criterio 9); el criterio 18 de RH-REQ-01 se difiere junto con C-05 (véase el plan de RH-REQ-01).
+9. **C-05** — DIFERIDO: la comparación visual directa con el PDF queda fuera de este corte (CORE-01 §7 criterio 9); el criterio 18 de RH-REQ-01 se difiere junto con C-05 (véase el plan de RH-REQ-01).
 
 **Riesgos principales.**
 

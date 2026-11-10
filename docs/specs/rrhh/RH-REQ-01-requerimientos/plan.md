@@ -1,9 +1,9 @@
 # Plan técnico — Requerimientos de personal (RH-REQ-01)
 
 **ID:** RH-REQ-01  
-**Versión del plan:** 1.0 (aprobado técnicamente el 10-nov-2026).  
+**Versión del plan:** 1.1 (aprobado técnicamente el 10-nov-2026; v1.1 registra la decisión de persistencia intra-sesión y las decisiones C-01 a C-04 heredadas del contenedor el 10-nov-2026).  
 **Cubre:** RH-REQ-01 v0.7 «Requerimientos de personal» (aprobada funcionalmente el 10-nov-2026). Se integra con CORE-01 v0.6 «Contenedor ERP compartido» a través de su plan ([`../../core/CORE-01-contenedor-erp/plan.md`](../../core/CORE-01-contenedor-erp/plan.md)).  
-**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes.  
+**Estado:** Aprobado técnicamente el 10 de noviembre de 2026. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 heredadas del contenedor y la persistencia intra-sesión quedan resueltas a nivel de contrato (10-nov-2026); INT-01 (contratos técnicos Selección/Alta y casos límite) y P-04 (matriz final de permisos) siguen abiertas.  
 **Fecha:** 10 de noviembre de 2026.
 
 ## Decisiones técnicas adoptadas (10 de noviembre de 2026)
@@ -11,6 +11,8 @@
 - **Stack:** React + TypeScript (Vite).
 - **Operaciones:** se construye contra mocks/adaptadores de contrato, distinguibles de operaciones reales, sin autorización ni persistencia falsas.
 - **Diferido:** RH-REQ-01 §10 criterio 18 (comparación visual de páginas 6–9) y C-05 quedan diferidos en este corte.
+- **Persistencia intra-sesión (C-04, heredada del contenedor):** `sessionStorage` solo con datos no sensibles, encapsulada en `SessionScopedStore<T>` y borrada al terminar la sesión; aplica a filtros, orden y página de la bandeja (T-RH-06).
+- **Autorización y catálogo (C-01/C-03, heredadas):** capacidades como cadenas opacas con prefijo, nunca nombres de rol; visibilidad no concede operación.
 
 ---
 
@@ -117,7 +119,7 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 **Resueltas (10 de noviembre de 2026):**
 
-1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado y el mecanismo de persistencia intra-sesión quedan como decisión técnica abierta a resolver antes de cerrar T-RH-06 y las tareas que dependan de persistencia; no se deducen del ZIP ni de la maqueta ni los concreta `tasks.md`.
+1. **Elección de stack y tooling** — RESUELTA: React + TypeScript (Vite). El gestor de estado concreto queda a criterio de la implementación y no se deduce del ZIP ni de la maqueta. La persistencia intra-sesión queda resuelta (10-nov-2026): `sessionStorage` solo con datos no sensibles, encapsulada en `SessionScopedStore<T>` y borrada al terminar la sesión (aplica a T-RH-06).
 2. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
 
 **Decisiones técnicas abiertas (a resolver antes de cerrar las tareas dependientes; `tasks.md` ya existe pero no las concreta):**

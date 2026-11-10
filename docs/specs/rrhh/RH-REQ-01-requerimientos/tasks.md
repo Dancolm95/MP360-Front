@@ -1,7 +1,7 @@
 # Tareas — Requerimientos de personal (RH-REQ-01)
 
 **Spec:** RH-REQ-01 v0.7 (aprobada funcionalmente el 10-nov-2026).  
-**Plan:** [`plan.md`](plan.md) v1.0 (aprobado técnicamente el 10-nov-2026).  
+**Plan:** [`plan.md`](plan.md) v1.1 (aprobado técnicamente el 10-nov-2026; v1.1 con persistencia intra-sesión resuelta y C-01 a C-04 heredadas).  
 **Estado del corte:** sin tareas iniciadas; ninguna tarea marcada como hecha.  
 **Alcance activo:** RH-REQ-01 §10 criterios 1–17 y 19–27.  
 **Diferido (fuera del alcance activo):** RH-REQ-01 §10 criterio 18 y C-05 (verificación diferida).

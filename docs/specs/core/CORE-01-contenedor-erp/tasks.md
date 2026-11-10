@@ -1,8 +1,8 @@
 # Tareas — Contenedor ERP compartido (CORE-01)
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
-**Plan:** [`plan.md`](plan.md) v1.0 (aprobado técnicamente el 10-nov-2026).  
-**Estado del corte:** sin tareas iniciadas; ninguna tarea marcada como hecha.  
+**Plan:** [`plan.md`](plan.md) v1.1 (aprobado técnicamente el 10-nov-2026; v1.1 con C-01 a C-04 resueltas).  
+**Estado del corte:** T-CORE-01 hecha (scaffold React + TypeScript + Vite; `npm install`/`build`/`dev` OK; reviewer APROBADO el 10-nov-2026); T-CORE-02…10 pendientes.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -17,7 +17,7 @@
 ## Fase A — Andamiaje y contratos base
 
 ### T-CORE-01 — Andamiaje del proyecto React + TypeScript (Vite)
-- [ ] Hecha
+- [x] Hecha — Evidencia: scaffold React + TypeScript + Vite en `src/` (`container/`, `shared/`, `modules/rrhh/`); `npm install` sin vulnerabilidades, `npm run build` (tsc + vite) sin errores y `npm run dev` arrancando (HTTP 200); reviewer APROBADO el 10-nov-2026.
 - **Depende de:** — (primera tarea).
 - **Traza:** constitución §Arquitectura; plan §1; decisión técnica (React + TS + Vite).
 - **Entrada:** decisión técnica de stack aprobada (10-nov-2026).
