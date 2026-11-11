@@ -4,12 +4,12 @@ Frontend administrativo **modular** del ERP MP 360. **RR. HH. es el primer módu
 
 ## Estado del proyecto
 
-Fase de **implementación por tareas (SDD)**: specs aprobadas funcionalmente, planes **v1.2 aprobados técnicamente el 10-nov-2026** (la v1.1 con Vite es histórica) y tareas creadas. El andamiaje Next.js, los contratos y las fixtures del contenedor están cerrados (T-CORE-02, T-CORE-03 y T-CORE-11); las vistas aún no existen.
+Fase de **implementación por tareas (SDD)**: specs aprobadas funcionalmente, planes **v1.2 aprobados técnicamente el 10-nov-2026** (la v1.1 con Vite es histórica) y tareas creadas. El andamiaje Next.js, los contratos, las fixtures y la cabecera/selector del contenedor están cerrados (T-CORE-02, T-CORE-03, T-CORE-11 y T-CORE-04); las **vistas de dominio** aún no existen.
 
 | Capacidad | Módulo | Spec | Estado | Documento |
 |---|---|---|---|---|
 | Requerimientos de personal | RR. HH. | RH-REQ-01 v0.7 | Aprobada funcionalmente (10-nov-2026); plan **v1.2 aprobado técnicamente** (10-nov-2026; v1.1 histórica); tareas creadas (T-RH-01…24), ninguna iniciada | [spec.md](docs/specs/rrhh/RH-REQ-01-requerimientos/spec.md) · [plan.md](docs/specs/rrhh/RH-REQ-01-requerimientos/plan.md) · [tasks.md](docs/specs/rrhh/RH-REQ-01-requerimientos/tasks.md) |
-| Contenedor ERP compartido | Core | CORE-01 v0.6 | Aprobada funcionalmente (10-nov-2026); plan **v1.2 aprobado técnicamente** (10-nov-2026; v1.1 histórica); tareas creadas (T-CORE-01…11); T-CORE-11 cerrada y mergeada; T-CORE-04 siguiente | [spec.md](docs/specs/core/CORE-01-contenedor-erp/spec.md) · [plan.md](docs/specs/core/CORE-01-contenedor-erp/plan.md) · [tasks.md](docs/specs/core/CORE-01-contenedor-erp/tasks.md) |
+| Contenedor ERP compartido | Core | CORE-01 v0.6 | Aprobada funcionalmente (10-nov-2026); plan **v1.2 aprobado técnicamente** (10-nov-2026; v1.1 histórica); tareas creadas (T-CORE-01…11); T-CORE-11 y T-CORE-04 cerradas y mergeadas; T-CORE-05 siguiente | [spec.md](docs/specs/core/CORE-01-contenedor-erp/spec.md) · [plan.md](docs/specs/core/CORE-01-contenedor-erp/plan.md) · [tasks.md](docs/specs/core/CORE-01-contenedor-erp/tasks.md) |
 
 > Corte en curso: contenedor ERP compartido + `UX-02`/`UX-03`/`UX-04`. Stack: **Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS**, con mocks/adaptadores de contrato. El cambio de stack fue **aprobado técnicamente el 10-nov-2026** (plan v1.2) y sustituye a la decisión anterior de React + TypeScript con Vite (plan v1.1, histórica). C-05 y el criterio 18 de RH-REQ-01 quedan diferidos; siguen abiertas las decisiones de INT-01 (contratos técnicos Selección/Alta y casos límite) y P-04 (matriz final de permisos y criterio de migración).
 
