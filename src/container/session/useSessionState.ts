@@ -7,6 +7,7 @@ import type {
   SessionContextResult,
   SessionEndedReason,
   SessionPort,
+  SignOutDestination,
 } from '../contracts'
 import {
   createSessionStoreRegistry,
@@ -17,10 +18,11 @@ import {
  * Límite de estado de sesión del contenedor (C-01, plan §2.1; CORE-01 §5 y §7
  * criterios 5 y 6).
  *
- * Representa `loading`, `authenticated`, `error`, `expired` y `terminated` a
- * partir de `SessionPort.getContext()` y `onEnded()`. Mientras carga o falla no
- * conserva identidad, contexto ni capacidades anteriores; al vencer o terminar
- * limpia de inmediato el estado y todos los stores intra-sesión registrados.
+ * Representa `loading`, `authenticated`, `error`, `expired`, `terminated` y
+ * `signedOut` a partir de `SessionPort.getContext()` y `onEnded()`. Mientras
+ * carga o falla no conserva identidad, contexto ni capacidades anteriores; al
+ * vencer, terminar o salir con éxito limpia de inmediato el estado y todos los
+ * stores intra-sesión registrados.
  * Al iniciar una autenticación nueva (cambio de `sessionKey`, o de puerto de
  * sesión si no se aporta) invalida la carga anterior y limpia también todos los
  * stores, de modo que ningún usuario hereda filtros ni contexto de bandeja.
@@ -33,6 +35,8 @@ export type SessionState =
   | { readonly status: 'error'; readonly error: ContractError }
   | { readonly status: 'expired' }
   | { readonly status: 'terminated' }
+  /** Salida voluntaria completada (C-02): la sesión local ya se limpió. */
+  | { readonly status: 'signedOut'; readonly destination: SignOutDestination }
 
 export interface UseSessionStateOptions {
   /**
@@ -60,6 +64,12 @@ export interface SessionStateApi {
   readonly retry: () => void
   /** Recuperación delegada en el proveedor externo; sin login local. */
   readonly recoverAccess: () => Promise<void>
+  /**
+   * Cierra la sesión local tras un `signOut` exitoso (C-02): invalida la carga
+   * en curso, limpia identidad/contexto/capacidades y todos los stores
+   * registrados, y deja el estado terminal `signedOut` con el destino acordado.
+   */
+  readonly endSession: (destination: SignOutDestination) => void
   /** Registra un store adicional para limpiarlo al terminar la sesión. */
   readonly registerStore: (store: SessionStateCleanupStore) => () => void
 }
@@ -180,7 +190,15 @@ export function useSessionState(
     (reason: SessionEndedReason) => {
       generationRef.current += 1
       registry.clearAll()
-      setState(reason === 'expired' ? { status: 'expired' } : { status: 'terminated' })
+      // Una salida voluntaria ya confirmada es terminal: un aviso tardío del
+      // proveedor no revierte la confirmación del destino al usuario.
+      setState((current) =>
+        current.status === 'signedOut'
+          ? current
+          : reason === 'expired'
+            ? { status: 'expired' }
+            : { status: 'terminated' },
+      )
     },
     [registry],
   )
@@ -240,10 +258,20 @@ export function useSessionState(
 
   const recoverAccess = useCallback(() => sessionRef.current.recoverAccess(), [])
 
+  const endSession = useCallback(
+    (destination: SignOutDestination) => {
+      // Una respuesta tardía de la carga en curso no repuebla el estado.
+      generationRef.current += 1
+      registry.clearAll()
+      setState({ status: 'signedOut', destination })
+    },
+    [registry],
+  )
+
   const registerStore = useCallback(
     (store: SessionStateCleanupStore) => registry.register(store),
     [registry],
   )
 
-  return { state, retry, recoverAccess, registerStore }
+  return { state, retry, recoverAccess, endSession, registerStore }
 }

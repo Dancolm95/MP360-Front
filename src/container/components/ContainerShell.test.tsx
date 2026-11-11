@@ -6,6 +6,7 @@ import {
   RRHH_MODULE_ID,
   createSessionWithUx02Fixture,
   createSessionWithoutUx02Fixture,
+  mockSignOutSuccess,
 } from '../fixtures'
 import { ContainerShell } from './ContainerShell'
 
@@ -67,5 +68,24 @@ describe('ContainerShell (CORE-01 §7 criterio 1)', () => {
     render(<ContainerShell catalog={catalog} />)
 
     expect(screen.queryByRole('complementary')).toBeNull()
+  })
+
+  it('sin puerto de salida no renderiza «Salir»; con puerto la acción va en la cabecera', async () => {
+    const catalog = await readCatalog(createSessionWithUx02Fixture().catalog)
+
+    const { rerender } = render(<ContainerShell catalog={catalog} />)
+    expect(screen.queryByRole('button', { name: 'Salir' })).toBeNull()
+
+    rerender(
+      <ContainerShell
+        catalog={catalog}
+        identity={{ displayName: 'Ana Pérez' }}
+        signOut={mockSignOutSuccess('provider')}
+      />,
+    )
+
+    const banner = screen.getByRole('banner')
+    expect(banner.querySelector('button')).not.toBeNull()
+    expect(screen.getByRole('button', { name: 'Salir' })).toBeDefined()
   })
 })

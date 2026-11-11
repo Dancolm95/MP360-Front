@@ -17,9 +17,11 @@ export {
   AppHeader,
   ContainerShell,
   ModuleSelector,
+  SignOutAction,
   type AppHeaderProps,
   type ContainerShellProps,
   type ModuleSelectorProps,
+  type SignOutActionProps,
 } from './components'
 export { getModuleLabel } from './labels'
 export { getSelectableModules } from './selectors'

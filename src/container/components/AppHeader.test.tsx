@@ -30,4 +30,16 @@ describe('AppHeader (CORE-01 §7 criterio 1)', () => {
     expect(screen.queryByText(/Sesión:/)).toBeNull()
     expect(screen.queryByText('   ')).toBeNull()
   })
+
+  it('monta las acciones opcionales en la cabecera', () => {
+    render(
+      <AppHeader
+        identity={{ displayName: 'Ana Pérez' }}
+        actions={<button type="button">Salir</button>}
+      />,
+    )
+
+    expect(screen.getByRole('banner')).toBeDefined()
+    expect(screen.getByRole('button', { name: 'Salir' })).toBeDefined()
+  })
 })
