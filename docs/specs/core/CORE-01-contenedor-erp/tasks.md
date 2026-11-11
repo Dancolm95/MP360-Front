@@ -1,8 +1,8 @@
 # Tareas — Contenedor ERP compartido (CORE-01)
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
-**Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03, T-CORE-11, T-CORE-04 y **T-CORE-05 hechas y en `main`** (`b36a956`, `74ef493`, `ec02c2a`+`df1ade6`, `9f1495c`+`6e7d2ab` y `c8cc754`+`05bd9a9`, respectivamente); T-CORE-05 validada **APROBADO** por el reviewer el 11-nov-2026 tras un ciclo de corrección (primer veredicto `CAMBIOS NECESARIOS`, sin hallazgos bloqueantes en la revisión final) y mergeada en `main` con `--ff-only`. **T-CORE-06 es la siguiente tarea y no está iniciada:** no se inicia hasta confirmación explícita del usuario; T-CORE-06…10 siguen pendientes.  
+**Plan:** [`plan.md`](plan.md) v1.3 (**11-nov-2026**; la v1.2 con stack Next.js sigue aprobada técnicamente desde el 10-nov-2026 y la v1.3 solo añade la decisión de tooling: pnpm). La v1.1 (React + TypeScript con Vite) es histórica.  
+**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03, T-CORE-11, T-CORE-04 y **T-CORE-05 hechas y en `main`** (`b36a956`, `74ef493`, `ec02c2a`+`df1ade6`, `9f1495c`+`6e7d2ab` y `c8cc754`+`05bd9a9`, respectivamente); T-CORE-05 validada **APROBADO** por el reviewer el 11-nov-2026 tras un ciclo de corrección (primer veredicto `CAMBIOS NECESARIOS`, sin hallazgos bloqueantes en la revisión final) y mergeada en `main` con `--ff-only`. **T-CORE-12 (adoptar pnpm como gestor de dependencias, tooling) es la siguiente tarea y no está iniciada:** requiere confirmación explícita del usuario; **T-CORE-06 va después** de T-CORE-12 y T-CORE-06…10 siguen pendientes. La migración a pnpm **no está ejecutada**: `package-lock.json` sigue versionado y `pnpm-lock.yaml` está parked fuera del repositorio.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -59,6 +59,20 @@
   - **Se conservan sin cambios:** `src/container/`, `src/shared/`, `src/modules/rrhh/` y los contratos de T-CORE-02.
 - **Hecho cuando:** `npm run build` termina sin errores; `npm start` responde HTTP 200 tras `next build`, con el árbol limpio de `dist/`/`.next/`; `npm test` pasa completo (contratos, fixtures y prueba de humo de componente); la comprobación acotada de Vite se cumple —no existen `vite.config.ts` ni `index.html`, y no hay referencias a Vite en `package.json`, `tsconfig.json`, `next.config.ts` ni `src/`, excluyendo `vitest.config.ts` y las coincidencias de la cadena «vitest»—; la evidencia se registra bajo **Node 24 LTS** (el entorno local tiene 25.9.0).
 
+### T-CORE-12 — Adoptar pnpm como gestor de dependencias (tooling)
+- [ ] Hecha
+- **Depende de:** T-CORE-11.
+- **Traza:** plan §6.1 «Revisión de tooling (11-nov-2026)» y plan §5 «Decisión de tooling adoptada el 11-nov-2026 (v1.3)»; decisión del usuario/senior del 11-nov-2026. No traza criterios de aceptación: es una tarea de tooling y no altera requisitos, contratos ni alcance.
+- **Entrada:** `package.json`, `package-lock.json`, `pnpm-lock.yaml` generado con pnpm 12.14.0, `.gitignore` y `next-env.d.ts`.
+- **Salida:**
+  - **Lockfile:** `pnpm-lock.yaml` versionado; `package-lock.json` retirado del repositorio y del control de versiones.
+  - **`package.json`:** `packageManager` declarado con la versión exacta de pnpm (12.14.0, confirmada con `pnpm --version`); se mantienen los scripts (`dev`, `build`, `start`, `test`, `test:watch`), `engines.node` y `.nvmrc` con Node 24 LTS. Sin altas ni bajas de dependencias.
+  - **`.gitignore`:** `node_modules/` sigue ignorado; se añade `.pnpm-store/` de forma defensiva (el store real está fuera del repositorio).
+  - **`next-env.d.ts`:** política aplicada con evidencia, no por suposición: se ignora y retira del índice solo si `pnpm build`, `pnpm test` y `pnpm exec tsc --noEmit` pasan sin él; en caso contrario se mantiene versionado y se documenta que se restaura tras `pnpm dev` (ruta `.next/dev/types`).
+  - **Documentación:** las instrucciones vigentes de instalación y evidencia pasan a pnpm; la evidencia histórica con `npm` se conserva como registro y no se reescribe.
+  - **Sin cambios:** `src/` (código de aplicación), contratos, fixtures, configuración de Next/Vitest y criterios de aceptación.
+- **Hecho cuando:** `pnpm install --frozen-lockfile`, `pnpm test` (**7 archivos / 43 pruebas**), `pnpm build` y `pnpm exec tsc --noEmit` pasan bajo **Node 24 LTS**; el árbol queda limpio (`git status --porcelain` vacío) tras build y tests; no existe `package-lock.json` ni quedan referencias nuevas a npm como instrucción vigente (solo como historia); la política de `next-env.d.ts` está aplicada y demostrada con la evidencia anterior.
+
 ## Fase B — Contenedor
 
 ### T-CORE-04 — Cabecera, identidad y selector de módulos
@@ -79,6 +93,7 @@
 
 ### T-CORE-06 — Acción «Salir» (C-02)
 - [ ] Hecha
+- **Secuencia:** no se inicia hasta cerrar T-CORE-12 (adopción de pnpm); su alcance, dependencias funcionales y «Hecho cuando» no cambian.
 - **Depende de:** T-CORE-05.
 - **Traza:** CORE-01 §7 criterios 6 y 7; plan §2.4.
 - **Entrada:** contrato de salida de T-CORE-02 y fixtures.

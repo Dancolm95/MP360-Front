@@ -1,12 +1,12 @@
 # Plan técnico — Contenedor ERP compartido (CORE-01)
 
 **ID:** CORE-01  
-**Versión del plan:** 1.2 (**aprobada técnicamente el 10 de noviembre de 2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript con Vite) queda como registro histórico.  
-**Cubre:** CORE-01 v0.6 «Contenedor ERP compartido» (aprobada funcionalmente el 10-nov-2026). Se integra con RH-REQ-01 v0.7 «Requerimientos de personal» a través de su plan ([`../../rrhh/RH-REQ-01-requerimientos/plan.md`](../../rrhh/RH-REQ-01-requerimientos/plan.md)).  
-**Estado:** **Aprobado técnicamente el 10 de noviembre de 2026** (v1.2, cambio de stack a Next.js). La v1.1 aprobada el 10-nov-2026 (React + TypeScript + Vite) queda como registro histórico. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 quedan resueltas a nivel de contrato (10-nov-2026); P-04 sigue abierta.  
-**Fecha:** 10 de noviembre de 2026.
+**Versión del plan:** 1.3 (**11 de noviembre de 2026**; adopción de **pnpm** como gestor de dependencias, decisión de tooling que no altera requisitos ni criterios). La v1.2 (aprobada técnicamente el 10-nov-2026; cambio de stack a Next.js) y la v1.1 (React + TypeScript con Vite) quedan como registro histórico.  
+**Cubre:** CORE-01 v0.6 «Contenedor ERP compartido» (aprobada funcionalmente el 10-nov-2026; **su aprobación funcional no cambia**). Se integra con RH-REQ-01 v0.7 «Requerimientos de personal» a través de su plan ([`../../rrhh/RH-REQ-01-requerimientos/plan.md`](../../rrhh/RH-REQ-01-requerimientos/plan.md)).  
+**Estado:** **Aprobado técnicamente el 10 de noviembre de 2026** (v1.2, cambio de stack a Next.js). La **v1.3** registra la decisión de tooling del 11-nov-2026 (pnpm) **sin reabrir** requisitos, criterios de aceptación, contratos, alcance ni tareas existentes; la v1.1 aprobada el 10-nov-2026 (React + TypeScript + Vite) queda como registro histórico. No fija URLs, endpoints ni payloads; lo que dependa de proveedor real queda señalado como decisión técnica abierta a resolver antes de cerrar las tareas dependientes. Las decisiones C-01 a C-04 quedan resueltas a nivel de contrato (10-nov-2026); P-04 sigue abierta.  
+**Fecha:** 11 de noviembre de 2026.
 
-## Decisiones técnicas adoptadas (10 de noviembre de 2026)
+## Decisiones técnicas adoptadas (10-11 de noviembre de 2026)
 
 - **Stack (revisado el 10-nov-2026; sustituye a la decisión de la v1.1):** Next.js 16 (App Router) + React 19 + TypeScript, con Node 24 LTS fijado como runtime; entrega con `next start` (servidor Node), sin `output: 'export'` en este MVP.
   - **Renderizado:** **sin SSR de datos ni de sesión**. `src/app/layout.tsx` es Server Component (exporta `metadata`, fija `lang`) y `page.tsx`/el shell del contenedor son Client Components (`'use client'`); Next sigue prerenderizando el HTML inicial, pero no se resuelve contexto ni capacidades en el servidor porque la sesión (C-01) es un puerto opaco: el frontend no ve credenciales ni token.
@@ -21,6 +21,13 @@
   - **Persistencia:** `sessionStorage` (C-04) solo se lee en efectos/cliente, nunca durante el render, para evitar hydration mismatch; `SessionScopedStore<T>` se mantiene sin cambios de contrato.
   - **Tests:** un único runner, **Vitest**, con React Testing Library y jsdom para componentes; se descarta Jest. El runner conserva su propio pipeline (hoy apoyado en Vite) y su configuración es independiente de la de la aplicación; la aplicación no usa Vite.
   - **Estructura:** `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/not-found.tsx` y `src/app/globals.css`; se conservan `src/container/`, `src/shared/` y `src/modules/rrhh/`.
+- **Gestor de dependencias (11-nov-2026; v1.3):** se adopta **pnpm** como gestor único del repositorio; el equipo ha tenido problemas con npm y esta decisión es de tooling, no de requisitos. No cambia código de aplicación, contratos, criterios ni tareas existentes.
+  - **Lockfile:** `pnpm-lock.yaml` versionado y `package-lock.json` retirado del control de versiones.
+  - **Fijado de versión:** `packageManager` en `package.json` con `pnpm@12.14.0` (la versión exacta se confirma con `pnpm --version` al ejecutar T-CORE-12). Node 24 LTS se mantiene (`.nvmrc`, `engines.node`).
+  - **Ignorados:** `node_modules/` sigue ignorado; se añade `.pnpm-store/` a `.gitignore` de forma defensiva (el store real está fuera del repositorio).
+  - **`next-env.d.ts`:** archivo generado por Next; política a fijar **con evidencia** en T-CORE-12 (véase §6.1).
+  - **Comandos oficiales de evidencia:** `pnpm install --frozen-lockfile`, `pnpm test`, `pnpm build` y `pnpm exec tsc --noEmit`, bajo Node 24 LTS.
+  - **Historia:** las evidencias registradas con `npm` se conservan como registro histórico; las instrucciones vigentes y nuevas usan pnpm.
 - **Operaciones:** se construye contra mocks/adaptadores de contrato, distinguibles de operaciones reales, sin autorización ni persistencia falsas.
 - **Diferido:** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 quedan diferidos en este corte (verificación visual directa con el PDF).
 - **C-01 (sesión):** puerto de sesión opaco — el frontend solicita contexto/capacidades y escucha el fin de sesión, sin ver credenciales ni token; el transporte lo resuelve el adaptador; estados `loading`/`authenticated`/`expired`/`terminated`/`error`.
@@ -140,6 +147,10 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 
 - **Stack y tooling (10-nov-2026)** — Next.js 16 (App Router) + React 19 + TypeScript sobre Node 24 LTS; entrega con `next start` y `output: 'export'` revisable cuando exista backend real; sin SSR de datos ni de sesión; sin autorización en `proxy.ts` (antes `middleware.ts`); un único runner de tests (Vitest + React Testing Library + jsdom). El gestor de estado concreto queda a criterio de la implementación y no se deduce del ZIP ni de la maqueta; la persistencia intra-sesión queda resuelta en C-04 (10-nov-2026). El detalle está en las «Decisiones técnicas adoptadas» y en §6.
 
+**Decisión de tooling adoptada el 11-nov-2026 (v1.3).**
+
+- **Gestor de dependencias:** **pnpm** sustituye a npm (`pnpm-lock.yaml` versionado, `package-lock.json` retirado, `packageManager` fijado, `.pnpm-store/` ignorado y política de `next-env.d.ts` a fijar con evidencia en T-CORE-12). No altera stack, requisitos, criterios, contratos ni el alcance de las tareas vigentes. Detalle y rationale en §6.1. La migración **aún no está ejecutada**: se hace en T-CORE-12, en su propia rama.
+
 **Resueltas (10 de noviembre de 2026):**
 
 1. **Existencia de backend/proveedores reales** — RESUELTA: este corte se construye contra **adaptadores/mocks que respeten los contratos** (distinguibles de operaciones reales, sin autorización ni persistencia falsas), no contra servicios reales.
@@ -168,6 +179,7 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 - **Frontera Server/Client e hidratación (`sessionStorage` leído en render):** mitigación: `layout.tsx` servidor y shell cliente; lectura del almacenamiento solo en efectos.
 - **Foco y accesibilidad en cambios de ruta del App Router:** mitigación: se verifica en T-CORE-08.
 - **Node 25.9.0 local frente a Node 24 LTS exigido:** mitigación: `.nvmrc`, `engines.node` y evidencia registrada bajo LTS.
+- **Migración de gestor de dependencias (npm → pnpm) a mitad de implementación:** riesgo de lockfile divergente, árbol sucio o `next-env.d.ts` regenerado por `pnpm dev`; mitigación: T-CORE-12 aislada, `pnpm install --frozen-lockfile`, `.pnpm-store/` ignorado y política de `next-env.d.ts` decidida con evidencia (§6.1).
 
 ---
 
@@ -179,6 +191,16 @@ Se verifican **todos** los criterios de aceptación de CORE-01 §7, salvo el dif
 - **Coste:** es el momento más barato. Solo existen andamiaje (T-CORE-01), contratos (T-CORE-02) y fixtures de contrato (T-CORE-03); no hay vistas ni lógica de dominio que migrar.
 - **Consecuencia operativa:** se añade **T-CORE-11** (sustituir el andamiaje Vite por Next.js) y T-CORE-01 queda sustituida por ella, conservando su commit como traza histórica. T-CORE-02 y T-CORE-03 ya están cerradas en `main` y no se reabren; T-CORE-11 incluye re-verificar los contratos y fixtures con el runner definitivo (Vitest + React Testing Library + jsdom). Con la v1.2 **aprobada el 10-nov-2026**, T-CORE-11 quedó cerrada ese mismo día con veredicto APROBADO y las tareas de vistas (T-CORE-04…10) se inician tras ese cierre, empezando por T-CORE-04.
 
+### 6.1 Revisión de tooling (11-nov-2026)
+
+- **Motivo:** el equipo ha tenido problemas con npm. La decisión del usuario/senior del 11-nov-2026 es usar **pnpm** como gestor único. Es una decisión de tooling, no de requisitos: **las specs no se modifican** (CORE-01 `spec.md` excluye el stack de su alcance y su aprobación funcional sigue vigente) y no se tocan criterios de aceptación, contratos ni el alcance de las tareas existentes.
+- **Qué cambia:** `pnpm-lock.yaml` pasa a ser el lockfile versionado; `package-lock.json` se retira; `package.json` declara `packageManager` (pnpm); `.gitignore` añade `.pnpm-store/` de forma defensiva; las instrucciones de instalación y evidencia pasan a pnpm.
+- **Qué NO cambia:** stack (Next.js 16 App Router + React 19 + TypeScript), runtime **Node 24 LTS**, entrega con `next start`, runner Vitest + React Testing Library + jsdom, contratos y puertos de T-CORE-02, fixtures de T-CORE-03 y la separación `container/` + `shared/` + `modules/<módulo>`. Tampoco cambia la evidencia histórica: lo registrado con `npm` se conserva tal cual como registro.
+- **Estado real a 11-nov-2026 (no es migración hecha):** `pnpm 12.14.0` está instalado; existe un `pnpm-lock.yaml` **parked fuera del repositorio**; `package-lock.json` sigue versionado; `package.json` **no** declara `packageManager`; `node_modules/` ya está en layout de pnpm y el store real está **fuera** del repositorio.
+- **Política de `next-env.d.ts` (a fijar con evidencia, no por suposición):** el archivo lo genera Next y `pnpm dev` lo reescribe (ruta `.next/dev/types`). En T-CORE-12 se decide en este orden: (1) si `pnpm build`, `pnpm test` y `pnpm exec tsc --noEmit` pasan **sin** el archivo versionado, se ignora y se retira del índice; (2) si alguna de esas verificaciones depende de él, se mantiene versionado y se documenta que se restaura tras `pnpm dev`. No se da por decidido hasta tener esa evidencia.
+- **Evidencia exigida:** `pnpm install --frozen-lockfile`, `pnpm test` (7 archivos / 43 pruebas), `pnpm build` y `pnpm exec tsc --noEmit`, bajo **Node 24 LTS**, con árbol limpio (`git status --porcelain` vacío) después de build y tests.
+- **Consecuencia operativa:** se añade **T-CORE-12** (adoptar pnpm) en la Fase A de `tasks.md`, con dependencia de T-CORE-11. T-CORE-06…10 no se reabren ni cambian de alcance; T-CORE-06 pasa a ejecutarse **después** de T-CORE-12. La migración se hará en su propia rama (`task/core-01-t12`), no en este cambio documental.
+
 ---
 
-**Siguiente punto:** la v1.2 está **aprobada técnicamente el 10-nov-2026**; **T-CORE-11 está cerrada** (`ec02c2a`+`df1ade6`, mergeada en `cfa6f2b`, veredicto APROBADO), **T-CORE-04 está cerrada y en `main`** (`9f1495c`+`6e7d2ab`, merge `--ff-only`, veredicto APROBADO del 11-nov-2026 sin hallazgos bloqueantes) y **T-CORE-05 está cerrada y en `main`** (`c8cc754`+`05bd9a9`, merge `--ff-only`, veredicto APROBADO del 11-nov-2026 tras un ciclo de corrección). La siguiente tarea es **T-CORE-06** (acción «Salir», C-02; CORE-01 §7 criterios 6 y 7), **no iniciada**: se inicia solo con confirmación explícita del usuario. Las decisiones técnicas abiertas de §5 (P-04) se resuelven antes de cerrar las tareas que dependen de esos contratos.
+**Siguiente punto:** la v1.2 sigue **aprobada técnicamente el 10-nov-2026** y la **v1.3** solo registra la decisión de tooling del 11-nov-2026 (pnpm, §6.1), sin reabrir requisitos ni criterios. **T-CORE-11 está cerrada** (`ec02c2a`+`df1ade6`, mergeada en `cfa6f2b`, veredicto APROBADO), **T-CORE-04 está cerrada y en `main`** (`9f1495c`+`6e7d2ab`, veredicto APROBADO del 11-nov-2026) y **T-CORE-05 está cerrada y en `main`** (`c8cc754`+`05bd9a9`, veredicto APROBADO del 11-nov-2026 tras un ciclo de corrección). La siguiente tarea es **T-CORE-12** (adoptar pnpm como gestor de dependencias; tooling, sin cambios de aplicación), **no iniciada** y sujeta a confirmación explícita del usuario. **T-CORE-06** (acción «Salir») va **después** de T-CORE-12. Las decisiones técnicas abiertas de §5 (P-04) se resuelven antes de cerrar las tareas que dependen de esos contratos.
