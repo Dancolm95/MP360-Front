@@ -54,7 +54,6 @@ describe('SignOutAction (CORE-01 §7 criterio 7)', () => {
       expect(signOut).toHaveBeenCalledTimes(1)
       expect(onSignedOut).toHaveBeenCalledTimes(1)
       expect(onSignedOut).toHaveBeenCalledWith(destination)
-      // La salida no ofrece un segundo envío ni un login local.
       expect(screen.queryByRole('button', { name: 'Salir' })).toBeNull()
       expect(screen.queryByRole('textbox')).toBeNull()
     })
@@ -167,7 +166,6 @@ describe('SignOutAction (CORE-01 §7 criterio 7)', () => {
   })
 })
 
-/** Doble de `Storage` con espía de escritura, instalado mientras dura la prueba. */
 function installStorageSpy(name: 'localStorage' | 'sessionStorage') {
   const entries = new Map<string, string>()
   const setItem = vi.fn((key: string, value: string) => {

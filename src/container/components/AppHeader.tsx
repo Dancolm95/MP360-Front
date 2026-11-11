@@ -7,12 +7,10 @@ import type { SessionIdentity } from '../contracts'
  * Muestra siempre la marca ERP y la identidad/contexto autorizados **solo si se
  * reciben y pueden mostrarse**. Si no hay identidad (o su nombre está vacío) no
  * se renderiza ningún sustituto: no se rellena con nombres de ejemplo ni con
- * datos del PDF. `actions` permite montar acciones del contenedor, como la
- * salida voluntaria, sin fijarlas en la cabecera.
+ * datos del PDF.
  */
 export interface AppHeaderProps {
   readonly identity?: SessionIdentity
-  /** Acciones opcionales del contenedor (p. ej. «Salir»). */
   readonly actions?: ReactNode
 }
 

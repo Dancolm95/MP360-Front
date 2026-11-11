@@ -16,18 +16,14 @@ import {
  * carga o el error no se hereda identidad, navegación ni datos previos; al
  * vencer o terminar la sesión se retira el contenido y se indica que la
  * recuperación del acceso corresponde al proveedor externo, sin login local.
- * Tras una salida voluntaria (`signedOut`) muestra la confirmación del destino
- * sin ofrecer login local.
  * Al cambiar `sessionKey` sin desmontar la frontera se inicia una autenticación
  * nueva: se descarta el estado anterior y se limpian todos los stores.
  */
 export interface SessionStateBoundaryProps extends UseSessionStateOptions {
   readonly session: SessionPort
   /**
-   * Contenido protegido. Si es función recibe el contexto ya autenticado y la
-   * API de sesión, de modo que nunca se pueda pintar con un contexto anterior o
-   * inexistente y el consumidor pueda cerrar la sesión con `endSession()` tras
-   * una salida voluntaria.
+   * Contenido protegido. Si es función recibe el contexto ya autenticado, de
+   * modo que nunca se pueda pintar con un contexto anterior o inexistente.
    */
   readonly children:
     | ReactNode

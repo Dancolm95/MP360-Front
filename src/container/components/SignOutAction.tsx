@@ -9,21 +9,12 @@ import type {
 } from '../contracts'
 
 /**
- * Acción «Salir» del contenedor (C-02, plan §2.4; CORE-01 §5 y §7 criterio 7).
- *
- * Inicia el cierre de la sesión real en el proveedor externo a través de
- * `SignOutPort`. Al terminar con éxito notifica el destino acordado
- * (`provider` | `local`) y muestra la confirmación; la limpieza de estado y de
- * los stores intra-sesión la ejecuta el consumidor mediante `endSession()` de
- * `useSessionState`. Ante un error del proveedor conserva la sesión y explica
- * cómo continuar, ofreciendo reintento solo si el contrato lo permite
- * (`error.retryable`). No implementa login local ni fija URL, endpoint ni
- * payload.
+ * Acción «Salir» (C-02, plan §2.4). No limpia el estado local: el consumidor lo
+ * hace con `endSession()` desde `onSignedOut`.
  */
 
 export interface SignOutActionProps {
   readonly signOut: SignOutPort
-  /** Notifica el destino confirmado para que el consumidor limpie la sesión. */
   readonly onSignedOut?: (destination: SignOutDestination) => void
   readonly label?: string
   readonly retryLabel?: string
@@ -43,11 +34,7 @@ const PROVIDER_DESTINATION_MESSAGE =
   'Has salido. El cierre de la sesión continúa en el proveedor de identidad externo.'
 const LOCAL_DESTINATION_MESSAGE = 'Has salido. La sesión local se ha cerrado.'
 
-/**
- * Fallback si el puerto rechaza la promesa o devuelve un resultado que no
- * respeta el contrato. El contrato no declara esta situación como reintentable,
- * así que no se ofrece reintento.
- */
+/** Fallo de transporte o resultado inválido: el contrato no lo declara reintentable. */
 const FALLBACK_SIGN_OUT_ERROR: ContractError = {
   message:
     'No se pudo cerrar la sesión en el proveedor. La sesión actual sigue activa; inténtalo de nuevo más tarde.',

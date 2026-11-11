@@ -21,10 +21,6 @@ import { SignOutAction } from './SignOutAction'
  * módulos y la zona central. La indicación de módulo/sección activos se emite
  * como texto, además de la marca semántica del selector. No renderiza panel
  * contextual derecho ni contenido ficticio.
- *
- * La acción «Salir» solo aparece cuando el consumidor aporta `signOut`; al
- * terminar con éxito, ese mismo consumidor debe limpiar la sesión con
- * `endSession()` de `useSessionState` desde `onSignedOut`.
  */
 export interface ContainerShellProps {
   readonly catalog: SectionCatalog
@@ -33,9 +29,8 @@ export interface ContainerShellProps {
   /** Etiqueta visible de la sección activa; la resuelve el módulo. */
   readonly activeSectionLabel?: string
   readonly onSelectModule?: (moduleId: ModuleId) => void
-  /** Puerto de salida; sin él no se renderiza la acción «Salir». */
   readonly signOut?: SignOutPort
-  /** Notifica el destino confirmado para limpiar la sesión local. */
+  /** El consumidor limpia la sesión con `endSession()` al recibir el destino. */
   readonly onSignedOut?: (destination: SignOutDestination) => void
   readonly children?: ReactNode
 }

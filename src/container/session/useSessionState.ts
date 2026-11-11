@@ -15,18 +15,11 @@ import {
 } from './store-registry'
 
 /**
- * Límite de estado de sesión del contenedor (C-01, plan §2.1; CORE-01 §5 y §7
- * criterios 5 y 6).
- *
- * Representa `loading`, `authenticated`, `error`, `expired`, `terminated` y
- * `signedOut` a partir de `SessionPort.getContext()` y `onEnded()`. Mientras
- * carga o falla no conserva identidad, contexto ni capacidades anteriores; al
- * vencer, terminar o salir con éxito limpia de inmediato el estado y todos los
- * stores intra-sesión registrados.
- * Al iniciar una autenticación nueva (cambio de `sessionKey`, o de puerto de
- * sesión si no se aporta) invalida la carga anterior y limpia también todos los
- * stores, de modo que ningún usuario hereda filtros ni contexto de bandeja.
- * No implementa login local ni captura credenciales.
+ * Estado de sesión del contenedor (C-01, plan §2.1; CORE-01 §5 y §7 criterios
+ * 5, 6 y 7). Al vencer, terminar o salir se limpia el estado y los stores
+ * intra-sesión; una autenticación nueva (cambio de `sessionKey` o del puerto)
+ * invalida la carga anterior y también los limpia, de modo que ningún usuario
+ * hereda filtros ni contexto de bandeja.
  */
 
 export type SessionState =
@@ -64,11 +57,7 @@ export interface SessionStateApi {
   readonly retry: () => void
   /** Recuperación delegada en el proveedor externo; sin login local. */
   readonly recoverAccess: () => Promise<void>
-  /**
-   * Cierra la sesión local tras un `signOut` exitoso (C-02): invalida la carga
-   * en curso, limpia identidad/contexto/capacidades y todos los stores
-   * registrados, y deja el estado terminal `signedOut` con el destino acordado.
-   */
+  /** Cierra la sesión local tras un `signOut` exitoso (C-02). */
   readonly endSession: (destination: SignOutDestination) => void
   /** Registra un store adicional para limpiarlo al terminar la sesión. */
   readonly registerStore: (store: SessionStateCleanupStore) => () => void

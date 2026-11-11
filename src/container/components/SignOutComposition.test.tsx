@@ -84,7 +84,6 @@ describe('Composición real de «Salir» con la cabecera y la sesión (criterio 
       )
       expect(signOutSpy).toHaveBeenCalledTimes(1)
 
-      // Limpieza inmediata: ni identidad, ni contexto, ni capacidades, ni datos.
       expect(screen.queryByText('Ana Pérez')).toBeNull()
       expect(screen.queryByText('Contenido protegido')).toBeNull()
       expect(screen.queryByText(/Capacidades:/)).toBeNull()
@@ -104,7 +103,6 @@ describe('Composición real de «Salir» con la cabecera y la sesión (criterio 
         ),
       ).toBeDefined()
 
-      // Sin login local ni credenciales.
       expect(screen.queryByRole('textbox')).toBeNull()
       expect(document.querySelector('input[type="password"]')).toBeNull()
     })
@@ -159,7 +157,6 @@ describe('Composición real de «Salir» con la cabecera y la sesión (criterio 
     const alert = await screen.findByRole('alert')
     expect(alert.textContent).toContain('El proveedor no responde en este momento.')
     expect(calls).toBe(1)
-    // El estado autenticado se conserva y no se limpia ningún store.
     expect(screen.getByText('Ana Pérez')).toBeDefined()
     expect(screen.getByText('Contenido protegido')).toBeDefined()
     expect(filters.get()).toEqual({ filtro: 'abiertos' })
@@ -256,7 +253,6 @@ describe('Composición real de «Salir» con la cabecera y la sesión (criterio 
   })
 })
 
-/** Doble de `Storage` con espía de escritura, instalado mientras dura la prueba. */
 function installStorageSpy(name: 'localStorage' | 'sessionStorage') {
   const entries = new Map<string, string>()
   const setItem = vi.fn((key: string, value: string) => {
