@@ -2,7 +2,7 @@
 
 **Spec:** RH-REQ-01 v0.7 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** sin tareas RH iniciadas; ninguna casilla RH marcada como hecha. La base compartida del contenedor hasta **T-CORE-07** está cerrada y en `main`; T-CORE-07 se integró por fast-forward el 11-nov-2026 (`1bc28ef120a906a82277518a4fe78988584661c3`; reviewer **APROBADO**, sin hallazgos) y conserva UX-02 como frontera sin bandeja ni dominio ficticios. El siguiente paso del corte es **T-CORE-08** (accesibilidad del contenedor), **no iniciada y sujeta a confirmación explícita del usuario**. T-RH-01…24 permanecen sin iniciar y sin cambios.
+**Estado del corte:** sin tareas RH iniciadas; ninguna casilla RH marcada como hecha. La base compartida del contenedor hasta **T-CORE-08** está cerrada y en `main`; T-CORE-07 y T-CORE-08 se integraron por fast-forward el 11-nov-2026 (`1bc28ef120a906a82277518a4fe78988584661c3` y `8826bec150b7108bc7e3c30c003b8e78bab0c0de`; reviewer **APROBADO**, sin hallazgos) y conservan UX-02 como frontera sin bandeja ni dominio ficticios. El siguiente paso del corte es **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio), **no iniciada y sujeta a confirmación explícita del usuario**. T-RH-01…24 permanecen sin iniciar y sin cambios.
 **Alcance activo:** RH-REQ-01 §10 criterios 1–17 y 19–27.  
 **Diferido (fuera del alcance activo):** RH-REQ-01 §10 criterio 18 y C-05 (verificación diferida).
 
