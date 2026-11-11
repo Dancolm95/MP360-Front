@@ -1,13 +1,16 @@
 /** @vitest-environment jsdom */
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { SessionContext, SessionPort } from '../contracts'
+import type { SessionContext, SessionContextResult, SessionPort } from '../contracts'
 import {
+  CAP_RRHH_REQUERIMIENTOS_READ,
   capabilitySet,
   createContextErrorFixture,
+  createDeferred,
   createExpiredFixture,
   createInMemoryStore,
   createLoadingFixture,
+  createMockSession,
   createTerminatedFixture,
   mockSessionWithCapabilities,
 } from '../fixtures'
@@ -116,6 +119,42 @@ describe('SessionStateBoundary (CORE-01 §7 criterio 5: carga y error)', () => {
     expect(screen.queryByText(/Identidad: Ana Pérez/)).toBeNull()
     await screen.findByRole('alert')
     expect(screen.queryByText(/Identidad: Ana Pérez/)).toBeNull()
+  })
+
+  it('si el puerto rechaza sin resultado tipado, no reclama un reintento no acordado', async () => {
+    const session: SessionPort = {
+      getContext: () => Promise.reject(new Error('fallo de transporte')),
+      onEnded: () => () => undefined,
+      recoverAccess: async () => undefined,
+    }
+
+    render(
+      <SessionStateBoundary session={session}>{identityContent}</SessionStateBoundary>,
+    )
+
+    const alert = await screen.findByRole('alert')
+    expect(alert.textContent).toContain('No se pudo cargar la sesión.')
+    expect(alert.textContent).toMatch(/proveedor de identidad externo/i)
+    expect(screen.queryByRole('button', { name: 'Reintentar' })).toBeNull()
+    expect(screen.queryByText(/Identidad:/)).toBeNull()
+  })
+
+  it('un resultado que no respeta el contrato se trata como error no reintentable', async () => {
+    const malformed = { status: 'authenticated' } as unknown as SessionContextResult
+    const session: SessionPort = {
+      getContext: async () => malformed,
+      onEnded: () => () => undefined,
+      recoverAccess: async () => undefined,
+    }
+
+    render(
+      <SessionStateBoundary session={session}>{identityContent}</SessionStateBoundary>,
+    )
+
+    const alert = await screen.findByRole('alert')
+    expect(alert.textContent).toContain('No se pudo cargar la sesión.')
+    expect(screen.queryByRole('button', { name: 'Reintentar' })).toBeNull()
+    expect(screen.queryByText(/Identidad:/)).toBeNull()
   })
 })
 
@@ -229,27 +268,147 @@ describe('SessionStateBoundary (CORE-01 §7 criterio 6: vencimiento y terminaci�
 })
 
 describe('SessionStateBoundary (nueva autenticación y persistencia)', () => {
-  it('una nueva autenticación no hereda identidad ni estado de la anterior', async () => {
-    const first = mockSessionWithCapabilities(capabilitySet(), {
-      displayName: 'Ana Pérez',
-    })
-    const firstRender = render(
-      <SessionStateBoundary session={first}>{identityContent}</SessionStateBoundary>,
+  function sessionContent(context: SessionContext) {
+    return (
+      <>
+        <p>Identidad: {context.identity?.displayName ?? 'sin identidad'}</p>
+        <p>Capacidades: {context.capabilities.join(',') || 'ninguna'}</p>
+      </>
     )
-    expect(await screen.findByText('Identidad: Ana Pérez')).toBeDefined()
-    firstRender.unmount()
+  }
 
-    const second = mockSessionWithCapabilities(capabilitySet(), {
+  it('con la frontera montada, una autenticación nueva limpia todos los stores y no hereda identidad ni contexto', async () => {
+    const filters = createInMemoryStore<unknown>()
+    const trayContext = createInMemoryStore<unknown>()
+    filters.set({ filtro: 'abiertos', pagina: 2 })
+    trayContext.set({ contexto: 'bandeja-A' })
+    const stores = [filters, trayContext]
+
+    const sessionA = mockSessionWithCapabilities(
+      capabilitySet(CAP_RRHH_REQUERIMIENTOS_READ),
+      { displayName: 'Ana Pérez' },
+    )
+    const sessionB = mockSessionWithCapabilities(capabilitySet(), {
       displayName: 'Bea Ruiz',
     })
-    render(
-      <SessionStateBoundary session={second}>{identityContent}</SessionStateBoundary>,
+
+    const { rerender } = render(
+      <SessionStateBoundary session={sessionA} sessionKey="auth-a" stores={stores}>
+        {sessionContent}
+      </SessionStateBoundary>,
+    )
+    expect(await screen.findByText('Identidad: Ana Pérez')).toBeDefined()
+    expect(
+      screen.getByText(`Capacidades: ${CAP_RRHH_REQUERIMIENTOS_READ}`),
+    ).toBeDefined()
+    expect(filters.get()).toEqual({ filtro: 'abiertos', pagina: 2 })
+    expect(trayContext.get()).toEqual({ contexto: 'bandeja-A' })
+
+    rerender(
+      <SessionStateBoundary session={sessionB} sessionKey="auth-b" stores={stores}>
+        {sessionContent}
+      </SessionStateBoundary>,
     )
 
-    // Antes de resolver la nueva carga no se pinta la identidad anterior.
+    // Ni la identidad ni las capacidades de A se pintan como vigentes.
     expect(screen.queryByText(/Ana Pérez/)).toBeNull()
+    expect(
+      screen.queryByText(`Capacidades: ${CAP_RRHH_REQUERIMIENTOS_READ}`),
+    ).toBeNull()
+
     expect(await screen.findByText('Identidad: Bea Ruiz')).toBeDefined()
+    expect(screen.getByText('Capacidades: ninguna')).toBeDefined()
     expect(screen.queryByText(/Ana Pérez/)).toBeNull()
+    // Todos los stores de la autenticación anterior quedan vacíos.
+    expect(filters.get()).toBeUndefined()
+    expect(trayContext.get()).toBeUndefined()
+  })
+
+  it('una respuesta tardía de la autenticación anterior no repuebla el estado', async () => {
+    const pendingA = createDeferred<SessionContextResult>()
+    const sessionA = createMockSession({ getContext: () => pendingA.promise })
+    const sessionB = mockSessionWithCapabilities(capabilitySet(), {
+      displayName: 'Bea Ruiz',
+    })
+
+    const { rerender } = render(
+      <SessionStateBoundary session={sessionA} sessionKey="auth-a">
+        {sessionContent}
+      </SessionStateBoundary>,
+    )
+    expect(screen.getByRole('status')).toBeDefined()
+
+    rerender(
+      <SessionStateBoundary session={sessionB} sessionKey="auth-b">
+        {sessionContent}
+      </SessionStateBoundary>,
+    )
+    expect(await screen.findByText('Identidad: Bea Ruiz')).toBeDefined()
+
+    await act(async () => {
+      pendingA.resolve({
+        status: 'authenticated',
+        context: { identity: { displayName: 'Ana Pérez' }, capabilities: [] },
+      })
+    })
+
+    expect(screen.getByText('Identidad: Bea Ruiz')).toBeDefined()
+    expect(screen.queryByText(/Ana Pérez/)).toBeNull()
+  })
+
+  it('un re-render con la misma sessionKey conserva los filtros de la misma sesión', async () => {
+    const store = createInMemoryStore<unknown>()
+    store.set({ filtro: 'abiertos' })
+    const session = mockSessionWithCapabilities(capabilitySet(), {
+      displayName: 'Ana Pérez',
+    })
+
+    const { rerender } = render(
+      <SessionStateBoundary session={session} sessionKey="auth-a" stores={[store]}>
+        {identityContent}
+      </SessionStateBoundary>,
+    )
+    expect(await screen.findByText('Identidad: Ana Pérez')).toBeDefined()
+
+    rerender(
+      <SessionStateBoundary session={session} sessionKey="auth-a" stores={[store]}>
+        {identityContent}
+      </SessionStateBoundary>,
+    )
+
+    expect(await screen.findByText('Identidad: Ana Pérez')).toBeDefined()
+    expect(store.get()).toEqual({ filtro: 'abiertos' })
+  })
+
+  it('onEnded("terminated") limpia todos los stores registrados', async () => {
+    const filters = createInMemoryStore<unknown>()
+    const trayContext = createInMemoryStore<unknown>()
+    filters.set({ filtro: 'abiertos' })
+    trayContext.set({ contexto: 'bandeja' })
+
+    const session = mockSessionWithCapabilities(capabilitySet(), {
+      displayName: 'Ana Pérez',
+    })
+
+    render(
+      <SessionStateBoundary
+        session={session}
+        sessionKey="auth-a"
+        stores={[filters, trayContext]}
+      >
+        {identityContent}
+      </SessionStateBoundary>,
+    )
+    expect(await screen.findByText('Identidad: Ana Pérez')).toBeDefined()
+
+    act(() => {
+      session.emitEnded('terminated')
+    })
+
+    expect(screen.getByRole('alert').textContent).toMatch(/se ha cerrado/i)
+    expect(screen.queryByText(/Identidad: Ana Pérez/)).toBeNull()
+    expect(filters.get()).toBeUndefined()
+    expect(trayContext.get()).toBeUndefined()
   })
 
   it('no escribe en localStorage/sessionStorage y deja ambos vacíos tras terminar', async () => {

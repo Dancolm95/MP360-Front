@@ -15,6 +15,8 @@ import {
  * carga o el error no se hereda identidad, navegación ni datos previos; al
  * vencer o terminar la sesión se retira el contenido y se indica que la
  * recuperación del acceso corresponde al proveedor externo, sin login local.
+ * Al cambiar `sessionKey` sin desmontar la frontera se inicia una autenticación
+ * nueva: se descarta el estado anterior y se limpian todos los stores.
  */
 export interface SessionStateBoundaryProps extends UseSessionStateOptions {
   readonly session: SessionPort
@@ -69,12 +71,13 @@ export function SessionStateBoundary({
   session,
   children,
   stores,
+  sessionKey,
   loadingMessage = DEFAULT_LOADING_MESSAGE,
   expiredMessage = DEFAULT_EXPIRED_MESSAGE,
   terminatedMessage = DEFAULT_TERMINATED_MESSAGE,
   retryLabel = DEFAULT_RETRY_LABEL,
 }: SessionStateBoundaryProps) {
-  const { state, retry } = useSessionState(session, { stores })
+  const { state, retry } = useSessionState(session, { stores, sessionKey })
 
   switch (state.status) {
     case 'loading':
