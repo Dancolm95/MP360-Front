@@ -24,6 +24,8 @@ pnpm-debug.log*
 
 # Dependencias y artefactos de build (aplican cuando se defina el stack)
 node_modules/
+# Store local de pnpm (el store real vive fuera del repositorio)
+.pnpm-store/
 .next/
 build/
 coverage/
@@ -35,3 +37,5 @@ coverage/
 
 # Referencia local, no fuente de requisitos
 ERP Front.zip
+# Generado por Next; se regenera en cada build/dev
+next-env.d.ts

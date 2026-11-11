@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.14.0",
   "description": "Frontend administrativo modular del ERP MP 360. RR. HH. es el primer módulo.",
   "engines": {
     "node": ">=20.9"

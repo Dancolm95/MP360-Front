@@ -31,6 +31,21 @@ Fase de **implementación por tareas (SDD)**: specs aprobadas funcionalmente, pl
 └── memory.md                    # Bitácora de continuidad (no es fuente de requisitos)
 ```
 
+## Desarrollo
+
+Requisitos: **Node 24 LTS** (fijado en `.nvmrc`) y **pnpm 12.14.0** (fijado en `package.json` → `packageManager`). El gestor de dependencias del repositorio es pnpm; no se usa npm.
+
+```bash
+nvm use                        # Node 24 LTS según .nvmrc
+pnpm install --frozen-lockfile # instalación reproducible desde pnpm-lock.yaml
+pnpm dev                       # servidor de desarrollo (next dev)
+pnpm test                      # pruebas (Vitest)
+pnpm build                     # build de producción (next build)
+pnpm exec tsc --noEmit         # comprobación de tipos
+```
+
+`pnpm-lock.yaml` es el único lockfile versionado; `package-lock.json` no existe. `next-env.d.ts` lo genera Next.js y está ignorado: `pnpm dev`/`pnpm build` lo regeneran sin ensuciar el árbol.
+
 ## Fuentes de verdad
 
 1. **Definición Funcional RR. HH. V2.2** — reglas, datos, actores y estados (conserva V2.1 donde no la sustituye).
