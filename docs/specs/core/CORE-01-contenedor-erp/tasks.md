@@ -2,7 +2,7 @@
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03 y T-CORE-11 hechas (`b36a956`, `74ef493` y `ec02c2a`+`df1ade6`, todas en `main`); T-CORE-11 validada **APROBADO** por el reviewer; **T-CORE-04 implementada el 11-nov-2026 en `task/core-01-t04`** (implementación `9f1495c` + este commit de evidencia), **pendiente de veredicto del reviewer y de merge**; T-CORE-05…10 pendientes y no se inician hasta ese veredicto.  
+**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03, T-CORE-11 y **T-CORE-04 hechas y en `main`** (`b36a956`, `74ef493`, `ec02c2a`+`df1ade6` y `9f1495c`+`6e7d2ab`, respectivamente); T-CORE-04 validada **APROBADO** por el reviewer el 11-nov-2026, sin hallazgos bloqueantes, y mergeada en `main` con `--ff-only`. **T-CORE-05 es la siguiente tarea y no está iniciada:** no se inicia hasta confirmación explícita del usuario; T-CORE-06…10 siguen pendientes.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -62,7 +62,7 @@
 ## Fase B — Contenedor
 
 ### T-CORE-04 — Cabecera, identidad y selector de módulos
-- [x] Hecha — Evidencia: `AppHeader` muestra la marca ERP siempre y la identidad solo si se recibe un nombre mostrable (sin sustitutos ni datos de ejemplo); `ModuleSelector` es una navegación horizontal con nombre accesible «Módulos del ERP» que solo ofrece módulos con sección implementada, visible y operable según catálogo/capacidades (con lectura UX-02: solo RR. HH.; sin ella: «Sin módulos disponibles» y sin «Próximamente»); el módulo activo se marca con `aria-current="page"` y nombre accesible «(módulo activo)», con borde/subrayado además del color; `ContainerShell` compone cabecera, selector y texto «Módulo activo: … · Sección: …», sin panel contextual derecho. Botones nativos `type="button"`, enfocables y operables por teclado; la selección se notifica por `onSelectModule`. Pruebas con fixtures (UX-02, sin UX-02 y visibilidad de Selección sin lectura): **6 archivos / 28 pruebas OK** (T-CORE-04 aporta 12) y **`npm run build` OK** el 11-nov-2026 bajo Node v25.9.0. Commits `9f1495c` (implementación) y este commit de evidencia en `task/core-01-t04`, rama realineada sobre `main`; pendiente de veredicto del reviewer. Límite de evidencia: fixtures con mocks, sin integración real.
+- [x] Hecha — Evidencia: `AppHeader` muestra la marca ERP siempre y la identidad solo si se recibe un nombre mostrable (sin sustitutos ni datos de ejemplo); `ModuleSelector` es una navegación horizontal con nombre accesible «Módulos del ERP» que solo ofrece módulos con sección implementada, visible y operable según catálogo/capacidades (con lectura UX-02: solo RR. HH.; sin ella: «Sin módulos disponibles» y sin «Próximamente»); el módulo activo se marca con `aria-current="page"` y nombre accesible «(módulo activo)», con borde/subrayado además del color; `ContainerShell` compone cabecera, selector y texto «Módulo activo: … · Sección: …», sin panel contextual derecho. Botones nativos `type="button"`, enfocables y operables por teclado; la selección se notifica por `onSelectModule`. Pruebas con fixtures (UX-02, sin UX-02 y visibilidad de Selección sin lectura): **6 archivos / 28 pruebas OK** (T-CORE-04 aporta 12) y **`npm run build` OK** el 11-nov-2026 bajo Node v24.21.0 LTS y Node v25.9.0. Commits `9f1495c` (implementación) y `6e7d2ab` (evidencia) en `task/core-01-t04`, mergeados en `main` con `git merge --ff-only`. **Veredicto del reviewer: APROBADO** (11-nov-2026), sin hallazgos bloqueantes. Cobertura de esta tarea: CORE-01 §7.1, §7.2, §7.3 y §7.8 en la parte que le corresponde; §7.4–§7.7 pertenecen a otras tareas y §7.9 (C-05) está diferido. Límite de evidencia: fixtures con mocks, sin integración real. Observaciones no bloqueantes derivadas a T-CORE-07, T-CORE-08 y T-CORE-10.
 - **Depende de:** T-CORE-03, T-CORE-11 (ninguna vista se implementa sobre el andamiaje Vite; T-CORE-11 debe estar cerrada).
 - **Traza:** CORE-01 §7 criterios 1, 2, 3, 8; plan §2.1 y §2.2.
 - **Entrada:** contratos y fixtures de contexto/capacidades/catálogo.
@@ -92,6 +92,7 @@
 - **Entrada:** fixtures de catálogo y capacidades.
 - **Salida:** entrada a RR. HH. → Requerimientos (bandeja) sin dashboard; secciones no implementadas solo con visibilidad explícita del backend → «Próximamente» informativo con regreso autorizado; destinos directos validan sesión y autorización; destinos desconocidos no se convierten en «Próximamente» ni vista ficticia; sin lectura UX-02 todo acceso RR. HH. se deniega sin datos.
 - **Hecho cuando:** criterios 1, 2 y 3 verificables; la visibilidad sola no opera ni accede a vistas inexistentes.
+- **Notas de verificación (T-CORE-04, 11-nov-2026):** `ContainerShell` recibe `activeSectionLabel` sin validarlo contra el catálogo; la resolución y autorización de la sección activa corresponde a esta tarea. Queda además pendiente que `src/app/page.tsx` componga `ContainerShell` (integración end-to-end).
 
 ### T-CORE-08 — Accesibilidad del contenedor
 - [ ] Hecha
@@ -100,6 +101,7 @@
 - **Entrada:** vistas del contenedor implementadas.
 - **Salida:** operación por teclado, foco visible y gestionado en cambios de vista/pérdida de sesión, nombres accesibles, activo identificable y mensajes por texto (no solo color).
 - **Hecho cuando:** criterio 8 verificable en selector, navegación, estados informativos y «Salir».
+- **Notas de verificación (T-CORE-04, 11-nov-2026):** la prueba de teclado actual solo enfoca y hace `fireEvent.click`; falta demostrar la activación con Enter/Espacio y reforzar `aria-live` y la gestión de foco.
 
 ### T-CORE-09 — Integración con UX-02/03/04 sin alterar el dominio (con RH-REQ-01)
 - [ ] Hecha
@@ -118,6 +120,7 @@
 - **Entrada:** todas las tareas anteriores.
 - **Salida:** matriz de verificación que cubre CORE-01 §7 criterios 1–8 y la traza de P-04 (criterios 2 y 3: sin permisos y visibilidad sin operación), registrando qué fixture/prueba valida cada criterio.
 - **Hecho cuando:** criterios 1–8 verificados y trazados; el criterio 9 queda excluido (diferido).
+- **Notas de verificación (T-CORE-04, 11-nov-2026):** falta la matriz unitaria de `getSelectableModules` («implementada + visible + capacidades vacías» y «no implementada + visible + capacidades»); el fallback de `getModuleLabel` no es seguro con claves heredadas (`constructor`, `__proto__`, `toString`); una prueba del selector tiene nombre engañoso; la evidencia de versión de Node debe unificarse.
 
 ## Verificación diferida (fuera del alcance activo)
 
