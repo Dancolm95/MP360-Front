@@ -356,6 +356,52 @@ describe('SessionStateBoundary (nueva autenticación y persistencia)', () => {
     expect(screen.queryByText(/Ana Pérez/)).toBeNull()
   })
 
+  it('una respuesta tardía de getContext no repuebla el estado tras endSession', async () => {
+    const pending = createDeferred<SessionContextResult>()
+    const session = createMockSession({ getContext: () => pending.promise })
+
+    render(
+      <SessionStateBoundary session={session}>
+        {(_context, api) => (
+          <button
+            type="button"
+            onClick={() => {
+              api.retry()
+              api.endSession('local')
+            }}
+          >
+            Finalizar localmente
+          </button>
+        )}
+      </SessionStateBoundary>,
+    )
+
+    expect(screen.getByRole('status').textContent).toMatch(/Cargando sesión/i)
+
+    act(() => {
+      pending.resolve({
+        status: 'authenticated',
+        context: { identity: { displayName: 'Ana Pérez' }, capabilities: [] },
+      })
+    })
+    const button = await screen.findByRole('button', { name: 'Finalizar localmente' })
+
+    const secondPending = createDeferred<SessionContextResult>()
+    session.getContext = () => secondPending.promise
+    fireEvent.click(button)
+
+    expect(screen.getByRole('status').textContent).toMatch(/sesión local se ha cerrado/i)
+    await act(async () => {
+      secondPending.resolve({
+        status: 'authenticated',
+        context: { identity: { displayName: 'Identidad tardía' }, capabilities: [] },
+      })
+    })
+
+    expect(screen.getByRole('status').textContent).toMatch(/sesión local se ha cerrado/i)
+    expect(screen.queryByText(/Identidad tardía/)).toBeNull()
+  })
+
   it('un re-render con la misma sessionKey conserva los filtros de la misma sesión', async () => {
     const store = createInMemoryStore<unknown>()
     store.set({ filtro: 'abiertos' })

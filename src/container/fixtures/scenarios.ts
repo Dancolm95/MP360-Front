@@ -8,8 +8,10 @@ import type {
 } from '../contracts'
 import type { ContractError } from '../../shared'
 import {
+  CAP_RRHH_ALTA_VISIBLE,
   CAP_RRHH_REQUERIMIENTOS_READ,
   CAP_RRHH_SELECCION_VISIBLE,
+  DEST_RRHH_ALTA,
   DEST_RRHH_REQUERIMIENTOS_BANDEJA,
   DEST_RRHH_REQUERIMIENTOS_NUEVO,
   DEST_RRHH_SELECCION,
@@ -71,6 +73,7 @@ export function buildNavigationRules(
 ): ReadonlyMap<LogicalDestination, DestinationResolution> {
   const read = hasCapability(capabilities, CAP_RRHH_REQUERIMIENTOS_READ)
   const seleccionVisible = hasCapability(capabilities, CAP_RRHH_SELECCION_VISIBLE)
+  const altaVisible = hasCapability(capabilities, CAP_RRHH_ALTA_VISIBLE)
 
   const rules = new Map<LogicalDestination, DestinationResolution>()
 
@@ -88,6 +91,12 @@ export function buildNavigationRules(
     ? { status: 'ok', destination: DEST_RRHH_SELECCION }
     : { status: 'not-found' }
   rules.set(DEST_RRHH_SELECCION, seleccion)
+  rules.set(
+    DEST_RRHH_ALTA,
+    altaVisible
+      ? { status: 'ok', destination: DEST_RRHH_ALTA }
+      : { status: 'not-found' },
+  )
 
   return rules
 }

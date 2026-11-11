@@ -29,6 +29,7 @@ export {
   DEST_RRHH_REQUERIMIENTOS_BANDEJA,
   DEST_RRHH_REQUERIMIENTOS_NUEVO,
   DEST_RRHH_SELECCION,
+  DEST_RRHH_ALTA,
   capabilitySet,
   hasCapability,
   type CapabilitySet,

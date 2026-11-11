@@ -141,7 +141,8 @@ describe('SignOutAction (CORE-01 §7 criterio 7)', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Salir' }))
 
     const alert = await screen.findByRole('alert')
-    expect(alert.textContent).toContain('No se pudo cerrar la sesión en el proveedor.')
+    expect(alert.textContent).toContain('No se pudo confirmar el cierre de la sesión')
+    expect(alert.textContent).not.toMatch(/sesión actual sigue activa/i)
     expect(screen.queryByRole('button', { name: 'Reintentar' })).toBeNull()
   })
 

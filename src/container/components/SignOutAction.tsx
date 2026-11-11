@@ -37,7 +37,7 @@ const LOCAL_DESTINATION_MESSAGE = 'Has salido. La sesión local se ha cerrado.'
 /** Fallo de transporte o resultado inválido: el contrato no lo declara reintentable. */
 const FALLBACK_SIGN_OUT_ERROR: ContractError = {
   message:
-    'No se pudo cerrar la sesión en el proveedor. La sesión actual sigue activa; inténtalo de nuevo más tarde.',
+    'No se pudo confirmar el cierre de la sesión con el proveedor. Recupera el acceso con el proveedor externo si necesitas comprobar su estado.',
   retryable: false,
 }
 

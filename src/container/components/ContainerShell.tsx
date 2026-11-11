@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import type {
   ModuleId,
   SectionCatalog,
+  SectionId,
   SessionIdentity,
   SignOutDestination,
   SignOutPort,
@@ -22,23 +23,33 @@ import { SignOutAction } from './SignOutAction'
  * como texto, además de la marca semántica del selector. No renderiza panel
  * contextual derecho ni contenido ficticio.
  */
-export interface ContainerShellProps {
+interface ContainerShellBaseProps {
   readonly catalog: SectionCatalog
   readonly identity?: SessionIdentity
   readonly activeModuleId?: ModuleId
-  /** Etiqueta visible de la sección activa; la resuelve el módulo. */
+  readonly activeSectionId?: SectionId
   readonly activeSectionLabel?: string
   readonly onSelectModule?: (moduleId: ModuleId) => void
-  readonly signOut?: SignOutPort
-  /** El consumidor limpia la sesión con `endSession()` al recibir el destino. */
-  readonly onSignedOut?: (destination: SignOutDestination) => void
   readonly children?: ReactNode
 }
+
+type ContainerShellSignOutProps =
+  | {
+      readonly signOut: SignOutPort
+      readonly onSignedOut: (destination: SignOutDestination) => void
+    }
+  | {
+      readonly signOut?: undefined
+      readonly onSignedOut?: undefined
+    }
+
+export type ContainerShellProps = ContainerShellBaseProps & ContainerShellSignOutProps
 
 export function ContainerShell({
   catalog,
   identity,
   activeModuleId,
+  activeSectionId,
   activeSectionLabel,
   onSelectModule,
   signOut,
@@ -48,13 +59,18 @@ export function ContainerShell({
   const activeModule = activeModuleId
     ? getSelectableModules(catalog).find((module) => module.id === activeModuleId)
     : undefined
+  const activeSection = activeSectionId
+    ? activeModule?.sections.find(
+        (section) => section.id === activeSectionId && section.visible,
+      )
+    : undefined
 
   return (
     <div className="erp-shell">
       <AppHeader
         identity={identity}
         actions={
-          signOut ? (
+          signOut && onSignedOut ? (
             <SignOutAction signOut={signOut} onSignedOut={onSignedOut} />
           ) : undefined
         }
@@ -67,7 +83,9 @@ export function ContainerShell({
       {activeModule ? (
         <p className="erp-shell__context">
           Módulo activo: {getModuleLabel(activeModule.id)}
-          {activeSectionLabel ? ` · Sección: ${activeSectionLabel}` : ''}
+          {activeSection && activeSectionLabel
+            ? ` · Sección: ${activeSectionLabel}`
+            : ''}
         </p>
       ) : null}
       <main className="erp-shell__content">{children}</main>

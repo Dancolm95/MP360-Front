@@ -4,6 +4,8 @@ import { afterEach, describe, expect, it } from 'vitest'
 import type { CatalogPort, SectionCatalog } from '../contracts'
 import {
   RRHH_MODULE_ID,
+  SECTION_REQUERIMIENTOS,
+  SECTION_SELECCION,
   createSessionWithUx02Fixture,
   createSessionWithoutUx02Fixture,
   mockSignOutSuccess,
@@ -29,6 +31,7 @@ describe('ContainerShell (CORE-01 §7 criterio 1)', () => {
         catalog={catalog}
         identity={{ displayName: 'Ana Pérez' }}
         activeModuleId={RRHH_MODULE_ID}
+        activeSectionId={SECTION_REQUERIMIENTOS}
         activeSectionLabel="Requerimientos"
       >
         <h1>Requerimientos</h1>
@@ -70,6 +73,22 @@ describe('ContainerShell (CORE-01 §7 criterio 1)', () => {
     expect(screen.queryByRole('complementary')).toBeNull()
   })
 
+  it('no anuncia como activa una sección que el catálogo no autorizó como visible', async () => {
+    const catalog = await readCatalog(createSessionWithUx02Fixture().catalog)
+
+    render(
+      <ContainerShell
+        catalog={catalog}
+        activeModuleId={RRHH_MODULE_ID}
+        activeSectionId={SECTION_SELECCION}
+        activeSectionLabel="Selección"
+      />,
+    )
+
+    expect(screen.getByText('Módulo activo: RR. HH.')).toBeDefined()
+    expect(screen.queryByText(/Sección: Selección/)).toBeNull()
+  })
+
   it('sin puerto de salida no renderiza «Salir»; con puerto la acción va en la cabecera', async () => {
     const catalog = await readCatalog(createSessionWithUx02Fixture().catalog)
 
@@ -81,6 +100,7 @@ describe('ContainerShell (CORE-01 §7 criterio 1)', () => {
         catalog={catalog}
         identity={{ displayName: 'Ana Pérez' }}
         signOut={mockSignOutSuccess('provider')}
+        onSignedOut={() => undefined}
       />,
     )
 

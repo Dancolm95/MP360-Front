@@ -59,6 +59,8 @@ export interface SessionStateApi {
   readonly recoverAccess: () => Promise<void>
   /** Cierra la sesión local tras un `signOut` exitoso (C-02). */
   readonly endSession: (destination: SignOutDestination) => void
+  /** Retira el contenido cuando navegación informa que la sesión terminó. */
+  readonly endSessionFromNavigation: () => void
   /** Registra un store adicional para limpiarlo al terminar la sesión. */
   readonly registerStore: (store: SessionStateCleanupStore) => () => void
 }
@@ -262,5 +264,16 @@ export function useSessionState(
     [registry],
   )
 
-  return { state, retry, recoverAccess, endSession, registerStore }
+  const endSessionFromNavigation = useCallback(() => {
+    clearForEnded('terminated')
+  }, [clearForEnded])
+
+  return {
+    state,
+    retry,
+    recoverAccess,
+    endSession,
+    endSessionFromNavigation,
+    registerStore,
+  }
 }

@@ -87,7 +87,14 @@ export function SessionStateBoundary({
   signedOutLocalMessage = DEFAULT_SIGNED_OUT_LOCAL_MESSAGE,
   retryLabel = DEFAULT_RETRY_LABEL,
 }: SessionStateBoundaryProps) {
-  const { state, retry, recoverAccess, endSession, registerStore } =
+  const {
+    state,
+    retry,
+    recoverAccess,
+    endSession,
+    endSessionFromNavigation,
+    registerStore,
+  } =
     useSessionState(session, { stores, sessionKey })
 
   switch (state.status) {
@@ -130,6 +137,7 @@ export function SessionStateBoundary({
                 retry,
                 recoverAccess,
                 endSession,
+                endSessionFromNavigation,
                 registerStore,
               })
             : children}

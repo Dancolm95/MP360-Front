@@ -1,27 +1,97 @@
 'use client'
 
-import { ERP_CONTAINER_LAYER } from '../container'
-import { RRHH_MODULE_ID } from '../modules/rrhh'
-import { SHARED_LAYER } from '../shared'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
+import {
+  SessionStateBoundary,
+  type CatalogPort,
+  type CatalogResult,
+} from '../container'
+import { createNotImplementedVisibleFixture } from '../container/fixtures'
+import { RrhhContainer } from '../modules/rrhh'
 
-/**
- * Página de inicio del andamiaje.
- *
- * En este andamiaje solo demuestra que las capas (contenedor, común y módulos)
- * están separadas y se conectan sin implementar vistas ni reglas de negocio.
- * Las vistas y la lógica del contenedor y del módulo RR. HH. se implementan
- * en tareas posteriores (T-CORE-04…T-CORE-10 y RH-REQ-01).
- */
+const MOCK_FIXTURE = createNotImplementedVisibleFixture()
+const MOCK_SESSION_KEY = 'core-01-t07-contract-fixture'
+const MOCK_RH_STORES = [MOCK_FIXTURE.store] as const
+
+function CatalogBoundary({
+  catalog,
+  children,
+}: {
+  readonly catalog: CatalogPort
+  readonly children: (result: Extract<CatalogResult, { status: 'ready' }>) => ReactNode
+}) {
+  const [result, setResult] = useState<CatalogResult>()
+  const [attempt, setAttempt] = useState(0)
+
+  useEffect(() => {
+    let active = true
+    setResult(undefined)
+    void catalog
+      .getCatalog()
+      .then((next) => {
+        if (active) setResult(next)
+      })
+      .catch(() => {
+        if (active) {
+          setResult({
+            status: 'error',
+            error: {
+              message: 'No se pudo cargar el catálogo autorizado.',
+              retryable: false,
+            },
+          })
+        }
+      })
+    return () => {
+      active = false
+    }
+  }, [attempt, catalog])
+
+  const retry = useCallback(() => setAttempt((current) => current + 1), [])
+
+  if (!result) return <p role="status">Cargando catálogo autorizado…</p>
+  if (result.status === 'error') {
+    return (
+      <div role="alert">
+        <p>{result.error.message}</p>
+        {result.error.retryable ? (
+          <button type="button" onClick={retry}>
+            Reintentar
+          </button>
+        ) : null}
+      </div>
+    )
+  }
+  return children(result)
+}
+
 export default function Page() {
   return (
-    <main>
-      <h1>ERP MP 360</h1>
-      <p>Andamiaje del frontend modular (React + TypeScript + Next.js).</p>
-      <ul>
-        <li>Contenedor ERP: {ERP_CONTAINER_LAYER}</li>
-        <li>Componentes comunes: {SHARED_LAYER}</li>
-        <li>Módulo: {RRHH_MODULE_ID}</li>
-      </ul>
-    </main>
+    <>
+      <p role="note">
+        Entorno de contrato mock: no representa una sesión ni autorización reales.
+      </p>
+      <SessionStateBoundary
+        session={MOCK_FIXTURE.session}
+        sessionKey={MOCK_SESSION_KEY}
+        stores={MOCK_RH_STORES}
+      >
+        {(context, session) => (
+          <CatalogBoundary catalog={MOCK_FIXTURE.catalog}>
+            {({ catalog }) => (
+              <RrhhContainer
+                catalog={catalog}
+                capabilities={context.capabilities}
+                identity={context.identity}
+                navigation={MOCK_FIXTURE.navigation}
+                signOut={MOCK_FIXTURE.signOut}
+                onSignedOut={session.endSession}
+                onSessionEnded={session.endSessionFromNavigation}
+              />
+            )}
+          </CatalogBoundary>
+        )}
+      </SessionStateBoundary>
+    </>
   )
 }
