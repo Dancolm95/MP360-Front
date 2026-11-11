@@ -4,7 +4,7 @@ Frontend administrativo **modular** del ERP MP 360. **RR. HH. es el primer módu
 
 ## Estado del proyecto
 
-Fase de **implementación por tareas (SDD)**: specs aprobadas funcionalmente, planes aprobados técnicamente (v1.1) con una revisión v1.2 propuesta por cambio de stack, y tareas creadas. Hay andamiaje, contratos y fixtures del contenedor; las vistas aún no existen.
+Fase de **implementación por tareas (SDD)**: specs aprobadas funcionalmente, planes **v1.2 aprobados técnicamente el 10-nov-2026** (la v1.1 con Vite es histórica) y tareas creadas. El andamiaje Next.js, los contratos y las fixtures del contenedor están cerrados (T-CORE-02, T-CORE-03 y T-CORE-11); las vistas aún no existen.
 
 | Capacidad | Módulo | Spec | Estado | Documento |
 |---|---|---|---|---|
