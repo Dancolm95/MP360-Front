@@ -2,7 +2,7 @@
 
 **Spec:** RH-REQ-01 v0.7 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** sin tareas iniciadas; ninguna tarea marcada como hecha. T-RH-01 ya tiene su base Next.js (T-CORE-11 cerrada el 10-nov-2026); T-CORE-04 y **T-CORE-05** del contenedor están cerradas y en `main` (veredictos APROBADO del 11-nov-2026). El siguiente paso del corte es el chore de tooling **T-CORE-12** (adopción de pnpm; decisión canónica en CORE-01 plan §6.1, 11-nov-2026), no iniciado hasta confirmación explícita del usuario; **después** vienen **T-CORE-06** y las tareas RH, sin iniciar. Las tareas RH no cambian.  
+**Estado del corte:** sin tareas iniciadas; ninguna tarea marcada como hecha. T-RH-01 ya tiene su base Next.js (T-CORE-11 cerrada el 10-nov-2026); T-CORE-04, **T-CORE-05** y **T-CORE-12** del contenedor están cerradas y en `main` (veredictos APROBADO del 11-nov-2026); T-CORE-12 cerró la adopción de pnpm (`c947acb`, merge `--ff-only`), así que el gestor vigente es pnpm. Antes de **T-CORE-06** se ejecuta el chore de tooling **T-CORE-13** (evitar que `next dev` escriba en `AGENTS.md`; decisión de tooling del 11-nov-2026), no iniciado hasta confirmación explícita del usuario; **después** vienen **T-CORE-06** y las tareas RH, sin iniciar. Las tareas RH no cambian.  
 **Alcance activo:** RH-REQ-01 §10 criterios 1–17 y 19–27.  
 **Diferido (fuera del alcance activo):** RH-REQ-01 §10 criterio 18 y C-05 (verificación diferida).
 

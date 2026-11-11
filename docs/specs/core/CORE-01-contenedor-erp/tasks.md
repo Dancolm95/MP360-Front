@@ -2,7 +2,7 @@
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.3 (**11-nov-2026**; la v1.2 con stack Next.js sigue aprobada técnicamente desde el 10-nov-2026 y la v1.3 solo añade la decisión de tooling: pnpm). La v1.1 (React + TypeScript con Vite) es histórica.  
-**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03, T-CORE-11, T-CORE-04 y **T-CORE-05 hechas y en `main`** (`b36a956`, `74ef493`, `ec02c2a`+`df1ade6`, `9f1495c`+`6e7d2ab` y `c8cc754`+`05bd9a9`, respectivamente); T-CORE-05 validada **APROBADO** por el reviewer el 11-nov-2026 tras un ciclo de corrección (primer veredicto `CAMBIOS NECESARIOS`, sin hallazgos bloqueantes en la revisión final) y mergeada en `main` con `--ff-only`. **T-CORE-12 (adoptar pnpm como gestor de dependencias, tooling) es la siguiente tarea y no está iniciada:** requiere confirmación explícita del usuario; **T-CORE-06 va después** de T-CORE-12 y T-CORE-06…10 siguen pendientes. La migración a pnpm **no está ejecutada**: `package-lock.json` sigue versionado y `pnpm-lock.yaml` está parked fuera del repositorio.  
+**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03, T-CORE-11, T-CORE-04 y **T-CORE-05 hechas y en `main`** (`b36a956`, `74ef493`, `ec02c2a`+`df1ade6`, `9f1495c`+`6e7d2ab` y `c8cc754`+`05bd9a9`, respectivamente); T-CORE-05 validada **APROBADO** por el reviewer el 11-nov-2026 tras un ciclo de corrección (primer veredicto `CAMBIOS NECESARIOS`, sin hallazgos bloqueantes en la revisión final) y mergeada en `main` con `--ff-only`. **T-CORE-12 (adoptar pnpm como gestor de dependencias, tooling) está hecha y en `main`** (`c947acb`, veredicto **APROBADO** del reviewer el 11-nov-2026, merge `--ff-only`): **la migración a pnpm está ejecutada** (`pnpm-lock.yaml` versionado, `packageManager: pnpm@12.14.0`, sin `package-lock.json`). **T-CORE-13 (tooling: evitar que `next dev` escriba en `AGENTS.md`) es la siguiente tarea y no está iniciada:** requiere confirmación explícita del usuario; **T-CORE-06 va después** de T-CORE-13 y T-CORE-06…10 siguen pendientes.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -60,7 +60,7 @@
 - **Hecho cuando:** `npm run build` termina sin errores; `npm start` responde HTTP 200 tras `next build`, con el árbol limpio de `dist/`/`.next/`; `npm test` pasa completo (contratos, fixtures y prueba de humo de componente); la comprobación acotada de Vite se cumple —no existen `vite.config.ts` ni `index.html`, y no hay referencias a Vite en `package.json`, `tsconfig.json`, `next.config.ts` ni `src/`, excluyendo `vitest.config.ts` y las coincidencias de la cadena «vitest»—; la evidencia se registra bajo **Node 24 LTS** (el entorno local tiene 25.9.0).
 
 ### T-CORE-12 — Adoptar pnpm como gestor de dependencias (tooling)
-- [ ] Hecha
+- [x] Hecha — Evidencia (**11-nov-2026**, todo bajo **Node v24.21.0 LTS** y pnpm 12.14.0): `package.json` declara `packageManager: pnpm@12.14.0`; **`pnpm-lock.yaml` versionado** y **`package-lock.json` retirado del índice y del disco** (no existe en el árbol); `.pnpm-store/` ignorado y `node_modules/` sigue ignorado; scripts, dependencias y `engines.node` intactos. **`next-env.d.ts` con política A aplicada y demostrada:** se retiró del índice y quedó ignorado (`.gitignore` línea 41), sin editarlo a mano; en un worktree sin el archivo ni `.next`, `pnpm exec tsc --noEmit` (exit 0), `pnpm test` (43/43) y `pnpm build` pasan, el build lo regenera con contenido idéntico al que estaba versionado en `main`, `git check-ignore` lo resuelve a `.gitignore:41` y el árbol sigue limpio. **Lockfile descrito con precisión:** contiene **dos documentos YAML**; el primero es la autogestión de pnpm (`packageManagerDependencies: pnpm@12.14.0` y los paquetes `@pnpm/exe.*`) y el segundo es el del proyecto, que **sí conserva `settings`** además de `importers` (`importers['.']` cubre las 11 dependencias con `specifier` exacto), `packages` y `snapshots`; se verificó **reproducibilidad byte a byte** —lockfile regenerado en un directorio limpio solo con `package.json`: `diff` de 0 líneas—, no solo idempotencia. **Resultados:** `pnpm install --frozen-lockfile` OK e idempotente (dos ejecuciones con el mismo `sha256`, sin reescribir el lockfile); `pnpm test` **7 archivos / 43 pruebas**; `pnpm build` OK; `pnpm exec tsc --noEmit` OK; `git status --porcelain` vacío tras build y tests. Sin referencias nuevas a npm como instrucción vigente (las apariciones de npm son historia de T-CORE-01/02/03/11 y rationale del plan). Commit `c947acb` (6 archivos, +1833/−2783) en `task/core-01-t12`, mergeado en `main` con `git merge --ff-only` (mismo commit). **Veredicto del reviewer: APROBADO** (11-nov-2026), sin hallazgos obligatorios. Recomendaciones no bloqueantes: **R1** —`pnpm dev` con Next 16.4.6 añade un bloque a `AGENTS.md` (archivo versionado) y deja el árbol sucio; no es una regresión de pnpm y se deriva a T-CORE-13—; **R3** —el lockfile multi-documento podría no ser leído por herramientas de terceros o pnpm < 12; la versión está fijada en `packageManager`—; **R4** —`engines.node` sigue en `>=20.9`; es preexistente y la tarea ordenaba no tocarlo—. **Límite:** no se verificó equivalencia literal con el lockfile aparcado (ya no existe); esa comprobación se sustituyó por la reproducibilidad byte a byte.
 - **Depende de:** T-CORE-11.
 - **Traza:** plan §6.1 «Revisión de tooling (11-nov-2026)» y plan §5 «Decisión de tooling adoptada el 11-nov-2026 (v1.3)»; decisión del usuario/senior del 11-nov-2026. No traza criterios de aceptación: es una tarea de tooling y no altera requisitos, contratos ni alcance.
 - **Entrada:** `package.json`, `package-lock.json`, `pnpm-lock.yaml` generado con pnpm 12.14.0, `.gitignore` y `next-env.d.ts`.
@@ -72,6 +72,14 @@
   - **Documentación:** las instrucciones vigentes de instalación y evidencia pasan a pnpm; la evidencia histórica con `npm` se conserva como registro y no se reescribe.
   - **Sin cambios:** `src/` (código de aplicación), contratos, fixtures, configuración de Next/Vitest y criterios de aceptación.
 - **Hecho cuando:** `pnpm install --frozen-lockfile`, `pnpm test` (**7 archivos / 43 pruebas**), `pnpm build` y `pnpm exec tsc --noEmit` pasan bajo **Node 24 LTS**; el árbol queda limpio (`git status --porcelain` vacío) tras build y tests; no existe `package-lock.json` ni quedan referencias nuevas a npm como instrucción vigente (solo como historia); la política de `next-env.d.ts` está aplicada y demostrada con la evidencia anterior.
+
+### T-CORE-13 — Evitar que `next dev` escriba en `AGENTS.md` (tooling)
+- [ ] Hecha
+- **Depende de:** T-CORE-12.
+- **Traza:** recomendación R1 de la revisión de T-CORE-12 (11-nov-2026) y decisión del usuario del 11-nov-2026. No traza criterios de aceptación: es una tarea de tooling.
+- **Entrada:** `next.config.ts`, `AGENTS.md` versionado, Next.js 16.4.6.
+- **Salida:** configuración de Next que evita que `next dev` genere o modifique `AGENTS.md` (el nombre exacto de la opción se confirma contra la documentación y los tipos de Next 16.4.6 durante la implementación; **no se inventa**); sin cambios de comportamiento de la aplicación, sin cambios en requisitos ni en documentos de producto y sin tocar el contenido acordado de `AGENTS.md`.
+- **Hecho cuando:** `pnpm dev` arranca y `git status --porcelain` queda **vacío** tras el arranque (sin ` M AGENTS.md`); `pnpm test`, `pnpm build` y `pnpm exec tsc --noEmit` siguen pasando bajo Node 24 LTS; la opción aplicada queda documentada en la evidencia de la tarea.
 
 ## Fase B — Contenedor
 
@@ -93,7 +101,7 @@
 
 ### T-CORE-06 — Acción «Salir» (C-02)
 - [ ] Hecha
-- **Secuencia:** no se inicia hasta cerrar T-CORE-12 (adopción de pnpm); su alcance, dependencias funcionales y «Hecho cuando» no cambian.
+- **Secuencia:** no se inicia hasta cerrar T-CORE-13 (tooling: evitar que `next dev` escriba en `AGENTS.md`); su alcance, dependencias funcionales y «Hecho cuando» no cambian.
 - **Depende de:** T-CORE-05.
 - **Traza:** CORE-01 §7 criterios 6 y 7; plan §2.4.
 - **Entrada:** contrato de salida de T-CORE-02 y fixtures.
