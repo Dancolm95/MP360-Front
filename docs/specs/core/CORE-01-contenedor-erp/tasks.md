@@ -2,7 +2,7 @@
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03, T-CORE-11 y **T-CORE-04 hechas y en `main`** (`b36a956`, `74ef493`, `ec02c2a`+`df1ade6` y `9f1495c`+`6e7d2ab`, respectivamente); T-CORE-04 validada **APROBADO** por el reviewer el 11-nov-2026, sin hallazgos bloqueantes, y mergeada en `main` con `--ff-only`. **T-CORE-05 es la siguiente tarea y no está iniciada:** no se inicia hasta confirmación explícita del usuario; T-CORE-06…10 siguen pendientes.  
+**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03, T-CORE-11, T-CORE-04 y **T-CORE-05 hechas y en `main`** (`b36a956`, `74ef493`, `ec02c2a`+`df1ade6`, `9f1495c`+`6e7d2ab` y `c8cc754`+`05bd9a9`, respectivamente); T-CORE-05 validada **APROBADO** por el reviewer el 11-nov-2026 tras un ciclo de corrección (primer veredicto `CAMBIOS NECESARIOS`, sin hallazgos bloqueantes en la revisión final) y mergeada en `main` con `--ff-only`. **T-CORE-06 es la siguiente tarea y no está iniciada:** no se inicia hasta confirmación explícita del usuario; T-CORE-06…10 siguen pendientes.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -70,7 +70,7 @@
 - **Hecho cuando:** criterios 1 y 2 observables con fixtures (con y sin UX-02); navegación operable por teclado con activo identificable (criterio 8).
 
 ### T-CORE-05 — Estados de sesión/contexto y limpieza ante vencimiento/terminación
-- [ ] Hecha
+- [x] Hecha — Evidencia: `useSessionState` expone los estados `loading`/`authenticated`/`error`/`expired`/`terminated` desde `SessionPort.getContext()` y `onEnded()` (`src/container/session/useSessionState.ts`); `SessionStateBoundary` solo pinta el contenido protegido en `authenticated` y, en carga/error/vencimiento/terminación, muestra únicamente el estado correspondiente (mensajes por `role="status"`/`role="alert"`, sin datos previos), con reintento **solo** si el contrato lo permite (`error.retryable`); el registro `SessionStoreRegistry` (`store-registry.ts`) coordina la limpieza de los stores intra-sesión y la frontera los expone por la prop `stores`; `session/index.ts` los agrupa y `src/container/index.ts` los exporta. Al vencer o terminar (`clearForEnded`) se invalida la generación en curso, se limpia el estado de inmediato y se ejecuta `clearAll()` de **todos** los stores registrados; `onEnded` se desuscribe en la limpieza del efecto; un cambio de `sessionKey` inicia una autenticación nueva (descarta identidad/contexto/capacidades, limpia todos los stores y descarta respuestas tardías de la autenticación anterior), de modo que una nueva autenticación no hereda estado; la recuperación se remite al proveedor externo sin login local; no se usa `localStorage` ni `sessionStorage`. Pruebas: **7 archivos / 43 pruebas OK**, `npm run build` OK y `npx tsc --noEmit` OK el 11-nov-2026 bajo Node v24.21.0 LTS y Node v25.9.0, árbol limpio. Commits `c8cc754` (implementación) y `05bd9a9` (corrección) en `task/core-01-t05`, mergeados en `main` con `git merge --ff-only`. **Veredicto del reviewer: APROBADO** (11-nov-2026) tras un ciclo de corrección: el primer veredicto fue `CAMBIOS NECESARIOS` por O1/O2 (aislamiento de stores al cambiar de autenticación y una prueba que no lo demostraba), resueltos en `05bd9a9`; la revisión final no registró hallazgos bloqueantes. Cobertura de esta tarea: CORE-01 §5 y §7 criterios 5 y 6. Límite de evidencia: fixtures con mocks, sin integración real con el proveedor. Fuera de esta tarea: no integra `src/app/page.tsx` (T-CORE-07/T-CORE-09), no existen aún filtros ni contexto de bandeja reales de RH —el registro de limpieza queda disponible para cuando aporten los suyos—, no implementa «Salir» (T-CORE-06), rutas ni «Próximamente» (T-CORE-07) ni la accesibilidad completa de foco (T-CORE-08).
 - **Depende de:** T-CORE-03, T-CORE-04.
 - **Traza:** CORE-01 §5; §7 criterios 5 y 6; plan §2.1 (C-01).
 - **Entrada:** fixtures de carga/error/vencimiento/terminación.
@@ -93,6 +93,7 @@
 - **Salida:** entrada a RR. HH. → Requerimientos (bandeja) sin dashboard; secciones no implementadas solo con visibilidad explícita del backend → «Próximamente» informativo con regreso autorizado; destinos directos validan sesión y autorización; destinos desconocidos no se convierten en «Próximamente» ni vista ficticia; sin lectura UX-02 todo acceso RR. HH. se deniega sin datos.
 - **Hecho cuando:** criterios 1, 2 y 3 verificables; la visibilidad sola no opera ni accede a vistas inexistentes.
 - **Notas de verificación (T-CORE-04, 11-nov-2026):** `ContainerShell` recibe `activeSectionLabel` sin validarlo contra el catálogo; la resolución y autorización de la sección activa corresponde a esta tarea. Queda además pendiente que `src/app/page.tsx` componga `ContainerShell` (integración end-to-end).
+- **Notas de verificación (T-CORE-05, 11-nov-2026):** al integrar, usa **siempre** una `sessionKey` estable (por ejemplo, el identificador de sesión del proveedor): si se omite, el hook cae en la identidad del objeto `SessionPort` y un padre que recree el puerto en cada render haría cambiar la clave y limpiaría los stores en cada render. Documenta en la integración que el aislamiento entre autenticaciones se apoya en la prop `stores` de `SessionStateBoundary`/`useSessionState` (los stores de RH deberán aportarse ahí). `src/app/page.tsx` debe componer `ContainerShell` y `SessionStateBoundary`; hoy la página no los integra.
 
 ### T-CORE-08 — Accesibilidad del contenedor
 - [ ] Hecha
@@ -102,6 +103,7 @@
 - **Salida:** operación por teclado, foco visible y gestionado en cambios de vista/pérdida de sesión, nombres accesibles, activo identificable y mensajes por texto (no solo color).
 - **Hecho cuando:** criterio 8 verificable en selector, navegación, estados informativos y «Salir».
 - **Notas de verificación (T-CORE-04, 11-nov-2026):** la prueba de teclado actual solo enfoca y hace `fireEvent.click`; falta demostrar la activación con Enter/Espacio y reforzar `aria-live` y la gestión de foco.
+- **Notas de verificación (T-CORE-05, 11-nov-2026):** al verificar accesibilidad de la pérdida de sesión, refuerza (a) la aserción del **instante exacto** de limpieza —estado y stores limpiados al recibir `onEnded`, sin conservar contenido protegido en el mismo tick—, (b) el **desregistro** de stores al desmontar la vista que los aporta y (c) foco y teclado en los estados de sesión. `recoverAccess` existe en la API del hook pero aún no tiene acción de interfaz asociada.
 
 ### T-CORE-09 — Integración con UX-02/03/04 sin alterar el dominio (con RH-REQ-01)
 - [ ] Hecha
@@ -121,6 +123,7 @@
 - **Salida:** matriz de verificación que cubre CORE-01 §7 criterios 1–8 y la traza de P-04 (criterios 2 y 3: sin permisos y visibilidad sin operación), registrando qué fixture/prueba valida cada criterio.
 - **Hecho cuando:** criterios 1–8 verificados y trazados; el criterio 9 queda excluido (diferido).
 - **Notas de verificación (T-CORE-04, 11-nov-2026):** falta la matriz unitaria de `getSelectableModules` («implementada + visible + capacidades vacías» y «no implementada + visible + capacidades»); el fallback de `getModuleLabel` no es seguro con claves heredadas (`constructor`, `__proto__`, `toString`); una prueba del selector tiene nombre engañoso; la evidencia de versión de Node debe unificarse.
+- **Notas de verificación (T-CORE-05, 11-nov-2026):** si encajan en la verificación, registra las recomendaciones de calidad React derivadas de esta tarea: mutación de refs durante el render en `useSessionState` (comportamiento intencional para no pintar estado heredado, pero conviene dejarlo trazado), prop `stores` creada inline por el padre (cambia de identidad en cada render) y cobertura del desregistro de stores al desmontar.
 
 ## Verificación diferida (fuera del alcance activo)
 

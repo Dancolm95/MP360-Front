@@ -143,4 +143,4 @@ Se verifican **todos** los criterios de aceptación de RH-REQ-01 §10, salvo el 
 
 ---
 
-**Siguiente punto:** la v1.2 está **aprobada técnicamente el 10-nov-2026** y T-CORE-11 (base Next.js) está cerrada; T-CORE-04 del contenedor también está cerrada y en `main` (veredicto APROBADO del 11-nov-2026), y el siguiente paso del corte es **T-CORE-05**, no iniciada hasta confirmación explícita del usuario; después vienen las tareas de este plan. Las decisiones técnicas abiertas de §5 (INT-01 y P-04) se resuelven antes de cerrar las tareas que dependen de esos contratos.
+**Siguiente punto:** la v1.2 está **aprobada técnicamente el 10-nov-2026** y T-CORE-11 (base Next.js) está cerrada; T-CORE-04 y **T-CORE-05** del contenedor también están cerradas y en `main` (veredictos APROBADO del 11-nov-2026), y el siguiente paso del corte es **T-CORE-06**, no iniciada hasta confirmación explícita del usuario; después vienen las tareas de este plan, sin iniciar. Las decisiones técnicas abiertas de §5 (INT-01 y P-04) se resuelven antes de cerrar las tareas que dependen de esos contratos.
