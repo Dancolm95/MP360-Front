@@ -12,3 +12,14 @@
 export const ERP_CONTAINER_LAYER = 'container' as const
 
 export type * from './contracts'
+
+export {
+  AppHeader,
+  ContainerShell,
+  ModuleSelector,
+  type AppHeaderProps,
+  type ContainerShellProps,
+  type ModuleSelectorProps,
+} from './components'
+export { getModuleLabel } from './labels'
+export { getSelectableModules } from './selectors'
