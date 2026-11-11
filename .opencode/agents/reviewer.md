@@ -27,6 +27,8 @@ Al validar implementación, revisa el diff de la rama de la tarea contra `main`
 relaciona regla, vista, referencia visual, prueba o evidencia y resultado. Ejecuta las verificaciones disponibles
 y declara las que no pudiste realizar. Incluye contratos, autorización, persistencia,
 estados de interfaz, accesibilidad y comparación visual.
+Revisa también el ruido de comentarios: señala el exceso como hallazgo **no bloqueante** y como
+**bloqueante** solo el comentario que contradiga el código o induzca a error.
 
 Empieza con uno de estos veredictos: `APROBADO`, `CAMBIOS NECESARIOS` o `NO VERIFICABLE`.
 Para cada hallazgo bloqueante, indica archivo y línea cuando existan, requisito afectado,

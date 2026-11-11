@@ -7,6 +7,14 @@ Consulta `docs/Inventario_y_conciliacion_RRHH.md` para fuentes visuales y difere
 Mantén el trabajo nuevo en este repositorio; `ERP Front.zip` es una referencia, no una fuente de requisitos.
 Lee `memory.md` al retomar el trabajo y actualízalo solo después de un avance verificable. Es una bitácora de continuidad: no sustituye la constitución, las specs, los planes ni las tareas.
 
+## Estilo de código y comentarios
+
+- El código debe explicarse por sí mismo: nombres claros y funciones pequeñas antes que comentarios.
+- Comenta solo lo que no se deduce del código: una decisión, su motivo, un invariante, un límite del contrato o una advertencia real. No repitas en prosa lo que la línea ya dice.
+- No añadas cabeceras de bloque a cada archivo, componente o función por defecto. Documenta la API pública solo cuando el contrato o la intención no sean evidentes.
+- Los comentarios no sustituyen pruebas ni documentación; no dejes comentarios obsoletos ni que contradigan el código.
+- El reviewer señala el exceso de comentarios como hallazgo no bloqueante, y como bloqueante solo si inducen a error o contradicen el comportamiento.
+
 ## Cierre de tarea y commits
 
 - **Ninguna tarea se cierra sin commit.** Una tarea con su «Hecho cuando» cumplido y evidencia

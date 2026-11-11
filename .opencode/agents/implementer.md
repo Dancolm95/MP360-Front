@@ -25,6 +25,9 @@ que la tarea exista y que sus dependencias estén completas; si no, detente.
 - Para cambios visuales, compara las páginas indicadas del PDF sin convertir sus datos
   de muestra en reglas.
 - No simules persistencia real, autorización ni éxito donde el contrato no lo permita.
+- **Comentarios:** comenta solo lo que el código no explica por sí mismo (decisiones, motivos,
+  invariantes, advertencias). No repitas la línea en prosa, no pongas cabeceras de bloque por
+  defecto y no dejes comentarios obsoletos. Si el nombre o la estructura bastan, no comentes.
 - Marca la tarea como completada solo cuando cumpla su «Hecho cuando» y exista evidencia.
   Si falla, conserva la tarea pendiente y explica el bloqueo. Después, detente.
 - **Puerta de entrada:** antes de editar ejecuta `git status --porcelain`. Debe estar vacío;

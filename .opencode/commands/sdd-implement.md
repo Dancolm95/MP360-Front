@@ -23,6 +23,9 @@ archivos de la tarea con `git add -- <rutas>` (nunca `git add -A`) y el mensaje
 Reporta el hash y deja el árbol limpio. No hagas push: lo hace el usuario tras
 verificar.
 
+Comenta solo lo puntual y no obvio: decisiones, motivos, invariantes o advertencias. No repitas
+en prosa lo que el código ya dice ni añadas cabeceras de bloque por defecto.
+
 Trabaja en la rama `task/<capacidad>-<T-ID>`: si estás en `main`, créala con
 `git switch -c` desde un árbol limpio; si ya existe para esa misma tarea, continúa en
 ella. No cambies a otra rama, no mergees y no hagas push: el merge y el push los hace

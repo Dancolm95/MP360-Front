@@ -16,3 +16,5 @@ Revisa permisos, persistencia real, carga/vacío/error, accesibilidad y
 comparación con el PDF sin tratar datos de ejemplo como reglas. Devuelve
 «Cumplida», «No cumplida» o «No verificable» con bloqueos concretos. No edites
 archivos ni corrijas defectos en este comando.
+Señala el exceso de comentarios como hallazgo no bloqueante; solo es bloqueante si contradice
+el código o induce a error.
