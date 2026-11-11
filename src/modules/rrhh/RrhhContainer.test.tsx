@@ -1,5 +1,6 @@
 /** @vitest-environment jsdom */
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { LogicalDestination, SectionCatalog } from '../../container/contracts'
@@ -74,18 +75,35 @@ describe('RrhhContainer (CORE-01 §7 criterios 1–3)', () => {
   it('solo una sección no implementada visible muestra Próximamente y vuelve a UX-02', async () => {
     const fixture = createNotImplementedVisibleFixture()
     const catalog = await readCatalog(fixture)
+    const user = userEvent.setup()
     renderContainer(catalog, { navigation: fixture.navigation })
-    await screen.findByRole('heading', { name: 'Requerimientos' })
+    const requirementsHeading = await screen.findByRole('heading', {
+      name: 'Requerimientos',
+    })
+    expect(document.activeElement).toBe(requirementsHeading)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Selección' }))
+    const selection = screen.getByRole('button', { name: 'Selección' })
+    selection.focus()
+    await user.keyboard('{Enter}')
 
-    expect(await screen.findByRole('heading', { name: 'Selección' })).toBeDefined()
+    const selectionHeading = await screen.findByRole('heading', { name: 'Selección' })
+    expect(document.activeElement).toBe(selectionHeading)
+    expect(
+      screen
+        .getByRole('button', { name: 'Selección (sección activa)' })
+        .getAttribute('aria-current'),
+    ).toBe('page')
     expect(screen.getByText('Próximamente')).toBeDefined()
     expect(screen.queryByRole('table')).toBeNull()
     expect(screen.queryByRole('form')).toBeNull()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Volver a Requerimientos' }))
-    expect(await screen.findByRole('heading', { name: 'Requerimientos' })).toBeDefined()
+    const back = screen.getByRole('button', { name: 'Volver a Requerimientos' })
+    back.focus()
+    await user.keyboard(' ')
+    const returnedHeading = await screen.findByRole('heading', {
+      name: 'Requerimientos',
+    })
+    expect(document.activeElement).toBe(returnedHeading)
   })
 
   it('no ofrece secciones que el catálogo no marcó visibles', async () => {

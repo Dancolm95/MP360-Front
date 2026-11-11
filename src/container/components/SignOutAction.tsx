@@ -94,13 +94,12 @@ export function SignOutAction({
       result = await signOut.signOut()
     } catch {
       result = { status: 'error', error: FALLBACK_SIGN_OUT_ERROR }
-    } finally {
-      inFlightRef.current = false
     }
 
     if (!mountedRef.current) return
 
     if (!isSignOutResult(result)) {
+      inFlightRef.current = false
       setState({ status: 'error', error: FALLBACK_SIGN_OUT_ERROR })
       return
     }
@@ -112,6 +111,7 @@ export function SignOutAction({
     }
 
     // Error del proveedor: no se limpia nada; la sesión autenticada se conserva.
+    inFlightRef.current = false
     setState({ status: 'error', error: result.error })
   }, [onSignedOut, signOut])
 
@@ -132,13 +132,13 @@ export function SignOutAction({
       ) : null}
 
       {pending ? (
-        <p className="erp-sign-out__pending" role="status">
+        <p className="erp-sign-out__pending" role="status" aria-live="polite">
           {pendingMessage}
         </p>
       ) : null}
 
       {state.status === 'success' ? (
-        <p className="erp-sign-out__success" role="status">
+        <p className="erp-sign-out__success" role="status" aria-live="polite">
           {state.destination === 'provider'
             ? PROVIDER_DESTINATION_MESSAGE
             : LOCAL_DESTINATION_MESSAGE}

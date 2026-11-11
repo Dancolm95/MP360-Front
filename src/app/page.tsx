@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import {
   SessionStateBoundary,
+  useFocusOnMount,
   type CatalogPort,
   type CatalogResult,
 } from '../container'
@@ -49,20 +50,60 @@ function CatalogBoundary({
 
   const retry = useCallback(() => setAttempt((current) => current + 1), [])
 
-  if (!result) return <p role="status">Cargando catálogo autorizado…</p>
+  if (!result) return <CatalogStatus>Cargando catálogo autorizado…</CatalogStatus>
   if (result.status === 'error') {
     return (
-      <div role="alert">
-        <p>{result.error.message}</p>
-        {result.error.retryable ? (
-          <button type="button" onClick={retry}>
-            Reintentar
-          </button>
-        ) : null}
-      </div>
+      <CatalogError
+        message={result.error.message}
+        retryable={result.error.retryable}
+        retry={retry}
+      />
     )
   }
   return children(result)
+}
+
+function CatalogStatus({ children }: { readonly children: ReactNode }) {
+  const ref = useFocusOnMount<HTMLParagraphElement>()
+  return (
+    <p
+      ref={ref}
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      tabIndex={-1}
+    >
+      {children}
+    </p>
+  )
+}
+
+function CatalogError({
+  message,
+  retryable,
+  retry,
+}: {
+  readonly message: string
+  readonly retryable: boolean
+  readonly retry: () => void
+}) {
+  const ref = useFocusOnMount<HTMLDivElement>()
+  return (
+    <div
+      ref={ref}
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      tabIndex={-1}
+    >
+      <p>{message}</p>
+      {retryable ? (
+        <button type="button" onClick={retry}>
+          Reintentar
+        </button>
+      ) : null}
+    </div>
+  )
 }
 
 export default function Page() {

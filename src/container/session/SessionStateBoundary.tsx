@@ -1,6 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { useFocusOnMount } from '../accessibility'
 import type { SessionContext, SessionPort } from '../contracts'
 import {
   useSessionState,
@@ -48,9 +49,32 @@ const DEFAULT_RETRY_LABEL = 'Reintentar'
 
 function renderLoading(message: string) {
   return (
-    <p className="erp-session-state erp-session-state--loading" role="status">
-      {message}
-    </p>
+    <SessionMessage className="erp-session-state--loading">{message}</SessionMessage>
+  )
+}
+
+function SessionMessage({
+  children,
+  className,
+  alert = false,
+}: {
+  readonly children: ReactNode
+  readonly className: string
+  readonly alert?: boolean
+}) {
+  const ref = useFocusOnMount<HTMLDivElement>()
+
+  return (
+    <div
+      ref={ref}
+      className={`erp-session-state ${className}`}
+      role={alert ? 'alert' : 'status'}
+      aria-live={alert ? 'assertive' : 'polite'}
+      aria-atomic="true"
+      tabIndex={-1}
+    >
+      {children}
+    </div>
   )
 }
 
@@ -63,8 +87,17 @@ function SessionErrorMessage({
   readonly retry: () => void
   readonly retryLabel: string
 }) {
+  const ref = useFocusOnMount<HTMLDivElement>()
+
   return (
-    <div className="erp-session-state erp-session-state--error" role="alert">
+    <div
+      ref={ref}
+      className="erp-session-state erp-session-state--error"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      tabIndex={-1}
+    >
       <p>{error.message}</p>
       {error.retryable ? (
         <button type="button" onClick={retry}>
@@ -110,23 +143,23 @@ export function SessionStateBoundary({
       )
     case 'expired':
       return (
-        <p className="erp-session-state erp-session-state--expired" role="alert">
+        <SessionMessage className="erp-session-state--expired" alert>
           {expiredMessage}
-        </p>
+        </SessionMessage>
       )
     case 'terminated':
       return (
-        <p className="erp-session-state erp-session-state--terminated" role="alert">
+        <SessionMessage className="erp-session-state--terminated" alert>
           {terminatedMessage}
-        </p>
+        </SessionMessage>
       )
     case 'signedOut':
       return (
-        <p className="erp-session-state erp-session-state--signed-out" role="status">
+        <SessionMessage className="erp-session-state--signed-out">
           {state.destination === 'provider'
             ? signedOutProviderMessage
             : signedOutLocalMessage}
-        </p>
+        </SessionMessage>
       )
     case 'authenticated':
       return (

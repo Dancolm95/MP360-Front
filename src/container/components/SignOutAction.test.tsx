@@ -6,6 +6,7 @@ import {
   render,
   screen,
 } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { SignOutPort, SignOutResult } from '../contracts'
 import {
@@ -30,6 +31,21 @@ describe('SignOutAction (CORE-01 §7 criterio 7)', () => {
     const button = screen.getByRole('button', { name: 'Salir' })
     expect(button.getAttribute('type')).toBe('button')
     expect(signOut).not.toHaveBeenCalled()
+  })
+
+  it('activa «Salir» con el teclado', async () => {
+    const port = mockSignOutSuccess('local')
+    const signOut = vi.spyOn(port, 'signOut')
+    const user = userEvent.setup()
+
+    render(<SignOutAction signOut={port} />)
+    await user.tab()
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Salir' }))
+
+    await user.keyboard(' ')
+
+    expect(await screen.findByText(/La sesión local se ha cerrado/i)).toBeDefined()
+    expect(signOut).toHaveBeenCalledOnce()
   })
 
   for (const destination of ['provider', 'local'] as const) {
@@ -84,6 +100,32 @@ describe('SignOutAction (CORE-01 §7 criterio 7)', () => {
     })
 
     expect(await screen.findByText(/La sesión local se ha cerrado/i)).toBeDefined()
+  })
+
+  it('mantiene el bloqueo durante la confirmación para cerrar la ventana de doble envío', async () => {
+    let calls = 0
+    const port: SignOutPort = {
+      signOut: async () => {
+        calls += 1
+        return { status: 'success', destination: 'local' }
+      },
+    }
+    let button: HTMLButtonElement
+
+    render(
+      <SignOutAction
+        signOut={port}
+        onSignedOut={() => {
+          button.click()
+        }}
+      />,
+    )
+    button = screen.getByRole('button', { name: 'Salir' }) as HTMLButtonElement
+
+    fireEvent.click(button)
+
+    expect(await screen.findByText(/La sesión local se ha cerrado/i)).toBeDefined()
+    expect(calls).toBe(1)
   })
 
   it('ante error reintentable conserva el mensaje y el reintento vuelve a llamar', async () => {

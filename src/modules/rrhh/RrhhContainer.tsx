@@ -23,6 +23,7 @@ import {
   SECTION_SELECCION,
 } from './identifiers'
 import { ContainerShell } from '../../container/components/ContainerShell'
+import { useFocusOnMount } from '../../container/accessibility'
 
 const EMPTY_SECTIONS: readonly Section[] = []
 
@@ -119,6 +120,30 @@ function classifyResolution(
   return { status: 'forbidden' }
 }
 
+function ViewHeading({ children }: { readonly children: string }) {
+  const ref = useFocusOnMount<HTMLHeadingElement>()
+  return (
+    <h1 ref={ref} tabIndex={-1}>
+      {children}
+    </h1>
+  )
+}
+
+function DestinationLoading() {
+  const ref = useFocusOnMount<HTMLParagraphElement>()
+  return (
+    <p
+      ref={ref}
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      tabIndex={-1}
+    >
+      Validando destino…
+    </p>
+  )
+}
+
 export function RrhhContainer({
   catalog,
   capabilities,
@@ -202,7 +227,13 @@ export function RrhhContainer({
               <button
                 key={String(section.id)}
                 type="button"
+                className="erp-section-navigation__item"
                 aria-current={activeSection?.id === section.id ? 'page' : undefined}
+                aria-label={
+                  activeSection?.id === section.id
+                    ? `${presentation.label} (sección activa)`
+                    : undefined
+                }
                 onClick={() => void resolve(presentation.destination)}
               >
                 {presentation.label}
@@ -212,16 +243,16 @@ export function RrhhContainer({
         </nav>
       ) : null}
 
-      {view.status === 'loading' ? <p role="status">Validando destino…</p> : null}
+      {view.status === 'loading' ? <DestinationLoading /> : null}
       {view.status === 'forbidden' ? (
         <section role="alert">
-          <h1>Sin permisos</h1>
+          <ViewHeading>Sin permisos</ViewHeading>
           <p>No tienes acceso de lectura a Requerimientos de RR. HH.</p>
         </section>
       ) : null}
       {view.status === 'not-found' ? (
         <section role="alert">
-          <h1>Destino no encontrado</h1>
+          <ViewHeading>Destino no encontrado</ViewHeading>
           <p>El destino solicitado no está disponible.</p>
           {canReadUx02 ? (
             <button
@@ -235,13 +266,13 @@ export function RrhhContainer({
       ) : null}
       {view.status === 'error' ? (
         <section role="alert">
-          <h1>No se pudo validar el destino</h1>
+          <ViewHeading>No se pudo validar el destino</ViewHeading>
           <p>Inténtalo de nuevo más tarde.</p>
         </section>
       ) : null}
       {view.status === 'tray' ? (
         <section>
-          <h1>Requerimientos</h1>
+          <ViewHeading>Requerimientos</ViewHeading>
           <p>
             Frontera de integración de UX-02. La bandeja operativa aún no está
             implementada.
@@ -250,7 +281,7 @@ export function RrhhContainer({
       ) : null}
       {view.status === 'upcoming' ? (
         <section>
-          <h1>{activePresentation?.label}</h1>
+          <ViewHeading>{activePresentation?.label ?? 'Sección'}</ViewHeading>
           <p>Próximamente</p>
           <p>Esta sección aún no tiene funcionalidad disponible.</p>
           <button

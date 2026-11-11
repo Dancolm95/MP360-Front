@@ -12,6 +12,7 @@
 export const ERP_CONTAINER_LAYER = 'container' as const
 
 export type * from './contracts'
+export { useFocusOnMount } from './accessibility'
 
 export {
   AppHeader,

@@ -1,5 +1,6 @@
 /** @vitest-environment jsdom */
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { useEffect, useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { SessionContext, SessionContextResult, SessionPort } from '../contracts'
 import {
@@ -15,6 +16,8 @@ import {
   mockSessionWithCapabilities,
 } from '../fixtures'
 import { SessionStateBoundary } from './SessionStateBoundary'
+import type { SessionStateApi } from './useSessionState'
+import type { SessionStateCleanupStore } from './store-registry'
 
 afterEach(() => {
   cleanup()
@@ -24,6 +27,35 @@ afterEach(() => {
 function identityContent(context: SessionContext) {
   const name = context.identity?.displayName
   return <p>Identidad: {name ?? 'sin identidad'}</p>
+}
+
+function RegisteredStore({
+  api,
+  store,
+}: {
+  readonly api: SessionStateApi
+  readonly store: SessionStateCleanupStore
+}) {
+  useEffect(() => api.registerStore(store), [api, store])
+  return <p>Vista con store</p>
+}
+
+function StoreLifecycle({
+  api,
+  store,
+}: {
+  readonly api: SessionStateApi
+  readonly store: SessionStateCleanupStore
+}) {
+  const [visible, setVisible] = useState(true)
+  return (
+    <>
+      <button type="button" onClick={() => setVisible(false)}>
+        Retirar vista
+      </button>
+      {visible ? <RegisteredStore api={api} store={store} /> : null}
+    </>
+  )
 }
 
 describe('SessionStateBoundary (CORE-01 §7 criterio 5: carga y error)', () => {
@@ -37,6 +69,7 @@ describe('SessionStateBoundary (CORE-01 §7 criterio 5: carga y error)', () => {
     )
 
     expect(screen.getByRole('status').textContent).toMatch(/Cargando sesión/i)
+    expect(document.activeElement).toBe(screen.getByRole('status'))
     expect(screen.queryByText(/Identidad:/)).toBeNull()
     expect(screen.queryByRole('button', { name: /RR\. HH\./ })).toBeNull()
     expect(screen.queryByRole('navigation')).toBeNull()
@@ -232,12 +265,37 @@ describe('SessionStateBoundary (CORE-01 §7 criterio 6: vencimiento y terminaci�
 
     const alert = screen.getByRole('alert')
     expect(alert.textContent).toMatch(/La sesión ha vencido/i)
+    expect(alert.getAttribute('aria-live')).toBe('assertive')
+    expect(document.activeElement).toBe(alert)
     expect(screen.queryByText(/Identidad: Ana Pérez/)).toBeNull()
     expect(store.get()).toBeUndefined()
     expect(unsubscribeCalls).toBe(0)
 
     unmount()
     expect(unsubscribeCalls).toBe(1)
+  })
+
+  it('desregistra el store cuando se desmonta la vista que lo aporta', async () => {
+    const session = mockSessionWithCapabilities(capabilitySet(), {
+      displayName: 'Ana Pérez',
+    })
+    const store = createInMemoryStore<unknown>()
+    store.set({ filtro: 'conservado fuera de la vista' })
+
+    render(
+      <SessionStateBoundary session={session}>
+        {(_context, api) => <StoreLifecycle api={api} store={store} />}
+      </SessionStateBoundary>,
+    )
+    await screen.findByText('Vista con store')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Retirar vista' }))
+    expect(screen.queryByText('Vista con store')).toBeNull()
+
+    act(() => session.emitEnded('terminated'))
+
+    expect(screen.getByRole('alert')).toBe(document.activeElement)
+    expect(store.get()).toEqual({ filtro: 'conservado fuera de la vista' })
   })
 
   it('si la sesión termina durante la carga, una respuesta tardía no repuebla el estado', async () => {

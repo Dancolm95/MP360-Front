@@ -1,5 +1,6 @@
 /** @vitest-environment jsdom */
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { CatalogPort, SectionCatalog } from '../contracts'
 import {
@@ -80,9 +81,10 @@ describe('ModuleSelector (CORE-01 §7 criterios 1, 2 y 8)', () => {
     ).toBeNull()
   })
 
-  it('usa botones nativos operables por teclado y notifica la selección', async () => {
+  it('activa el módulo con Enter y Espacio', async () => {
     const catalog = await readCatalog(createSessionWithUx02Fixture().catalog)
     const onSelectModule = vi.fn()
+    const user = userEvent.setup()
 
     render(
       <ModuleSelector catalog={catalog} onSelectModule={onSelectModule} />,
@@ -91,10 +93,12 @@ describe('ModuleSelector (CORE-01 §7 criterios 1, 2 y 8)', () => {
     const button = screen.getByRole('button', { name: 'RR. HH.' })
     expect(button.getAttribute('type')).toBe('button')
 
-    button.focus()
+    await user.tab()
     expect(document.activeElement).toBe(button)
 
-    fireEvent.click(button)
-    expect(onSelectModule).toHaveBeenCalledWith(RRHH_MODULE_ID)
+    await user.keyboard('{Enter}')
+    await user.keyboard(' ')
+    expect(onSelectModule).toHaveBeenNthCalledWith(1, RRHH_MODULE_ID)
+    expect(onSelectModule).toHaveBeenNthCalledWith(2, RRHH_MODULE_ID)
   })
 })

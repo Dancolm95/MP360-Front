@@ -14,8 +14,6 @@ body {
   min-height: 100vh;
 }
 
-/* Contenedor ERP (T-CORE-04) */
-
 .erp-shell {
   min-height: 100vh;
 }
@@ -42,6 +40,38 @@ body {
 
 .erp-header__identity-label {
   font-weight: 600;
+}
+
+.erp-header__actions {
+  margin-left: auto;
+}
+
+.erp-sign-out {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.erp-sign-out__button,
+.erp-sign-out__retry {
+  border: 1px solid #52606d;
+  border-radius: 0.25rem;
+  background: #fff;
+  color: #1f2933;
+  font: inherit;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.erp-sign-out__button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.erp-sign-out__pending,
+.erp-sign-out__success,
+.erp-sign-out__error p {
+  margin: 0;
 }
 
 .erp-module-selector {
@@ -92,4 +122,49 @@ body {
 
 .erp-shell__content {
   padding: 1.5rem;
+}
+
+.erp-shell__content > nav {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.erp-section-navigation__item {
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.erp-section-navigation__item[aria-current='page'] {
+  border-bottom-color: currentColor;
+  font-weight: 700;
+}
+
+.erp-session-state {
+  margin: 2rem;
+  max-width: 48rem;
+  padding: 1rem;
+  border-left: 4px solid #52606d;
+  background: #f5f7fa;
+}
+
+.erp-session-state--error,
+.erp-session-state--expired,
+.erp-session-state--terminated {
+  border-left-color: #b42318;
+}
+
+.erp-session-state--signed-out {
+  border-left-color: #067647;
+}
+
+button:focus-visible,
+[tabindex='-1']:focus {
+  outline: 3px solid #1f6feb;
+  outline-offset: 3px;
 }

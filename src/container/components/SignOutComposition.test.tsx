@@ -82,6 +82,8 @@ describe('Composición real de «Salir» con la cabecera y la sesión (criterio 
           ? /El cierre de la sesión continúa en el proveedor/i
           : /La sesión local se ha cerrado/i,
       )
+      expect(document.activeElement).toBe(confirmation)
+      expect(confirmation.getAttribute('aria-live')).toBe('polite')
       expect(signOutSpy).toHaveBeenCalledTimes(1)
 
       expect(screen.queryByText('Ana Pérez')).toBeNull()
