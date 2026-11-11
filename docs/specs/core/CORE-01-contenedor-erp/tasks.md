@@ -2,7 +2,7 @@
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03 y T-CORE-11 hechas (`b36a956`, `74ef493` y `ec02c2a`+`df1ade6`, todas en `main`); T-CORE-11 validada **APROBADO** por el reviewer; T-CORE-04…10 pendientes, con **T-CORE-04 como siguiente**.  
+**Estado del corte:** T-CORE-01 hecha y **sustituida por T-CORE-11** (commit conservado como traza); T-CORE-02, T-CORE-03 y T-CORE-11 hechas (`b36a956`, `74ef493` y `ec02c2a`+`df1ade6`, todas en `main`); T-CORE-11 validada **APROBADO** por el reviewer; **T-CORE-04 implementada el 11-nov-2026 en `task/core-01-t04`** (implementación `9f1495c` + este commit de evidencia), **pendiente de veredicto del reviewer y de merge**; T-CORE-05…10 pendientes y no se inician hasta ese veredicto.  
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
@@ -62,7 +62,7 @@
 ## Fase B — Contenedor
 
 ### T-CORE-04 — Cabecera, identidad y selector de módulos
-- [ ] Hecha
+- [x] Hecha — Evidencia: `AppHeader` muestra la marca ERP siempre y la identidad solo si se recibe un nombre mostrable (sin sustitutos ni datos de ejemplo); `ModuleSelector` es una navegación horizontal con nombre accesible «Módulos del ERP» que solo ofrece módulos con sección implementada, visible y operable según catálogo/capacidades (con lectura UX-02: solo RR. HH.; sin ella: «Sin módulos disponibles» y sin «Próximamente»); el módulo activo se marca con `aria-current="page"` y nombre accesible «(módulo activo)», con borde/subrayado además del color; `ContainerShell` compone cabecera, selector y texto «Módulo activo: … · Sección: …», sin panel contextual derecho. Botones nativos `type="button"`, enfocables y operables por teclado; la selección se notifica por `onSelectModule`. Pruebas con fixtures (UX-02, sin UX-02 y visibilidad de Selección sin lectura): **6 archivos / 28 pruebas OK** (T-CORE-04 aporta 12) y **`npm run build` OK** el 11-nov-2026 bajo Node v25.9.0. Commits `9f1495c` (implementación) y este commit de evidencia en `task/core-01-t04`, rama realineada sobre `main`; pendiente de veredicto del reviewer. Límite de evidencia: fixtures con mocks, sin integración real.
 - **Depende de:** T-CORE-03, T-CORE-11 (ninguna vista se implementa sobre el andamiaje Vite; T-CORE-11 debe estar cerrada).
 - **Traza:** CORE-01 §7 criterios 1, 2, 3, 8; plan §2.1 y §2.2.
 - **Entrada:** contratos y fixtures de contexto/capacidades/catálogo.
