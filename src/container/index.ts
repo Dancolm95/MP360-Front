@@ -23,3 +23,14 @@ export {
 } from './components'
 export { getModuleLabel } from './labels'
 export { getSelectableModules } from './selectors'
+export {
+  SessionStateBoundary,
+  createSessionStoreRegistry,
+  useSessionState,
+  type SessionState,
+  type SessionStateApi,
+  type SessionStateBoundaryProps,
+  type SessionStateCleanupStore,
+  type SessionStoreRegistry,
+  type UseSessionStateOptions,
+} from './session'
