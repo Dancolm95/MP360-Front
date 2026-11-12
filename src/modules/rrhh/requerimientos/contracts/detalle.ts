@@ -34,7 +34,7 @@ import type {
   CoberturaRequerimiento,
   ColaboradorReemplazo,
   EstadoRequerimiento,
-  EstadoRequerimientoPersistido,
+  EstadoRequerimientoCompleto,
 } from './requerimiento'
 
 export interface UbicacionDetalle {
@@ -91,14 +91,17 @@ export interface EventoCancelacion extends EventoHistorialBase {
   readonly comentario: string | null
 }
 
-/** Ajuste auditado del plazo administrativo; conserva ambos valores y fechas. */
+/**
+ * Ajuste auditado del plazo administrativo; conserva ambos valores y fechas.
+ * Solo ocurre tras la aprobación, por lo que ambas fechas objetivo existen.
+ */
 export interface EventoAjustePlazo extends EventoHistorialBase {
   readonly accion: 'ajuste-plazo'
   readonly motivo: string
   readonly plazoAnteriorDias: number
   readonly plazoNuevoDias: number
-  readonly fechaObjetivoAnterior: FechaISO | null
-  readonly fechaObjetivoNueva: FechaISO | null
+  readonly fechaObjetivoAnterior: FechaISO
+  readonly fechaObjetivoNueva: FechaISO
 }
 
 export interface EventoFijacionPlazo extends EventoHistorialBase {
@@ -138,7 +141,8 @@ export interface EfectoCoberturaReversion {
   readonly solicitadas: number
   readonly cubiertas: number
   readonly pendientes: number
-  readonly estadoResultante: EstadoRequerimiento
+  /** Toda reversión confirmada deja el requerimiento En reclutamiento. */
+  readonly estadoResultante: 'en-reclutamiento'
 }
 
 /** Evento auditado de Selección que recalcula la cobertura y enlaza la solicitud. */
@@ -179,13 +183,11 @@ export interface DetalleRequerimientoBase {
 }
 
 /**
- * Detalle de un Borrador. El contenido puede estar incompleto y se expone tal
- * como lo persistió el backend; el plazo o la cobertura solo existen si ya son
- * derivables de los datos introducidos.
+ * Datos parciales de un Borrador. El contenido puede estar incompleto y se
+ * expone tal como lo persistió el backend; el plazo o la cobertura solo existen
+ * si ya son derivables de los datos introducidos.
  */
-export interface DetalleRequerimientoBorrador
-  extends DetalleRequerimientoBase {
-  readonly estado: 'borrador'
+interface DetalleRequerimientoDatosParciales {
   readonly borrador: BorradorRequerimiento
   readonly plazo: PlazoRequerimiento | null
   readonly cobertura: CoberturaRequerimiento | null
@@ -193,9 +195,7 @@ export interface DetalleRequerimientoBorrador
   readonly procesoSeleccion: null
 }
 
-export interface DetalleRequerimientoPersistido
-  extends DetalleRequerimientoBase {
-  readonly estado: EstadoRequerimientoPersistido
+interface DetalleRequerimientoDatosCompletos {
   readonly motivo: MotivoRequerimiento
   readonly empresa: Empresa
   readonly colaboradorAReemplazar: ColaboradorReemplazo | null
@@ -214,9 +214,55 @@ export interface DetalleRequerimientoPersistido
   readonly procesoSeleccion: ProcesoSeleccionRef | null
 }
 
+export interface DetalleRequerimientoBorrador
+  extends DetalleRequerimientoBase,
+    DetalleRequerimientoDatosParciales {
+  readonly estado: 'borrador'
+}
+
+export interface DetalleRequerimientoCompleto
+  extends DetalleRequerimientoBase,
+    DetalleRequerimientoDatosCompletos {
+  readonly estado: EstadoRequerimientoCompleto
+}
+
+export interface DetalleRequerimientoCanceladoCompleto
+  extends DetalleRequerimientoBase,
+    DetalleRequerimientoDatosCompletos {
+  readonly estado: 'cancelado'
+  readonly datos: 'completos'
+}
+
+/**
+ * Cancelado nacido de un Borrador: conserva el contenido tal como se persistió.
+ * Sin aprobación no hay proceso de Selección; plazo y cobertura solo existen si
+ * ya eran derivables de los datos introducidos.
+ */
+export interface DetalleRequerimientoCanceladoParcial
+  extends DetalleRequerimientoBase,
+    DetalleRequerimientoDatosParciales {
+  readonly estado: 'cancelado'
+  readonly datos: 'parciales'
+}
+
+export type DetalleRequerimientoCancelado =
+  | DetalleRequerimientoCanceladoCompleto
+  | DetalleRequerimientoCanceladoParcial
+
 export type DetalleRequerimiento =
   | DetalleRequerimientoBorrador
-  | DetalleRequerimientoPersistido
+  | DetalleRequerimientoCompleto
+  | DetalleRequerimientoCancelado
+
+/**
+ * Detalle devuelto al guardar: conserva el estado real de la edición. Guardar
+ * en Pendiente de aprobación no lo rebaja a Borrador ni cambia de estado.
+ */
+export type DetalleRequerimientoEditable =
+  | DetalleRequerimientoBorrador
+  | (DetalleRequerimientoCompleto & {
+      readonly estado: 'pendiente-aprobacion' | 'observado'
+    })
 
 export type ResultadoDetalle =
   | { readonly status: 'ok'; readonly datos: DetalleRequerimiento }

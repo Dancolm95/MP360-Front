@@ -6,7 +6,9 @@ import type { Usuario } from './catalogos'
 import type {
   DetalleRequerimiento,
   DetalleRequerimientoBorrador,
-  DetalleRequerimientoPersistido,
+  DetalleRequerimientoCancelado,
+  DetalleRequerimientoCompleto,
+  DetalleRequerimientoEditable,
 } from './detalle'
 import type { ErrorIntegracion, ErrorValidacion } from './errores'
 import type { RequerimientoId, SolicitudReversionId } from './identificadores'
@@ -17,7 +19,6 @@ import type {
 import type {
   BorradorRequerimiento,
   EstadoRequerimiento,
-  EstadoRequerimientoPersistido,
   ResumenRequerimientoCompleto,
 } from './requerimiento'
 
@@ -122,9 +123,11 @@ export type ResultadoCrearRequerimiento =
 
 export interface ConfirmacionEnvio {
   readonly id: RequerimientoId
-  readonly resumen: ResumenRequerimientoCompleto
+  readonly resumen: ResumenRequerimientoCompleto & {
+    readonly estado: 'pendiente-aprobacion'
+  }
   readonly responsable: Usuario | null
-  readonly estado: EstadoRequerimientoPersistido
+  readonly estado: 'pendiente-aprobacion'
 }
 
 /**
@@ -134,7 +137,7 @@ export interface ConfirmacionEnvio {
  */
 export interface ResultadoAperturaProceso {
   readonly proceso: ProcesoSeleccionRef
-  readonly requerimiento: DetalleRequerimientoPersistido
+  readonly requerimiento: DetalleRequerimientoCompleto
   readonly idempotente: boolean
 }
 
@@ -142,18 +145,18 @@ export interface ResultadoAperturaProceso {
 export interface SolicitudReversionRegistrada {
   readonly solicitudId: SolicitudReversionId
   readonly estado: 'pendiente-confirmacion'
-  readonly requerimiento: DetalleRequerimientoPersistido
+  readonly requerimiento: DetalleRequerimientoCompleto
 }
 
 export type ResultadoGuardarBorrador =
-  ResultadoComando<DetalleRequerimientoBorrador>
+  ResultadoComando<DetalleRequerimientoEditable>
 export type ResultadoEnvioAprobacion = ResultadoComando<ConfirmacionEnvio>
-export type ResultadoAprobar = ResultadoComando<DetalleRequerimientoPersistido>
-export type ResultadoObservar = ResultadoComando<DetalleRequerimientoPersistido>
-export type ResultadoCancelar = ResultadoComando<DetalleRequerimientoPersistido>
-export type ResultadoFijarPlazo = ResultadoComando<DetalleRequerimientoPersistido>
+export type ResultadoAprobar = ResultadoComando<DetalleRequerimientoCompleto>
+export type ResultadoObservar = ResultadoComando<DetalleRequerimientoCompleto>
+export type ResultadoCancelar = ResultadoComando<DetalleRequerimientoCancelado>
+export type ResultadoFijarPlazo = ResultadoComando<DetalleRequerimientoCompleto>
 export type ResultadoAjustarPlazo =
-  ResultadoComando<DetalleRequerimientoPersistido>
+  ResultadoComando<DetalleRequerimientoCompleto>
 export type ResultadoAbrirProceso = ResultadoComando<ResultadoAperturaProceso>
 
 /**

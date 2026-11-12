@@ -8,6 +8,25 @@ export type NivelAlerta = 'temprana' | 'media' | 'critica'
 /** Porcentajes del plazo administrativo; el día umbral se redondea hacia arriba. */
 export type PorcentajeUmbral = 50 | 75 | 90
 
+/** Duración administrativa válida en días hábiles (spec §5.1). */
+export type DiasHabilesAdministrativos =
+  | 15
+  | 16
+  | 17
+  | 18
+  | 19
+  | 20
+  | 21
+  | 22
+  | 23
+  | 24
+  | 25
+  | 26
+  | 27
+  | 28
+  | 29
+  | 30
+
 /**
  * El umbral queda ligado a la clasificación para no admitir combinaciones
  * imposibles: días fijos en Operativo y porcentaje en Administrativo.
@@ -73,8 +92,8 @@ export interface PlazoAdministrativoPendiente extends PlazoRequerimientoBase {
 
 export interface PlazoAdministrativoFijado extends PlazoRequerimientoBase {
   readonly clasificacion: 'administrativo'
-  /** Entero 15–30; el backend revalida el rango. */
-  readonly duracionDiasHabiles: number
+  /** El backend revalida el rango además del tipo. */
+  readonly duracionDiasHabiles: DiasHabilesAdministrativos
   readonly origen: 'fijado-administrativo' | 'ajustado-administrativo'
   readonly alerta: AlertaPlazoAdministrativo | null
 }

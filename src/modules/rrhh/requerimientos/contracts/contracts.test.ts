@@ -16,19 +16,31 @@ import type {
   ConsultaBandeja,
   DetalleRequerimiento,
   DetalleRequerimientoBorrador,
+  DetalleRequerimientoCancelado,
+  DetalleRequerimientoCanceladoCompleto,
+  DetalleRequerimientoCanceladoParcial,
+  DetalleRequerimientoCompleto,
+  DetalleRequerimientoEditable,
+  DiasHabilesAdministrativos,
   EstadoRequerimiento,
+  EstadoRequerimientoCompleto,
   EstadoRequerimientoPersistido,
+  EventoAjustePlazo,
   EventoCancelacion,
   EventoCreacion,
   EventoReversionCobertura,
+  FechaISO,
   FiltrosBandeja,
   MotivoRequerimiento,
   NivelAlerta,
   OrdenBandeja,
   PaginacionBandeja,
   PaginaRequerimientos,
+  PlazoAdministrativoFijado,
   PlazoAdministrativoPendiente,
   PlazoOperativo,
+  PlazoRequerimiento,
+  ResultadoCancelar,
   ResultadoComando,
   ResultadoCrearRequerimiento,
   ResultadoGuardarBorrador,
@@ -36,6 +48,7 @@ import type {
   ResultadoSolicitarReversion,
   RequerimientoCreado,
   ResumenRequerimiento,
+  ResumenRequerimientoCanceladoParcial,
   SolicitudReversionId,
   SolicitudReversionRegistrada,
   UmbralAlerta,
@@ -85,6 +98,9 @@ describe('contratos del dominio Requerimientos (T-RH-02)', () => {
     expectTypeOf<EstadoRequerimientoPersistido>().toEqualTypeOf<
       Exclude<EstadoRequerimiento, 'borrador'>
     >()
+    expectTypeOf<EstadoRequerimientoCompleto>().toEqualTypeOf<
+      Exclude<EstadoRequerimiento, 'borrador' | 'cancelado'>
+    >()
   })
 
   it('la consulta de bandeja reúne filtros, orden y paginación', () => {
@@ -120,9 +136,37 @@ describe('contratos del dominio Requerimientos (T-RH-02)', () => {
     expectTypeOf<PaginaRequerimientos['elementos'][number]>().toEqualTypeOf<
       ResumenRequerimiento
     >()
+  })
+
+  it('guardar conserva el estado real de la edición y no lo rebaja a Borrador', () => {
+    type DatosGuardado = Extract<
+      ResultadoGuardarBorrador,
+      { readonly status: 'confirmado' }
+    >['datos']
+    type EditablePendiente = Extract<
+      DatosGuardado,
+      { estado: 'pendiente-aprobacion' | 'observado' }
+    >
+
+    expectTypeOf<DatosGuardado>().toEqualTypeOf<DetalleRequerimientoEditable>()
+    expectTypeOf<DatosGuardado['estado']>().toEqualTypeOf<
+      'borrador' | 'pendiente-aprobacion' | 'observado'
+    >()
     expectTypeOf<
-      Extract<ResultadoGuardarBorrador, { status: 'confirmado' }>['datos']
-    >().toEqualTypeOf<DetalleRequerimientoBorrador>()
+      DetalleRequerimientoCompleto & {
+        readonly estado: 'pendiente-aprobacion'
+      }
+    >().toMatchTypeOf<DatosGuardado>()
+    expectTypeOf<
+      DetalleRequerimientoCompleto & { readonly estado: 'observado' }
+    >().toMatchTypeOf<DatosGuardado>()
+    expectTypeOf<EditablePendiente['estado']>().toEqualTypeOf<
+      'pendiente-aprobacion' | 'observado'
+    >()
+    expectTypeOf<EditablePendiente>().toMatchTypeOf<DetalleRequerimientoCompleto>()
+    expectTypeOf<
+      Extract<DatosGuardado, { estado: 'cancelado' }>
+    >().toEqualTypeOf<never>()
   })
 
   it('la creación no exige identificador ni versión previos y devuelve ambos al confirmar', () => {
@@ -182,6 +226,9 @@ describe('contratos del dominio Requerimientos (T-RH-02)', () => {
       EventoReversionCobertura['efectoCobertura']['pendientes']
     >().toBeNumber()
     expectTypeOf<
+      EventoReversionCobertura['efectoCobertura']['estadoResultante']
+    >().toEqualTypeOf<'en-reclutamiento'>()
+    expectTypeOf<
       EventoReversionCobertura['colaboradorAfectadoId']
     >().toEqualTypeOf<ColaboradorId | null>()
   })
@@ -232,6 +279,51 @@ describe('contratos del dominio Requerimientos (T-RH-02)', () => {
     }>()
   })
 
+  it('un Cancelado desde Borrador incompleto conserva datos parciales', () => {
+    type DatosCancelado = Extract<
+      ResultadoCancelar,
+      { readonly status: 'confirmado' }
+    >['datos']
+
+    expectTypeOf<DatosCancelado>().toEqualTypeOf<DetalleRequerimientoCancelado>()
+    expectTypeOf<
+      Extract<DatosCancelado, { datos: 'parciales' }>
+    >().toEqualTypeOf<DetalleRequerimientoCanceladoParcial>()
+    expectTypeOf<
+      Extract<DatosCancelado, { datos: 'completos' }>
+    >().toEqualTypeOf<DetalleRequerimientoCanceladoCompleto>()
+    expectTypeOf<DetalleRequerimientoCanceladoParcial['borrador']>().toEqualTypeOf<
+      BorradorRequerimiento
+    >()
+    expectTypeOf<DetalleRequerimientoCanceladoParcial['plazo']>().toEqualTypeOf<
+      PlazoRequerimiento | null
+    >()
+    expectTypeOf<EstadoRequerimientoCompleto>().toEqualTypeOf<
+      Exclude<EstadoRequerimiento, 'borrador' | 'cancelado'>
+    >()
+    type CompletoAdmiteCancelado =
+      'cancelado' extends DetalleRequerimientoCompleto['estado'] ? true : false
+    expectTypeOf<CompletoAdmiteCancelado>().toEqualTypeOf<false>()
+  })
+
+  it('la bandeja representa el Cancelado parcial sin inventar columnas', () => {
+    type CanceladoParcial = Extract<
+      ResumenRequerimiento,
+      { estado: 'cancelado'; datos: 'parciales' }
+    >
+
+    expectTypeOf<CanceladoParcial>().toEqualTypeOf<ResumenRequerimientoCanceladoParcial>()
+    expectTypeOf<CanceladoParcial['motivo']>().toEqualTypeOf<
+      MotivoRequerimiento | null
+    >()
+    expectTypeOf<CanceladoParcial['solicitadas']>().toEqualTypeOf<number | null>()
+    expectTypeOf<CanceladoParcial['fechaObjetivo']>().toEqualTypeOf<null>()
+    expectTypeOf<CanceladoParcial['alerta']>().toEqualTypeOf<null>()
+    expectTypeOf<ResumenRequerimiento['estado']>().toEqualTypeOf<
+      EstadoRequerimiento
+    >()
+  })
+
   it('el plazo no admite combinaciones imposibles por clasificación', () => {
     expectTypeOf<PlazoOperativo['duracionDiasHabiles']>().toEqualTypeOf<10>()
     expectTypeOf<PlazoOperativo['origen']>().toEqualTypeOf<'operativo-fijo'>()
@@ -241,12 +333,22 @@ describe('contratos del dominio Requerimientos (T-RH-02)', () => {
     expectTypeOf<
       PlazoAdministrativoPendiente['duracionDiasHabiles']
     >().toEqualTypeOf<null>()
+    expectTypeOf<PlazoAdministrativoFijado['duracionDiasHabiles']>().toEqualTypeOf<
+      DiasHabilesAdministrativos
+    >()
+    type CatorceValido = 14 extends DiasHabilesAdministrativos ? true : false
+    expectTypeOf<CatorceValido>().toEqualTypeOf<false>()
     expectTypeOf<
       Extract<UmbralAlerta, { tipo: 'dias-fijos' }>['clasificacion']
     >().toEqualTypeOf<'operativo'>()
     expectTypeOf<
       Extract<UmbralAlerta, { tipo: 'porcentaje' }>['clasificacion']
     >().toEqualTypeOf<'administrativo'>()
+  })
+
+  it('el ajuste de plazo conserva fechas objetivo existentes', () => {
+    expectTypeOf<EventoAjustePlazo['fechaObjetivoAnterior']>().toEqualTypeOf<FechaISO>()
+    expectTypeOf<EventoAjustePlazo['fechaObjetivoNueva']>().toEqualTypeOf<FechaISO>()
   })
 
   it('la fecha de aprobación no se duplica fuera del plazo', () => {

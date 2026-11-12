@@ -28,10 +28,22 @@ export type EstadoRequerimiento =
   | 'cubierto'
   | 'cancelado'
 
-/** Estados con datos persistidos completos; excluye el borrador incompleto. */
+/**
+ * Estados posteriores al Borrador. El Cancelado puede conservar datos
+ * parciales si se canceló desde un Borrador incompleto.
+ */
 export type EstadoRequerimientoPersistido = Exclude<
   EstadoRequerimiento,
   'borrador'
+>
+
+/**
+ * Estados cuyo contenido obligatorio está completo. El Cancelado se modela
+ * aparte porque puede conservar datos parciales.
+ */
+export type EstadoRequerimientoCompleto = Exclude<
+  EstadoRequerimientoPersistido,
+  'cancelado'
 >
 
 export interface ColaboradorReemplazo {
@@ -83,15 +95,17 @@ export interface CoberturaRequerimiento {
   readonly primerosDiasReales: readonly PrimerDiaRealAlta[]
 }
 
-/**
- * Fila de la bandeja con datos incompletos: el motivo, la empresa, el puesto o
- * los contadores pueden faltar mientras el requerimiento siga en Borrador.
- */
-export interface ResumenRequerimientoBorrador {
+interface ResumenRequerimientoBase {
   readonly id: RequerimientoId
   readonly version: number
   readonly fechaCreacion: InstanteISO
-  readonly estado: 'borrador'
+}
+
+/**
+ * Columnas de la bandeja que pueden faltar. Sin aprobación no existe fecha
+ * objetivo ni alerta; los campos ausentes se muestran como tales.
+ */
+interface ResumenRequerimientoDatosParciales {
   readonly motivo: MotivoRequerimiento | null
   readonly empresa: Empresa | null
   readonly puesto: Puesto | null
@@ -104,16 +118,7 @@ export interface ResumenRequerimientoBorrador {
   readonly autorizacion: AutorizacionRequerimiento
 }
 
-/**
- * Fila de la bandeja de un requerimiento que ya superó el borrador. El
- * responsable es el usuario asignado a la próxima tarea; `null` significa que
- * no hay tarea pendiente o asignación y la vista muestra «Sin asignar».
- */
-export interface ResumenRequerimientoCompleto {
-  readonly id: RequerimientoId
-  readonly version: number
-  readonly fechaCreacion: InstanteISO
-  readonly estado: EstadoRequerimientoPersistido
+interface ResumenRequerimientoDatosCompletos {
   readonly motivo: MotivoRequerimiento
   readonly empresa: Empresa
   readonly puesto: Puesto
@@ -126,6 +131,43 @@ export interface ResumenRequerimientoCompleto {
   readonly autorizacion: AutorizacionRequerimiento
 }
 
+export interface ResumenRequerimientoBorrador
+  extends ResumenRequerimientoBase,
+    ResumenRequerimientoDatosParciales {
+  readonly estado: 'borrador'
+}
+
+/**
+ * Fila de la bandeja de un requerimiento que ya superó el borrador. El
+ * responsable es el usuario asignado a la próxima tarea; `null` significa que
+ * no hay tarea pendiente o asignación y la vista muestra «Sin asignar».
+ */
+export interface ResumenRequerimientoCompleto
+  extends ResumenRequerimientoBase,
+    ResumenRequerimientoDatosCompletos {
+  readonly estado: EstadoRequerimientoCompleto
+}
+
+export interface ResumenRequerimientoCanceladoCompleto
+  extends ResumenRequerimientoBase,
+    ResumenRequerimientoDatosCompletos {
+  readonly estado: 'cancelado'
+  readonly datos: 'completos'
+}
+
+/** Cancelado nacido de un Borrador: conserva los campos tal como se persistieron. */
+export interface ResumenRequerimientoCanceladoParcial
+  extends ResumenRequerimientoBase,
+    ResumenRequerimientoDatosParciales {
+  readonly estado: 'cancelado'
+  readonly datos: 'parciales'
+}
+
+export type ResumenRequerimientoCancelado =
+  | ResumenRequerimientoCanceladoCompleto
+  | ResumenRequerimientoCanceladoParcial
+
 export type ResumenRequerimiento =
   | ResumenRequerimientoBorrador
   | ResumenRequerimientoCompleto
+  | ResumenRequerimientoCancelado
