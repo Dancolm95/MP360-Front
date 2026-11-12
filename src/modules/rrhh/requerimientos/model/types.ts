@@ -73,6 +73,7 @@ export type CodigoErrorFormulario =
   | 'obligatorio'
   | 'seleccion-no-disponible'
   | 'jerarquia-inconsistente'
+  | 'valor-no-permitido'
   | 'entero-minimo'
   | 'formato-decimal'
   | 'importe-negativo'
@@ -89,7 +90,7 @@ export interface ModeloRequerimientoListo {
   readonly colaboradorAReemplazarId: ColaboradorId | null
   readonly departamentoId: DepartamentoId
   readonly areaId: AreaId
-  readonly subareaId: SubareaId
+  readonly subareaId: SubareaId | null
   readonly puestoId: PuestoId
   readonly clasificacion: Clasificacion
   readonly vacantes: number
@@ -115,7 +116,7 @@ export interface RemuneracionPenParseada {
 export interface SeleccionOrganizacional {
   readonly departamentoId: DepartamentoId
   readonly areaId: AreaId
-  readonly subareaId: SubareaId
+  readonly subareaId: SubareaId | null
   readonly puestoId: PuestoId
 }
 

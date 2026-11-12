@@ -69,9 +69,10 @@ export function comprobarJerarquiaOrganizacional(
   return Boolean(
     context.departamentos.some((item) => item.id === seleccion.departamentoId) &&
       area?.departamentoId === seleccion.departamentoId &&
-      subarea?.areaId === area.id &&
       puesto?.areaId === area.id &&
-      puesto.subareaId === subarea.id,
+      (puesto.subareaId === null
+        ? seleccion.subareaId === null
+        : subarea?.areaId === area.id && puesto.subareaId === subarea.id),
   )
 }
 
@@ -116,7 +117,6 @@ function requiredErrors(input: FormularioRequerimientoInput): ErrorFormulario[] 
   required('empresaId', input.empresaId)
   required('departamentoId', input.departamentoId)
   required('areaId', input.areaId)
-  required('subareaId', input.subareaId)
   required('puestoId', input.puestoId)
   required('vacantes', input.vacantes)
   required('remuneracionMensual', input.remuneracionMensual)
@@ -126,6 +126,14 @@ function requiredErrors(input: FormularioRequerimientoInput): ErrorFormulario[] 
   required('usuarioProximaTareaId', input.usuarioProximaTareaId)
   if (input.motivo === 'reemplazo') {
     required('colaboradorAReemplazarId', input.colaboradorAReemplazarId)
+  } else if (
+    input.motivo !== null &&
+    input.colaboradorAReemplazarId !== null
+  ) {
+    errors.push({
+      field: 'colaboradorAReemplazarId',
+      code: 'valor-no-permitido',
+    })
   }
   if (input.comentario === null || input.comentario.trim() === '') {
     errors.push({ field: 'comentario', code: 'obligatorio' })
@@ -181,20 +189,35 @@ export function validarParaEnvio(
   if (
     input.departamentoId !== null &&
     input.areaId !== null &&
-    input.subareaId !== null &&
     input.puestoId !== null
   ) {
-    clasificacion = derivarClasificacion(
-      {
+    const area = context.areas.find((item) => item.id === input.areaId)
+    const puesto = context.puestos.find((item) => item.id === input.puestoId)
+    const departamentoValido = context.departamentos.some(
+      (item) => item.id === input.departamentoId,
+    )
+    const areaValida =
+      departamentoValido && area?.departamentoId === input.departamentoId
+    const puestoValido = areaValida && puesto?.areaId === area.id
+
+    if (!areaValida) {
+      errors.push({ field: 'areaId', code: 'jerarquia-inconsistente' })
+    }
+    if (!puestoValido) {
+      errors.push({ field: 'puestoId', code: 'jerarquia-inconsistente' })
+    } else if (puesto.subareaId !== null && input.subareaId === null) {
+      errors.push({ field: 'subareaId', code: 'obligatorio' })
+    } else {
+      const seleccion = {
         departamentoId: input.departamentoId,
         areaId: input.areaId,
         subareaId: input.subareaId,
         puestoId: input.puestoId,
-      },
-      context,
-    )
-    if (clasificacion === null) {
-      errors.push({ field: 'puestoId', code: 'jerarquia-inconsistente' })
+      }
+      clasificacion = derivarClasificacion(seleccion, context)
+      if (clasificacion === null) {
+        errors.push({ field: 'subareaId', code: 'jerarquia-inconsistente' })
+      }
     }
   }
 
@@ -228,7 +251,7 @@ export function validarParaEnvio(
       colaboradorAReemplazarId: input.colaboradorAReemplazarId,
       departamentoId: input.departamentoId!,
       areaId: input.areaId!,
-      subareaId: input.subareaId!,
+      subareaId: input.subareaId,
       puestoId: input.puestoId!,
       clasificacion: clasificacion!,
       vacantes: vacantes.value,

@@ -32,6 +32,7 @@ const departamentoId = id<DepartamentoId>('departamento-1')
 const areaId = id<AreaId>('area-1')
 const subareaId = id<SubareaId>('subarea-1')
 const puestoId = id<PuestoId>('puesto-1')
+const puestoDirectoId = id<PuestoId>('puesto-directo')
 const departamentoUbicacionId = id<DepartamentoUbicacionId>('ubicacion-1')
 const provinciaId = id<ProvinciaId>('provincia-1')
 const distritoId = id<DistritoId>('distrito-1')
@@ -125,13 +126,12 @@ describe('modelo de formulario', () => {
 
     expect(result.ok).toBe(false)
     if (result.ok) return
-    expect(result.errors).toHaveLength(13)
+    expect(result.errors).toHaveLength(12)
     expect(result.errors.map(({ field }) => field)).toEqual([
       'motivo',
       'empresaId',
       'departamentoId',
       'areaId',
-      'subareaId',
       'puestoId',
       'vacantes',
       'remuneracionMensual',
@@ -154,7 +154,9 @@ describe('modelo de formulario', () => {
     })
 
     for (const motivo of ['nueva-vacante', 'practicante', 'otros'] as const) {
-      expect(validarParaEnvio({ ...validInput, motivo }, context).ok).toBe(true)
+      const result = validarParaEnvio({ ...validInput, motivo }, context)
+      expect(result.ok).toBe(true)
+      if (result.ok) expect(result.value.colaboradorAReemplazarId).toBeNull()
     }
     expect(
       validarParaEnvio(
@@ -163,6 +165,30 @@ describe('modelo de formulario', () => {
       ).ok,
     ).toBe(true)
   })
+
+  it.each(['nueva-vacante', 'practicante', 'otros'] as const)(
+    'rechaza colaborador residual para %s',
+    (motivo) => {
+      expect(
+        validarParaEnvio(
+          {
+            ...validInput,
+            motivo,
+            colaboradorAReemplazarId: colaboradorId,
+          },
+          context,
+        ),
+      ).toEqual({
+        ok: false,
+        errors: [
+          {
+            field: 'colaboradorAReemplazarId',
+            code: 'valor-no-permitido',
+          },
+        ],
+      })
+    },
+  )
 
   it('produce un modelo listo compatible con el contrato y sin fecha objetivo', () => {
     const result = validarParaEnvio(validInput, context)
@@ -258,6 +284,19 @@ describe('remuneración PEN', () => {
 describe('jerarquías y clasificación', () => {
   const organizacion = { departamentoId, areaId, subareaId, puestoId }
   const ubicacion = { departamentoId: departamentoUbicacionId, provinciaId, distritoId }
+  const directContext: ContextoValidacionFormulario = {
+    ...context,
+    puestos: [
+      ...context.puestos,
+      {
+        id: puestoDirectoId,
+        nombre: 'Puesto directo neutral',
+        areaId,
+        subareaId: null,
+        clasificacion: 'operativo',
+      },
+    ],
+  }
 
   it('acepta relaciones válidas y deriva clasificación solo desde el catálogo', () => {
     expect(comprobarJerarquiaOrganizacional(organizacion, context)).toBe(true)
@@ -271,6 +310,55 @@ describe('jerarquías y clasificación', () => {
     expect(derivarClasificacion(invalid, context)).toBeNull()
     const result = validarParaEnvio({ ...validInput, puestoId: invalid.puestoId }, context)
     expect(result).toEqual({
+      ok: false,
+      errors: [{ field: 'puestoId', code: 'jerarquia-inconsistente' }],
+    })
+  })
+
+  it('acepta un puesto vinculado directamente al área sin inventar subárea', () => {
+    const result = validarParaEnvio(
+      { ...validInput, puestoId: puestoDirectoId, subareaId: null },
+      directContext,
+    )
+
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    expect(result.value.subareaId).toBeNull()
+    expect(result.value.clasificacion).toBe('operativo')
+  })
+
+  it('exige subárea cuando el puesto efectivo la requiere', () => {
+    expect(validarParaEnvio({ ...validInput, subareaId: null }, context)).toEqual({
+      ok: false,
+      errors: [{ field: 'subareaId', code: 'obligatorio' }],
+    })
+  })
+
+  it('rechaza una subárea residual para un puesto directo al área', () => {
+    expect(
+      validarParaEnvio(
+        { ...validInput, puestoId: puestoDirectoId },
+        directContext,
+      ),
+    ).toEqual({
+      ok: false,
+      errors: [{ field: 'subareaId', code: 'jerarquia-inconsistente' }],
+    })
+  })
+
+  it('rechaza relaciones incompatibles entre área y puesto', () => {
+    const otraAreaId = id<AreaId>('area-2')
+    const contextWithOtherArea: ContextoValidacionFormulario = {
+      ...context,
+      areas: [
+        ...context.areas,
+        { id: otraAreaId, nombre: 'Otra área neutral', departamentoId },
+      ],
+    }
+
+    expect(
+      validarParaEnvio({ ...validInput, areaId: otraAreaId }, contextWithOtherArea),
+    ).toEqual({
       ok: false,
       errors: [{ field: 'puestoId', code: 'jerarquia-inconsistente' }],
     })
