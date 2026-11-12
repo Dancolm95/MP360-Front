@@ -9,12 +9,13 @@ import type {
   CampoOrdenBandeja,
   CatalogosRequerimientos,
   ConsultaBandeja,
+  DuracionAplicable,
   EstadoRequerimiento,
   FiltrosBandeja,
   OrdenBandeja,
   PaginaRequerimientos,
   ResumenRequerimiento,
-  ResultadoBandeja,
+  ResultadoConsultaBandeja,
   SubareaId,
   Usuario,
 } from '../contracts'
@@ -51,6 +52,10 @@ interface DefinicionColumna {
   readonly etiqueta: string
 }
 
+type DestinoFoco =
+  | { readonly tipo: 'orden'; readonly campo: CampoOrdenBandeja }
+  | { readonly tipo: 'paginacion'; readonly sentido: 'siguiente' | 'anterior' }
+
 const COLUMNAS: readonly DefinicionColumna[] = [
   { campo: 'id', etiqueta: 'ID' },
   { campo: 'fecha-creacion', etiqueta: 'Fecha de creación' },
@@ -84,6 +89,21 @@ function ValorAusente() {
   return (
     <span className="rrhh-tray__ausente">
       —<span className="sr-only"> Sin dato</span>
+    </span>
+  )
+}
+
+const AVISO_DURACION = 'La fecha objetivo se calcula al aprobar.'
+
+function DuracionCelda({ duracion }: { readonly duracion: DuracionAplicable }) {
+  return (
+    <span className="rrhh-tray__duracion">
+      <span>
+        {duracion.diasHabiles === null
+          ? 'Plazo pendiente de definir'
+          : `${duracion.diasHabiles} días hábiles`}
+      </span>
+      <span className="rrhh-tray__duracion-aviso">{AVISO_DURACION}</span>
     </span>
   )
 }
@@ -127,8 +147,9 @@ function renderCelda(
     case 'estado':
       return <EstadoConAlerta fila={fila} />
     case 'fecha-objetivo':
-      return fila.fechaObjetivo ? (
-        formatearFecha(fila.fechaObjetivo)
+      if (fila.fechaObjetivo) return formatearFecha(fila.fechaObjetivo)
+      return fila.duracionAplicable ? (
+        <DuracionCelda duracion={fila.duracionAplicable} />
       ) : (
         <span className="rrhh-tray__sin-fecha">Sin fecha</span>
       )
@@ -183,8 +204,7 @@ function ResultadoBandeja({
   return (
     <>
       <p role="status" aria-live="polite" className="rrhh-tray__resumen">
-        {datos.total} {datos.total === 1 ? 'requerimiento' : 'requerimientos'} ·
-        Página {datos.pagina} de {totalPaginas}
+        {datos.total} {datos.total === 1 ? 'requerimiento' : 'requerimientos'}
       </p>
       <div className="rrhh-tray__tabla-contenedor">
         <table className="rrhh-tray__tabla">
@@ -204,6 +224,7 @@ function ResultadoBandeja({
                       type="button"
                       className="rrhh-tray__orden"
                       aria-label={`Ordenar por ${etiqueta}`}
+                      data-orden={campo}
                       onClick={() => onOrdenar(campo)}
                     >
                       {etiqueta}
@@ -233,6 +254,7 @@ function ResultadoBandeja({
           onClick={() => onPagina(datos.pagina - 1)}
           disabled={datos.pagina <= 1}
           aria-label="Página anterior"
+          data-paginacion="anterior"
         >
           Anterior
         </button>
@@ -244,6 +266,7 @@ function ResultadoBandeja({
           onClick={() => onPagina(datos.pagina + 1)}
           disabled={datos.pagina >= totalPaginas}
           aria-label="Página siguiente"
+          data-paginacion="siguiente"
         >
           Siguiente
         </button>
@@ -287,13 +310,18 @@ export function BandejaRequerimientos({
     status: 'loading',
   })
   const solicitudRef = useRef(0)
+  const seccionRef = useRef<HTMLElement>(null)
+  const refDesde = useRef<HTMLInputElement>(null)
+  const refHasta = useRef<HTMLInputElement>(null)
+  /** El control accionado se desmonta durante la carga; se enfoca al volver. */
+  const focoPendienteRef = useRef<DestinoFoco | null>(null)
 
   const cargar = useCallback(
     async (siguienteConsulta: ConsultaBandeja) => {
       const solicitud = ++solicitudRef.current
       setResultado({ status: 'loading' })
 
-      let respuesta: ResultadoBandeja
+      let respuesta: ResultadoConsultaBandeja
       try {
         respuesta = await port.consultar(siguienteConsulta)
       } catch {
@@ -321,6 +349,34 @@ export function BandejaRequerimientos({
     void cargar(consulta)
   }, [cargar, consulta])
 
+  useEffect(() => {
+    const destino = focoPendienteRef.current
+    if (!destino || resultado.status === 'loading') return
+    if (resultado.status !== 'ok') {
+      focoPendienteRef.current = null
+      return
+    }
+
+    focoPendienteRef.current = null
+    const seccion = seccionRef.current
+    const selector =
+      destino.tipo === 'orden'
+        ? `[data-orden="${destino.campo}"]`
+        : `[data-paginacion="${destino.sentido}"]`
+    const control = seccion?.querySelector<HTMLButtonElement>(selector)
+    if (control && !control.disabled) {
+      control.focus()
+      return
+    }
+    if (destino.tipo === 'paginacion') {
+      const contrario =
+        destino.sentido === 'siguiente' ? 'anterior' : 'siguiente'
+      seccion
+        ?.querySelector<HTMLButtonElement>(`[data-paginacion="${contrario}"]`)
+        ?.focus()
+    }
+  }, [resultado])
+
   useEffect(
     () => () => {
       solicitudRef.current += 1
@@ -332,6 +388,7 @@ export function BandejaRequerimientos({
     campo: keyof EstadoFiltrosFormulario,
     valor: string,
   ) => {
+    if (campo === 'desde' || campo === 'hasta') setErrorPeriodo(null)
     setFiltros((previo) => {
       const siguiente = { ...previo, [campo]: valor } as EstadoFiltrosFormulario
 
@@ -376,6 +433,14 @@ export function BandejaRequerimientos({
     const error = validarPeriodo(filtros)
     if (error) {
       setErrorPeriodo(error)
+      // El periodo es una pareja: si falta un extremo, el foco va al que falta.
+      const primerCampo =
+        filtros.desde === ''
+          ? refDesde
+          : filtros.hasta === ''
+            ? refHasta
+            : refDesde
+      primerCampo.current?.focus()
       return
     }
     setErrorPeriodo(null)
@@ -403,6 +468,7 @@ export function BandejaRequerimientos({
   }
 
   const ordenarPor = (campo: CampoOrdenBandeja) => {
+    focoPendienteRef.current = { tipo: 'orden', campo }
     setConsulta({
       ...consulta,
       orden: siguienteOrden(consulta.orden, campo),
@@ -414,6 +480,10 @@ export function BandejaRequerimientos({
   }
 
   const irAPagina = (pagina: number) => {
+    focoPendienteRef.current = {
+      tipo: 'paginacion',
+      sentido: pagina < consulta.paginacion.pagina ? 'anterior' : 'siguiente',
+    }
     setConsulta({
       ...consulta,
       paginacion: {
@@ -456,10 +526,15 @@ export function BandejaRequerimientos({
   const idDesde = `${idBase}-desde`
   const idHasta = `${idBase}-hasta`
   const idAyudaPeriodo = `${idBase}-ayuda-periodo`
+  const idErrorPeriodo = `${idBase}-error-periodo`
   const idTamano = `${idBase}-tamano`
 
   return (
-    <section className="rrhh-tray" aria-labelledby={idTitulo}>
+    <section
+      ref={seccionRef}
+      className="rrhh-tray"
+      aria-labelledby={idTitulo}
+    >
       <h2 id={idTitulo}>Bandeja de requerimientos</h2>
 
       <form
@@ -601,7 +676,13 @@ export function BandejaRequerimientos({
                 id={idDesde}
                 type="date"
                 value={filtros.desde}
-                aria-describedby={idAyudaPeriodo}
+                ref={refDesde}
+                aria-invalid={errorPeriodo ? true : undefined}
+                aria-describedby={
+                  errorPeriodo
+                    ? `${idAyudaPeriodo} ${idErrorPeriodo}`
+                    : idAyudaPeriodo
+                }
                 onChange={(evento) => cambiarCampo('desde', evento.target.value)}
               />
             </div>
@@ -611,7 +692,13 @@ export function BandejaRequerimientos({
                 id={idHasta}
                 type="date"
                 value={filtros.hasta}
-                aria-describedby={idAyudaPeriodo}
+                ref={refHasta}
+                aria-invalid={errorPeriodo ? true : undefined}
+                aria-describedby={
+                  errorPeriodo
+                    ? `${idAyudaPeriodo} ${idErrorPeriodo}`
+                    : idAyudaPeriodo
+                }
                 onChange={(evento) => cambiarCampo('hasta', evento.target.value)}
               />
             </div>
@@ -619,7 +706,11 @@ export function BandejaRequerimientos({
         </div>
 
         {errorPeriodo ? (
-          <p role="alert" className="rrhh-tray__error-periodo">
+          <p
+            id={idErrorPeriodo}
+            role="alert"
+            className="rrhh-tray__error-periodo"
+          >
             {errorPeriodo}
           </p>
         ) : null}

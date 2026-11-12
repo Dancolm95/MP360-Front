@@ -3,7 +3,7 @@ import type {
   ConsultaBandeja,
   DetalleRequerimientosPort,
   RequerimientoId,
-  ResultadoBandeja,
+  ResultadoConsultaBandeja,
   ResultadoDetalle,
 } from '../contracts'
 import {
@@ -21,7 +21,10 @@ export interface MockBandejaRequerimientosPort
 }
 
 export function createMockBandejaRequerimientos(
-  configuredResult: FixtureResponse<ResultadoBandeja, readonly [ConsultaBandeja]>,
+  configuredResult: FixtureResponse<
+    ResultadoConsultaBandeja,
+    readonly [ConsultaBandeja]
+  >,
 ): MockBandejaRequerimientosPort {
   const result =
     typeof configuredResult === 'function'

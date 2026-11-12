@@ -396,6 +396,17 @@ button:focus-visible,
   color: #52606d;
 }
 
+.rrhh-tray__duracion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.rrhh-tray__duracion-aviso {
+  color: #52606d;
+  font-size: 0.85rem;
+}
+
 .rrhh-tray__paginacion {
   display: flex;
   flex-wrap: wrap;

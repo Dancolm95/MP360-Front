@@ -22,6 +22,7 @@ import type {
   DetalleRequerimientoCompleto,
   DetalleRequerimientoEditable,
   DiasHabilesAdministrativos,
+  DuracionAplicable,
   EstadoRequerimiento,
   EstadoRequerimientoCompleto,
   EstadoRequerimientoPersistido,
@@ -321,6 +322,30 @@ describe('contratos del dominio Requerimientos (T-RH-02)', () => {
     expectTypeOf<CanceladoParcial['alerta']>().toEqualTypeOf<null>()
     expectTypeOf<ResumenRequerimiento['estado']>().toEqualTypeOf<
       EstadoRequerimiento
+    >()
+  })
+
+  it('la duración aplicable no es una fecha y respeta el rango administrativo', () => {
+    type DuracionAdministrativa = Extract<
+      DuracionAplicable,
+      { clasificacion: 'administrativo' }
+    >
+    type DuracionTieneFecha =
+      'fechaObjetivo' extends keyof DuracionAplicable ? true : false
+    type CatorceValido = 14 extends DuracionAdministrativa['diasHabiles']
+      ? true
+      : false
+
+    expectTypeOf<DuracionAplicable['clasificacion']>().toEqualTypeOf<
+      'operativo' | 'administrativo'
+    >()
+    expectTypeOf<DuracionAdministrativa['diasHabiles']>().toEqualTypeOf<
+      DiasHabilesAdministrativos | null
+    >()
+    expectTypeOf<DuracionTieneFecha>().toEqualTypeOf<false>()
+    expectTypeOf<CatorceValido>().toEqualTypeOf<false>()
+    expectTypeOf<ResumenRequerimiento['duracionAplicable']>().toEqualTypeOf<
+      DuracionAplicable | null
     >()
   })
 

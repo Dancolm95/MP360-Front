@@ -92,8 +92,8 @@ export interface PaginaRequerimientos {
   readonly capacidades: CapacidadesBandeja
 }
 
-export type ResultadoBandeja = ResultadoLectura<PaginaRequerimientos>
+export type ResultadoConsultaBandeja = ResultadoLectura<PaginaRequerimientos>
 
 export interface BandejaRequerimientosPort {
-  consultar(consulta: ConsultaBandeja): Promise<ResultadoBandeja>
+  consultar(consulta: ConsultaBandeja): Promise<ResultadoConsultaBandeja>
 }

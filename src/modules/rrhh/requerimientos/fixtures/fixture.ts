@@ -4,7 +4,7 @@ import type {
   AccionRequerimiento,
   CatalogosRequerimientos,
   ResultadoAsociarCandidato,
-  ResultadoBandeja,
+  ResultadoConsultaBandeja,
   ResultadoDetalle,
   ResultadoLectura,
 } from '../contracts'
@@ -39,7 +39,7 @@ export interface RequerimientosFixtureConfig {
   readonly scenario: string
   readonly access: EffectiveFixtureAccess
   readonly catalogos: ResultadoLectura<CatalogosRequerimientos>
-  readonly bandeja: ResultadoBandeja
+  readonly bandeja: ResultadoConsultaBandeja
   readonly detalle: ResultadoDetalle
   readonly comandos: MockCommandResults
   readonly asociarCandidato: ResultadoAsociarCandidato

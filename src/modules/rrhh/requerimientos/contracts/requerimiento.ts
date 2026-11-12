@@ -16,7 +16,7 @@ import type {
   SubareaId,
   UsuarioId,
 } from './identificadores'
-import type { AlertaPlazo } from './plazos'
+import type { AlertaPlazo, DiasHabilesAdministrativos } from './plazos'
 
 /** Estados canónicos del requerimiento (spec §6). */
 export type EstadoRequerimiento =
@@ -102,6 +102,19 @@ interface ResumenRequerimientoBase {
 }
 
 /**
+ * Duración aplicable antes de la aprobación (spec §5.1). No contiene fecha:
+ * el objetivo se calcula al aprobar. El administrativo depende del plazo que
+ * fije RR. HH., por lo que puede estar aún pendiente de definir.
+ */
+export type DuracionAplicable =
+  | { readonly clasificacion: 'operativo'; readonly diasHabiles: 10 }
+  | {
+      readonly clasificacion: 'administrativo'
+      readonly diasHabiles: DiasHabilesAdministrativos
+    }
+  | { readonly clasificacion: 'administrativo'; readonly diasHabiles: null }
+
+/**
  * Columnas de la bandeja que pueden faltar. Sin aprobación no existe fecha
  * objetivo ni alerta; los campos ausentes se muestran como tales.
  */
@@ -113,6 +126,8 @@ interface ResumenRequerimientoDatosParciales {
   readonly cubiertas: number | null
   readonly pendientes: number | null
   readonly fechaObjetivo: null
+  /** `null` mientras no se conozca la clasificación; nunca es una fecha. */
+  readonly duracionAplicable: DuracionAplicable | null
   readonly responsable: Usuario | null
   readonly alerta: null
   readonly autorizacion: AutorizacionRequerimiento
@@ -126,6 +141,10 @@ interface ResumenRequerimientoDatosCompletos {
   readonly cubiertas: number
   readonly pendientes: number
   readonly fechaObjetivo: FechaISO | null
+  /**
+   * Duración aplicable antes de aprobar; `null` una vez existe fecha objetivo.
+   */
+  readonly duracionAplicable: DuracionAplicable | null
   readonly responsable: Usuario | null
   readonly alerta: AlertaPlazo | null
   readonly autorizacion: AutorizacionRequerimiento

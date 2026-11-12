@@ -22,6 +22,7 @@ import type {
   CatalogosRequerimientos,
   Departamento,
   DepartamentoId,
+  DuracionAplicable,
   Empresa,
   EmpresaId,
   FechaISO,
@@ -30,7 +31,7 @@ import type {
   Puesto,
   PuestoId,
   RequerimientoId,
-  ResultadoBandeja,
+  ResultadoConsultaBandeja,
   ResumenRequerimiento,
   ResumenRequerimientoBorrador,
   ResumenRequerimientoCompleto,
@@ -161,6 +162,7 @@ function filaCompleta(
     cubiertas: 1,
     pendientes: 1,
     fechaObjetivo: '2026-01-20' as FechaISO,
+    duracionAplicable: null,
     responsable: usuarioA,
     alerta: null,
     autorizacion: autorizacion(id),
@@ -184,6 +186,7 @@ function filaBorrador(
     cubiertas: null,
     pendientes: null,
     fechaObjetivo: null,
+    duracionAplicable: null,
     responsable: null,
     alerta: null,
     autorizacion: autorizacion(id),
@@ -312,7 +315,7 @@ describe('consulta inicial y filtros (RH-REQ-01 §7.1, §10-13)', () => {
     })
   })
 
-  it('no aplica un periodo incompleto y lo explica', async () => {
+  it('no aplica un periodo incompleto, asocia el error al control y enfoca el campo que falta', async () => {
     const port = createMockBandejaRequerimientos(
       lecturaFixture.ok(pagina([filaCompleta()])),
     )
@@ -326,9 +329,44 @@ describe('consulta inicial y filtros (RH-REQ-01 §7.1, §10-13)', () => {
     await user.click(screen.getByRole('button', { name: 'Aplicar filtros' }))
 
     expect(port.calls).toHaveLength(1)
-    expect(screen.getByRole('alert').textContent).toContain(
-      'Indica ambas fechas',
+    const alerta = screen.getByRole('alert')
+    expect(alerta.textContent).toContain('Indica ambas fechas')
+    const desde = screen.getByLabelText('Aprobado desde')
+    const hasta = screen.getByLabelText('Aprobado hasta')
+    expect(desde.getAttribute('aria-invalid')).toBe('true')
+    expect(hasta.getAttribute('aria-invalid')).toBe('true')
+    expect(desde.getAttribute('aria-describedby')).toContain(alerta.id)
+    expect(hasta.getAttribute('aria-describedby')).toContain(alerta.id)
+    expect(document.activeElement).toBe(hasta)
+
+    fireEvent.change(hasta, { target: { value: '2026-01-31' } })
+    expect(screen.queryByRole('alert')).toBeNull()
+    expect(
+      screen.getByLabelText('Aprobado desde').getAttribute('aria-invalid'),
+    ).toBeNull()
+  })
+
+  it('focaliza «Aprobado desde» cuando el rango está invertido', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
     )
+    const user = userEvent.setup()
+    renderBandeja(port)
+    await screen.findByRole('table')
+
+    fireEvent.change(screen.getByLabelText('Aprobado desde'), {
+      target: { value: '2026-03-01' },
+    })
+    fireEvent.change(screen.getByLabelText('Aprobado hasta'), {
+      target: { value: '2026-01-31' },
+    })
+    await user.click(screen.getByRole('button', { name: 'Aplicar filtros' }))
+
+    expect(port.calls).toHaveLength(1)
+    expect(screen.getByRole('alert').textContent).toContain(
+      'no puede ser posterior',
+    )
+    expect(document.activeElement).toBe(screen.getByLabelText('Aprobado desde'))
   })
 
   it('limpia subárea y puesto incompatibles al cambiar de área', async () => {
@@ -487,6 +525,7 @@ describe('paginación y total (RH-REQ-01 §7.1)', () => {
       name: 'Paginación de requerimientos',
     })
     expect(within(navInicial).getByText('Página 1 de 3')).toBeDefined()
+    expect(screen.getAllByText('Página 1 de 3')).toHaveLength(1)
     expect(
       screen
         .getByRole('button', { name: 'Página anterior' })
@@ -556,30 +595,88 @@ describe('columnas y estados de la fila (RH-REQ-01 §7.1, §10-13 y §10-24)', (
     expect(tabla.getByText('Usuario A')).toBeDefined()
   })
 
-  it('no inventa fecha objetivo antes de aprobar', async () => {
-    const borrador = filaBorrador({ id: 'req-1' as RequerimientoId })
-    const pendiente = filaCompleta({
+  it('muestra la duración aplicable antes de aprobar y la fecha solo tras aprobar', async () => {
+    const borradorOperativo = filaBorrador({
+      id: 'req-1' as RequerimientoId,
+      duracionAplicable: {
+        clasificacion: 'operativo',
+        diasHabiles: 10,
+      } satisfies DuracionAplicable,
+    })
+    const pendienteAdministrativo = filaCompleta({
       id: 'req-2' as RequerimientoId,
       estado: 'pendiente-aprobacion',
       fechaObjetivo: null,
+      duracionAplicable: {
+        clasificacion: 'administrativo',
+        diasHabiles: 20,
+      } satisfies DuracionAplicable,
+    })
+    const pendienteSinPlazo = filaCompleta({
+      id: 'req-3' as RequerimientoId,
+      estado: 'observado',
+      fechaObjetivo: null,
+      duracionAplicable: {
+        clasificacion: 'administrativo',
+        diasHabiles: null,
+      } satisfies DuracionAplicable,
     })
     const aprobado = filaCompleta({
-      id: 'req-3' as RequerimientoId,
+      id: 'req-4' as RequerimientoId,
       estado: 'aprobado',
       fechaObjetivo: '2026-01-20' as FechaISO,
     })
     const port = createMockBandejaRequerimientos(
-      lecturaFixture.ok(pagina([borrador, pendiente, aprobado])),
+      lecturaFixture.ok(
+        pagina([
+          borradorOperativo,
+          pendienteAdministrativo,
+          pendienteSinPlazo,
+          aprobado,
+        ]),
+      ),
     )
     renderBandeja(port)
     await screen.findByRole('table')
 
-    const filas = within(screen.getByRole('table'))
+    const tabla = within(screen.getByRole('table'))
+    const filas = tabla.getAllByRole('row').slice(1)
+    const indiceFechaObjetivo = COLUMNAS_ORDEN.findIndex(
+      ({ campo }) => campo === 'fecha-objetivo',
+    )
+    const celdaObjetivo = (fila: HTMLElement) =>
+      within(fila).getAllByRole('cell')[indiceFechaObjetivo].textContent
+
+    expect(celdaObjetivo(filas[0])).toContain('10 días hábiles')
+    expect(celdaObjetivo(filas[1])).toContain('20 días hábiles')
+    expect(celdaObjetivo(filas[2])).toContain('Plazo pendiente de definir')
+    expect(celdaObjetivo(filas[3])).toContain('20/01/2026')
+    expect(celdaObjetivo(filas[0])).not.toMatch(/\d{2}\/\d{2}\/\d{4}/)
+    expect(celdaObjetivo(filas[1])).not.toMatch(/\d{2}\/\d{2}\/\d{4}/)
+    expect(celdaObjetivo(filas[2])).not.toMatch(/\d{2}\/\d{2}\/\d{4}/)
+    expect(
+      tabla.getAllByText('La fecha objetivo se calcula al aprobar.'),
+    ).toHaveLength(3)
+  })
+
+  it('no inventa fecha objetivo cuando no se conoce la clasificación', async () => {
+    const borrador = filaBorrador({ id: 'req-1' as RequerimientoId })
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([borrador])),
+    )
+    renderBandeja(port)
+    await screen.findByRole('table')
+
+    const fila = within(screen.getByRole('table'))
       .getAllByRole('row')
-      .slice(1)
-    expect(filas[0].textContent).toContain('Sin fecha')
-    expect(filas[1].textContent).toContain('Sin fecha')
-    expect(filas[2].textContent).toContain('20/01/2026')
+      .slice(1)[0]
+    const indiceFechaObjetivo = COLUMNAS_ORDEN.findIndex(
+      ({ campo }) => campo === 'fecha-objetivo',
+    )
+    const celdaObjetivo =
+      within(fila).getAllByRole('cell')[indiceFechaObjetivo].textContent
+    expect(celdaObjetivo).toContain('Sin fecha')
+    expect(celdaObjetivo).not.toMatch(/\d{2}\/\d{2}\/\d{4}/)
   })
 
   it('muestra la alerta separada del estado canónico y nunca «Urgente» como estado', async () => {
@@ -605,7 +702,7 @@ describe('columnas y estados de la fila (RH-REQ-01 §7.1, §10-13 y §10-24)', (
 
 describe('estados de interfaz (RH-REQ-01 §8)', () => {
   it('muestra carga sin datos anteriores y luego la nueva consulta', async () => {
-    const deferred = createDeferred<ResultadoBandeja>()
+    const deferred = createDeferred<ResultadoConsultaBandeja>()
     let llamadas = 0
     const port = createMockBandejaRequerimientos(() => {
       llamadas += 1
@@ -682,6 +779,26 @@ describe('estados de interfaz (RH-REQ-01 §8)', () => {
     expect(port.calls[1]).toEqual(port.calls[0])
   })
 
+  it('trata el rechazo de la consulta como error recuperable', async () => {
+    let llamadas = 0
+    const port = createMockBandejaRequerimientos(() => {
+      llamadas += 1
+      if (llamadas === 1) throw new Error('Fallo de red')
+      return lecturaFixture.ok(pagina([filaCompleta()]))
+    })
+    const user = userEvent.setup()
+    renderBandeja(port)
+
+    const alerta = await screen.findByRole('alert')
+    expect(alerta.textContent).toContain(
+      'No se pudieron cargar los requerimientos.',
+    )
+    await user.click(screen.getByRole('button', { name: 'Reintentar' }))
+
+    expect(await screen.findByRole('table')).toBeDefined()
+    expect(port.calls).toHaveLength(2)
+  })
+
   it('no ofrece reintento si el error no es recuperable', async () => {
     const port = createMockBandejaRequerimientos(
       lecturaFixture.error<PaginaRequerimientos>({
@@ -718,7 +835,7 @@ describe('estados de interfaz (RH-REQ-01 §8)', () => {
 })
 
 describe('teclado y accesibilidad (RH-REQ-01 §8)', () => {
-  it('ordena y pagina con Enter y Espacio', async () => {
+  it('ordena y pagina con Enter y Espacio sin reenfocar a mano', async () => {
     const port = createMockBandejaRequerimientos((consulta) =>
       lecturaFixture.ok({
         elementos: [filaCompleta({ id: 'req-1' as RequerimientoId })],
@@ -732,23 +849,39 @@ describe('teclado y accesibilidad (RH-REQ-01 §8)', () => {
     renderBandeja(port)
     await screen.findByRole('table')
 
-    const botonMotivo = screen.getByRole('button', {
-      name: 'Ordenar por Motivo',
-    })
-    botonMotivo.focus()
+    screen.getByRole('button', { name: 'Ordenar por Motivo' }).focus()
     await user.keyboard('{Enter}')
     await waitFor(() => expect(port.calls).toHaveLength(2))
     expect(port.calls[1].orden).toEqual({ campo: 'motivo', direccion: 'asc' })
+    expect(document.activeElement).toBe(
+      screen.getByRole('button', { name: 'Ordenar por Motivo' }),
+    )
 
-    screen.getByRole('button', { name: 'Ordenar por Motivo' }).focus()
     await user.keyboard(' ')
     await waitFor(() => expect(port.calls).toHaveLength(3))
     expect(port.calls[2].orden).toEqual({ campo: 'motivo', direccion: 'desc' })
+    expect(document.activeElement).toBe(
+      screen.getByRole('button', { name: 'Ordenar por Motivo' }),
+    )
 
-    const siguiente = screen.getByRole('button', { name: 'Página siguiente' })
-    siguiente.focus()
+    screen.getByRole('button', { name: 'Página siguiente' }).focus()
     await user.keyboard('{Enter}')
     await waitFor(() => expect(port.calls).toHaveLength(4))
     expect(port.calls[3].paginacion.pagina).toBe(2)
+    expect(document.activeElement).toBe(
+      screen.getByRole('button', { name: 'Página siguiente' }),
+    )
+
+    await user.keyboard('{Enter}')
+    await waitFor(() => expect(port.calls).toHaveLength(5))
+    expect(port.calls[4].paginacion.pagina).toBe(3)
+    expect(
+      screen
+        .getByRole('button', { name: 'Página siguiente' })
+        .hasAttribute('disabled'),
+    ).toBe(true)
+    expect(document.activeElement).toBe(
+      screen.getByRole('button', { name: 'Página anterior' }),
+    )
   })
 })
