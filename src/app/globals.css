@@ -168,3 +168,258 @@ button:focus-visible,
   outline: 3px solid #1f6feb;
   outline-offset: 3px;
 }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rrhh-tray {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rrhh-tray h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.rrhh-tray__filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rrhh-tray__campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.rrhh-tray__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.rrhh-tray__campo label {
+  font-weight: 600;
+}
+
+.rrhh-tray__campo select,
+.rrhh-tray__campo input {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #9aa5b1;
+  border-radius: 0.25rem;
+  background: #fff;
+  font: inherit;
+}
+
+.rrhh-tray__periodo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.75rem;
+  border: 1px solid #cbd2d9;
+  border-radius: 0.25rem;
+}
+
+.rrhh-tray__periodo legend {
+  padding: 0 0.25rem;
+  font-weight: 600;
+}
+
+.rrhh-tray__periodo .rrhh-tray__ayuda {
+  grid-column: 1 / -1;
+}
+
+.rrhh-tray__ayuda {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.9rem;
+}
+
+.rrhh-tray__acciones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.rrhh-tray__acciones button,
+.rrhh-tray__error button,
+.rrhh-tray__paginacion button {
+  border: 1px solid #52606d;
+  border-radius: 0.25rem;
+  background: #fff;
+  color: #1f2933;
+  font: inherit;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.rrhh-tray__error-periodo {
+  margin: 0;
+  color: #b42318;
+  font-weight: 600;
+}
+
+.rrhh-tray__carga,
+.rrhh-tray__vacio,
+.rrhh-tray__resumen {
+  margin: 0;
+}
+
+.rrhh-tray__error {
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #b42318;
+  background: #fef3f2;
+}
+
+.rrhh-tray__error h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.rrhh-tray__error p {
+  margin: 0 0 0.5rem;
+}
+
+.rrhh-tray__tabla-contenedor {
+  overflow-x: auto;
+}
+
+.rrhh-tray__tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.rrhh-tray__tabla th,
+.rrhh-tray__tabla td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #cbd2d9;
+  text-align: left;
+  vertical-align: top;
+}
+
+.rrhh-tray__tabla thead th {
+  background: #f5f7fa;
+}
+
+.rrhh-tray__orden {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rrhh-tray__orden-icono {
+  color: #52606d;
+  font-size: 0.75rem;
+}
+
+.rrhh-tray__estado-contenedor {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.rrhh-tray__estado {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: #e4e7eb;
+  color: #1f2933;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.rrhh-tray__estado--pendiente-aprobacion,
+.rrhh-tray__estado--observado {
+  background: #fef0c7;
+  color: #7a4d00;
+}
+
+.rrhh-tray__estado--aprobado,
+.rrhh-tray__estado--en-reclutamiento {
+  background: #d1e9ff;
+  color: #0b4a8f;
+}
+
+.rrhh-tray__estado--cubierto {
+  background: #d1fadf;
+  color: #05603a;
+}
+
+.rrhh-tray__estado--cancelado {
+  background: #fee4e2;
+  color: #912018;
+}
+
+.rrhh-tray__alerta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.rrhh-tray__alerta--temprana {
+  color: #7a4d00;
+}
+
+.rrhh-tray__alerta--media {
+  color: #b54708;
+}
+
+.rrhh-tray__alerta--critica {
+  color: #b42318;
+}
+
+.rrhh-tray__ausente,
+.rrhh-tray__sin-fecha,
+.rrhh-tray__sin-asignar {
+  color: #52606d;
+}
+
+.rrhh-tray__paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rrhh-tray__paginacion p {
+  margin: 0;
+}
+
+.rrhh-tray__paginacion button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.rrhh-tray__tamano {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.rrhh-tray select:focus-visible,
+.rrhh-tray input:focus-visible {
+  outline: 3px solid #1f6feb;
+  outline-offset: 2px;
+}
