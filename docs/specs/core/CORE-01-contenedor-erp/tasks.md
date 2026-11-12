@@ -2,7 +2,7 @@
 
 **Spec:** CORE-01 v0.6 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.3 (**11-nov-2026**; la v1.2 con stack Next.js sigue aprobada técnicamente desde el 10-nov-2026 y la v1.3 solo añade la decisión de tooling: pnpm). La v1.1 (React + TypeScript con Vite) es histórica.  
-**Estado del corte:** T-CORE-01 hecha y sustituida por T-CORE-11; T-CORE-02, T-CORE-03, T-CORE-11, T-CORE-04, T-CORE-05, T-CORE-12, T-CORE-13, T-CORE-06, T-CORE-07 y **T-CORE-08 están hechas y en `main`**, con sus evidencias registradas en cada tarea. T-CORE-08 quedó integrada por fast-forward en `main` el 11-nov-2026 (`8826bec150b7108bc7e3c30c003b8e78bab0c0de`; reviewer **APROBADO**, sin hallazgos bloqueantes). **La siguiente tarea es T-CORE-09 (integración con UX-02/03/04 sin alterar el dominio): no iniciada y sujeta a confirmación explícita del usuario**; T-CORE-10 sigue pendiente.
+**Estado del corte:** T-CORE-01 hecha y sustituida por T-CORE-11; T-CORE-02, T-CORE-03, T-CORE-11, T-CORE-04, T-CORE-05, T-CORE-12, T-CORE-13, T-CORE-06, T-CORE-07 y **T-CORE-08 están hechas y en `main`**, con sus evidencias registradas en cada tarea. T-CORE-08 quedó integrada por fast-forward en `main` el 11-nov-2026 (`8826bec150b7108bc7e3c30c003b8e78bab0c0de`; reviewer **APROBADO**, sin hallazgos bloqueantes). **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) está **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-05…14); no está iniciada. T-CORE-10 sigue pendiente.
 **Alcance activo:** CORE-01 §7 criterios 1–8.  
 **Diferido (fuera del alcance activo):** C-05 (CORE-01 §7 criterio 9) y RH-REQ-01 §10 criterio 18 (verificación diferida junto a C-05).
 
