@@ -1,15 +1,4 @@
-import type { Clasificacion } from './base'
 import type { FechaISO } from './identificadores'
-
-/**
- * Origen del plazo vigente. `pendiente` cubre un Administrativo al que RR. HH.
- * todavía no ha fijado el plazo; un Operativo siempre es `operativo-fijo`.
- */
-export type OrigenPlazo =
-  | 'operativo-fijo'
-  | 'fijado-administrativo'
-  | 'ajustado-administrativo'
-  | 'pendiente'
 
 /** Alerta, objetivo y cumplimiento son conceptos distintos. */
 export type CumplimientoPlazo = 'pendiente' | 'en-plazo' | 'incumplido'
@@ -19,9 +8,21 @@ export type NivelAlerta = 'temprana' | 'media' | 'critica'
 /** Porcentajes del plazo administrativo; el día umbral se redondea hacia arriba. */
 export type PorcentajeUmbral = 50 | 75 | 90
 
+/**
+ * El umbral queda ligado a la clasificación para no admitir combinaciones
+ * imposibles: días fijos en Operativo y porcentaje en Administrativo.
+ */
 export type UmbralAlerta =
-  | { readonly tipo: 'dias-fijos'; readonly diaHabil: number }
-  | { readonly tipo: 'porcentaje'; readonly porcentaje: PorcentajeUmbral }
+  | {
+      readonly tipo: 'dias-fijos'
+      readonly clasificacion: 'operativo'
+      readonly diaHabil: number
+    }
+  | {
+      readonly tipo: 'porcentaje'
+      readonly clasificacion: 'administrativo'
+      readonly porcentaje: PorcentajeUmbral
+    }
 
 /**
  * Alerta vigente. Alcanzar un umbral no equivale a vencimiento ni cambia el
@@ -34,11 +35,18 @@ export interface AlertaPlazo {
   readonly fecha: FechaISO
 }
 
-export interface PlazoRequerimiento {
-  readonly clasificacion: Clasificacion
-  /** Operativo: 10. Administrativo: entero 15–30 o `null` mientras no se fije. */
-  readonly duracionDiasHabiles: number | null
-  readonly origen: OrigenPlazo
+export interface AlertaPlazoOperativo extends AlertaPlazo {
+  readonly umbral: Extract<UmbralAlerta, { readonly clasificacion: 'operativo' }>
+}
+
+export interface AlertaPlazoAdministrativo extends AlertaPlazo {
+  readonly umbral: Extract<
+    UmbralAlerta,
+    { readonly clasificacion: 'administrativo' }
+  >
+}
+
+export interface PlazoRequerimientoBase {
   /** Día 0 del cómputo; `null` antes de la aprobación. */
   readonly fechaAprobacion: FechaISO | null
   /**
@@ -46,6 +54,32 @@ export interface PlazoRequerimiento {
    * hipotética. Tras un ajuste se recalcula desde la aprobación original.
    */
   readonly fechaObjetivo: FechaISO | null
-  readonly alerta: AlertaPlazo | null
   readonly cumplimiento: CumplimientoPlazo
 }
+
+export interface PlazoOperativo extends PlazoRequerimientoBase {
+  readonly clasificacion: 'operativo'
+  readonly duracionDiasHabiles: 10
+  readonly origen: 'operativo-fijo'
+  readonly alerta: AlertaPlazoOperativo | null
+}
+
+export interface PlazoAdministrativoPendiente extends PlazoRequerimientoBase {
+  readonly clasificacion: 'administrativo'
+  readonly duracionDiasHabiles: null
+  readonly origen: 'pendiente'
+  readonly alerta: AlertaPlazoAdministrativo | null
+}
+
+export interface PlazoAdministrativoFijado extends PlazoRequerimientoBase {
+  readonly clasificacion: 'administrativo'
+  /** Entero 15–30; el backend revalida el rango. */
+  readonly duracionDiasHabiles: number
+  readonly origen: 'fijado-administrativo' | 'ajustado-administrativo'
+  readonly alerta: AlertaPlazoAdministrativo | null
+}
+
+export type PlazoRequerimiento =
+  | PlazoOperativo
+  | PlazoAdministrativoPendiente
+  | PlazoAdministrativoFijado

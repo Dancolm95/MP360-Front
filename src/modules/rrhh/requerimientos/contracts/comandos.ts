@@ -1,8 +1,13 @@
 import type { LogicalDestination } from '../../../../container/contracts'
 import type { ContractError } from '../../../../shared'
 import type { MotivoDenegacion } from './autorizacion'
+import type { CausalCancelacion } from './base'
 import type { Usuario } from './catalogos'
-import type { DetalleRequerimiento } from './detalle'
+import type {
+  DetalleRequerimiento,
+  DetalleRequerimientoBorrador,
+  DetalleRequerimientoPersistido,
+} from './detalle'
 import type { ErrorIntegracion, ErrorValidacion } from './errores'
 import type { RequerimientoId, SolicitudReversionId } from './identificadores'
 import type {
@@ -12,7 +17,8 @@ import type {
 import type {
   BorradorRequerimiento,
   EstadoRequerimiento,
-  ResumenRequerimiento,
+  EstadoRequerimientoPersistido,
+  ResumenRequerimientoCompleto,
 } from './requerimiento'
 
 /** Todo comando de escritura revalida la versión leída por el usuario. */
@@ -21,11 +27,22 @@ export interface ComandoVersionado {
   readonly version: number
 }
 
+/** La creación no tiene identificador ni versión previos; los asigna el backend. */
+export interface ComandoCrearRequerimiento {
+  readonly contenido: BorradorRequerimiento
+}
+
 export interface ComandoGuardarBorrador extends ComandoVersionado {
   readonly borrador: BorradorRequerimiento
 }
 
-export interface ComandoEnviarAprobacion extends ComandoVersionado {}
+/**
+ * Envío o reenvío con el contenido completo revisado. Se persiste al enviar,
+ * aunque antes no se haya guardado el borrador.
+ */
+export interface ComandoEnviarAprobacion extends ComandoVersionado {
+  readonly contenido: BorradorRequerimiento
+}
 
 export interface ComandoAprobar extends ComandoVersionado {
   readonly comentario?: string
@@ -34,8 +51,6 @@ export interface ComandoAprobar extends ComandoVersionado {
 export interface ComandoObservar extends ComandoVersionado {
   readonly comentario: string
 }
-
-export type CausalCancelacion = 'menor-carga-laboral' | 'creacion-por-error'
 
 export interface ComandoCancelar extends ComandoVersionado {
   readonly causal: CausalCancelacion
@@ -62,6 +77,7 @@ export interface ComandoSolicitarReversionCobertura
 /**
  * Conflicto de versión: rechazo sin persistir, con la versión vigente y sus
  * datos para que la interfaz conserve la entrada y permita una nueva decisión.
+ * Los datos vigentes pueden ser un Borrador incompleto.
  */
 export interface ConflictoVersion {
   readonly versionEsperada: number
@@ -90,11 +106,25 @@ export type ResultadoComando<T> =
   | { readonly status: 'conflicto-version'; readonly conflicto: ConflictoVersion }
   | FalloComando
 
+/** Creación confirmada: identificador, versión y datos iniciales persistidos. */
+export interface RequerimientoCreado {
+  readonly id: RequerimientoId
+  readonly version: number
+  readonly detalle: DetalleRequerimientoBorrador
+}
+
+export type ResultadoCrearRequerimiento =
+  | { readonly status: 'confirmado'; readonly datos: RequerimientoCreado }
+  | { readonly status: 'validacion'; readonly errores: readonly ErrorValidacion[] }
+  | { readonly status: 'sin-autorizacion'; readonly motivo: MotivoDenegacion }
+  | { readonly status: 'error'; readonly error: ContractError }
+  | { readonly status: 'sesion-finalizada' }
+
 export interface ConfirmacionEnvio {
   readonly id: RequerimientoId
-  readonly resumen: ResumenRequerimiento
+  readonly resumen: ResumenRequerimientoCompleto
   readonly responsable: Usuario | null
-  readonly estado: EstadoRequerimiento
+  readonly estado: EstadoRequerimientoPersistido
 }
 
 /**
@@ -104,7 +134,7 @@ export interface ConfirmacionEnvio {
  */
 export interface ResultadoAperturaProceso {
   readonly proceso: ProcesoSeleccionRef
-  readonly requerimiento: DetalleRequerimiento
+  readonly requerimiento: DetalleRequerimientoPersistido
   readonly idempotente: boolean
 }
 
@@ -112,20 +142,30 @@ export interface ResultadoAperturaProceso {
 export interface SolicitudReversionRegistrada {
   readonly solicitudId: SolicitudReversionId
   readonly estado: 'pendiente-confirmacion'
-  readonly requerimiento: DetalleRequerimiento
+  readonly requerimiento: DetalleRequerimientoPersistido
 }
 
-export type ResultadoGuardarBorrador = ResultadoComando<DetalleRequerimiento>
+export type ResultadoGuardarBorrador =
+  ResultadoComando<DetalleRequerimientoBorrador>
 export type ResultadoEnvioAprobacion = ResultadoComando<ConfirmacionEnvio>
-export type ResultadoAprobar = ResultadoComando<DetalleRequerimiento>
-export type ResultadoObservar = ResultadoComando<DetalleRequerimiento>
-export type ResultadoCancelar = ResultadoComando<DetalleRequerimiento>
-export type ResultadoFijarPlazo = ResultadoComando<DetalleRequerimiento>
-export type ResultadoAjustarPlazo = ResultadoComando<DetalleRequerimiento>
+export type ResultadoAprobar = ResultadoComando<DetalleRequerimientoPersistido>
+export type ResultadoObservar = ResultadoComando<DetalleRequerimientoPersistido>
+export type ResultadoCancelar = ResultadoComando<DetalleRequerimientoPersistido>
+export type ResultadoFijarPlazo = ResultadoComando<DetalleRequerimientoPersistido>
+export type ResultadoAjustarPlazo =
+  ResultadoComando<DetalleRequerimientoPersistido>
 export type ResultadoAbrirProceso = ResultadoComando<ResultadoAperturaProceso>
-export type ResultadoSolicitarReversion = ResultadoComando<SolicitudReversionRegistrada>
+
+/**
+ * `confirmado` significa que la solicitud quedó registrada, no que la
+ * cobertura cambió: los contadores solo se recalculan con el evento auditado
+ * de Selección.
+ */
+export type ResultadoSolicitarReversion =
+  ResultadoComando<SolicitudReversionRegistrada>
 
 export interface ComandosRequerimientosPort {
+  crear(comando: ComandoCrearRequerimiento): Promise<ResultadoCrearRequerimiento>
   guardarBorrador(comando: ComandoGuardarBorrador): Promise<ResultadoGuardarBorrador>
   enviarAprobacion(
     comando: ComandoEnviarAprobacion,

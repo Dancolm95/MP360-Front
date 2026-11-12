@@ -1,6 +1,10 @@
 import type { ContractError } from '../../../../shared'
 import type { AutorizacionRequerimiento } from './autorizacion'
-import type { MotivoRequerimiento, Remuneracion } from './base'
+import type {
+  CausalCancelacion,
+  MotivoRequerimiento,
+  Remuneracion,
+} from './base'
 import type {
   Area,
   Departamento,
@@ -13,10 +17,12 @@ import type {
   Usuario,
 } from './catalogos'
 import type {
+  ColaboradorId,
   EventoHistorialId,
   FechaISO,
   InstanteISO,
   RequerimientoId,
+  SolicitudReversionId,
 } from './identificadores'
 import type {
   ProcesoSeleccionRef,
@@ -24,9 +30,11 @@ import type {
 } from './integracion'
 import type { NivelAlerta, PlazoRequerimiento } from './plazos'
 import type {
+  BorradorRequerimiento,
   CoberturaRequerimiento,
   ColaboradorReemplazo,
   EstadoRequerimiento,
+  EstadoRequerimientoPersistido,
 } from './requerimiento'
 
 export interface UbicacionDetalle {
@@ -36,16 +44,16 @@ export interface UbicacionDetalle {
 }
 
 export type AccionCambioEstado =
-  | 'creacion'
   | 'edicion'
   | 'envio'
   | 'reenvio'
   | 'aprobacion'
   | 'observacion'
-  | 'cancelacion'
 
 export type AccionHistorial =
   | AccionCambioEstado
+  | 'creacion'
+  | 'cancelacion'
   | 'fijacion-plazo'
   | 'ajuste-plazo'
   | 'alerta'
@@ -65,6 +73,21 @@ export interface EventoCambioEstado extends EventoHistorialBase {
   readonly accion: AccionCambioEstado
   readonly estadoAnterior: EstadoRequerimiento
   readonly estadoNuevo: EstadoRequerimiento
+  readonly comentario: string | null
+}
+
+/** La creación no tiene estado anterior; nace directamente en Borrador. */
+export interface EventoCreacion extends EventoHistorialBase {
+  readonly accion: 'creacion'
+  readonly estadoNuevo: 'borrador'
+  readonly comentario: string | null
+}
+
+export interface EventoCancelacion extends EventoHistorialBase {
+  readonly accion: 'cancelacion'
+  readonly estadoAnterior: EstadoRequerimiento
+  readonly estadoNuevo: 'cancelado'
+  readonly causal: CausalCancelacion
   readonly comentario: string | null
 }
 
@@ -107,14 +130,25 @@ export interface EventoAperturaProceso extends EventoHistorialBase {
 /** Solicitud de RR. HH.; no cambia la cobertura por sí sola. */
 export interface EventoSolicitudReversion extends EventoHistorialBase {
   readonly accion: 'solicitud-reversion'
+  readonly solicitudId: SolicitudReversionId
   readonly motivo: string
 }
 
-/** Evento auditado de Selección que recalcula la cobertura. */
-export interface EventoReversionCoberturaHistorial extends EventoHistorialBase {
+export interface EfectoCoberturaReversion {
+  readonly solicitadas: number
+  readonly cubiertas: number
+  readonly pendientes: number
+  readonly estadoResultante: EstadoRequerimiento
+}
+
+/** Evento auditado de Selección que recalcula la cobertura y enlaza la solicitud. */
+export interface EventoReversionCobertura extends EventoHistorialBase {
   readonly accion: 'reversion-cobertura'
+  readonly solicitudId: SolicitudReversionId
   readonly origen: 'seleccion'
   readonly motivo: string
+  readonly colaboradorAfectadoId: ColaboradorId | null
+  readonly efectoCobertura: EfectoCoberturaReversion
 }
 
 export interface EventoPrimerDiaReal extends EventoHistorialBase {
@@ -124,19 +158,44 @@ export interface EventoPrimerDiaReal extends EventoHistorialBase {
 
 export type EventoHistorial =
   | EventoCambioEstado
+  | EventoCreacion
+  | EventoCancelacion
   | EventoAjustePlazo
   | EventoFijacionPlazo
   | EventoAlertaHistorial
   | EventoVencimiento
   | EventoAperturaProceso
   | EventoSolicitudReversion
-  | EventoReversionCoberturaHistorial
+  | EventoReversionCobertura
   | EventoPrimerDiaReal
 
-export interface DetalleRequerimiento {
+export interface DetalleRequerimientoBase {
   readonly id: RequerimientoId
   readonly version: number
   readonly estado: EstadoRequerimiento
+  readonly fechaCreacion: InstanteISO
+  readonly historial: readonly EventoHistorial[]
+  readonly autorizacion: AutorizacionRequerimiento
+}
+
+/**
+ * Detalle de un Borrador. El contenido puede estar incompleto y se expone tal
+ * como lo persistió el backend; el plazo o la cobertura solo existen si ya son
+ * derivables de los datos introducidos.
+ */
+export interface DetalleRequerimientoBorrador
+  extends DetalleRequerimientoBase {
+  readonly estado: 'borrador'
+  readonly borrador: BorradorRequerimiento
+  readonly plazo: PlazoRequerimiento | null
+  readonly cobertura: CoberturaRequerimiento | null
+  readonly remuneracionPreviaAlta: RemuneracionPreviaAlta | null
+  readonly procesoSeleccion: null
+}
+
+export interface DetalleRequerimientoPersistido
+  extends DetalleRequerimientoBase {
+  readonly estado: EstadoRequerimientoPersistido
   readonly motivo: MotivoRequerimiento
   readonly empresa: Empresa
   readonly colaboradorAReemplazar: ColaboradorReemplazo | null
@@ -148,16 +207,16 @@ export interface DetalleRequerimiento {
   readonly ubicacion: UbicacionDetalle
   readonly usuarioProximaTarea: Usuario | null
   readonly comentario: string
-  readonly fechaCreacion: InstanteISO
-  readonly fechaAprobacion: FechaISO | null
   readonly plazo: PlazoRequerimiento
   readonly cobertura: CoberturaRequerimiento
-  readonly historial: readonly EventoHistorial[]
-  readonly autorizacion: AutorizacionRequerimiento
   /** Solo lectura; el ajuste previo al alta pertenece a Alta. */
   readonly remuneracionPreviaAlta: RemuneracionPreviaAlta | null
   readonly procesoSeleccion: ProcesoSeleccionRef | null
 }
+
+export type DetalleRequerimiento =
+  | DetalleRequerimientoBorrador
+  | DetalleRequerimientoPersistido
 
 export type ResultadoDetalle =
   | { readonly status: 'ok'; readonly datos: DetalleRequerimiento }

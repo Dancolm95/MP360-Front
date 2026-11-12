@@ -1,11 +1,8 @@
 import type { AutorizacionRequerimiento } from './autorizacion'
 import type { MotivoRequerimiento, Remuneracion } from './base'
+import type { Empresa, Puesto, Usuario } from './catalogos'
 import type {
-  Empresa,
-  Puesto,
-  Usuario,
-} from './catalogos'
-import type {
+  AreaId,
   ColaboradorId,
   DepartamentoId,
   DepartamentoUbicacionId,
@@ -16,11 +13,9 @@ import type {
   ProvinciaId,
   PuestoId,
   RequerimientoId,
-  AreaId,
   SubareaId,
   UsuarioId,
 } from './identificadores'
-import type { PrimerDiaRealAlta } from './integracion'
 import type { AlertaPlazo } from './plazos'
 
 /** Estados canónicos del requerimiento (spec §6). */
@@ -32,6 +27,12 @@ export type EstadoRequerimiento =
   | 'en-reclutamiento'
   | 'cubierto'
   | 'cancelado'
+
+/** Estados con datos persistidos completos; excluye el borrador incompleto. */
+export type EstadoRequerimientoPersistido = Exclude<
+  EstadoRequerimiento,
+  'borrador'
+>
 
 export interface ColaboradorReemplazo {
   readonly id: ColaboradorId
@@ -64,9 +65,16 @@ export interface BorradorRequerimiento {
 }
 
 /**
+ * Dato de solo lectura que aporta Alta. Requerimientos lo consume únicamente
+ * para la cobertura; no altera la fecha objetivo ni el cómputo de plazos.
+ */
+export interface PrimerDiaRealAlta {
+  readonly fecha: FechaISO
+}
+
+/**
  * Cobertura confirmada por integración. Invariante:
- * `pendientes = solicitadas − cubiertas`. Los primeros días reales son de solo
- * lectura y no participan en el cómputo de plazos.
+ * `pendientes = solicitadas − cubiertas`.
  */
 export interface CoberturaRequerimiento {
   readonly solicitadas: number
@@ -76,24 +84,48 @@ export interface CoberturaRequerimiento {
 }
 
 /**
- * Fila de la bandeja. `responsable` es el usuario asignado a la próxima tarea;
- * `null` significa que no hay tarea pendiente o asignación y la vista muestra
- * «Sin asignar», sin inferir otro actor.
+ * Fila de la bandeja con datos incompletos: el motivo, la empresa, el puesto o
+ * los contadores pueden faltar mientras el requerimiento siga en Borrador.
  */
-export interface ResumenRequerimiento {
+export interface ResumenRequerimientoBorrador {
   readonly id: RequerimientoId
   readonly version: number
   readonly fechaCreacion: InstanteISO
+  readonly estado: 'borrador'
+  readonly motivo: MotivoRequerimiento | null
+  readonly empresa: Empresa | null
+  readonly puesto: Puesto | null
+  readonly solicitadas: number | null
+  readonly cubiertas: number | null
+  readonly pendientes: number | null
+  readonly fechaObjetivo: null
+  readonly responsable: Usuario | null
+  readonly alerta: null
+  readonly autorizacion: AutorizacionRequerimiento
+}
+
+/**
+ * Fila de la bandeja de un requerimiento que ya superó el borrador. El
+ * responsable es el usuario asignado a la próxima tarea; `null` significa que
+ * no hay tarea pendiente o asignación y la vista muestra «Sin asignar».
+ */
+export interface ResumenRequerimientoCompleto {
+  readonly id: RequerimientoId
+  readonly version: number
+  readonly fechaCreacion: InstanteISO
+  readonly estado: EstadoRequerimientoPersistido
   readonly motivo: MotivoRequerimiento
   readonly empresa: Empresa
   readonly puesto: Puesto
   readonly solicitadas: number
   readonly cubiertas: number
   readonly pendientes: number
-  readonly estado: EstadoRequerimiento
   readonly fechaObjetivo: FechaISO | null
   readonly responsable: Usuario | null
   readonly alerta: AlertaPlazo | null
-  /** Capacidades y acciones efectivas de este registro y versión. */
   readonly autorizacion: AutorizacionRequerimiento
 }
+
+export type ResumenRequerimiento =
+  | ResumenRequerimientoBorrador
+  | ResumenRequerimientoCompleto

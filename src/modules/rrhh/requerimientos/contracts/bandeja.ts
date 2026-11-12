@@ -1,3 +1,4 @@
+import type { Capability } from '../../../../shared'
 import type {
   AreaId,
   EmpresaId,
@@ -69,6 +70,17 @@ export interface ConsultaBandeja {
 }
 
 /**
+ * Acciones que no dependen de un registro concreto. «Nuevo» es una acción de
+ * bandeja; no se deduce de la autorización de un requerimiento existente.
+ */
+export type AccionBandeja = 'crear'
+
+export interface CapacidadesBandeja {
+  readonly capacidades: readonly Capability[]
+  readonly accionesPermitidas: readonly AccionBandeja[]
+}
+
+/**
  * Página de resultados. `total` corresponde a la misma consulta filtrada y
  * ordenada; `elementos` vacío representa «sin resultados».
  */
@@ -77,6 +89,7 @@ export interface PaginaRequerimientos {
   readonly total: number
   readonly pagina: number
   readonly tamanoPagina: number
+  readonly capacidades: CapacidadesBandeja
 }
 
 export type ResultadoBandeja = ResultadoLectura<PaginaRequerimientos>

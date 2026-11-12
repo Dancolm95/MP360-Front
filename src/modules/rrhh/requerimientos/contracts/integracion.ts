@@ -1,22 +1,9 @@
 import type { Remuneracion } from './base'
-import type {
-  FechaISO,
-  InstanteISO,
-  ProcesoSeleccionId,
-  UsuarioId,
-} from './identificadores'
+import type { ProcesoSeleccionId } from './identificadores'
 
 /** Referencia al proceso ya creado en Selección; no es una URL ni un endpoint. */
 export interface ProcesoSeleccionRef {
   readonly id: ProcesoSeleccionId
-}
-
-/**
- * Dato de solo lectura que aporta Alta. Requerimientos lo consume únicamente
- * para la cobertura; no altera la fecha objetivo ni el cómputo de plazos.
- */
-export interface PrimerDiaRealAlta {
-  readonly fecha: FechaISO
 }
 
 /**
@@ -36,13 +23,6 @@ export interface SolicitudReversionCobertura {
   readonly motivo: string
 }
 
-/**
- * Evento auditado de Selección que confirma una reversión. Solo este evento
- * recalcula la cobertura; la solicitud por sí sola no cambia los contadores.
- */
-export interface EventoReversionCobertura {
-  readonly origen: 'seleccion'
-  readonly motivo: string
-  readonly actor: UsuarioId
-  readonly fechaHora: InstanteISO
-}
+// La lectura de candidatos de Selección (vínculos y desvínculos mostrados en
+// UX-04) no se modela en T-RH-02: queda como contrato posterior de T-RH-11,
+// sin tipos ni datos ficticios aquí.

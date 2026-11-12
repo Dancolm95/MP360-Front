@@ -8,6 +8,9 @@ export type MotivoRequerimiento =
   | 'practicante'
   | 'otros'
 
+/** Causales documentadas de cancelación (spec §6). */
+export type CausalCancelacion = 'menor-carga-laboral' | 'creacion-por-error'
+
 /**
  * Importe mensual en soles. La validación de negocio vive fuera del contrato:
  * PEN, no negativo, máximo dos decimales y `0.00` solo para Practicante.

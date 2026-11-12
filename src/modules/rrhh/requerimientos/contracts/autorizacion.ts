@@ -1,9 +1,11 @@
 import type { Capability } from '../../../../shared'
 import type { RequerimientoId } from './identificadores'
 
-/** Acciones del requerimiento que el backend puede habilitar por registro. */
+/**
+ * Acciones del requerimiento que el backend puede habilitar por registro. La
+ * creación no se gobierna por registro: viaja en las capacidades de la bandeja.
+ */
 export type AccionRequerimiento =
-  | 'crear'
   | 'editar'
   | 'enviar'
   | 'aprobar'
