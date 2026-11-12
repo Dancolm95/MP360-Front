@@ -2,7 +2,7 @@
 
 **Spec:** RH-REQ-01 v0.7 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** **T-RH-01 y T-RH-02 están cerradas e integradas en `main`; T-RH-03 está cerrada en su rama de tarea y pendiente de revisión/merge por el usuario**. T-RH-02 se integró por fast-forward el 12-nov-2026 (`2088eb6` + `694fad3` + `b9060ee`; rama `task/rh-req-01-t02`; reviewer **APROBADO** tras dos ciclos de corrección, sin hallazgos bloqueantes). La base compartida del contenedor hasta **T-CORE-08** también está cerrada y en `main`. T-RH-04…24 permanecen sin iniciar. **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) sigue **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-05…14).
+**Estado del corte:** **T-RH-01 y T-RH-02 están cerradas e integradas en `main`**. T-RH-02 se integró por fast-forward el 12-nov-2026 (`2088eb6` + `694fad3` + `b9060ee`; rama `task/rh-req-01-t02`; reviewer **APROBADO** tras dos ciclos de corrección, sin hallazgos bloqueantes). La base compartida del contenedor hasta **T-CORE-08** también está cerrada y en `main`. **La siguiente tarea es T-RH-03 (adaptadores mock de contrato del dominio): no iniciada y sujeta a confirmación explícita del usuario.** T-RH-03…24 permanecen sin iniciar. **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) sigue **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-05…14).
 **Alcance activo:** RH-REQ-01 §10 criterios 1–17 y 19–27.  
 **Diferido (fuera del alcance activo):** RH-REQ-01 §10 criterio 18 y C-05 (verificación diferida).
 
@@ -33,7 +33,7 @@
 - **Hecho cuando:** los contratos compilan y representan las responsabilidades y casos límite del plan §2, sin endpoints concretos.
 
 ### T-RH-03 — Adaptadores mock de contrato del dominio (fixtures)
-- [x] Hecha — Evidencia (**12-nov-2026**, bajo **Node v24.21.0 LTS** y pnpm 12.14.0): adaptadores `kind: 'mock'` para catálogos, bandeja, detalle/historial, los diez comandos, navegación a Selección y paquete de fixture parametrizado por `Capability` y acciones efectivas, con resultados configurados y trazas aisladas; sin autorización, persistencia, red, rutas ni temporizadores. Los builders cubren lectura, escritura, creación/borrador incompleto, guardado por estado, Cancelado parcial e INT-01 (apertura idempotente/fallo, reversión y datos de Alta de solo lectura). Prueba enfocada **1 archivo / 21 pruebas**, suite completa **12 archivos / 115 pruebas**, `pnpm build`, `pnpm exec tsc --noEmit` y `git diff --check` OK. Evidencia con mocks no demuestra integración real. Rama `task/rh-req-01-t03`; commit consignado al cierre.
+- [ ] Hecha
 - **Depende de:** T-RH-02.
 - **Traza:** plan §2 y §3 (P-04); decisión técnica (mocks).
 - **Entrada:** contratos de T-RH-02.
