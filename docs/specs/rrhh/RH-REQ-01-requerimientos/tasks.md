@@ -2,7 +2,7 @@
 
 **Spec:** RH-REQ-01 v0.7 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** **T-RH-01, T-RH-02 y T-RH-03 están cerradas e integradas en `main`**. T-RH-03 se integró por fast-forward el 12-nov-2026 (`f71f2be8` + `eda4843`; reviewer final **APROBADO**, sin hallazgos, después de un ciclo de corrección exclusivamente documental). La base compartida del contenedor hasta **T-CORE-08** también está cerrada y en `main`. **La siguiente tarea es T-RH-04 (modelo de datos y validaciones de formulario): no iniciada y sujeta a confirmación explícita del usuario.** T-RH-04…24 permanecen sin iniciar. **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) sigue **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-05…14).
+**Estado del corte:** **T-RH-01 a T-RH-04 están cerradas e integradas en `main`**. T-RH-04 se integró por fast-forward el 12-nov-2026 (`a635e9b` + `00487c4`; reviewer final **APROBADO**, sin hallazgos, tras un ciclo de corrección). La base compartida del contenedor hasta **T-CORE-08** también está cerrada y en `main`. **La siguiente tarea es T-RH-05 (Bandeja UX-02: filtros, columnas, orden y paginación): no iniciada y sujeta a confirmación explícita del usuario.** T-RH-05…24 permanecen sin iniciar. **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) sigue **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-05…14).
 **Alcance activo:** RH-REQ-01 §10 criterios 1–17 y 19–27.  
 **Diferido (fuera del alcance activo):** RH-REQ-01 §10 criterio 18 y C-05 (verificación diferida).
 
@@ -43,7 +43,7 @@
 ## Fase B — Datos y validaciones
 
 ### T-RH-04 — Modelo de datos y validaciones de formulario
-- [ ] Hecha
+- [x] Hecha — Evidencia (**12-nov-2026**, bajo **Node 24 LTS** y pnpm 12.14.0): modelo de formulario con borradores incompletos, errores estructurados por campo y validaciones de obligatorios, jerarquías organizacional y geográfica (puesto directo al Área sin Subárea), clasificación derivada, vacantes entero ≥ 1, remuneración PEN 0–2 decimales con `0.00` solo Practicante, usuario de próxima tarea y comentario; un motivo distinto de Reemplazo con colaborador a reemplazar residual rechaza el envío (decisión del usuario). Pruebas enfocadas **1 archivo / 46 pruebas**, suite **13 archivos / 161 pruebas**, `pnpm build`, `pnpm exec tsc --noEmit` y `git diff --check` OK, con árbol limpio. Diff material: 5 archivos (+786/−1) bajo `src/modules/rrhh/requerimientos/model/**` y el barril del dominio, sin documentación ni memoria. Commits `a635e9b` y `00487c4` en `task/rh-req-01-t04`, integrados en `main` por fast-forward. **Veredicto final del reviewer: APROBADO**, sin hallazgos, tras un ciclo de corrección. Criterio 3 verificable. Límites: sin UI, persistencia real, plazos ni integración; el criterio 18 sigue diferido.
 - **Depende de:** T-RH-02.
 - **Traza:** RH-REQ-01 §4; §10 criterio 3.
 - **Entrada:** reglas de §4.
