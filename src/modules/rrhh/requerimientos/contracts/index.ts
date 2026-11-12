@@ -1,1 +1,12 @@
-// Fase A (T-RH-02): contratos tipados del dominio Requerimientos (plan §2).
+export type * from './base'
+export type * from './identificadores'
+export type * from './resultados'
+export type * from './catalogos'
+export type * from './plazos'
+export type * from './autorizacion'
+export type * from './integracion'
+export type * from './requerimiento'
+export type * from './bandeja'
+export type * from './detalle'
+export type * from './errores'
+export type * from './comandos'
