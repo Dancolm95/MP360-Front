@@ -2,7 +2,7 @@
 
 **Spec:** RH-REQ-01 v0.7 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** **T-RH-01 (andamiaje del módulo RR. HH. sobre Next.js) cerrada e integrada en `main`** el 11-nov-2026 por fast-forward (`f2929a73c1ff4236fbd770b083cce27296559147`; rama `task/rh-req-01-t01`; reviewer **APROBADO**, sin hallazgos bloqueantes). La base compartida del contenedor hasta **T-CORE-08** está cerrada y en `main`; T-CORE-07 y T-CORE-08 se integraron por fast-forward el 11-nov-2026 (`1bc28ef120a906a82277518a4fe78988584661c3` y `8826bec150b7108bc7e3c30c003b8e78bab0c0de`; reviewer **APROBADO**, sin hallazgos) y conservan UX-02 como frontera sin bandeja ni dominio ficticios. **La siguiente tarea es T-RH-02 (contratos tipados del dominio Requerimientos): no iniciada y sujeta a confirmación explícita del usuario.** T-RH-02…24 permanecen sin iniciar. **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) sigue **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-05…14).
+**Estado del corte:** **T-RH-01 y T-RH-02 están cerradas e integradas en `main`**. T-RH-02 se integró por fast-forward el 12-nov-2026 (`2088eb6` + `694fad3` + `b9060ee`; rama `task/rh-req-01-t02`; reviewer **APROBADO** tras dos ciclos de corrección, sin hallazgos bloqueantes). La base compartida del contenedor hasta **T-CORE-08** también está cerrada y en `main`. **La siguiente tarea es T-RH-03 (adaptadores mock de contrato del dominio): no iniciada y sujeta a confirmación explícita del usuario.** T-RH-03…24 permanecen sin iniciar. **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) sigue **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-05…14).
 **Alcance activo:** RH-REQ-01 §10 criterios 1–17 y 19–27.  
 **Diferido (fuera del alcance activo):** RH-REQ-01 §10 criterio 18 y C-05 (verificación diferida).
 
@@ -25,7 +25,7 @@
 - **Hecho cuando:** el módulo compila junto al contenedor sin errores.
 
 ### T-RH-02 — Contratos TypeScript del dominio Requerimientos
-- [ ] Hecha
+- [x] Hecha — Evidencia (**12-nov-2026**, **Node 24 LTS** y pnpm 12.14.0): 15 archivos bajo `src/modules/rrhh/requerimientos/**` (+1537/−3) definen contratos TypeScript para catálogos, jerarquías, calendario, bandeja filtrada/ordenada/paginada, detalle/historial, plazos, comandos versionados, capacidades por registro y de bandeja, creación e INT-01, sin URLs, endpoints, payloads, roles ni datos ficticios. El contenido revisado viaja en envío/reenvío y se persiste al enviar; la lectura de candidatos de Selección queda fuera de esta tarea y diferida a T-RH-11; cancelar un Borrador incompleto conserva sus datos parciales sin inventar campos. `pnpm install --frozen-lockfile` OK, `pnpm test` **11 archivos / 94 pruebas** OK, `pnpm build` OK, `pnpm exec tsc --noEmit` OK y `git diff --check` OK, con árbol limpio. Commits `2088eb610058290b09c863f48d37bbda9b437197`, `694fad32407f117a46b01b8cf2ae46fb3e752145` y `b9060ee6e5fab8fb7c90b1a153495063ac1f7171` en `task/rh-req-01-t02`, integrados en `main` por fast-forward. **Veredicto final del reviewer: APROBADO**, sin hallazgos bloqueantes, después de dos ciclos de corrección.
 - **Depende de:** T-RH-01, T-CORE-02.
 - **Traza:** RH-REQ-01 §9; plan §2.
 - **Entrada:** reglas funcionales de §4–§7 y §9.
@@ -114,6 +114,7 @@
 
 ### T-RH-12 — Aprobar/Observar/Cancelar y fijación de plazo administrativo
 - [ ] Hecha
+- **Observación heredada de T-RH-02 (no bloqueante):** los comandos tipados de fijar/ajustar plazo reciben `diasHabiles: number`, mientras el valor persistido expresa el rango 15–30; verificar aquí que la validación y la revalidación del backend rechacen valores fuera del rango, sin ampliar el contrato funcional.
 - **Depende de:** T-RH-11.
 - **Traza:** RH-REQ-01 §7.3; §10 criterios 4 y 6.
 - **Entrada:** detalle + capacidades.
@@ -140,6 +141,7 @@
 
 ### T-RH-15 — Cómputo de plazos, umbrales y vencimiento
 - [ ] Hecha
+- **Observación heredada de T-RH-02 (no bloqueante):** cubrir el límite 15–30 cuando `diasHabiles` llega como `number`; el backend conserva la responsabilidad de revalidarlo y esta observación no cambia las reglas de §5.
 - **Depende de:** T-RH-04.
 - **Traza:** RH-REQ-01 §5; §10 criterios 4, 5 y 19.
 - **Entrada:** calendario único y reglas de §5.
