@@ -32,6 +32,7 @@ import {
   ORDEN_INICIAL,
   construirFiltros,
   crearConsulta,
+  formularioDesdeFiltros,
   hayFiltrosActivos,
   puestosDisponibles,
   siguienteOrden,
@@ -39,6 +40,7 @@ import {
   validarPeriodo,
   type EstadoFiltrosFormulario,
 } from './filtros'
+import type { ContextoBandeja, SeleccionRequerimiento } from '../state'
 
 type EstadoResultado =
   | { readonly status: 'loading' }
@@ -75,6 +77,55 @@ const ERROR_LECTURA: ContractError = {
   retryable: true,
 }
 
+function esControlInteractivo(target: EventTarget | null): boolean {
+  return (
+    target instanceof Element &&
+    target.closest('button, a, input, select, textarea') !== null
+  )
+}
+
+function FilaRequerimiento({
+  fila,
+  onSeleccionar,
+}: {
+  readonly fila: ResumenRequerimiento
+  readonly onSeleccionar?: (fila: ResumenRequerimiento) => void
+}) {
+  const interactiva = onSeleccionar !== undefined
+  const abrir = () => onSeleccionar?.(fila)
+  const id = String(fila.id)
+
+  return (
+    <tr
+      tabIndex={interactiva ? 0 : undefined}
+      aria-label={interactiva ? `Abrir requerimiento ${id}` : undefined}
+      data-requerimiento={interactiva ? id : undefined}
+      onClick={
+        interactiva
+          ? (evento) => {
+              if (esControlInteractivo(evento.target)) return
+              abrir()
+            }
+          : undefined
+      }
+      onKeyDown={
+        interactiva
+          ? (evento) => {
+              if (evento.target !== evento.currentTarget) return
+              if (evento.key !== 'Enter' && evento.key !== ' ') return
+              evento.preventDefault()
+              abrir()
+            }
+          : undefined
+      }
+    >
+      {COLUMNAS.map(({ campo }) => (
+        <td key={campo}>{renderCelda(fila, campo)}</td>
+      ))}
+    </tr>
+  )
+}
+
 export interface BandejaRequerimientosProps {
   readonly port: BandejaRequerimientosPort
   readonly catalogos: CatalogosRequerimientos
@@ -83,6 +134,19 @@ export interface BandejaRequerimientosProps {
   readonly tamanoPaginaInicial: number
   /** Tamaños que permite el consumidor. Si falta o solo hay uno, no se muestra el selector. */
   readonly tamanosPagina?: readonly number[]
+  /**
+   * Consulta previa que se repinta y se vuelve a pedir al montar. Para restaurar
+   * un contexto distinto con la bandeja ya montada, remóntala (por ejemplo con
+   * `key`); no se reaplica en caliente para no pisar lo que el usuario edita.
+   */
+  readonly contextoInicial?: ContextoBandeja
+  /** Se invoca con la consulta aplicada cuando cambia por aplicar, ordenar o paginar. */
+  readonly onContextoCambia?: (contexto: ContextoBandeja) => void
+  /**
+   * Habilita la fila como disparador del detalle. Sin consumidor, las filas no
+   * son interactivas ni anuncian una navegación inexistente.
+   */
+  readonly onAbrirDetalle?: (seleccion: SeleccionRequerimiento) => void
 }
 
 function ValorAusente() {
@@ -169,6 +233,7 @@ interface ResultadoProps {
   readonly onOrdenar: (campo: CampoOrdenBandeja) => void
   readonly onPagina: (pagina: number) => void
   readonly onTamano: (tamano: number) => void
+  readonly onSeleccionar?: (fila: ResumenRequerimiento) => void
   readonly tamanosDisponibles: readonly number[]
   readonly mostrarSelectorTamano: boolean
   readonly idTamano: string
@@ -181,6 +246,7 @@ function ResultadoBandeja({
   onOrdenar,
   onPagina,
   onTamano,
+  onSeleccionar,
   tamanosDisponibles,
   mostrarSelectorTamano,
   idTamano,
@@ -239,11 +305,11 @@ function ResultadoBandeja({
           </thead>
           <tbody>
             {datos.elementos.map((fila) => (
-              <tr key={String(fila.id)}>
-                {COLUMNAS.map(({ campo }) => (
-                  <td key={campo}>{renderCelda(fila, campo)}</td>
-                ))}
-              </tr>
+              <FilaRequerimiento
+                key={String(fila.id)}
+                fila={fila}
+                onSeleccionar={onSeleccionar}
+              />
             ))}
           </tbody>
         </table>
@@ -297,14 +363,18 @@ export function BandejaRequerimientos({
   solicitantes = [],
   tamanoPaginaInicial,
   tamanosPagina = [],
+  contextoInicial,
+  onContextoCambia,
+  onAbrirDetalle,
 }: BandejaRequerimientosProps) {
   const idBase = useId()
-  const [filtros, setFiltros] = useState<EstadoFiltrosFormulario>(
-    FILTROS_FORMULARIO_VACIOS,
+  const [filtros, setFiltros] = useState<EstadoFiltrosFormulario>(() =>
+    formularioDesdeFiltros(contextoInicial?.filtros ?? {}),
   )
   const [errorPeriodo, setErrorPeriodo] = useState<string | null>(null)
-  const [consulta, setConsulta] = useState<ConsultaBandeja>(() =>
-    crearConsulta({}, ORDEN_INICIAL, 1, tamanoPaginaInicial),
+  const [consulta, setConsulta] = useState<ConsultaBandeja>(
+    () =>
+      contextoInicial ?? crearConsulta({}, ORDEN_INICIAL, 1, tamanoPaginaInicial),
   )
   const [resultado, setResultado] = useState<EstadoResultado>({
     status: 'loading',
@@ -315,6 +385,19 @@ export function BandejaRequerimientos({
   const refHasta = useRef<HTMLInputElement>(null)
   /** El control accionado se desmonta durante la carga; se enfoca al volver. */
   const focoPendienteRef = useRef<DestinoFoco | null>(null)
+  const onContextoCambiaRef = useRef(onContextoCambia)
+  useEffect(() => {
+    onContextoCambiaRef.current = onContextoCambia
+  }, [onContextoCambia])
+  const contextoEmitidoRef = useRef(false)
+  useEffect(() => {
+    // El montaje no emite: el contexto inicial ya lo aporta la persistencia.
+    if (!contextoEmitidoRef.current) {
+      contextoEmitidoRef.current = true
+      return
+    }
+    onContextoCambiaRef.current?.(consulta)
+  }, [consulta])
 
   const cargar = useCallback(
     async (siguienteConsulta: ConsultaBandeja) => {
@@ -499,6 +582,10 @@ export function BandejaRequerimientos({
 
   const reintentar = () => {
     void cargar(consulta)
+  }
+
+  const seleccionarFila = (fila: ResumenRequerimiento) => {
+    onAbrirDetalle?.({ requerimiento: fila, contexto: consulta })
   }
 
   const opcionesMotivo =
@@ -763,6 +850,7 @@ export function BandejaRequerimientos({
           onOrdenar={ordenarPor}
           onPagina={irAPagina}
           onTamano={cambiarTamano}
+          onSeleccionar={onAbrirDetalle ? seleccionarFila : undefined}
           tamanosDisponibles={tamanosDisponibles}
           mostrarSelectorTamano={tamanosDisponibles.length > 1}
           idTamano={idTamano}

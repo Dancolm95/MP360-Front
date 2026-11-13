@@ -8,9 +8,9 @@ import {
   within,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Capability } from '../../../../shared'
-import { createDeferred } from '../../../../container/fixtures'
+import { createDeferred, createInMemoryStore } from '../../../../container/fixtures'
 import { CAP_RRHH_REQUERIMIENTOS_READ } from '../../identifiers'
 import type {
   AlertaPlazo,
@@ -45,6 +45,7 @@ import {
   lecturaFixture,
   type MockBandejaRequerimientosPort,
 } from '../fixtures'
+import { crearStoreContextoBandeja, type ContextoBandeja, type SeleccionRequerimiento } from '../state'
 import { BandejaRequerimientos } from './BandejaRequerimientos'
 
 afterEach(cleanup)
@@ -214,6 +215,9 @@ function renderBandeja(
     readonly solicitantes?: readonly Usuario[]
     readonly tamanosPagina?: readonly number[]
     readonly tamanoPaginaInicial?: number
+    readonly contextoInicial?: ContextoBandeja
+    readonly onContextoCambia?: (contexto: ContextoBandeja) => void
+    readonly onAbrirDetalle?: (seleccion: SeleccionRequerimiento) => void
   } = {},
 ) {
   return render(
@@ -223,6 +227,9 @@ function renderBandeja(
       solicitantes={opciones.solicitantes ?? [usuarioA, usuarioB]}
       tamanoPaginaInicial={opciones.tamanoPaginaInicial ?? 10}
       tamanosPagina={opciones.tamanosPagina ?? [10, 25]}
+      contextoInicial={opciones.contextoInicial}
+      onContextoCambia={opciones.onContextoCambia}
+      onAbrirDetalle={opciones.onAbrirDetalle}
     />,
   )
 }
@@ -883,5 +890,283 @@ describe('teclado y accesibilidad (RH-REQ-01 §8)', () => {
     expect(document.activeElement).toBe(
       screen.getByRole('button', { name: 'Página anterior' }),
     )
+  })
+})
+
+const contextoRestaurado: ContextoBandeja = {
+  filtros: {
+    estados: ['aprobado'],
+    motivos: ['reemplazo'],
+    empresas: [empresaA.id],
+    areas: [areaA.id],
+    subareas: [subareaA.id],
+    puestos: [puestoA.id],
+    solicitantes: [usuarioB.id],
+    periodoAprobacion: {
+      desde: '2026-01-01' as FechaISO,
+      hasta: '2026-01-31' as FechaISO,
+    },
+  },
+  orden: { campo: 'motivo', direccion: 'asc' },
+  paginacion: { pagina: 2, tamanoPagina: 25 },
+}
+
+describe('contexto persistido de la bandeja (RH-REQ-01 §7.1, §10-14)', () => {
+  it('restaura filtros, orden y página del contexto previo al montar', async () => {
+    const port = createMockBandejaRequerimientos((consulta) =>
+      lecturaFixture.ok({
+        elementos: [filaCompleta()],
+        total: 50,
+        pagina: consulta.paginacion.pagina,
+        tamanoPagina: consulta.paginacion.tamanoPagina,
+        capacidades: { capacidades: [capability], accionesPermitidas: [] },
+      }),
+    )
+    renderBandeja(port, { contextoInicial: contextoRestaurado })
+    await screen.findByRole('table')
+
+    expect(port.calls[0]).toEqual(contextoRestaurado)
+    expect((screen.getByLabelText('Estado') as HTMLSelectElement).value).toBe(
+      'aprobado',
+    )
+    expect((screen.getByLabelText('Motivo') as HTMLSelectElement).value).toBe(
+      'reemplazo',
+    )
+    expect((screen.getByLabelText('Empresa') as HTMLSelectElement).value).toBe(
+      String(empresaA.id),
+    )
+    expect((screen.getByLabelText('Área') as HTMLSelectElement).value).toBe(
+      String(areaA.id),
+    )
+    expect((screen.getByLabelText('Subárea') as HTMLSelectElement).value).toBe(
+      String(subareaA.id),
+    )
+    expect((screen.getByLabelText('Puesto') as HTMLSelectElement).value).toBe(
+      String(puestoA.id),
+    )
+    expect((screen.getByLabelText('Solicitante') as HTMLSelectElement).value).toBe(
+      String(usuarioB.id),
+    )
+    expect(
+      (screen.getByLabelText('Aprobado desde') as HTMLInputElement).value,
+    ).toBe('2026-01-01')
+    expect(
+      (screen.getByLabelText('Aprobado hasta') as HTMLInputElement).value,
+    ).toBe('2026-01-31')
+    expect(
+      screen
+        .getByRole('columnheader', { name: 'Motivo' })
+        .getAttribute('aria-sort'),
+    ).toBe('ascending')
+    expect(
+      (screen.getByLabelText('Elementos por página') as HTMLSelectElement).value,
+    ).toBe('25')
+    expect(
+      within(
+        screen.getByRole('navigation', {
+          name: 'Paginación de requerimientos',
+        }),
+      ).getByText('Página 2 de 2'),
+    ).toBeDefined()
+  })
+
+  it('entrega la consulta aplicada al consumidor y no la emite al montar ni al editar sin aplicar', async () => {
+    const port = createMockBandejaRequerimientos((consulta) =>
+      lecturaFixture.ok({
+        elementos: [filaCompleta()],
+        total: 25,
+        pagina: consulta.paginacion.pagina,
+        tamanoPagina: consulta.paginacion.tamanoPagina,
+        capacidades: { capacidades: [capability], accionesPermitidas: [] },
+      }),
+    )
+    const onContextoCambia = vi.fn()
+    const user = userEvent.setup()
+    renderBandeja(port, { onContextoCambia })
+    await screen.findByRole('table')
+
+    expect(onContextoCambia).not.toHaveBeenCalled()
+
+    await user.selectOptions(screen.getByLabelText('Estado'), 'aprobado')
+    expect(onContextoCambia).not.toHaveBeenCalled()
+
+    await user.click(screen.getByRole('button', { name: 'Aplicar filtros' }))
+    await waitFor(() => expect(onContextoCambia).toHaveBeenCalledTimes(1))
+    expect(onContextoCambia.mock.calls[0][0]).toEqual({
+      filtros: { estados: ['aprobado'] },
+      orden: { campo: 'fecha-creacion', direccion: 'desc' },
+      paginacion: { pagina: 1, tamanoPagina: 10 },
+    })
+
+    await user.click(
+      screen.getByRole('button', { name: 'Ordenar por Motivo' }),
+    )
+    await waitFor(() => expect(onContextoCambia).toHaveBeenCalledTimes(2))
+    expect(onContextoCambia.mock.calls[1][0]).toEqual({
+      filtros: { estados: ['aprobado'] },
+      orden: { campo: 'motivo', direccion: 'asc' },
+      paginacion: { pagina: 1, tamanoPagina: 10 },
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Página siguiente' }))
+    await waitFor(() => expect(onContextoCambia).toHaveBeenCalledTimes(3))
+    expect(onContextoCambia.mock.calls[2][0]).toEqual({
+      filtros: { estados: ['aprobado'] },
+      orden: { campo: 'motivo', direccion: 'asc' },
+      paginacion: { pagina: 2, tamanoPagina: 10 },
+    })
+  })
+
+  it('persiste la consulta aplicada y la restaura al remontar la bandeja', async () => {
+    const base = createInMemoryStore<unknown>()
+    const store = crearStoreContextoBandeja(base, { tamanoPaginaInicial: 10 })
+    const port = createMockBandejaRequerimientos((consulta) =>
+      lecturaFixture.ok({
+        elementos: [filaCompleta()],
+        total: 25,
+        pagina: consulta.paginacion.pagina,
+        tamanoPagina: consulta.paginacion.tamanoPagina,
+        capacidades: { capacidades: [capability], accionesPermitidas: [] },
+      }),
+    )
+    const user = userEvent.setup()
+    const { unmount } = renderBandeja(port, {
+      onContextoCambia: (contexto) => store.set(contexto),
+    })
+    await screen.findByRole('table')
+
+    await user.selectOptions(screen.getByLabelText('Estado'), 'aprobado')
+    await user.click(screen.getByRole('button', { name: 'Aplicar filtros' }))
+    await waitFor(() => expect(port.calls).toHaveLength(2))
+    await user.click(
+      screen.getByRole('button', { name: 'Ordenar por Motivo' }),
+    )
+    await waitFor(() => expect(port.calls).toHaveLength(3))
+    await user.click(screen.getByRole('button', { name: 'Página siguiente' }))
+    await waitFor(() => expect(port.calls).toHaveLength(4))
+
+    const contexto = store.get()
+    expect(contexto).toEqual({
+      filtros: { estados: ['aprobado'] },
+      orden: { campo: 'motivo', direccion: 'asc' },
+      paginacion: { pagina: 2, tamanoPagina: 10 },
+    })
+
+    unmount()
+
+    const portTrasNavegar = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    renderBandeja(portTrasNavegar, { contextoInicial: contexto })
+    await screen.findByRole('table')
+
+    expect(portTrasNavegar.calls[0]).toEqual(contexto)
+    expect((screen.getByLabelText('Estado') as HTMLSelectElement).value).toBe(
+      'aprobado',
+    )
+    expect(
+      screen
+        .getByRole('columnheader', { name: 'Motivo' })
+        .getAttribute('aria-sort'),
+    ).toBe('ascending')
+  })
+})
+
+describe('apertura de fila con contexto (RH-REQ-01 §7.1, §10-23)', () => {
+  it('abre el detalle al interactuar con la fila y expone el requerimiento con la consulta', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    const onAbrirDetalle = vi.fn()
+    renderBandeja(port, { onAbrirDetalle })
+    await screen.findByRole('table')
+
+    const fila = within(screen.getByRole('table')).getAllByRole('row')[1]
+    expect(fila.getAttribute('tabindex')).toBe('0')
+    expect(fila.getAttribute('aria-label')).toBe('Abrir requerimiento req-1')
+
+    fireEvent.click(within(fila).getAllByRole('cell')[0])
+
+    expect(onAbrirDetalle).toHaveBeenCalledTimes(1)
+    expect(onAbrirDetalle).toHaveBeenCalledWith({
+      requerimiento: filaCompleta(),
+      contexto: {
+        filtros: {},
+        orden: { campo: 'fecha-creacion', direccion: 'desc' },
+        paginacion: { pagina: 1, tamanoPagina: 10 },
+      },
+    })
+  })
+
+  it('abre con Enter y con Espacio reales desde el teclado', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    const onAbrirDetalle = vi.fn()
+    const user = userEvent.setup()
+    renderBandeja(port, { onAbrirDetalle })
+    await screen.findByRole('table')
+
+    const fila = within(screen.getByRole('table')).getAllByRole('row')[1]
+    fila.focus()
+    expect(document.activeElement).toBe(fila)
+
+    await user.keyboard('{Enter}')
+    expect(onAbrirDetalle).toHaveBeenCalledTimes(1)
+
+    await user.keyboard(' ')
+    expect(onAbrirDetalle).toHaveBeenCalledTimes(2)
+    expect(document.activeElement).toBe(fila)
+  })
+
+  it('expone el contexto vigente tras aplicar, ordenar y paginar', async () => {
+    const port = createMockBandejaRequerimientos((consulta) =>
+      lecturaFixture.ok({
+        elementos: [filaCompleta()],
+        total: 25,
+        pagina: consulta.paginacion.pagina,
+        tamanoPagina: consulta.paginacion.tamanoPagina,
+        capacidades: { capacidades: [capability], accionesPermitidas: [] },
+      }),
+    )
+    const onAbrirDetalle = vi.fn()
+    const user = userEvent.setup()
+    renderBandeja(port, { onAbrirDetalle })
+    await screen.findByRole('table')
+
+    await user.selectOptions(screen.getByLabelText('Motivo'), 'reemplazo')
+    await user.click(screen.getByRole('button', { name: 'Aplicar filtros' }))
+    await waitFor(() => expect(port.calls).toHaveLength(2))
+    await user.click(
+      screen.getByRole('button', { name: 'Ordenar por Empresa' }),
+    )
+    await waitFor(() => expect(port.calls).toHaveLength(3))
+    await user.click(screen.getByRole('button', { name: 'Página siguiente' }))
+    await waitFor(() => expect(port.calls).toHaveLength(4))
+
+    const fila = within(screen.getByRole('table')).getAllByRole('row')[1]
+    fireEvent.click(fila)
+
+    expect(onAbrirDetalle).toHaveBeenCalledWith({
+      requerimiento: filaCompleta(),
+      contexto: {
+        filtros: { motivos: ['reemplazo'] },
+        orden: { campo: 'empresa', direccion: 'asc' },
+        paginacion: { pagina: 2, tamanoPagina: 10 },
+      },
+    })
+  })
+
+  it('no hace interactivas las filas si no hay consumidor de detalle', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    renderBandeja(port)
+    await screen.findByRole('table')
+
+    const fila = within(screen.getByRole('table')).getAllByRole('row')[1]
+    expect(fila.hasAttribute('tabindex')).toBe(false)
+    expect(fila.hasAttribute('aria-label')).toBe(false)
+    expect(fila.hasAttribute('data-requerimiento')).toBe(false)
   })
 })

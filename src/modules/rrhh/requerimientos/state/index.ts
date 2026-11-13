@@ -1,2 +1,9 @@
-// Fase G (T-RH-16…17): máquina de estados, transiciones y concurrencia
-// versionada (comandos).
+export {
+  contextoBandejaInicial,
+  crearStoreContextoBandeja,
+  sanearContextoBandeja,
+  sanearFiltrosBandeja,
+  type ContextoBandeja,
+  type OpcionesContextoBandeja,
+  type SeleccionRequerimiento,
+} from './contexto-bandeja'

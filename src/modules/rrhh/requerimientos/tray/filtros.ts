@@ -88,6 +88,23 @@ export function construirFiltros(
   return resultado
 }
 
+/** Repinta los controles a partir de una consulta aplicada o restaurada. */
+export function formularioDesdeFiltros(
+  filtros: FiltrosBandeja,
+): EstadoFiltrosFormulario {
+  return {
+    estado: filtros.estados?.[0] ?? '',
+    motivo: filtros.motivos?.[0] ?? '',
+    empresa: filtros.empresas?.[0] ?? '',
+    area: filtros.areas?.[0] ?? '',
+    subarea: filtros.subareas?.[0] ?? '',
+    puesto: filtros.puestos?.[0] ?? '',
+    solicitante: filtros.solicitantes?.[0] ?? '',
+    desde: filtros.periodoAprobacion?.desde ?? '',
+    hasta: filtros.periodoAprobacion?.hasta ?? '',
+  }
+}
+
 export function hayFiltrosActivos(filtros: FiltrosBandeja): boolean {
   return Object.keys(filtros).length > 0
 }
