@@ -13,6 +13,7 @@ import type { Capability } from '../../../../shared'
 import { createDeferred, createInMemoryStore } from '../../../../container/fixtures'
 import { CAP_RRHH_REQUERIMIENTOS_READ } from '../../identifiers'
 import type {
+  AccionRequerimiento,
   AlertaPlazo,
   Area,
   AreaId,
@@ -149,6 +150,18 @@ function autorizacion(id: RequerimientoId): AutorizacionRequerimiento {
   }
 }
 
+function autorizacionCon(
+  id: RequerimientoId,
+  accionesPermitidas: readonly AccionRequerimiento[],
+): AutorizacionRequerimiento {
+  return {
+    requerimientoId: id,
+    version: 1,
+    capacidades: [capability],
+    accionesPermitidas,
+  }
+}
+
 function filaCompleta(
   overrides: Partial<ResumenRequerimientoCompleto> = {},
 ): ResumenRequerimientoCompleto {
@@ -220,6 +233,9 @@ function renderBandeja(
     readonly contextoInicial?: ContextoBandeja
     readonly onContextoCambia?: (contexto: ContextoBandeja) => void
     readonly onAbrirDetalle?: (seleccion: SeleccionRequerimiento) => void
+    readonly onNuevo?: () => void
+    readonly onEditar?: (seleccion: SeleccionRequerimiento) => void
+    readonly onCancelar?: (seleccion: SeleccionRequerimiento) => void
   } = {},
 ) {
   return render(
@@ -232,6 +248,9 @@ function renderBandeja(
       contextoInicial={opciones.contextoInicial}
       onContextoCambia={opciones.onContextoCambia}
       onAbrirDetalle={opciones.onAbrirDetalle}
+      onNuevo={opciones.onNuevo}
+      onEditar={opciones.onEditar}
+      onCancelar={opciones.onCancelar}
     />,
   )
 }
@@ -1252,5 +1271,244 @@ describe('apertura de fila con contexto (RH-REQ-01 §7.1, §10-23)', () => {
     expect(fila.hasAttribute('aria-label')).toBe(false)
     expect(fila.hasAttribute('aria-keyshortcuts')).toBe(false)
     expect(fila.hasAttribute('data-requerimiento')).toBe(false)
+  })
+})
+
+const contextoInicial: ContextoBandeja = {
+  filtros: {},
+  orden: { campo: 'fecha-creacion', direccion: 'desc' },
+  paginacion: { pagina: 1, tamanoPagina: 10 },
+}
+
+describe('acciones por capacidades y estados de interfaz (RH-REQ-01 §7.1, §8, §10-16)', () => {
+  it('muestra «Nuevo» solo con la capacidad «crear» de la bandeja', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(
+        pagina([filaCompleta()], {
+          capacidades: { capacidades: [capability], accionesPermitidas: ['crear'] },
+        }),
+      ),
+    )
+    renderBandeja(port, { onNuevo: vi.fn() })
+    await screen.findByRole('table')
+
+    expect(screen.getByRole('button', { name: 'Nuevo' })).toBeDefined()
+  })
+
+  it('no muestra «Nuevo» sin la capacidad «crear» aunque haya consumidor', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    renderBandeja(port, { onNuevo: vi.fn() })
+    await screen.findByRole('table')
+
+    expect(screen.queryByRole('button', { name: 'Nuevo' })).toBeNull()
+  })
+
+  it('muestra «Detalle» para toda fila visible sin exigir capacidad de fila', async () => {
+    const sinAcciones = filaCompleta({ id: 'req-1' as RequerimientoId })
+    const conAcciones = filaCompleta({
+      id: 'req-2' as RequerimientoId,
+      autorizacion: autorizacionCon('req-2' as RequerimientoId, [
+        'editar',
+        'cancelar',
+      ]),
+    })
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([sinAcciones, conAcciones])),
+    )
+    renderBandeja(port, { onAbrirDetalle: vi.fn() })
+    await screen.findByRole('table')
+
+    expect(
+      screen.getByRole('button', { name: 'Detalle requerimiento req-1' }),
+    ).toBeDefined()
+    expect(
+      screen.getByRole('button', { name: 'Detalle requerimiento req-2' }),
+    ).toBeDefined()
+  })
+
+  it('muestra «Editar» solo con la capacidad «editar» de la fila', async () => {
+    const filaEditable = filaCompleta({
+      id: 'req-1' as RequerimientoId,
+      autorizacion: autorizacionCon('req-1' as RequerimientoId, ['editar']),
+    })
+    const filaSinEditar = filaCompleta({ id: 'req-2' as RequerimientoId })
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaEditable, filaSinEditar])),
+    )
+    renderBandeja(port, { onEditar: vi.fn() })
+    await screen.findByRole('table')
+
+    expect(
+      screen.getByRole('button', { name: 'Editar requerimiento req-1' }),
+    ).toBeDefined()
+    expect(
+      screen.queryByRole('button', { name: 'Editar requerimiento req-2' }),
+    ).toBeNull()
+  })
+
+  it('no muestra «Editar» sin la capacidad «editar» aunque haya consumidor', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    renderBandeja(port, { onEditar: vi.fn() })
+    await screen.findByRole('table')
+
+    expect(
+      screen.queryByRole('button', { name: 'Editar requerimiento req-1' }),
+    ).toBeNull()
+  })
+
+  it('muestra «Cancelar» solo con la capacidad «cancelar» de la fila', async () => {
+    const filaCancelable = filaCompleta({
+      id: 'req-1' as RequerimientoId,
+      autorizacion: autorizacionCon('req-1' as RequerimientoId, ['cancelar']),
+    })
+    const filaSinCancelar = filaCompleta({ id: 'req-2' as RequerimientoId })
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCancelable, filaSinCancelar])),
+    )
+    renderBandeja(port, { onCancelar: vi.fn() })
+    await screen.findByRole('table')
+
+    expect(
+      screen.getByRole('button', { name: 'Cancelar requerimiento req-1' }),
+    ).toBeDefined()
+    expect(
+      screen.queryByRole('button', { name: 'Cancelar requerimiento req-2' }),
+    ).toBeNull()
+  })
+
+  it('emite la intención correcta con requerimiento y contexto, sin ejecutar comandos', async () => {
+    const filaDetalle = filaCompleta({ id: 'req-1' as RequerimientoId })
+    const filaEditable = filaCompleta({
+      id: 'req-2' as RequerimientoId,
+      autorizacion: autorizacionCon('req-2' as RequerimientoId, [
+        'editar',
+        'cancelar',
+      ]),
+    })
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(
+        pagina([filaDetalle, filaEditable], {
+          capacidades: { capacidades: [capability], accionesPermitidas: ['crear'] },
+        }),
+      ),
+    )
+    const onNuevo = vi.fn()
+    const onAbrirDetalle = vi.fn()
+    const onEditar = vi.fn()
+    const onCancelar = vi.fn()
+    const user = userEvent.setup()
+    renderBandeja(port, { onNuevo, onAbrirDetalle, onEditar, onCancelar })
+    await screen.findByRole('table')
+
+    await user.click(screen.getByRole('button', { name: 'Nuevo' }))
+    expect(onNuevo).toHaveBeenCalledTimes(1)
+    expect(onNuevo).toHaveBeenCalledWith()
+
+    await user.click(
+      screen.getByRole('button', { name: 'Detalle requerimiento req-1' }),
+    )
+    expect(onAbrirDetalle).toHaveBeenCalledTimes(1)
+    expect(onAbrirDetalle).toHaveBeenCalledWith({
+      requerimiento: filaDetalle,
+      contexto: contextoInicial,
+    })
+
+    await user.click(
+      screen.getByRole('button', { name: 'Editar requerimiento req-2' }),
+    )
+    expect(onEditar).toHaveBeenCalledTimes(1)
+    expect(onEditar).toHaveBeenCalledWith({
+      requerimiento: filaEditable,
+      contexto: contextoInicial,
+    })
+
+    await user.click(
+      screen.getByRole('button', { name: 'Cancelar requerimiento req-2' }),
+    )
+    expect(onCancelar).toHaveBeenCalledTimes(1)
+    expect(onCancelar).toHaveBeenCalledWith({
+      requerimiento: filaEditable,
+      contexto: contextoInicial,
+    })
+
+    expect(port.calls).toHaveLength(1)
+  })
+
+  it('opera las cuatro acciones con Enter y Espacio', async () => {
+    const filaEditable = filaCompleta({
+      id: 'req-2' as RequerimientoId,
+      autorizacion: autorizacionCon('req-2' as RequerimientoId, [
+        'editar',
+        'cancelar',
+      ]),
+    })
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(
+        pagina([filaEditable], {
+          capacidades: { capacidades: [capability], accionesPermitidas: ['crear'] },
+        }),
+      ),
+    )
+    const onNuevo = vi.fn()
+    const onAbrirDetalle = vi.fn()
+    const onEditar = vi.fn()
+    const onCancelar = vi.fn()
+    const user = userEvent.setup()
+    renderBandeja(port, { onNuevo, onAbrirDetalle, onEditar, onCancelar })
+    await screen.findByRole('table')
+
+    screen.getByRole('button', { name: 'Nuevo' }).focus()
+    await user.keyboard('{Enter}')
+    await user.keyboard(' ')
+    expect(onNuevo).toHaveBeenCalledTimes(2)
+
+    screen.getByRole('button', { name: 'Detalle requerimiento req-2' }).focus()
+    await user.keyboard('{Enter}')
+    await user.keyboard(' ')
+    expect(onAbrirDetalle).toHaveBeenCalledTimes(2)
+
+    screen.getByRole('button', { name: 'Editar requerimiento req-2' }).focus()
+    await user.keyboard('{Enter}')
+    await user.keyboard(' ')
+    expect(onEditar).toHaveBeenCalledTimes(2)
+
+    screen.getByRole('button', { name: 'Cancelar requerimiento req-2' }).focus()
+    await user.keyboard('{Enter}')
+    await user.keyboard(' ')
+    expect(onCancelar).toHaveBeenCalledTimes(2)
+  })
+
+  it('sin consumidor no muestra las acciones ni anuncia navegación a vistas inexistentes', async () => {
+    const filaConAcciones = filaCompleta({
+      id: 'req-1' as RequerimientoId,
+      autorizacion: autorizacionCon('req-1' as RequerimientoId, [
+        'editar',
+        'cancelar',
+      ]),
+    })
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(
+        pagina([filaConAcciones], {
+          capacidades: { capacidades: [capability], accionesPermitidas: ['crear'] },
+        }),
+      ),
+    )
+    renderBandeja(port)
+    await screen.findByRole('table')
+
+    expect(screen.queryByRole('button', { name: 'Nuevo' })).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: 'Detalle requerimiento req-1' }),
+    ).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: 'Editar requerimiento req-1' }),
+    ).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: 'Cancelar requerimiento req-1' }),
+    ).toBeNull()
   })
 })

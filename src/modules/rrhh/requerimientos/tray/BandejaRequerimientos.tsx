@@ -87,13 +87,22 @@ function esControlInteractivo(target: EventTarget | null): boolean {
 function FilaRequerimiento({
   fila,
   onSeleccionar,
+  onEditar,
+  onCancelar,
 }: {
   readonly fila: ResumenRequerimiento
   readonly onSeleccionar?: (fila: ResumenRequerimiento) => void
+  readonly onEditar?: (fila: ResumenRequerimiento) => void
+  readonly onCancelar?: (fila: ResumenRequerimiento) => void
 }) {
   const interactiva = onSeleccionar !== undefined
   const abrir = () => onSeleccionar?.(fila)
   const id = String(fila.id)
+  const accionesPermitidas = fila.autorizacion.accionesPermitidas
+  const puedeEditar = onEditar !== undefined && accionesPermitidas.includes('editar')
+  const puedeCancelar =
+    onCancelar !== undefined && accionesPermitidas.includes('cancelar')
+  const muestraAcciones = onSeleccionar !== undefined || puedeEditar || puedeCancelar
 
   return (
     <tr
@@ -125,6 +134,39 @@ function FilaRequerimiento({
       {COLUMNAS.map(({ campo }) => (
         <td key={campo}>{renderCelda(fila, campo)}</td>
       ))}
+      {muestraAcciones ? (
+        <td>
+          <div className="rrhh-tray__acciones">
+            {onSeleccionar ? (
+              <button
+                type="button"
+                aria-label={`Detalle requerimiento ${id}`}
+                onClick={abrir}
+              >
+                Detalle
+              </button>
+            ) : null}
+            {puedeEditar ? (
+              <button
+                type="button"
+                aria-label={`Editar requerimiento ${id}`}
+                onClick={() => onEditar?.(fila)}
+              >
+                Editar
+              </button>
+            ) : null}
+            {puedeCancelar ? (
+              <button
+                type="button"
+                aria-label={`Cancelar requerimiento ${id}`}
+                onClick={() => onCancelar?.(fila)}
+              >
+                Cancelar
+              </button>
+            ) : null}
+          </div>
+        </td>
+      ) : null}
     </tr>
   )
 }
@@ -150,6 +192,16 @@ export interface BandejaRequerimientosProps {
    * son interactivas ni anuncian una navegación inexistente.
    */
   readonly onAbrirDetalle?: (seleccion: SeleccionRequerimiento) => void
+  /**
+   * Acciones de bandeja y de fila. Sin consumidor no se muestran ni se anuncia
+   * un destino inexistente. La visibilidad por capacidad la decide el backend:
+   * «Nuevo» exige «crear» de la bandeja; «Editar»/«Cancelar» exigen las
+   * acciones de la fila; «Detalle» reutiliza `onAbrirDetalle` y aparece en toda
+   * fila visible.
+   */
+  readonly onNuevo?: () => void
+  readonly onEditar?: (seleccion: SeleccionRequerimiento) => void
+  readonly onCancelar?: (seleccion: SeleccionRequerimiento) => void
 }
 
 function ValorAusente() {
@@ -237,6 +289,8 @@ interface ResultadoProps {
   readonly onPagina: (pagina: number) => void
   readonly onTamano: (tamano: number) => void
   readonly onSeleccionar?: (fila: ResumenRequerimiento) => void
+  readonly onEditar?: (fila: ResumenRequerimiento) => void
+  readonly onCancelar?: (fila: ResumenRequerimiento) => void
   readonly tamanosDisponibles: readonly number[]
   readonly mostrarSelectorTamano: boolean
   readonly idTamano: string
@@ -250,6 +304,8 @@ function ResultadoBandeja({
   onPagina,
   onTamano,
   onSeleccionar,
+  onEditar,
+  onCancelar,
   tamanosDisponibles,
   mostrarSelectorTamano,
   idTamano,
@@ -269,6 +325,8 @@ function ResultadoBandeja({
   }
 
   const totalPaginas = Math.max(1, Math.ceil(datos.total / datos.tamanoPagina))
+  const hayAccionesFila =
+    onSeleccionar !== undefined || onEditar !== undefined || onCancelar !== undefined
 
   return (
     <>
@@ -308,6 +366,11 @@ function ResultadoBandeja({
                   </th>
                 )
               })}
+              {hayAccionesFila ? (
+                <th scope="col" className="sr-only">
+                  Acciones
+                </th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
@@ -316,6 +379,8 @@ function ResultadoBandeja({
                 key={String(fila.id)}
                 fila={fila}
                 onSeleccionar={onSeleccionar}
+                onEditar={onEditar}
+                onCancelar={onCancelar}
               />
             ))}
           </tbody>
@@ -373,6 +438,9 @@ export function BandejaRequerimientos({
   contextoInicial,
   onContextoCambia,
   onAbrirDetalle,
+  onNuevo,
+  onEditar,
+  onCancelar,
 }: BandejaRequerimientosProps) {
   const idBase = useId()
   const [filtros, setFiltros] = useState<EstadoFiltrosFormulario>(() =>
@@ -609,6 +677,14 @@ export function BandejaRequerimientos({
     onAbrirDetalle?.({ requerimiento: fila, contexto: consulta })
   }
 
+  const editarFila = (fila: ResumenRequerimiento) => {
+    onEditar?.({ requerimiento: fila, contexto: consulta })
+  }
+
+  const cancelarFila = (fila: ResumenRequerimiento) => {
+    onCancelar?.({ requerimiento: fila, contexto: consulta })
+  }
+
   const opcionesMotivo =
     catalogos.motivos.length > 0
       ? catalogos.motivos
@@ -644,6 +720,16 @@ export function BandejaRequerimientos({
       aria-labelledby={idTitulo}
     >
       <h2 id={idTitulo}>Bandeja de requerimientos</h2>
+
+      {resultado.status === 'ok' &&
+      onNuevo &&
+      resultado.datos.capacidades.accionesPermitidas.includes('crear') ? (
+        <div className="rrhh-tray__acciones">
+          <button type="button" onClick={() => onNuevo()}>
+            Nuevo
+          </button>
+        </div>
+      ) : null}
 
       <form
         className="rrhh-tray__filtros"
@@ -872,6 +958,8 @@ export function BandejaRequerimientos({
           onPagina={irAPagina}
           onTamano={cambiarTamano}
           onSeleccionar={onAbrirDetalle ? seleccionarFila : undefined}
+          onEditar={onEditar ? editarFila : undefined}
+          onCancelar={onCancelar ? cancelarFila : undefined}
           tamanosDisponibles={tamanosDisponibles}
           mostrarSelectorTamano={tamanosDisponibles.length > 1}
           idTamano={idTamano}
