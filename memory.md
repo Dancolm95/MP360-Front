@@ -95,7 +95,7 @@
 
 ## Próximo paso
 
-Fase: implementación. **T-RH-06 está cerrada, validada e integrada** (`bb79ded`+`50b7f22`, reviewer **APROBADO**). **T-CORE-09 queda bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-07…14). El siguiente trabajo accionable es **T-RH-07** (acciones por capacidades y estados de interfaz de la bandeja; depende solo de T-RH-05), no iniciado y sujeto a confirmación explícita; no encadenar automáticamente. P-04 continúa como dependencia externa y la evidencia con mocks no demuestra integración real con proveedores.
+Fase: implementación. **T-RH-06 está cerrada, validada e integrada** (`bb79ded`+`50b7f22`, reviewer **APROBADO**). **T-CORE-09 queda bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-07…14). **T-RH-07** (acciones por capacidades y estados de interfaz de la bandeja) está **en ejecución desde el 13-nov-2026** por confirmación explícita del usuario, acotada a botones + intención (Cancelar no ejecuta comando; conflicto/éxito persistido en T-RH-12/T-RH-16). P-04 continúa como dependencia externa y la evidencia con mocks no demuestra integración real con proveedores.
 
 ## Regla de actualización
 
