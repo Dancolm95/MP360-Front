@@ -2,7 +2,7 @@
 
 **Spec:** RH-REQ-01 v0.7 (aprobada funcionalmente el 10-nov-2026).  
 **Plan:** [`plan.md`](plan.md) v1.2 (**aprobado técnicamente el 10-nov-2026**; cambio de stack a Next.js). La v1.1 (React + TypeScript + Vite) fue aprobada técnicamente el 10-nov-2026 y es histórica.  
-**Estado del corte:** **T-RH-01 a T-RH-05 están cerradas e integradas en `main`**. T-RH-05 se integró por fast-forward el 12-nov-2026 (`1bbd33e` + `06f5fd4`; `main` = `06f5fd4ca165c7bedb6b149c61459acf8284d7d6`; reviewer final **APROBADO** tras un ciclo de corrección: foco, error de periodo y decisión de duración antes de aprobar). La base compartida del contenedor hasta **T-CORE-08** también está cerrada y en `main`. **La siguiente tarea es T-RH-06 (Persistencia intra-sesión de filtros y apertura de fila con contexto): no iniciada y sujeta a confirmación explícita del usuario.** T-RH-06…24 permanecen sin iniciar. **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) sigue **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-06…14).
+**Estado del corte:** **T-RH-01 a T-RH-05 están cerradas e integradas en `main`**. T-RH-05 se integró por fast-forward el 12-nov-2026 (`1bbd33e` + `06f5fd4`; `main` = `06f5fd4ca165c7bedb6b149c61459acf8284d7d6`; reviewer final **APROBADO** tras un ciclo de corrección: foco, error de periodo y decisión de duración antes de aprobar). La base compartida del contenedor hasta **T-CORE-08** también está cerrada y en `main`. **T-RH-06 (Persistencia intra-sesión de filtros y apertura de fila con contexto) está en ejecución desde el 13-nov-2026**, iniciada por confirmación explícita del usuario y acotada a la capa de estado/dominio: persistencia intra-sesión de filtros, orden y página con `SessionScopedStore` (C-04), contexto de bandeja como contrato reutilizable y disparador accesible de fila de UX-02. Las vistas UX de RR. HH. las construye el usuario fuera de la cadena SDD, en un worktree aparte; por eso esta tarea no verifica aún el criterio 22 (la vista UX-04 pertenece a T-RH-11 y el botón visible «Volver a bandeja» a T-RH-14) y no modifica vistas (`src/app/**`, `globals.css`, `form/**`, `detail/**`). **T-RH-06…24 siguen pendientes de cierre** (T-RH-07…24 sin iniciar). **T-CORE-09** (integración con UX-02/03/04 sin alterar el dominio) sigue **bloqueada** hasta que existan las vistas UX-02/03/04 de RH-REQ-01 (T-RH-06…14).
 **Alcance activo:** RH-REQ-01 §10 criterios 1–17 y 19–27.  
 **Diferido (fuera del alcance activo):** RH-REQ-01 §10 criterio 18 y C-05 (verificación diferida).
 
@@ -63,10 +63,11 @@
 ### T-RH-06 — Persistencia intra-sesión de filtros y apertura de fila con contexto
 - [ ] Hecha
 - **Depende de:** T-RH-05.
-- **Traza:** RH-REQ-01 §7.1; §10 criterios 14, 22 y 23.
+- **Traza:** RH-REQ-01 §7.1; §10 criterio 14 y criterio 23 (parte de UX-02).
+- **Decisión del 13-nov-2026:** la tarea se inicia acotada a estado/dominio porque las vistas UX de RR. HH. se construyen fuera de la cadena SDD y UX-04 aún no existe (T-RH-11); el botón visible «Volver a bandeja» pertenece a T-RH-14. No se tocan vistas (`src/app/**`, `globals.css`, `form/**`, `detail/**`).
 - **Entrada:** bandeja de T-RH-05.
-- **Salida:** filtros que sobreviven a navegación/recarga dentro de la sesión y se limpian al cerrar sesión, sin datos sensibles en `localStorage`; la fila abre su detalle por teclado e interacción; la entrada y el regreso conservan el contexto.
-- **Hecho cuando:** criterios 14, 22 y 23 verificables.
+- **Salida:** filtros, orden y página de la bandeja persistentes dentro de la sesión mediante `SessionScopedStore` (C-04, heredada del contenedor), con limpieza al cerrar o terminar la sesión y sin datos sensibles en `localStorage`; contexto de bandeja de entrada y regreso expuesto como contrato de estado reutilizable; fila de UX-02 como disparador accesible que abre el detalle por teclado (Enter/Espacio) y por interacción con la fila, sin depender de la acción «Detalle», y que expone el requerimiento seleccionado junto con el contexto. No incluye la vista UX-04 ni el botón visible «Volver a bandeja», que quedan en T-RH-11 y T-RH-14.
+- **Hecho cuando:** criterio 14 verificable; criterio 23 verificable en su parte de UX-02 (disparador accesible de fila y contexto conservado). La apertura real en UX-04 se verifica en T-RH-11 y el criterio 22 en T-RH-14.
 
 ### T-RH-07 — Acciones por capacidades y estados de interfaz de la bandeja
 - [ ] Hecha
@@ -133,8 +134,8 @@
 - [ ] Hecha
 - **Depende de:** T-RH-11, T-RH-06.
 - **Traza:** RH-REQ-01 §7.3; §10 criterio 22.
-- **Entrada:** detalle + contexto de bandeja.
-- **Salida:** restaura filtros, orden y página previos.
+- **Entrada:** detalle de T-RH-11 + contexto de bandeja producido por T-RH-06.
+- **Salida:** botón visible «Volver a bandeja» en UX-04 que restaura filtros, orden y página previos consumiendo el contrato de contexto de T-RH-06, sin reimplementarlo.
 - **Hecho cuando:** criterio 22 verificable.
 
 ## Fase F — Cómputo de plazos y alertas
