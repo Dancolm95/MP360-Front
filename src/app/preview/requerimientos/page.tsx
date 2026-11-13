@@ -15,6 +15,7 @@ import {
   PAGINA_REQUERIMIENTOS,
   SOLICITANTES,
 } from './data'
+import { MarcoPagina6 } from './marco'
 import styles from './preview.module.css'
 
 type Vista = 'bandeja' | 'crear' | 'detalle'
@@ -35,59 +36,66 @@ export default function PreviewRequerimientos() {
   )
 
   return (
-    <main className={styles['preview']}>
-      <header className={styles['preview__cabecera']}>
-        <h1 className={styles['preview__titulo']}>
-          Preview de Requerimientos
-        </h1>
-        <p className={styles['preview__nota']} role="note">
-          Preview experimental: monta las ventanas presentacionales UX-02/03/04
-          con datos de ejemplo. No está integrado al contenedor ni representa
-          sesión, autorización o persistencia reales.
-        </p>
-      </header>
+    <>
+      <main className={styles['preview']}>
+        <header className={styles['preview__cabecera']}>
+          <h1 className={styles['preview__titulo']}>
+            Preview de Requerimientos
+          </h1>
+          <p className={styles['preview__nota']} role="note">
+            Preview experimental: monta las ventanas presentacionales UX-02/03/04
+            con datos de ejemplo. No está integrado al contenedor ni representa
+            sesión, autorización o persistencia reales.
+          </p>
+        </header>
 
-      <div
-        className={styles['preview__selector']}
-        role="group"
-        aria-label="Vista a previsualizar"
-      >
-        {VISTAS.map(({ id, etiqueta }) => (
-          <button
-            key={id}
-            type="button"
-            className={styles['preview__opcion']}
-            aria-pressed={vista === id}
-            onClick={() => setVista(id)}
-          >
-            {etiqueta}
-          </button>
-        ))}
-      </div>
+        <div
+          className={styles['preview__selector']}
+          role="group"
+          aria-label="Vista a previsualizar"
+        >
+          {VISTAS.map(({ id, etiqueta }) => (
+            <button
+              key={id}
+              type="button"
+              className={styles['preview__opcion']}
+              aria-pressed={vista === id}
+              onClick={() => setVista(id)}
+            >
+              {etiqueta}
+            </button>
+          ))}
+        </div>
 
-      <section className={styles['preview__vista']} aria-live="polite">
-        {vista === 'bandeja' ? (
+        {vista === 'crear' ? (
+          <section className={styles['preview__vista']} aria-live="polite">
+            <FormularioRequerimiento
+              catalogos={CATALOGOS}
+              colaboradores={COLABORADORES}
+              onCancelar={() => setVista('bandeja')}
+            />
+          </section>
+        ) : null}
+        {vista === 'detalle' ? (
+          <section className={styles['preview__vista']} aria-live="polite">
+            <DetalleRequerimiento
+              detalle={DETALLE}
+              onVolver={() => setVista('bandeja')}
+            />
+          </section>
+        ) : null}
+      </main>
+
+      {vista === 'bandeja' ? (
+        <MarcoPagina6>
           <BandejaRequerimientos
             port={bandejaPort}
             catalogos={CATALOGOS}
             solicitantes={SOLICITANTES}
             tamanoPaginaInicial={10}
           />
-        ) : null}
-        {vista === 'crear' ? (
-          <FormularioRequerimiento
-            catalogos={CATALOGOS}
-            colaboradores={COLABORADORES}
-            onCancelar={() => setVista('bandeja')}
-          />
-        ) : null}
-        {vista === 'detalle' ? (
-          <DetalleRequerimiento
-            detalle={DETALLE}
-            onVolver={() => setVista('bandeja')}
-          />
-        ) : null}
-      </section>
-    </main>
+        </MarcoPagina6>
+      ) : null}
+    </>
   )
 }
