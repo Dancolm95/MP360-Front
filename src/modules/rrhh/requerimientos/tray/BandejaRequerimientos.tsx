@@ -97,8 +97,11 @@ function FilaRequerimiento({
 
   return (
     <tr
+      // El estilo de foco visible (`tr:focus-visible`) queda para la
+      // integración (T-CORE-09); aquí solo se garantiza el foco operable.
       tabIndex={interactiva ? 0 : undefined}
       aria-label={interactiva ? `Abrir requerimiento ${id}` : undefined}
+      aria-keyshortcuts={interactiva ? 'Enter Space' : undefined}
       data-requerimiento={interactiva ? id : undefined}
       onClick={
         interactiva
@@ -274,7 +277,11 @@ function ResultadoBandeja({
       </p>
       <div className="rrhh-tray__tabla-contenedor">
         <table className="rrhh-tray__tabla">
-          <caption className="sr-only">Requerimientos de personal</caption>
+          <caption className="sr-only">
+            {onSeleccionar
+              ? 'Requerimientos de personal. Pulsa Enter o Espacio sobre una fila para abrir su detalle.'
+              : 'Requerimientos de personal'}
+          </caption>
           <thead>
             <tr>
               {COLUMNAS.map(({ campo, etiqueta }) => {
@@ -389,13 +396,13 @@ export function BandejaRequerimientos({
   useEffect(() => {
     onContextoCambiaRef.current = onContextoCambia
   }, [onContextoCambia])
-  const contextoEmitidoRef = useRef(false)
+  const consultaPreviaRef = useRef<ConsultaBandeja | null>(null)
   useEffect(() => {
-    // El montaje no emite: el contexto inicial ya lo aporta la persistencia.
-    if (!contextoEmitidoRef.current) {
-      contextoEmitidoRef.current = true
-      return
-    }
+    const anterior = consultaPreviaRef.current
+    consultaPreviaRef.current = consulta
+    // El montaje (incluido el doble efecto de StrictMode) no emite: la consulta
+    // inicial ya la aporta la persistencia. Solo una consulta distinta lo hace.
+    if (anterior === null || anterior === consulta) return
     onContextoCambiaRef.current?.(consulta)
   }, [consulta])
 
@@ -431,6 +438,20 @@ export function BandejaRequerimientos({
   useEffect(() => {
     void cargar(consulta)
   }, [cargar, consulta])
+
+  useEffect(() => {
+    if (resultado.status !== 'ok') return
+    if (resultado.datos.total === 0) return
+    if (resultado.datos.elementos.length > 0) return
+    if (consulta.paginacion.pagina <= 1) return
+
+    // La página restaurada o vigente dejó de existir (el total cambió). La
+    // primera siempre es válida con resultados; el contexto se vuelve a pedir.
+    setConsulta({
+      ...consulta,
+      paginacion: { ...consulta.paginacion, pagina: 1 },
+    })
+  }, [consulta, resultado])
 
   useEffect(() => {
     const destino = focoPendienteRef.current

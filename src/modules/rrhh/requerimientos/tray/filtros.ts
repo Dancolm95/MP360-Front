@@ -38,10 +38,7 @@ export const FILTROS_FORMULARIO_VACIOS: EstadoFiltrosFormulario = {
   hasta: '',
 }
 
-export const ORDEN_INICIAL: OrdenBandeja = {
-  campo: 'fecha-creacion',
-  direccion: 'desc',
-}
+export { ORDEN_INICIAL } from '../state/valores-bandeja'
 
 export function validarPeriodo(filtros: EstadoFiltrosFormulario): string | null {
   const tieneDesde = filtros.desde !== ''
@@ -88,7 +85,11 @@ export function construirFiltros(
   return resultado
 }
 
-/** Repinta los controles a partir de una consulta aplicada o restaurada. */
+/**
+ * Repinta los controles de selección única a partir de una consulta aplicada o
+ * restaurada. El contrato admite varios valores por filtro, pero UX-02 solo
+ * muestra el primero; los demás permanecen en la consulta hasta reaplicarla.
+ */
 export function formularioDesdeFiltros(
   filtros: FiltrosBandeja,
 ): EstadoFiltrosFormulario {

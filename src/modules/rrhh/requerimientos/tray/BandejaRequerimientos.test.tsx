@@ -26,6 +26,7 @@ import type {
   Empresa,
   EmpresaId,
   FechaISO,
+  FiltrosBandeja,
   InstanteISO,
   PaginaRequerimientos,
   Puesto,
@@ -47,6 +48,7 @@ import {
 } from '../fixtures'
 import { crearStoreContextoBandeja, type ContextoBandeja, type SeleccionRequerimiento } from '../state'
 import { BandejaRequerimientos } from './BandejaRequerimientos'
+import { construirFiltros, formularioDesdeFiltros } from './filtros'
 
 afterEach(cleanup)
 
@@ -401,6 +403,55 @@ describe('consulta inicial y filtros (RH-REQ-01 §7.1, §10-13)', () => {
     expect((screen.getByLabelText('Puesto') as HTMLSelectElement).value).toBe(
       '',
     )
+  })
+})
+
+describe('repintado del formulario desde filtros restaurados (RH-REQ-01 §7.1)', () => {
+  it('repinta el primer valor de cada filtro y lo reaplica como valor único', () => {
+    const filtros: FiltrosBandeja = {
+      estados: ['aprobado', 'observado'],
+      motivos: ['reemplazo', 'otros'],
+      empresas: ['empresa-a' as EmpresaId],
+      periodoAprobacion: {
+        desde: '2026-01-01' as FechaISO,
+        hasta: '2026-01-31' as FechaISO,
+      },
+    }
+
+    const form = formularioDesdeFiltros(filtros)
+
+    expect(form.estado).toBe('aprobado')
+    expect(form.motivo).toBe('reemplazo')
+    expect(form.empresa).toBe('empresa-a')
+    expect(form.desde).toBe('2026-01-01')
+    expect(form.hasta).toBe('2026-01-31')
+
+    // UX-02 usa controles de selección única: el formulario solo expresa un
+    // valor por filtro, de modo que al reaplicar cada filtro queda como array
+    // de un elemento. Los valores adicionales del contexto no se representan.
+    expect(construirFiltros(form)).toEqual({
+      estados: ['aprobado'],
+      motivos: ['reemplazo'],
+      empresas: ['empresa-a'],
+      periodoAprobacion: {
+        desde: '2026-01-01' as FechaISO,
+        hasta: '2026-01-31' as FechaISO,
+      },
+    })
+  })
+
+  it('deja vacíos los controles cuando el contexto no tiene ese filtro', () => {
+    expect(formularioDesdeFiltros({})).toEqual({
+      estado: '',
+      motivo: '',
+      empresa: '',
+      area: '',
+      subarea: '',
+      puesto: '',
+      solicitante: '',
+      desde: '',
+      hasta: '',
+    })
   })
 })
 
@@ -970,6 +1021,37 @@ describe('contexto persistido de la bandeja (RH-REQ-01 §7.1, §10-14)', () => {
     ).toBeDefined()
   })
 
+  it('vuelve a la primera página válida cuando la restaurada queda fuera de rango', async () => {
+    const port = createMockBandejaRequerimientos((consulta) => {
+      const fueraDeRango = consulta.paginacion.pagina > 5
+      return lecturaFixture.ok({
+        elementos: fueraDeRango ? [] : [filaCompleta()],
+        total: 50,
+        pagina: consulta.paginacion.pagina,
+        tamanoPagina: consulta.paginacion.tamanoPagina,
+        capacidades: { capacidades: [capability], accionesPermitidas: [] },
+      })
+    })
+    renderBandeja(port, {
+      contextoInicial: {
+        filtros: {},
+        orden: { campo: 'fecha-creacion', direccion: 'desc' },
+        paginacion: { pagina: 9, tamanoPagina: 10 },
+      },
+    })
+
+    expect(await screen.findByRole('table')).toBeDefined()
+    expect(port.calls[0].paginacion.pagina).toBe(9)
+    expect(port.calls[port.calls.length - 1].paginacion.pagina).toBe(1)
+    expect(
+      within(
+        screen.getByRole('navigation', {
+          name: 'Paginación de requerimientos',
+        }),
+      ).getByText('Página 1 de 5'),
+    ).toBeDefined()
+  })
+
   it('entrega la consulta aplicada al consumidor y no la emite al montar ni al editar sin aplicar', async () => {
     const port = createMockBandejaRequerimientos((consulta) =>
       lecturaFixture.ok({
@@ -1084,6 +1166,7 @@ describe('apertura de fila con contexto (RH-REQ-01 §7.1, §10-23)', () => {
     const fila = within(screen.getByRole('table')).getAllByRole('row')[1]
     expect(fila.getAttribute('tabindex')).toBe('0')
     expect(fila.getAttribute('aria-label')).toBe('Abrir requerimiento req-1')
+    expect(fila.getAttribute('aria-keyshortcuts')).toBe('Enter Space')
 
     fireEvent.click(within(fila).getAllByRole('cell')[0])
 
@@ -1167,6 +1250,7 @@ describe('apertura de fila con contexto (RH-REQ-01 §7.1, §10-23)', () => {
     const fila = within(screen.getByRole('table')).getAllByRole('row')[1]
     expect(fila.hasAttribute('tabindex')).toBe(false)
     expect(fila.hasAttribute('aria-label')).toBe(false)
+    expect(fila.hasAttribute('aria-keyshortcuts')).toBe(false)
     expect(fila.hasAttribute('data-requerimiento')).toBe(false)
   })
 })

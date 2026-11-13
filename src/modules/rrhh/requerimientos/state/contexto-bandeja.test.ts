@@ -11,7 +11,7 @@ import type {
   SubareaId,
   UsuarioId,
 } from '../index'
-import { ESTADOS, MOTIVOS } from '../tray/formato'
+import { ESTADOS, MOTIVOS } from './valores-bandeja'
 import {
   contextoBandejaInicial,
   crearStoreContextoBandeja,

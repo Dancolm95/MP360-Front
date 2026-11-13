@@ -16,8 +16,8 @@ import type {
   SubareaId,
   UsuarioId,
 } from '../contracts'
-import { ORDEN_INICIAL } from '../tray/filtros'
-import { ESTADOS, MOTIVOS } from '../tray/formato'
+import { type AlmacenSesion, crearStoreSessionStorage } from './almacen-sesion'
+import { CAMPOS_ORDEN, ESTADOS, MOTIVOS, ORDEN_INICIAL } from './valores-bandeja'
 
 /**
  * Contexto de la bandeja UX-02 (RH-REQ-01 §7.1 y §7.3): filtros aplicados,
@@ -38,20 +38,6 @@ export interface OpcionesContextoBandeja {
   /** Tamaños admitidos; un tamaño persistido fuera de esta lista se descarta. */
   readonly tamanosPagina?: readonly number[]
 }
-
-const CAMPOS_ORDEN: readonly CampoOrdenBandeja[] = [
-  'id',
-  'fecha-creacion',
-  'motivo',
-  'empresa',
-  'puesto',
-  'solicitadas',
-  'cubiertas',
-  'pendientes',
-  'estado',
-  'fecha-objetivo',
-  'responsable',
-]
 
 const PATRON_FECHA = /^\d{4}-\d{2}-\d{2}$/
 
@@ -222,5 +208,30 @@ export function crearStoreContextoBandeja(
     clear() {
       store.clear()
     },
+  }
+}
+
+/** Clave versionada del contexto de bandeja en `sessionStorage`. */
+export const CLAVE_CONTEXTO_BANDEJA =
+  'erp-mp360:rrhh:requerimientos:contexto-bandeja:v1'
+
+/**
+ * Contexto de bandeja persistido de verdad en `sessionStorage`: una recarga
+ * crea otra instancia que lee la misma clave. Un valor ausente, corrupto o
+ * inaccesible se traduce en el contexto inicial; `clear()` retira la clave.
+ */
+export function crearStoreContextoBandejaSesion(
+  opciones: OpcionesContextoBandeja,
+  almacen?: AlmacenSesion | null,
+): SessionScopedStore<ContextoBandeja> {
+  const saneado = crearStoreContextoBandeja(
+    crearStoreSessionStorage<unknown>(CLAVE_CONTEXTO_BANDEJA, almacen),
+    opciones,
+  )
+
+  return {
+    get: () => saneado.get() ?? contextoBandejaInicial(opciones),
+    set: (contexto) => saneado.set(contexto),
+    clear: () => saneado.clear(),
   }
 }

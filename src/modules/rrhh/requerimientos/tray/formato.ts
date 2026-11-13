@@ -4,6 +4,8 @@ import type {
   NivelAlerta,
 } from '../contracts'
 
+export { ESTADOS, MOTIVOS } from '../state/valores-bandeja'
+
 export const ESTADO_LABELS: Readonly<Record<EstadoRequerimiento, string>> = {
   borrador: 'Borrador',
   'pendiente-aprobacion': 'Pendiente de aprobación',
@@ -26,23 +28,6 @@ export const ALERTA_LABELS: Readonly<Record<NivelAlerta, string>> = {
   media: 'Media',
   critica: 'Crítica',
 }
-
-export const ESTADOS: readonly EstadoRequerimiento[] = [
-  'borrador',
-  'pendiente-aprobacion',
-  'observado',
-  'aprobado',
-  'en-reclutamiento',
-  'cubierto',
-  'cancelado',
-]
-
-export const MOTIVOS: readonly MotivoRequerimiento[] = [
-  'reemplazo',
-  'nueva-vacante',
-  'practicante',
-  'otros',
-]
 
 /** Fecha civil `YYYY-MM-DD` mostrada como `DD/MM/YYYY`, sin depender del huso. */
 export function formatearFecha(valor: string): string {
