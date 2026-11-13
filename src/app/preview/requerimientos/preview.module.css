@@ -1,0 +1,62 @@
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.preview__cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.preview__titulo {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.preview__nota {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #b54708;
+  background: #fff4e5;
+  color: #7a4d00;
+  font-size: 0.9rem;
+}
+
+.preview__selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.preview__opcion {
+  border: 1px solid #52606d;
+  border-radius: 0.25rem;
+  background: #fff;
+  color: #1f2933;
+  font: inherit;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+
+.preview__opcion[aria-pressed='true'] {
+  background: #2249f2;
+  border-color: #2249f2;
+  color: #fff;
+  font-weight: 600;
+}
+
+.preview__opcion:focus-visible {
+  outline: 3px solid #1f6feb;
+  outline-offset: 2px;
+}
+
+.preview__vista {
+  border-top: 1px solid #cbd2d9;
+  padding-top: 1rem;
+}
