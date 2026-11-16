@@ -7,7 +7,7 @@ import type {
   ColaboradorId,
   DepartamentoId,
   DepartamentoUbicacionId,
-  DetalleRequerimiento,
+  DetalleRequerimientoEditable,
   DiasHabilesAdministrativos,
   Distrito,
   DistritoId,
@@ -63,14 +63,22 @@ export const FORMULARIO_VACIO: FormularioRequerimientoInput = {
 /**
  * Formulario inicial de un alta. Solo preselecciona al responsable por defecto
  * del catálogo; el resto queda incompleto a propósito (no se rellenan valores
- * ficticios).
+ * ficticios). Una preselección que no pertenece al catálogo se descarta.
  */
 export function crearFormularioVacio(
   catalogos: CatalogosRequerimientos,
 ): FormularioRequerimientoInput {
+  const predeterminado = catalogos.usuarioProximaTareaPredeterminado
+  const predeterminadoExiste =
+    predeterminado !== null &&
+    catalogos.usuariosProximaTarea.some(
+      (usuario) => usuario.id === predeterminado,
+    )
+  const usuarioProximaTareaId = predeterminadoExiste ? predeterminado : null
+
   return {
     ...FORMULARIO_VACIO,
-    usuarioProximaTareaId: catalogos.usuarioProximaTareaPredeterminado,
+    usuarioProximaTareaId,
   }
 }
 
@@ -295,13 +303,15 @@ export function formularioDesdeBorrador(
   }
 }
 
+/**
+ * Reconstruye el formulario de un detalle que el contrato permite editar:
+ * Borrador, Pendiente de aprobación y Observado. El Cancelado parcial conserva
+ * datos, pero no es editable desde UX-03.
+ */
 export function formularioDesdeDetalle(
-  detalle: DetalleRequerimiento,
+  detalle: DetalleRequerimientoEditable,
 ): FormularioRequerimientoInput {
   if (detalle.estado === 'borrador') {
-    return formularioDesdeBorrador(detalle.borrador)
-  }
-  if (detalle.estado === 'cancelado' && detalle.datos === 'parciales') {
     return formularioDesdeBorrador(detalle.borrador)
   }
 

@@ -11,7 +11,7 @@ import type {
   DepartamentoUbicacion,
   DepartamentoUbicacionId,
   DetalleRequerimientoBorrador,
-  DetalleRequerimientoCompleto,
+  DetalleRequerimientoEditable,
   Distrito,
   DistritoId,
   Empresa,
@@ -132,7 +132,7 @@ const borradorCompleto: BorradorRequerimiento = {
   comentario: 'Justificación neutral',
 }
 
-const detalleCompleto: DetalleRequerimientoCompleto = {
+const detalleCompleto: DetalleRequerimientoEditable = {
   id: id<RequerimientoId>('req-1'),
   version: 2,
   estado: 'observado',
@@ -206,6 +206,16 @@ describe('formulario: estado inicial y mapeo', () => {
     })
   })
 
+  it('no preselecciona un usuario por defecto ausente del catálogo', () => {
+    const formulario = crearFormularioVacio({
+      ...catalogos,
+      usuarioProximaTareaPredeterminado: id<UsuarioId>('usuario-ajeno'),
+    })
+
+    expect(formulario).toEqual(FORMULARIO_VACIO)
+    expect(formulario.usuarioProximaTareaId).toBeNull()
+  })
+
   it('mapea un borrador aplanando la ubicación y formateando el importe', () => {
     expect(formularioDesdeBorrador(borradorCompleto)).toEqual({
       motivo: 'reemplazo',
@@ -250,7 +260,7 @@ describe('formulario: estado inicial y mapeo', () => {
     )
   })
 
-  it('mapea un detalle completo con datos aprobados reflejados en el formulario', () => {
+  it('mapea un detalle completo editable con sus datos reflejados en el formulario', () => {
     expect(formularioDesdeDetalle(detalleCompleto)).toEqual({
       motivo: 'reemplazo',
       empresaId: empresaA.id,
@@ -267,6 +277,15 @@ describe('formulario: estado inicial y mapeo', () => {
       usuarioProximaTareaId: usuarioA.id,
       comentario: 'Justificación neutral',
     })
+  })
+
+  it('mapea un detalle Pendiente de aprobación editable', () => {
+    expect(
+      formularioDesdeDetalle({
+        ...detalleCompleto,
+        estado: 'pendiente-aprobacion',
+      }),
+    ).toEqual(formularioDesdeBorrador(borradorCompleto))
   })
 })
 
