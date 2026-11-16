@@ -91,9 +91,10 @@
 ### T-RH-09 — Revisión y envío
 - [ ] Hecha
 - **Depende de:** T-RH-08.
+- **Decisión del 16-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual de UX-03 la desarrolla el usuario en una rama aparte. Se implementan el modelo de revisión (instantánea de los datos del formulario con sus etiquetas y valores), la consolidación de errores existentes de T-RH-04 sin duplicar reglas, la conservación de los valores no persistidos al volver a editar, la restricción de que el envío/reenvío solo ocurre desde la revisión y la construcción de la confirmación posterior (ID, resumen, responsable y estado). No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**` ni `detail/**`; «Guardar borrador» se apoya en el puerto de comandos y no simula persistencia que el adaptador no ofrezca.
 - **Traza:** RH-REQ-01 §7.2; §10 criterios 1 y 2.
 - **Entrada:** formulario.
-- **Salida:** «Revisión y envío» con todos los datos y errores; «Volver a editar» conserva valores no persistidos; «Guardar borrador» exige persistencia real; envío/reenvío solo desde revisión; confirmación posterior con ID/resumen/responsable/estado.
+- **Salida:** modelo de revisión con los datos del formulario, sus etiquetas y valores; errores consolidados de T-RH-04 sin duplicar reglas; conservación de los valores no persistidos al volver a editar; envío/reenvío solo desde la revisión; confirmación posterior con ID/resumen/responsable/estado; «Guardar borrador» apoyado en el puerto de comandos, sin componentes de vista ni persistencia simulada.
 - **Hecho cuando:** criterios 1 y 2 verificables contra el adaptador mock; la persistencia real en backend no se demuestra con fixtures y queda pendiente hasta disponer de servicios reales.
 
 ### T-RH-10 — Cancelar edición y comentario de observación
