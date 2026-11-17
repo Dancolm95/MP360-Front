@@ -1,5 +1,6 @@
 export type * from './contracts'
 export * from './acciones'
+export * from './deadlines'
 export * from './detail'
 export * from './fixtures'
 export * from './form'
