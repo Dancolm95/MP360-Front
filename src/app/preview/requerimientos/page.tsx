@@ -10,6 +10,7 @@ import { DisenoFormulario } from './ux03/DisenoFormulario'
 import { DisenoLogin, DisenoModulos, DisenoPerfiles } from './acceso/DisenosAcceso'
 import { DisenoInicio } from './inicio/DisenoInicio'
 import { DisenoDetalle } from './ux04/DisenoDetalle'
+import { BandejaCandidatos } from './candidatos/BandejaCandidatos'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -22,6 +23,7 @@ type Diseno =
   | 'ux03-formulario'
   | 'ux03-confirmacion'
   | 'ux04'
+  | 'candidatos'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -90,6 +92,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <DisenoDetalle />,
+  },
+  {
+    id: 'candidatos',
+    etiqueta: 'Candidatos',
+    referencia: '/preview/mp360/img/referencia-candidatos.jpg',
+    descripcion: 'Bandeja de candidatos',
+    ancho: 1920,
+    alto: 1176,
+    componente: <BandejaCandidatos />,
   },
   {
     id: 'login',

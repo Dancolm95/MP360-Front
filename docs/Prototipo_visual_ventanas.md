@@ -55,6 +55,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `ux03-formulario` | Nuevo requerimiento de personal | `req-07` | 1920 × 1176 | `?ux=ux03-formulario` |
 | `ux03-confirmacion` | Confirmación de envío | `req-08` | 1920 × 1176 | `?ux=ux03-confirmacion` |
 | `ux04` | Detalle del requerimiento | `req-09` | 1920 × 1176 | `?ux=ux04` |
+| `candidatos` | Bandeja de candidatos | PDF p. 10 (UX-05) | 1920 × 1176 | `?ux=candidatos` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -91,6 +92,7 @@ src/app/preview/requerimientos/
 ├── ux02/                    # bandeja (req-06) + cromo compartido y escalado
 ├── ux03/                    # alta y confirmación (req-07 y req-08)
 ├── ux04/                    # detalle (req-09)
+├── candidatos/              # bandeja de candidatos (PDF p. 10, UX-05)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -121,6 +123,7 @@ public/preview/mp360/
 | UX-03a Formulario | Sin cambios solicitados | 8,2 / 255 |
 | UX-03b Confirmación | Sin cambios solicitados | 7,9 / 255 |
 | UX-04 Detalle | Sin cambios solicitados | 10,0 / 255 |
+| Candidatos (PDF p. 10) | Pendiente de revisión visual | 8,9 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -149,6 +152,10 @@ resuelven en la implementación funcional, no aquí:
    activo para no romper el patrón del resto de ventanas.
 6. **Ventanas de acceso**: pertenecen al flujo de entrada (core), no a RR. HH.; se generan
    aquí solo como prototipo visual.
+7. **Bandeja de candidatos (PDF p. 10)**: la fuente conserva dos artefactos visibles —la
+   etiqueta tenue «UX-05» y el encabezado «Requerimientos» con su breadcrumb de detalle—;
+   se replican por fidelidad al render. El azul medido en el PDF es `#2b48e9`, ligeramente
+   distinto del token `#2249f2`; esta ventana lo adopta solo para sus propios elementos.
 
 ## 9. Cierre y siguiente paso
 

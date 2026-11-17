@@ -2982,3 +2982,356 @@
   left: 348px;
   top: 347px;
 }
+
+/* ---------- UX-05: bandeja de candidatos (PDF p. 10) ---------- */
+
+.ux05-lienzo {
+  --azul: #2b48e9;
+  --azul-suave: #e1e7f8;
+  --azul-acento: #294bee;
+  --candidato-ambar-suave: #fcf0dd;
+  --candidato-ambar-texto: #e7953d;
+  --candidato-verde-suave: #c1fdbf;
+  --candidato-verde-texto: #5d985e;
+  --candidato-rojo-suave: #f5bec4;
+  --candidato-rojo-texto: #af3633;
+}
+
+.ux05-marca-arte {
+  position: absolute;
+  top: 171px;
+  left: -26px;
+  z-index: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 55px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: #fff;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.ux05-breadcrumb > span:last-child {
+  color: var(--gris-medio);
+}
+
+.ux05-titulo {
+  color: #333;
+}
+
+.ux05-subtitulo {
+  color: #808080;
+}
+
+.ux05-btn-primario {
+  width: 230px;
+  justify-content: center;
+}
+
+.ux05-filtros {
+  height: 133px;
+  padding: 20px 0 0 25.5px;
+}
+
+.ux05-filtros__grid {
+  display: grid;
+  grid-template-columns: 612px repeat(4, 200px);
+  column-gap: 26.25px;
+  align-items: start;
+}
+
+.ux05-filtros .ux02-campo {
+  gap: 13px;
+}
+
+.ux05-filtros .ux05-campo--busqueda {
+  gap: 8px;
+}
+
+.ux05-titulo-filtro {
+  margin-left: 13px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  color: #333;
+}
+
+.ux05-busqueda {
+  height: 37px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+}
+
+.ux05-busqueda .ux02-i {
+  font-size: 18px;
+  color: var(--gris);
+}
+
+.ux05-busqueda input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  color: var(--texto);
+}
+
+.ux05-busqueda input::placeholder {
+  color: var(--gris);
+}
+
+.ux05-filtros__pie {
+  padding-top: 17px;
+}
+
+.ux05-btn-aplicar {
+  width: 130px;
+  height: 28px;
+  gap: 4px;
+  padding: 0 6px;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.ux05-btn-limpiar {
+  height: 28px;
+}
+
+.ux05-divisor-seccion {
+  margin-top: 13px;
+}
+
+.ux05-subseccion {
+  padding-top: 19px;
+}
+
+.ux05-subseccion .ux05-titulo {
+  margin-top: 17px;
+}
+
+.ux05-sub-breadcrumb span:nth-child(3) {
+  color: var(--gris-medio);
+}
+
+.ux05-lista {
+  margin-top: 7.5px;
+  padding-bottom: 0;
+}
+
+.ux05-lienzo .ux02-submenu button {
+  width: 150px;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.ux05-lista__barra {
+  padding: 17px 13px 17px 32px;
+  gap: 11px;
+}
+
+.ux05-chip-orden {
+  width: 171px;
+  justify-content: flex-start;
+  gap: 7px;
+}
+
+.ux05-chip-area {
+  width: 90px;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.ux05-barra__derecha {
+  gap: 5.5px;
+}
+
+.ux05-boton-fecha {
+  width: 130px;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  color: #808080;
+}
+
+.ux05-tabla .ux02-tabla__fila {
+  grid-template-columns:
+    272.5px 163px 211px 187px 172px 178px 137px 132px 92.3px;
+}
+
+.ux05-tabla__cabecera {
+  height: 54px;
+  font-size: 14px;
+}
+
+.ux05-th--candidato {
+  justify-content: flex-start;
+  gap: 32px;
+  padding-left: 6.5px;
+}
+
+.ux05-th__rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ux05-th__rotulo .ux02-i {
+  font-size: 14px;
+  color: var(--negro);
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+}
+
+.ux05-casilla {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border: 1px solid var(--borde);
+  border-radius: 2px;
+  background: #fff;
+}
+
+.ux05-celda-candidato {
+  justify-content: flex-start;
+  gap: 16px;
+  padding-left: 6.5px;
+}
+
+.ux05-avatar {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.ux05-avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux05-datos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: left;
+}
+
+.ux05-nombre {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #000;
+  white-space: nowrap;
+}
+
+.ux05-nacionalidad {
+  font-size: 12px;
+  line-height: 1.1;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux05-celda--documento,
+.ux05-celda--actualizacion,
+.ux05-celda--requerimiento {
+  color: #808080;
+}
+
+.ux05-celda--puesto {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--negro);
+}
+
+.ux05-aptitud {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 142px;
+  height: 30px;
+  border-radius: 4px;
+  background: var(--azul-suave);
+  color: var(--azul);
+  font-size: 13px;
+}
+
+.ux05-estado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 123px;
+  height: 30px;
+  border-radius: 15px;
+  background: var(--azul-suave);
+  color: var(--azul);
+  font-size: 13px;
+}
+
+.ux05-estado[data-estado='Seleccionado'] {
+  background: var(--candidato-ambar-suave);
+  color: var(--candidato-ambar-texto);
+}
+
+.ux05-estado[data-estado='Finalista'] {
+  background: var(--candidato-verde-suave);
+  color: var(--candidato-verde-texto);
+}
+
+.ux05-estado[data-estado='Contratado'] {
+  background: var(--candidato-rojo-suave);
+  color: var(--candidato-rojo-texto);
+}
+
+/* La página 10 reparte las cinco filas con alturas irregulares; se conservan
+   para calzar con el render de referencia. */
+.ux05-tabla__cuerpo .ux02-tabla__fila:nth-child(1) {
+  height: 57.8px;
+}
+
+.ux05-tabla__cuerpo .ux02-tabla__fila:nth-child(2) {
+  height: 62px;
+}
+
+.ux05-tabla__cuerpo .ux02-tabla__fila:nth-child(3) {
+  height: 61px;
+}
+
+.ux05-tabla__cuerpo .ux02-tabla__fila:nth-child(4) {
+  height: 68px;
+}
+
+.ux05-tabla__cuerpo .ux02-tabla__fila:nth-child(5) {
+  height: 75px;
+}
+
+.ux05-paginacion {
+  margin-top: 19px;
+  margin-right: -2.5px;
+  gap: 7px;
+}
+
+.ux05-paginacion .ux02-pagina {
+  width: 48px;
+  height: 48px;
+}
+
+.ux05-paginacion .ux02-pagina--activa {
+  background: var(--azul-acento);
+}
+
+.ux05-lienzo .ux02-rail__titulo:first-child {
+  justify-content: flex-start;
+  gap: 8px;
+}

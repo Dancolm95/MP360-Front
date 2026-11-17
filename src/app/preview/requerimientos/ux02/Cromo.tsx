@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import {
   ACCIONES_RAPIDAS,
   COLABORADORES_PANEL,
@@ -64,11 +65,15 @@ export function Navegacion({
   activo = 'Requerimientos',
   moduloAbierto = false,
   onModulo,
+  submenuContenido,
+  chevronActivo = true,
 }: {
   submenu?: boolean
   activo?: string
   moduloAbierto?: boolean
   onModulo?: () => void
+  submenuContenido?: ReactNode
+  chevronActivo?: boolean
 }) {
   return (
     <nav className="ux02-nav" aria-label="Secciones de RR. HH.">
@@ -101,7 +106,7 @@ export function Navegacion({
             <button type="button">
               <Icono nombre={item.icono} />
               <span>{item.etiqueta}</span>
-              {esActivo ? (
+              {esActivo && chevronActivo ? (
                 <span className="ux02-i ux02-nav__chevron" aria-hidden="true">
                   expand_more
                 </span>
@@ -110,8 +115,12 @@ export function Navegacion({
 
             {esActivo && submenu ? (
               <div className="ux02-submenu">
-                <button type="button">Nuevo</button>
-                <button type="button">Detalle</button>
+                {submenuContenido ?? (
+                  <>
+                    <button type="button">Nuevo</button>
+                    <button type="button">Detalle</button>
+                  </>
+                )}
               </div>
             ) : null}
           </li>
@@ -122,12 +131,20 @@ export function Navegacion({
   )
 }
 
-export function PanelLateral() {
+export function PanelLateral({
+  iconoAcciones = 'add',
+  iconoAccesos = 'chevron_right',
+  iconoEventos = 'calendar_month',
+}: {
+  iconoAcciones?: string
+  iconoAccesos?: string | null
+  iconoEventos?: string
+} = {}) {
   return (
     <aside className="ux02-rail" aria-label="Panel contextual">
       <div className="ux02-rail__titulo">
         Acciones rápidas
-        <Icono nombre="add" />
+        <Icono nombre={iconoAcciones} />
       </div>
       <div className="ux02-rail__tarjeta ux02-rail__tarjeta--acciones">
         {ACCIONES_RAPIDAS.map((accion, indice) => (
@@ -140,7 +157,7 @@ export function PanelLateral() {
       <div className="ux02-rail__accesos">
         <div className="ux02-rail__titulo">
           Mis accesos
-          <Icono nombre="chevron_right" />
+          {iconoAccesos ? <Icono nombre={iconoAccesos} /> : null}
         </div>
         <div className="ux02-rail__accesos-lista">
           {MIS_ACCESOS.map((acceso) => (
@@ -154,7 +171,7 @@ export function PanelLateral() {
       <div className="ux02-rail__eventos">
         <div className="ux02-rail__titulo ux02-rail__titulo--eventos">
           Próximos Eventos
-          <Icono nombre="calendar_month" />
+          <Icono nombre={iconoEventos} />
         </div>
         <div className="ux02-rail__tarjeta ux02-rail__tarjeta--eventos">
           <span className="ux02-rail__evento-titulo">Cumpleaños / Agosto</span>
