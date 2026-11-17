@@ -100,9 +100,10 @@
 ### T-RH-10 — Cancelar edición y comentario de observación
 - [ ] Hecha
 - **Depende de:** T-RH-08.
+- **Decisión del 17-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual de UX-03 la desarrolla el usuario en una rama aparte. Se implementan el descarte de la edición con confirmación explícita (aceptar descarta los cambios no persistidos y vuelve sin persistir; rechazar conserva todos los valores), la distinción verificable entre «Cancelar edición», «Guardar borrador» y «Cancelar requerimiento», y la exposición del comentario de Observado para mostrarlo antes de corregir. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**` ni `detail/**`.
 - **Traza:** RH-REQ-01 §7.2; §10 criterios 20 y 21.
 - **Entrada:** formulario.
-- **Salida:** «Cancelar edición» con confirmación de descarte (aceptar vuelve sin persistir; rechazar conserva valores), distinto de «Guardar borrador» y de «Cancelar requerimiento»; en Observado, comentario visible antes de corregir.
+- **Salida:** estado y datos del descarte de la edición con confirmación explícita (aceptar descarta los cambios no persistidos y vuelve sin persistir; rechazar conserva todos los valores), la distinción verificable entre «Cancelar edición», «Guardar borrador» y «Cancelar requerimiento», y la lectura del comentario de Observación expuesto para mostrarlo antes de corregir; sin componentes de vista ni diálogos.
 - **Hecho cuando:** criterios 20 y 21 verificables.
 
 ## Fase E — UX-04 Detalle y aprobación
