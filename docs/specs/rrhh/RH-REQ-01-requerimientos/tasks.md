@@ -140,9 +140,10 @@
 ### T-RH-14 — «Volver a bandeja» con contexto
 - [ ] Hecha
 - **Depende de:** T-RH-11, T-RH-06.
+- **Decisión del 17-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual de UX-04 la desarrolla el usuario en una rama aparte. Se implementa la **restauración del contexto de bandeja**: a partir del contexto producido por T-RH-06, devolver la consulta de bandeja equivalente (filtros, orden y página) lista para aplicarse, sin reimplementar el contrato ni la persistencia, con ida y vuelta verificable y comportamiento explícito cuando el contexto falta, está incompleto o es incompatible con los catálogos disponibles. El **botón visible** «Volver a bandeja» y su accesibilidad los aporta la rama visual, y el criterio 22 se verifica aquí en su parte de restauración. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `review/**` ni `detail/**`.
 - **Traza:** RH-REQ-01 §7.3; §10 criterio 22.
 - **Entrada:** detalle de T-RH-11 + contexto de bandeja producido por T-RH-06.
-- **Salida:** botón visible «Volver a bandeja» en UX-04 que restaura filtros, orden y página previos consumiendo el contrato de contexto de T-RH-06, sin reimplementarlo.
+- **Salida:** restauración del contexto de bandeja en lógica y estado: a partir del contexto de T-RH-06, devolver los filtros, el orden y la página previos listos para aplicarse, sin reimplementar el contrato ni la persistencia, con comportamiento explícito cuando el contexto falta, está incompleto o es incompatible con los catálogos disponibles; el botón visible «Volver a bandeja» y su accesibilidad los aporta la rama visual.
 - **Hecho cuando:** criterio 22 verificable.
 
 ## Fase F — Cómputo de plazos y alertas
