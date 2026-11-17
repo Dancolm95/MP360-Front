@@ -1,4 +1,24 @@
 export type {
+  DecisionDescarte,
+  EdicionEnCurso,
+  ResultadoDescarte,
+  ResultadoGuardadoEnCurso,
+  ResultadoSolicitudCancelacion,
+} from './cancelar-edicion'
+export {
+  crearEdicionEnCurso,
+  guardarBorradorEnCurso,
+  registrarGuardado,
+  resolverDescarte,
+  solicitarCancelarEdicion,
+} from './cancelar-edicion'
+export type {
+  LecturaObservacion,
+  MotivoSinObservacion,
+  ObservacionVigente,
+} from './observacion'
+export { observacionVigente } from './observacion'
+export type {
   CabeceraRevision,
   CampoRevision,
   CampoRevisionValor,
