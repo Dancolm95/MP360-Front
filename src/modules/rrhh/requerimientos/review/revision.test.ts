@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type {
   Area,
   AreaId,
+  BorradorRequerimiento,
   CalendarioLaboralId,
   CatalogosRequerimientos,
   ColaboradorId,
@@ -37,9 +38,10 @@ import {
 import {
   AVISO_DURACION,
   FORMULARIO_VACIO,
+  contextoDesdeCatalogos,
   formularioDesdeDetalle,
 } from '../form/helpers'
-import type { FormularioRequerimientoInput } from '../model'
+import { validarParaEnvio, type FormularioRequerimientoInput } from '../model'
 import {
   NO_APLICA,
   PENDIENTE_DEFINIR,
@@ -47,7 +49,6 @@ import {
   SIN_COMPLETAR,
   SIN_DETERMINAR,
   SIN_SUBAREA,
-  borradorDesdeFormulario,
   crearRevision,
   type OpcionesRevision,
 } from './modelo'
@@ -200,6 +201,40 @@ const confirmacionEnvio: ConfirmacionEnvio = {
   estado: 'pendiente-aprobacion',
 }
 
+const borradorConfirmado: BorradorRequerimiento = {
+  motivo: 'reemplazo',
+  empresaId: empresaA.id,
+  colaboradorAReemplazarId: colaboradorA.id,
+  departamentoId: departamentoA.id,
+  areaId: areaA.id,
+  subareaId: subareaA.id,
+  puestoId: puestoOperativoA.id,
+  vacantes: 3,
+  remuneracion: { monto: 1234.5, moneda: 'PEN' },
+  ubicacion: {
+    departamentoId: ubicacionA.id,
+    provinciaId: provinciaA.id,
+    distritoId: distritoA.id,
+  },
+  usuarioProximaTareaId: usuarioA.id,
+  comentario: 'Justificación revisada',
+}
+
+const borradorIncompleto: BorradorRequerimiento = {
+  motivo: 'otros',
+  empresaId: null,
+  colaboradorAReemplazarId: null,
+  departamentoId: null,
+  areaId: null,
+  subareaId: null,
+  puestoId: null,
+  vacantes: null,
+  remuneracion: null,
+  ubicacion: null,
+  usuarioProximaTareaId: null,
+  comentario: null,
+}
+
 const detalleGuardado: DetalleRequerimientoEditable = {
   id: requerimientoId,
   version: 3,
@@ -207,11 +242,34 @@ const detalleGuardado: DetalleRequerimientoEditable = {
   fechaCreacion: instante,
   historial: [],
   autorizacion,
-  borrador: borradorDesdeFormulario(formularioIncompleto),
+  borrador: borradorConfirmado,
   plazo: null,
   cobertura: null,
   remuneracionPreviaAlta: null,
   procesoSeleccion: null,
+}
+
+const detalleIncompleto: DetalleRequerimientoEditable = {
+  ...detalleGuardado,
+  borrador: borradorIncompleto,
+}
+
+/** Reapertura del borrador rico: importe a dos decimales y vacantes numéricas. */
+const formularioReabierto: FormularioRequerimientoInput = {
+  motivo: 'reemplazo',
+  empresaId: empresaA.id,
+  colaboradorAReemplazarId: colaboradorA.id,
+  departamentoId: departamentoA.id,
+  areaId: areaA.id,
+  subareaId: subareaA.id,
+  puestoId: puestoOperativoA.id,
+  vacantes: 3,
+  remuneracionMensual: '1234.50',
+  departamentoUbicacionId: ubicacionA.id,
+  provinciaId: provinciaA.id,
+  distritoId: distritoA.id,
+  usuarioProximaTareaId: usuarioA.id,
+  comentario: 'Justificación revisada',
 }
 
 const conflictoVersion: ConflictoVersion = {
@@ -305,8 +363,22 @@ describe('revisión: instantánea de datos', () => {
 
   it('consolida todos los errores de T-RH-04 con la etiqueta del campo', () => {
     const revision = crearRevision(formularioIncompleto, catalogos)
+    const validacion = validarParaEnvio(
+      formularioIncompleto,
+      contextoDesdeCatalogos(catalogos),
+    )
 
-    expect(revision.errores.length).toBeGreaterThan(5)
+    expect(validacion.ok).toBe(false)
+    if (validacion.ok) return
+
+    expect(
+      revision.errores.map(({ campo, codigo }) => ({ campo, codigo })),
+    ).toEqual(
+      validacion.errors.map(({ field, code }) => ({
+        campo: field,
+        codigo: code,
+      })),
+    )
     expect(revision.errores[0]).toEqual({
       campo: 'empresaId',
       etiqueta: 'Empresa',
@@ -615,6 +687,53 @@ describe('envío a aprobación', () => {
     })
   })
 
+  it('mapea el estado inválido conservando la entrada sin reintento', async () => {
+    const comandos = createMockComandosRequerimientos(
+      resultadosComandos({
+        enviarAprobacion: comandoFixture.estadoInvalido<ConfirmacionEnvio>(
+          'aprobado',
+        ),
+      }),
+    )
+
+    const resultado = await enviarAprobacion(
+      enRevision(),
+      { requerimientoId, version: 2 },
+      comandos,
+    )
+
+    expect(resultado.operacion).toEqual({
+      status: 'estado-invalido',
+      estadoActual: 'aprobado',
+      entradaConservada: true,
+      reintentable: false,
+    })
+    expect(resultado.estado.paso).toBe('revision')
+    expect(resultado.estado.formulario).toEqual(formularioCompleto)
+  })
+
+  it('mapea la sesión finalizada sin cambiar de paso ni reintentar', async () => {
+    const comandos = createMockComandosRequerimientos(
+      resultadosComandos({
+        enviarAprobacion: comandoFixture.sesionFinalizada<ConfirmacionEnvio>(),
+      }),
+    )
+
+    const resultado = await enviarAprobacion(
+      enRevision(),
+      { requerimientoId, version: 2 },
+      comandos,
+    )
+
+    expect(resultado.operacion).toEqual({
+      status: 'sesion-finalizada',
+      entradaConservada: true,
+      reintentable: false,
+    })
+    expect(resultado.estado.paso).toBe('revision')
+    expect(resultado.estado.formulario).toEqual(formularioCompleto)
+  })
+
   it('distingue la denegación por capacidad de la denegación por ámbito', async () => {
     const capacidad = createMockComandosRequerimientos(
       resultadosComandos({
@@ -724,7 +843,7 @@ describe('guardar borrador', () => {
     )
 
     const resultado = await guardarBorrador(
-      crearEstadoEdicion(formularioIncompleto),
+      crearEstadoEdicion(formularioCompleto),
       { requerimientoId, version: 1 },
       comandos,
     )
@@ -734,12 +853,45 @@ describe('guardar borrador', () => {
       requerimientoId,
       version: 1,
     })
+    expect(comandos.calls.guardarBorrador[0].borrador).toEqual(
+      borradorConfirmado,
+    )
     expect(resultado.estado.paso).toBe('edicion')
     expect(resultado.operacion).toMatchObject({
       status: 'confirmado',
       accion: 'borrador',
     })
-    if (resultado.operacion.status !== 'confirmado' || resultado.operacion.accion !== 'borrador') {
+    if (
+      resultado.operacion.status !== 'confirmado' ||
+      resultado.operacion.accion !== 'borrador'
+    ) {
+      return
+    }
+    expect(formularioDesdeDetalle(resultado.operacion.detalle)).toEqual(
+      formularioReabierto,
+    )
+  })
+
+  it('no inventa valores en un borrador realmente incompleto', async () => {
+    const comandos = createMockComandosRequerimientos(
+      resultadosComandos({
+        guardarBorrador: comandoFixture.confirmado(detalleIncompleto),
+      }),
+    )
+
+    const resultado = await guardarBorrador(
+      crearEstadoEdicion(formularioIncompleto),
+      { requerimientoId, version: 1 },
+      comandos,
+    )
+
+    expect(comandos.calls.guardarBorrador[0].borrador).toEqual(
+      borradorIncompleto,
+    )
+    if (
+      resultado.operacion.status !== 'confirmado' ||
+      resultado.operacion.accion !== 'borrador'
+    ) {
       return
     }
     expect(formularioDesdeDetalle(resultado.operacion.detalle)).toEqual(
