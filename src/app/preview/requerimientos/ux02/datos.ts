@@ -86,16 +86,16 @@ export const FILAS: readonly FilaBandeja[] = [
 ]
 
 export const NAVEGACION = [
-  { etiqueta: 'Inicio', icono: 'home', activo: false, dosLineas: false, ancho: 106 },
-  { etiqueta: 'Requerimientos', icono: 'description', activo: true, dosLineas: false, ancho: 176 },
-  { etiqueta: 'Reclutamiento', icono: 'work', activo: false, dosLineas: false, ancho: 170 },
-  { etiqueta: 'Colaboradores', icono: 'group', activo: false, dosLineas: false, ancho: 165 },
-  { etiqueta: 'Onboarding', icono: 'fact_check', activo: false, dosLineas: false, ancho: 148 },
-  { etiqueta: 'EPP y Equipos', icono: 'verified_user', activo: false, dosLineas: false, ancho: 207 },
-  { etiqueta: 'Asistencia', icono: 'schedule', activo: false, dosLineas: false, ancho: 166 },
-  { etiqueta: 'Offboarding', icono: 'badge', activo: false, dosLineas: false, ancho: 150 },
-  { etiqueta: 'Organización y Dotación', icono: 'account_tree', activo: false, dosLineas: true, ancho: 168 },
-  { etiqueta: 'Gestión Documental', icono: 'description', activo: false, dosLineas: true, ancho: 131 },
+  { etiqueta: 'Inicio', icono: 'home', dosLineas: false, ancho: 106 },
+  { etiqueta: 'Requerimientos', icono: 'description', dosLineas: false, ancho: 176 },
+  { etiqueta: 'Reclutamiento', icono: 'work', dosLineas: false, ancho: 170 },
+  { etiqueta: 'Colaboradores', icono: 'group', dosLineas: false, ancho: 165 },
+  { etiqueta: 'Onboarding', icono: 'fact_check', dosLineas: false, ancho: 148 },
+  { etiqueta: 'EPP y Equipos', icono: 'verified_user', dosLineas: false, ancho: 207 },
+  { etiqueta: 'Asistencia', icono: 'schedule', dosLineas: false, ancho: 166 },
+  { etiqueta: 'Offboarding', icono: 'badge', dosLineas: false, ancho: 150 },
+  { etiqueta: 'Organización y Dotación', icono: 'account_tree', dosLineas: true, ancho: 168 },
+  { etiqueta: 'Gestión Documental', icono: 'description', dosLineas: true, ancho: 131 },
 ] as const
 
 export const ACCIONES_RAPIDAS = [

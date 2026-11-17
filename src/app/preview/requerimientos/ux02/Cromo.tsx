@@ -59,7 +59,13 @@ export function Cabecera() {
   )
 }
 
-export function Navegacion({ submenu = true }: { submenu?: boolean }) {
+export function Navegacion({
+  submenu = true,
+  activo = 'Requerimientos',
+}: {
+  submenu?: boolean
+  activo?: string
+}) {
   return (
     <nav className="ux02-nav" aria-label="Secciones de RR. HH.">
       <button type="button" className="ux02-nav__modulo">
@@ -68,13 +74,15 @@ export function Navegacion({ submenu = true }: { submenu?: boolean }) {
       </button>
 
       <ul className="ux02-nav__tabs">
-        {NAVEGACION.map((item) => (
+        {NAVEGACION.map((item) => {
+          const esActivo = item.etiqueta === activo
+          return (
           <li
             key={item.etiqueta}
             style={{ width: `${item.ancho}px` }}
             className={[
               'ux02-nav__tab',
-              item.activo ? 'ux02-nav__tab--activo' : '',
+              esActivo ? 'ux02-nav__tab--activo' : '',
               item.dosLineas ? 'ux02-nav__tab--dos-lineas' : '',
             ]
               .filter(Boolean)
@@ -83,21 +91,22 @@ export function Navegacion({ submenu = true }: { submenu?: boolean }) {
             <button type="button">
               <Icono nombre={item.icono} />
               <span>{item.etiqueta}</span>
-              {item.activo ? (
+              {esActivo ? (
                 <span className="ux02-i ux02-nav__chevron" aria-hidden="true">
                   expand_more
                 </span>
               ) : null}
             </button>
 
-            {item.activo && submenu ? (
+            {esActivo && submenu ? (
               <div className="ux02-submenu">
                 <button type="button">Nuevo</button>
                 <button type="button">Detalle</button>
               </div>
             ) : null}
           </li>
-        ))}
+          )
+        })}
       </ul>
     </nav>
   )

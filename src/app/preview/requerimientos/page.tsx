@@ -7,13 +7,14 @@ import { FormularioRequerimiento } from '../../../modules/rrhh/requerimientos/fo
 import { CATALOGOS, COLABORADORES, DETALLE } from './data'
 import { DisenoConfirmacion } from './ux03/DisenoConfirmacion'
 import { DisenoFormulario } from './ux03/DisenoFormulario'
+import { DisenoInicio } from './inicio/DisenoInicio'
 import { DisenoDetalle } from './ux04/DisenoDetalle'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
 
 type Modo = 'diseno' | 'comparar' | 'crear' | 'detalle'
-type Diseno = 'ux02' | 'ux03-formulario' | 'ux03-confirmacion' | 'ux04'
+type Diseno = 'inicio' | 'ux02' | 'ux03-formulario' | 'ux03-confirmacion' | 'ux04'
 
 interface OpcionDiseno {
   readonly id: Diseno
@@ -24,6 +25,13 @@ interface OpcionDiseno {
 }
 
 const DISENOS: readonly OpcionDiseno[] = [
+  {
+    id: 'inicio',
+    etiqueta: 'Inicio',
+    referencia: '/preview/mp360/img/referencia-inicio.jpg',
+    descripcion: 'Dashboard de RR. HH.',
+    componente: <DisenoInicio />,
+  },
   {
     id: 'ux02',
     etiqueta: 'UX-02',
@@ -66,7 +74,7 @@ function esDiseno(valor: string | null): valor is Diseno {
 
 export default function PreviewRequerimientos() {
   const [modo, setModo] = useState<Modo>(MODO_INICIAL)
-  const [diseno, setDiseno] = useState<Diseno>('ux02')
+  const [diseno, setDiseno] = useState<Diseno>('inicio')
 
   useEffect(() => {
     const parametros = new URLSearchParams(window.location.search)
