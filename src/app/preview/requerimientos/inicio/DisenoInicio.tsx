@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react'
 import { Cabecera, Icono, Navegacion, PanelLateral, Pie } from '../ux02/Cromo'
 import {
   ALERTAS,
   COBERTURA,
   FILTROS_INICIO,
   INDICADORES,
+  MODULOS_INICIO,
   type Alerta,
   type Indicador,
 } from './datos'
@@ -163,11 +165,54 @@ function Cobertura() {
   )
 }
 
-export function DisenoInicio() {
+function SelectorModulos({ alCerrar }: { alCerrar: () => void }) {
+  return (
+    <>
+      <div className="ux-inicio-scrim" aria-hidden="true" onClick={alCerrar} />
+      <div className="ux-inicio-modulos" role="menu" aria-label="Módulos de MP 360">
+        {MODULOS_INICIO.map((modulo) => (
+          <button
+            key={modulo.nombre}
+            type="button"
+            role="menuitem"
+            className="ux-inicio-modulos__tesela"
+            style={{ background: modulo.color }}
+            onClick={alCerrar}
+          >
+            <Icono nombre={modulo.icono} />
+            <span className="ux-inicio-modulos__etiqueta">{modulo.nombre}</span>
+          </button>
+        ))}
+      </div>
+    </>
+  )
+}
+
+export function DisenoInicio({ selectorAbierto = false }: { selectorAbierto?: boolean }) {
+  const [moduloAbierto, setModuloAbierto] = useState(selectorAbierto)
+
+  useEffect(() => {
+    setModuloAbierto(selectorAbierto)
+  }, [selectorAbierto])
+
+  useEffect(() => {
+    if (!moduloAbierto) return
+    const cerrarConEscape = (evento: KeyboardEvent) => {
+      if (evento.key === 'Escape') setModuloAbierto(false)
+    }
+    document.addEventListener('keydown', cerrarConEscape)
+    return () => document.removeEventListener('keydown', cerrarConEscape)
+  }, [moduloAbierto])
+
   return (
     <div className="ux02-lienzo">
       <Cabecera />
-      <Navegacion submenu={false} activo="Inicio" />
+      <Navegacion
+        submenu={false}
+        activo="Inicio"
+        moduloAbierto={moduloAbierto}
+        onModulo={() => setModuloAbierto((abierto) => !abierto)}
+      />
       <main className="ux02-main ux-inicio-main">
         <div className="ux02-columna ux-inicio-columna">
           <header className="ux-inicio-cabecera">
@@ -196,6 +241,7 @@ export function DisenoInicio() {
         <PanelLateral />
       </main>
       <Pie />
+      {moduloAbierto ? <SelectorModulos alCerrar={() => setModuloAbierto(false)} /> : null}
     </div>
   )
 }

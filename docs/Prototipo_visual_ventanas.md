@@ -50,6 +50,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | Modo | Ventana | Mesa del diseño | Lienzo | Ruta directa |
 |---|---|---|---|---|
 | `inicio` | Dashboard de Gestión de RR. HH. | `a-04` | 1920 × 1176 | `?ux=inicio` |
+| `inicio-modulo` | Dashboard con selector de módulo abierto | `a-05` | 1920 × 1176 | `?ux=inicio-modulo` |
 | `ux02` | Bandeja de Requerimientos | `req-06` | 1920 × 1176 | `?ux=ux02` |
 | `ux03-formulario` | Nuevo requerimiento de personal | `req-07` | 1920 × 1176 | `?ux=ux03-formulario` |
 | `ux03-confirmacion` | Confirmación de envío | `req-08` | 1920 × 1176 | `?ux=ux03-confirmacion` |
@@ -62,8 +63,9 @@ Además, el selector conserva las vistas **funcionales** experimentales (`Funcio
 `Funcional UX-04`), que montan los componentes reales del módulo con datos de ejemplo.
 No forman parte del prototipo visual: están ahí solo para contraste.
 
-**Pendiente del kit:** `a-05` es la misma pantalla de Inicio con el desplegable
-«Área/Subárea» abierto; es un **estado de interacción**, no una ventana nueva.
+**Nota sobre `a-05`:** es la misma pantalla de Inicio con el **selector de módulo**
+abierto —no el filtro de Área/Subárea—. Se replica como modo propio `inicio-modulo` para
+compararlo y como interacción del botón «Recursos Humanos» en `inicio`.
 
 ## 4. Cómo ejecutarlo
 
@@ -120,6 +122,7 @@ public/preview/mp360/
 | UX-03b Confirmación | Sin cambios solicitados | 7,9 / 255 |
 | UX-04 Detalle | Sin cambios solicitados | 10,0 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
+| Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
 | Perfiles | Pendiente de revisión visual | 6,9 / 255 |
 | Módulos | Pendiente de revisión visual | 8,7 / 255 |

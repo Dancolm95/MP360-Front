@@ -339,6 +339,10 @@
   font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
 }
 
+.ux02-nav__modulo[aria-expanded='true'] .ux02-i {
+  visibility: hidden;
+}
+
 .ux02-nav__tabs {
   display: flex;
   align-items: center;
@@ -2604,6 +2608,74 @@
 
 .ux-inicio-cobertura .ux-inicio-mas {
   right: 64px;
+}
+
+/* ---------- Inicio: selector de módulos abierto (mesa a-05) ---------- */
+
+.ux-inicio-scrim {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  top: 191px;
+  bottom: 97px;
+  background: rgba(21, 40, 44, 0.48);
+}
+
+.ux-inicio-modulos {
+  position: absolute;
+  z-index: 5;
+  left: 28.6px;
+  top: 208.6px;
+  width: 293px;
+  height: 293px;
+  display: grid;
+  grid-template-columns: 120px 120px;
+  grid-template-rows: 119px 119px;
+  gap: 10px;
+  padding: 20px 23px 25px 20px;
+  border-radius: 10px;
+  background: #1c1c1c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+}
+
+.ux-inicio-modulos__tesela {
+  position: relative;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.ux-inicio-modulos__tesela .ux02-i {
+  position: absolute;
+  left: 14px;
+  top: 53px;
+  font-size: 32px;
+  line-height: 1;
+  -webkit-text-stroke: 0.8px currentColor;
+}
+
+.ux-inicio-modulos__tesela:nth-child(2) .ux02-i,
+.ux-inicio-modulos__tesela:nth-child(3) .ux02-i {
+  font-size: 38px;
+}
+
+.ux-inicio-modulos__tesela:nth-child(4) .ux02-i {
+  top: 45px;
+  font-size: 50px;
+}
+
+.ux-inicio-modulos__etiqueta {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  bottom: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: left;
 }
 
 /* ---------- Acceso: login, perfiles y módulos (mesas a-01 a a-03) ---------- */

@@ -17,6 +17,7 @@ import styles from './preview.module.css'
 type Modo = 'diseno' | 'comparar' | 'crear' | 'detalle'
 type Diseno =
   | 'inicio'
+  | 'inicio-modulo'
   | 'ux02'
   | 'ux03-formulario'
   | 'ux03-confirmacion'
@@ -44,6 +45,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <DisenoInicio />,
+  },
+  {
+    id: 'inicio-modulo',
+    etiqueta: 'Inicio módulo',
+    referencia: '/preview/mp360/img/referencia-inicio-modulo.jpg',
+    descripcion: 'Dashboard con selector de módulo',
+    ancho: 1920,
+    alto: 1176,
+    componente: <DisenoInicio selectorAbierto />,
   },
   {
     id: 'ux02',

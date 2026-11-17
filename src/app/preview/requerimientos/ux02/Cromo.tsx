@@ -62,13 +62,23 @@ export function Cabecera() {
 export function Navegacion({
   submenu = true,
   activo = 'Requerimientos',
+  moduloAbierto = false,
+  onModulo,
 }: {
   submenu?: boolean
   activo?: string
+  moduloAbierto?: boolean
+  onModulo?: () => void
 }) {
   return (
     <nav className="ux02-nav" aria-label="Secciones de RR. HH.">
-      <button type="button" className="ux02-nav__modulo">
+      <button
+        type="button"
+        className="ux02-nav__modulo"
+        aria-expanded={moduloAbierto}
+        aria-haspopup="menu"
+        onClick={onModulo}
+      >
         <span>Recursos Humanos</span>
         <Icono nombre="expand_more" />
       </button>
