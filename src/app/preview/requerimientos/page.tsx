@@ -7,6 +7,7 @@ import { FormularioRequerimiento } from '../../../modules/rrhh/requerimientos/fo
 import { CATALOGOS, COLABORADORES, DETALLE } from './data'
 import { DisenoConfirmacion } from './ux03/DisenoConfirmacion'
 import { DisenoFormulario } from './ux03/DisenoFormulario'
+import { DisenoLogin, DisenoModulos, DisenoPerfiles } from './acceso/DisenosAcceso'
 import { DisenoInicio } from './inicio/DisenoInicio'
 import { DisenoDetalle } from './ux04/DisenoDetalle'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
@@ -14,13 +15,23 @@ import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
 
 type Modo = 'diseno' | 'comparar' | 'crear' | 'detalle'
-type Diseno = 'inicio' | 'ux02' | 'ux03-formulario' | 'ux03-confirmacion' | 'ux04'
+type Diseno =
+  | 'inicio'
+  | 'ux02'
+  | 'ux03-formulario'
+  | 'ux03-confirmacion'
+  | 'ux04'
+  | 'login'
+  | 'perfiles'
+  | 'modulos'
 
 interface OpcionDiseno {
   readonly id: Diseno
   readonly etiqueta: string
   readonly referencia: string
   readonly descripcion: string
+  readonly ancho: number
+  readonly alto: number
   readonly componente: ReactNode
 }
 
@@ -30,6 +41,8 @@ const DISENOS: readonly OpcionDiseno[] = [
     etiqueta: 'Inicio',
     referencia: '/preview/mp360/img/referencia-inicio.jpg',
     descripcion: 'Dashboard de RR. HH.',
+    ancho: 1920,
+    alto: 1176,
     componente: <DisenoInicio />,
   },
   {
@@ -37,6 +50,8 @@ const DISENOS: readonly OpcionDiseno[] = [
     etiqueta: 'UX-02',
     referencia: '/preview/mp360/img/referencia-ux02.jpg',
     descripcion: 'Bandeja de requerimientos',
+    ancho: 1920,
+    alto: 1176,
     componente: <DisenoPagina6 />,
   },
   {
@@ -44,6 +59,8 @@ const DISENOS: readonly OpcionDiseno[] = [
     etiqueta: 'UX-03a',
     referencia: '/preview/mp360/img/referencia-ux03-formulario.jpg',
     descripcion: 'Nuevo requerimiento',
+    ancho: 1920,
+    alto: 1176,
     componente: <DisenoFormulario />,
   },
   {
@@ -51,6 +68,8 @@ const DISENOS: readonly OpcionDiseno[] = [
     etiqueta: 'UX-03b',
     referencia: '/preview/mp360/img/referencia-ux03-confirmacion.jpg',
     descripcion: 'Confirmación de envío',
+    ancho: 1920,
+    alto: 1176,
     componente: <DisenoConfirmacion />,
   },
   {
@@ -58,7 +77,36 @@ const DISENOS: readonly OpcionDiseno[] = [
     etiqueta: 'UX-04',
     referencia: '/preview/mp360/img/referencia-ux04.jpg',
     descripcion: 'Detalle del requerimiento',
+    ancho: 1920,
+    alto: 1176,
     componente: <DisenoDetalle />,
+  },
+  {
+    id: 'login',
+    etiqueta: 'Login',
+    referencia: '/preview/mp360/img/referencia-acceso-login.jpg',
+    descripcion: 'Acceso a MP 360',
+    ancho: 1920,
+    alto: 1080,
+    componente: <DisenoLogin />,
+  },
+  {
+    id: 'perfiles',
+    etiqueta: 'Perfiles',
+    referencia: '/preview/mp360/img/referencia-acceso-perfiles.jpg',
+    descripcion: 'Selección de perfil',
+    ancho: 1920,
+    alto: 1080,
+    componente: <DisenoPerfiles />,
+  },
+  {
+    id: 'modulos',
+    etiqueta: 'Módulos',
+    referencia: '/preview/mp360/img/referencia-acceso-modulos.jpg',
+    descripcion: 'Selección de módulo',
+    ancho: 1920,
+    alto: 1080,
+    componente: <DisenoModulos />,
   },
 ]
 
@@ -106,12 +154,16 @@ export default function PreviewRequerimientos() {
               <div className={styles['comparacion__columna']}>
                 <p className={styles['comparacion__etiqueta']}>Implementación</p>
                 <div className={styles['comparacion__implementacion']}>
-                  <VistaEscalada>{activo.componente}</VistaEscalada>
+                  <VistaEscalada ancho={activo.ancho} alto={activo.alto}>
+                    {activo.componente}
+                  </VistaEscalada>
                 </div>
               </div>
             </>
           ) : (
-            <VistaEscalada>{activo.componente}</VistaEscalada>
+            <VistaEscalada ancho={activo.ancho} alto={activo.alto}>
+              {activo.componente}
+            </VistaEscalada>
           )}
         </main>
       ) : null}

@@ -3,10 +3,15 @@
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
-const ANCHO = 1920
-const ALTO = 1176
-
-export function VistaEscalada({ children }: { children: ReactNode }) {
+export function VistaEscalada({
+  children,
+  ancho = 1920,
+  alto = 1176,
+}: {
+  children: ReactNode
+  ancho?: number
+  alto?: number
+}) {
   const contenedor = useRef<HTMLDivElement>(null)
   const [escala, setEscala] = useState(0)
 
@@ -14,23 +19,23 @@ export function VistaEscalada({ children }: { children: ReactNode }) {
     const nodo = contenedor.current
     if (!nodo) return
 
-    const medir = () => setEscala(nodo.clientWidth / ANCHO)
+    const medir = () => setEscala(nodo.clientWidth / ancho)
     medir()
 
     const observador = new ResizeObserver(medir)
     observador.observe(nodo)
     return () => observador.disconnect()
-  }, [])
+  }, [ancho])
 
   return (
     <div
       ref={contenedor}
-      style={{ width: '100%', height: ALTO * escala, overflow: 'hidden' }}
+      style={{ width: '100%', height: alto * escala, overflow: 'hidden' }}
     >
       <div
         style={{
-          width: ANCHO,
-          height: ALTO,
+          width: ancho,
+          height: alto,
           transform: `scale(${escala})`,
           transformOrigin: 'top left',
           visibility: escala > 0 ? 'visible' : 'hidden',
