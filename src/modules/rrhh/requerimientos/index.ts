@@ -1,4 +1,5 @@
 export type * from './contracts'
+export * from './detail'
 export * from './fixtures'
 export * from './form'
 export * from './model'
