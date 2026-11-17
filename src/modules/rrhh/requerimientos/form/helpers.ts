@@ -8,7 +8,6 @@ import type {
   DepartamentoId,
   DepartamentoUbicacionId,
   DetalleRequerimientoEditable,
-  DiasHabilesAdministrativos,
   Distrito,
   DistritoId,
   DuracionAplicable,
@@ -23,6 +22,7 @@ import type {
   SubareaId,
   UsuarioId,
 } from '../contracts'
+import { esDiasHabilesAdministrativos } from '../deadlines'
 import { derivarClasificacion } from '../model'
 import type {
   ContextoValidacionFormulario,
@@ -245,17 +245,6 @@ export function clasificacionFormulario(
   )
 }
 
-function esPlazoAdministrativo(
-  valor: number | null | undefined,
-): valor is DiasHabilesAdministrativos {
-  return (
-    typeof valor === 'number' &&
-    Number.isInteger(valor) &&
-    valor >= 15 &&
-    valor <= 30
-  )
-}
-
 /**
  * Duración antes de aprobar: nunca una fecha. El administrativo depende del
  * plazo que fije RR. HH.; sin plazo válido queda «pendiente de definir».
@@ -270,7 +259,7 @@ export function derivarDuracionAplicable(
   if (clasificacion === 'administrativo') {
     return {
       clasificacion: 'administrativo',
-      diasHabiles: esPlazoAdministrativo(plazoAdministrativoDias)
+      diasHabiles: esDiasHabilesAdministrativos(plazoAdministrativoDias)
         ? plazoAdministrativoDias
         : null,
     }

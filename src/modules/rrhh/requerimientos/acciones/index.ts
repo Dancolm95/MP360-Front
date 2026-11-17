@@ -1,4 +1,6 @@
 export type {
+  AccionAjustePlazo,
+  AccionEvaluable,
   AccionEvaluada,
   AccionGestion,
   CampoAccion,
@@ -18,8 +20,18 @@ export type {
 export {
   ACCIONES_GESTION,
   CAUSALES_CANCELACION,
-  DIAS_HABILES_ADMINISTRATIVOS,
 } from './tipos'
+export type {
+  AjustePlazoProyectado,
+  ContextoAjustePlazo,
+  ResultadoAccionAjustarPlazo,
+  ResultadoAjusteCalculado,
+  SolicitudAjustePlazo,
+} from './ajuste-plazo'
+export {
+  ajustarPlazoAdministrativo,
+  calcularAjustePlazoAdministrativo,
+} from './ajuste-plazo'
 export {
   clasificacionDeDetalle,
   esAccionEjecutable,
@@ -29,7 +41,6 @@ export {
 export {
   comentarioNormalizado,
   esCausalCancelacion,
-  esDiasHabilesAdministrativos,
   validarCancelacion,
   validarComentarioObservacion,
   validarDiasHabilesAdministrativos,
@@ -41,3 +52,5 @@ export {
   fijarPlazoAdministrativo,
   observarRequerimiento,
 } from './ejecucion'
+export type { FalloComandoContrato } from './resultados'
+export { mapearFalloComando } from './resultados'

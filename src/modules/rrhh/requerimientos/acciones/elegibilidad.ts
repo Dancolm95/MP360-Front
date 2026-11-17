@@ -5,6 +5,7 @@ import type {
 } from '../contracts'
 import type {
   AccionEvaluada,
+  AccionEvaluable,
   AccionGestion,
   EvaluacionAcciones,
   MotivoAccionNoDisponible,
@@ -33,7 +34,7 @@ export function clasificacionDeDetalle(
 
 function motivoNoEjecutable(
   detalle: DetalleRequerimiento,
-  accion: AccionGestion,
+  accion: AccionEvaluable,
 ): MotivoAccionNoDisponible | null {
   switch (accion) {
     case 'aprobar':
@@ -52,11 +53,21 @@ function motivoNoEjecutable(
       return clasificacionDeDetalle(detalle) === 'administrativo'
         ? null
         : 'clasificacion-no-aplicable'
+    case 'ajustar-plazo':
+      if (
+        detalle.estado !== 'aprobado' &&
+        detalle.estado !== 'en-reclutamiento'
+      ) {
+        return 'estado-no-aplicable'
+      }
+      return clasificacionDeDetalle(detalle) === 'administrativo'
+        ? null
+        : 'clasificacion-no-aplicable'
   }
 }
 
 function mensajeNoDisponible(
-  accion: AccionGestion,
+  accion: AccionEvaluable,
   motivo: MotivoAccionNoDisponible,
 ): string {
   if (motivo === 'sin-autorizacion') {
@@ -70,6 +81,11 @@ function mensajeNoDisponible(
       ? 'El plazo administrativo solo aplica a requerimientos de clasificación administrativa.'
       : 'El plazo administrativo se fija antes de aprobar, mientras el requerimiento está pendiente de aprobación.'
   }
+  if (accion === 'ajustar-plazo') {
+    return motivo === 'clasificacion-no-aplicable'
+      ? 'El plazo administrativo de seguimiento solo aplica a requerimientos de clasificación administrativa.'
+      : 'El plazo administrativo de seguimiento solo se ajusta en Aprobado o En reclutamiento.'
+  }
   return accion === 'aprobar'
     ? 'La aprobación solo está disponible cuando el requerimiento está pendiente de aprobación.'
     : 'La observación solo está disponible cuando el requerimiento está pendiente de aprobación.'
@@ -81,7 +97,7 @@ function mensajeNoDisponible(
  */
 export function evaluarAccion(
   detalle: DetalleRequerimiento,
-  accion: AccionGestion,
+  accion: AccionEvaluable,
 ): AccionEvaluada {
   const visible = detalle.autorizacion.accionesPermitidas.includes(accion)
   if (!visible) {
@@ -114,9 +130,11 @@ export function evaluarAcciones(
   return {
     estado: detalle.estado,
     acciones,
-    ejecutables: acciones
-      .filter((accion) => accion.ejecutable)
-      .map((accion) => accion.accion),
+    ejecutables: ACCIONES_GESTION.filter((accion) =>
+      acciones.some(
+        (evaluada) => evaluada.accion === accion && evaluada.ejecutable,
+      ),
+    ),
   }
 }
 

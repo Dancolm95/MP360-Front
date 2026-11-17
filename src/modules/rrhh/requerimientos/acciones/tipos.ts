@@ -20,6 +20,15 @@ export type AccionGestion = Extract<
   'aprobar' | 'observar' | 'cancelar' | 'fijar-plazo'
 >
 
+/**
+ * Acciones de UX-04 con elegibilidad por estado y capacidades. El ajuste
+ * auditado del plazo comparte la evaluación por registro, pero no forma parte
+ * del conjunto que `evaluarAcciones` recorre por defecto.
+ */
+export type AccionAjustePlazo = 'ajustar-plazo'
+
+export type AccionEvaluable = AccionGestion | AccionAjustePlazo
+
 export const ACCIONES_GESTION: readonly AccionGestion[] = [
   'aprobar',
   'observar',
@@ -33,7 +42,7 @@ export type MotivoAccionNoDisponible =
   | 'clasificacion-no-aplicable'
 
 export interface AccionEvaluada {
-  readonly accion: AccionGestion
+  readonly accion: AccionEvaluable
   /** El backend la incluyó en `accionesPermitidas`. */
   readonly visible: boolean
   /** Visible y admitida por el estado; no implica que sus datos sean válidos. */
@@ -52,6 +61,7 @@ export type CampoAccion =
   | 'confirmacion'
   | 'causal'
   | 'comentario'
+  | 'motivo'
   | 'plazo-administrativo'
   | 'general'
 
@@ -87,7 +97,7 @@ export type FalloAccion =
     }
   | {
       readonly status: 'accion-no-disponible'
-      readonly accion: AccionGestion
+      readonly accion: AccionEvaluable
       readonly motivo: MotivoAccionNoDisponible
       readonly mensaje: string
       readonly entradaConservada: true
@@ -173,8 +183,3 @@ export const CAUSALES_CANCELACION: readonly CausalCancelacion[] = [
   'menor-carga-laboral',
   'creacion-por-error',
 ]
-
-export const DIAS_HABILES_ADMINISTRATIVOS = {
-  minimo: 15,
-  maximo: 30,
-} as const

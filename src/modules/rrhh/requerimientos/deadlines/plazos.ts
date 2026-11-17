@@ -7,15 +7,15 @@ import type {
   PorcentajeUmbral,
   UmbralAlerta,
 } from '../contracts'
-// `acciones` (T-RH-12) es hoy la fuente del rango 15–30; se reutiliza para no
-// duplicar la regla en este módulo.
-import { esDiasHabilesAdministrativos } from '../acciones/reglas'
-import { DIAS_HABILES_ADMINISTRATIVOS } from '../acciones/tipos'
 import {
   parsearFechaCivil,
   siguienteDiaHabil,
   sumarDiasHabiles,
 } from './calendario'
+import {
+  DIAS_HABILES_ADMINISTRATIVOS,
+  esDiasHabilesAdministrativos,
+} from './rango'
 
 export const DIAS_HABILES_OPERATIVO = 10
 

@@ -1,29 +1,18 @@
 import type {
   CausalCancelacion,
   DetalleRequerimientoCompleto,
-  DiasHabilesAdministrativos,
 } from '../contracts'
+import {
+  DIAS_HABILES_ADMINISTRATIVOS,
+  esDiasHabilesAdministrativos,
+} from '../deadlines'
 import { clasificacionDeDetalle } from './elegibilidad'
 import type {
   ErrorAccion,
   ResultadoPlazoValidado,
   SolicitudCancelacion,
 } from './tipos'
-import {
-  CAUSALES_CANCELACION,
-  DIAS_HABILES_ADMINISTRATIVOS,
-} from './tipos'
-
-export function esDiasHabilesAdministrativos(
-  valor: unknown,
-): valor is DiasHabilesAdministrativos {
-  return (
-    typeof valor === 'number' &&
-    Number.isInteger(valor) &&
-    valor >= DIAS_HABILES_ADMINISTRATIVOS.minimo &&
-    valor <= DIAS_HABILES_ADMINISTRATIVOS.maximo
-  )
-}
+import { CAUSALES_CANCELACION } from './tipos'
 
 export function esCausalCancelacion(
   valor: unknown,
@@ -60,8 +49,7 @@ export function validarPlazoAdministrativoParaAprobar(
   return [
     {
       campo: 'plazo-administrativo',
-      mensaje:
-        'El plazo administrativo debe ser un entero entre 15 y 30 días hábiles antes de aprobar.',
+      mensaje: `El plazo administrativo debe ser un entero entre ${DIAS_HABILES_ADMINISTRATIVOS.minimo} y ${DIAS_HABILES_ADMINISTRATIVOS.maximo} días hábiles antes de aprobar.`,
     },
   ]
 }
@@ -80,8 +68,8 @@ export function validarComentarioObservacion(
 
 /**
  * El formulario puede entregar el valor sin convertir, así que la validación
- * acepta cualquier entrada y solo deja pasar el entero 15–30 que exige el
- * comando.
+ * acepta cualquier entrada y solo deja pasar el entero del rango administrativo
+ * que exige el comando.
  */
 export function validarDiasHabilesAdministrativos(
   valor: unknown,
@@ -93,8 +81,7 @@ export function validarDiasHabilesAdministrativos(
     ok: false,
     error: {
       campo: 'plazo-administrativo',
-      mensaje:
-        'El plazo administrativo debe ser un entero entre 15 y 30 días hábiles.',
+      mensaje: `El plazo administrativo debe ser un entero entre ${DIAS_HABILES_ADMINISTRATIVOS.minimo} y ${DIAS_HABILES_ADMINISTRATIVOS.maximo} días hábiles.`,
     },
   }
 }

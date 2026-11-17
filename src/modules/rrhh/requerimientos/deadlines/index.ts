@@ -10,6 +10,10 @@ export {
   evaluarPlazo,
   seleccionarAlertaVigente,
 } from './evaluacion'
+export {
+  DIAS_HABILES_ADMINISTRATIVOS,
+  esDiasHabilesAdministrativos,
+} from './rango'
 export type {
   DuracionDiasHabiles,
   ErrorPlazoCalculo,

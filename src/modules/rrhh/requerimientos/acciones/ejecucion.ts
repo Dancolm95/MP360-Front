@@ -1,5 +1,4 @@
 import type {
-  CampoRequerimiento,
   CausalCancelacion,
   ComandoAprobar,
   ComandoCancelar,
@@ -7,10 +6,8 @@ import type {
   ComandoObservar,
   ComandosRequerimientosPort,
   DetalleRequerimiento,
-  ErrorValidacion,
   ResultadoAprobar as ResultadoAprobarContrato,
   ResultadoCancelar as ResultadoCancelarContrato,
-  ResultadoComando,
   ResultadoFijarPlazo as ResultadoFijarPlazoContrato,
   ResultadoObservar as ResultadoObservarContrato,
 } from '../contracts'
@@ -23,11 +20,12 @@ import {
   validarDiasHabilesAdministrativos,
   validarPlazoAdministrativoParaAprobar,
 } from './reglas'
+import {
+  accionNoDisponible,
+  falloValidacion,
+  mapearFalloComando,
+} from './resultados'
 import type {
-  AccionGestion,
-  CampoAccion,
-  ErrorAccion,
-  FalloAccion,
   OpcionesAprobar,
   ResultadoAccionAprobar,
   ResultadoAccionCancelar,
@@ -35,104 +33,6 @@ import type {
   ResultadoAccionObservar,
   SolicitudCancelacion,
 } from './tipos'
-
-function campoDeContrato(campo: CampoRequerimiento): CampoAccion {
-  if (campo === 'comentario' || campo === 'plazo-administrativo') return campo
-  return 'general'
-}
-
-function erroresDeContrato(
-  errores: readonly ErrorValidacion[],
-): readonly ErrorAccion[] {
-  return errores.map((error) => ({
-    campo: campoDeContrato(error.campo),
-    mensaje: error.mensaje,
-  }))
-}
-
-type FalloComandoContrato = Exclude<
-  ResultadoComando<unknown>,
-  { readonly status: 'confirmado' }
->
-
-function mapearFalloComando(resultado: FalloComandoContrato): FalloAccion {
-  switch (resultado.status) {
-    case 'conflicto-version':
-      return {
-        status: 'conflicto-version',
-        conflicto: resultado.conflicto,
-        entradaConservada: true,
-        reintentable: true,
-      }
-    case 'validacion':
-      return {
-        status: 'validacion',
-        errores: erroresDeContrato(resultado.errores),
-        entradaConservada: true,
-        reintentable: true,
-      }
-    case 'sin-autorizacion':
-      return {
-        status: 'sin-autorizacion',
-        motivo: resultado.motivo,
-        entradaConservada: true,
-        reintentable: false,
-      }
-    case 'estado-invalido':
-      return {
-        status: 'estado-invalido',
-        estadoActual: resultado.estadoActual,
-        entradaConservada: true,
-        reintentable: false,
-      }
-    case 'error-integracion':
-      return {
-        status: 'error-integracion',
-        error: resultado.error,
-        entradaConservada: true,
-        reintentable: resultado.error.error.retryable,
-      }
-    case 'error':
-      return {
-        status: 'error',
-        error: resultado.error,
-        entradaConservada: true,
-        reintentable: resultado.error.retryable,
-      }
-    case 'sesion-finalizada':
-      return {
-        status: 'sesion-finalizada',
-        entradaConservada: true,
-        reintentable: false,
-      }
-  }
-}
-
-function validacion(errores: readonly ErrorAccion[]): FalloAccion {
-  return {
-    status: 'validacion',
-    errores,
-    entradaConservada: true,
-    reintentable: true,
-  }
-}
-
-function accionNoDisponible(
-  detalle: DetalleRequerimiento,
-  accion: AccionGestion,
-): FalloAccion {
-  const evaluada = evaluarAccion(detalle, accion)
-  return {
-    status: 'accion-no-disponible',
-    accion,
-    motivo: evaluada.motivo ?? 'sin-autorizacion',
-    mensaje:
-      evaluada.mensaje ??
-      'La acción no está disponible para este requerimiento.',
-    entradaConservada: true,
-    reintentable: false,
-  }
-}
 
 /**
  * Aprobar un pendiente. La clasificación administrativa exige un plazo válido
@@ -151,7 +51,7 @@ export async function aprobarRequerimiento(
   }
 
   const errores = validarPlazoAdministrativoParaAprobar(detalle)
-  if (errores.length > 0) return validacion(errores)
+  if (errores.length > 0) return falloValidacion(errores)
 
   const comentario = comentarioNormalizado(opciones.comentario)
   const comando: ComandoAprobar = {
@@ -185,7 +85,7 @@ export async function observarRequerimiento(
 
   const limpio = comentarioNormalizado(comentario)
   if (limpio === null) {
-    return validacion(validarComentarioObservacion(comentario))
+    return falloValidacion(validarComentarioObservacion(comentario))
   }
 
   const comando: ComandoObservar = {
@@ -219,11 +119,11 @@ export async function cancelarRequerimiento(
   }
 
   const errores = validarCancelacion(solicitud)
-  if (errores.length > 0) return validacion(errores)
+  if (errores.length > 0) return falloValidacion(errores)
 
   const causal: CausalCancelacion | null = solicitud.causal
   if (!esCausalCancelacion(causal)) {
-    return validacion(validarCancelacion(solicitud))
+    return falloValidacion(validarCancelacion(solicitud))
   }
 
   const comentario = comentarioNormalizado(solicitud.comentario)
@@ -263,7 +163,7 @@ export async function fijarPlazoAdministrativo(
   }
 
   const validado = validarDiasHabilesAdministrativos(valor)
-  if (!validado.ok) return validacion([validado.error])
+  if (!validado.ok) return falloValidacion([validado.error])
 
   const comando: ComandoFijarPlazoAdministrativo = {
     requerimientoId: detalle.id,
