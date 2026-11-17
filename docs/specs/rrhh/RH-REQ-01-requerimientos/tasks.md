@@ -120,9 +120,10 @@
 ### T-RH-12 — Aprobar/Observar/Cancelar y fijación de plazo administrativo
 - [ ] Hecha
 - **Observación heredada de T-RH-02 (no bloqueante):** los comandos tipados de fijar/ajustar plazo reciben `diasHabiles: number`, mientras el valor persistido expresa el rango 15–30; verificar aquí que la validación y la revalidación del backend rechacen valores fuera del rango, sin ampliar el contrato funcional.
+- **Decisión del 17-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual de UX-04 la desarrolla el usuario en una rama aparte. Se implementan la elegibilidad y la ejecución de Aprobar/Observar/Cancelar y de fijar plazo según el estado y `accionesPermitidas`, con las validaciones de Observar (comentario obligatorio), Cancelar (confirmación y causal) y aprobación (rechazo si el plazo administrativo falta o es inválido), usando los comandos versionados y el mapeo de resultados del contrato. `DetalleUx04` no proyecta `autorizacion`, así que la tarea consume el detalle bruto o amplía el modelo sin duplicar las reglas de T-RH-11. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `form/**` ni `detail/**`.
 - **Depende de:** T-RH-11.
 - **Traza:** RH-REQ-01 §7.3; §10 criterios 4 y 6.
-- **Entrada:** detalle + capacidades.
+- **Entrada:** detalle del requerimiento con `autorizacion` y las capacidades efectivas.
 - **Salida:** Aprobar/Observar/Cancelar por estado y capacidades (Observar exige comentario; cancelar exige confirmación y causal); RR. HH. fija el plazo para un administrativo pendiente; la aprobación rechaza la ausencia o invalidez de ese plazo.
 - **Hecho cuando:** criterios 4 y 6 verificables.
 
