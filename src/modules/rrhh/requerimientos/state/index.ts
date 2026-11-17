@@ -13,3 +13,11 @@ export {
   type OpcionesContextoBandeja,
   type SeleccionRequerimiento,
 } from './contexto-bandeja'
+export {
+  restaurarConsultaBandeja,
+  type AjusteRestauracionBandeja,
+  type EstadoRestauracionBandeja,
+  type MotivoAjusteRestauracionBandeja,
+  type OpcionesRestauracionBandeja,
+  type ResultadoRestauracionBandeja,
+} from './restauracion-bandeja'
