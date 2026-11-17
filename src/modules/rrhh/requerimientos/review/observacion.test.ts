@@ -188,15 +188,6 @@ const historialSinObservacion: EventoHistorial[] = [
 
 const historialObservado: EventoHistorial[] = [
   {
-    id: id<EventoHistorialId>('evento-observacion-2'),
-    usuario: jefeOperaciones,
-    fechaHora: '2026-11-14T15:30:00Z' as InstanteISO,
-    accion: 'observacion',
-    estadoAnterior: 'pendiente-aprobacion',
-    estadoNuevo: 'observado',
-    comentario: 'Falta detallar la ubicación del puesto',
-  },
-  {
     id: id<EventoHistorialId>('evento-observacion-1'),
     usuario: jefeOperaciones,
     fechaHora: '2026-11-10T09:00:00Z' as InstanteISO,
@@ -213,6 +204,15 @@ const historialObservado: EventoHistorial[] = [
     estadoAnterior: 'observado',
     estadoNuevo: 'pendiente-aprobacion',
     comentario: null,
+  },
+  {
+    id: id<EventoHistorialId>('evento-observacion-2'),
+    usuario: jefeOperaciones,
+    fechaHora: '2026-11-14T15:30:00Z' as InstanteISO,
+    accion: 'observacion',
+    estadoAnterior: 'pendiente-aprobacion',
+    estadoNuevo: 'observado',
+    comentario: 'Falta detallar la ubicación del puesto',
   },
   ...historialSinObservacion,
 ]
@@ -278,7 +278,7 @@ function resultadosComandos(
 }
 
 describe('comentario de la observación vigente', () => {
-  it('devuelve el comentario más reciente con su autor y fecha, no la justificación', () => {
+  it('devuelve la observación más reciente aunque venga desordenada, no la justificación', () => {
     const lectura = observacionVigente(detalleObservado)
 
     expect(lectura.status).toBe('disponible')
@@ -289,6 +289,35 @@ describe('comentario de la observación vigente', () => {
       comentario: 'Falta detallar la ubicación del puesto',
     })
     expect(lectura.observacion.comentario).not.toBe(detalleObservado.comentario)
+  })
+
+  it('compara instantes con distinto offset, no cadenas', () => {
+    const detalleConOffsets = detalle('observado', [
+      {
+        id: id<EventoHistorialId>('evento-offset'),
+        usuario: jefeOperaciones,
+        fechaHora: '2026-11-14T17:00:00+02:00' as InstanteISO,
+        accion: 'observacion',
+        estadoAnterior: 'pendiente-aprobacion',
+        estadoNuevo: 'observado',
+        comentario: 'Observación anterior en UTC',
+      },
+      {
+        id: id<EventoHistorialId>('evento-utc'),
+        usuario: jefeOperaciones,
+        fechaHora: '2026-11-14T15:30:00Z' as InstanteISO,
+        accion: 'observacion',
+        estadoAnterior: 'pendiente-aprobacion',
+        estadoNuevo: 'observado',
+        comentario: 'Observación vigente en UTC',
+      },
+    ])
+
+    const lectura = observacionVigente(detalleConOffsets)
+
+    expect(lectura.status).toBe('disponible')
+    if (lectura.status !== 'disponible') return
+    expect(lectura.observacion.comentario).toBe('Observación vigente en UTC')
   })
 
   it('declara la ausencia si el observado no tiene evento de observación', () => {

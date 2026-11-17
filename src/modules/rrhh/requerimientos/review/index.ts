@@ -1,4 +1,5 @@
 export type {
+  BorradorConfirmado,
   DecisionDescarte,
   EdicionEnCurso,
   ResultadoDescarte,

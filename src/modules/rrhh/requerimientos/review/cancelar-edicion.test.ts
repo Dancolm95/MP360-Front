@@ -46,6 +46,7 @@ import {
 import {
   crearEdicionEnCurso,
   guardarBorradorEnCurso,
+  registrarGuardado,
   resolverDescarte,
   solicitarCancelarEdicion,
   type EdicionEnCurso,
@@ -90,6 +91,7 @@ const distritoA: Distrito = {
   provinciaId: provinciaA.id,
 }
 const usuarioA: Usuario = { id: id<UsuarioId>('usuario-a'), nombre: 'Usuario A' }
+const usuarioB: Usuario = { id: id<UsuarioId>('usuario-b'), nombre: 'Usuario B' }
 const colaboradorA: ColaboradorReemplazo = {
   id: id<ColaboradorId>('colaborador-a'),
   nombre: 'Colaborador A',
@@ -183,7 +185,8 @@ const detalleConfirmado: DetalleRequerimientoEditable = {
   version: 4,
   borrador: {
     ...borradorPersistido,
-    comentario: 'Cambio sin guardar',
+    comentario: 'Cambio sin guardar (normalizado por el backend)',
+    usuarioProximaTareaId: usuarioB.id,
   },
 }
 
@@ -372,7 +375,7 @@ describe('cancelar edición: confirmación de descarte', () => {
     expect(solicitud.edicion.estado.paso).toBe('edicion')
   })
 
-  it('no confunde la representación de un control con un cambio de valor', () => {
+  it('equipara solo las formas canónicas válidas de los controles', () => {
     const desdeDetalle = crearEdicionEnCurso(
       {
         ...formularioPersistido,
@@ -389,6 +392,37 @@ describe('cancelar edición: confirmación de descarte', () => {
       valor: '1500.01',
     })
     expect(solicitarCancelarEdicion(conOtroImporte).status).toBe(
+      'confirmacion-pendiente',
+    )
+  })
+
+  it.each([
+    '1500.000',
+    ' 1500 ',
+    '1e3',
+    '0x5DC',
+    '+1500',
+    '1500.',
+    '.5',
+    '-0',
+  ])('trata el importe inválido «%s» como cambio', (valor) => {
+    const edicion = editar(crearEdicionEnCurso(formularioPersistido), {
+      campo: 'remuneracionMensual',
+      valor,
+    })
+
+    expect(solicitarCancelarEdicion(edicion).status).toBe(
+      'confirmacion-pendiente',
+    )
+  })
+
+  it('trata las vacantes con espacios como cambio', () => {
+    const edicion = editar(crearEdicionEnCurso(formularioPersistido), {
+      campo: 'vacantes',
+      valor: ' 2 ',
+    })
+
+    expect(solicitarCancelarEdicion(edicion).status).toBe(
       'confirmacion-pendiente',
     )
   })
@@ -465,9 +499,18 @@ describe('cancelar edición: límites con las otras acciones', () => {
       return
     }
 
-    expect(guardado.edicion.formularioDePartida).toEqual(
-      formularioDesdeDetalle(guardado.operacion.detalle),
+    const confirmado = formularioDesdeDetalle(guardado.operacion.detalle)
+    expect(guardado.edicion.formularioDePartida).toEqual(confirmado)
+    expect(guardado.edicion.formularioDePartida.comentario).toBe(
+      'Cambio sin guardar (normalizado por el backend)',
     )
+    expect(guardado.edicion.formularioDePartida.comentario).not.toBe(
+      'Cambio sin guardar',
+    )
+    expect(guardado.edicion.formularioDePartida.usuarioProximaTareaId).toBe(
+      usuarioB.id,
+    )
+    expect(guardado.edicion.estado.formulario).toEqual(confirmado)
     expect(solicitarCancelarEdicion(guardado.edicion).status).toBe(
       'sin-cambios',
     )
@@ -489,6 +532,30 @@ describe('cancelar edición: límites con las otras acciones', () => {
     expect(comandos.calls.cancelar).toHaveLength(0)
     expect(comandos.calls.aprobar).toHaveLength(0)
     expect(comandos.calls.observar).toHaveLength(0)
+  })
+
+  it('registrarGuardado toma los valores del detalle confirmado, no los locales', () => {
+    const local = editar(crearEdicionEnCurso(formularioPersistido), {
+      campo: 'comentario',
+      valor: 'Cambio sin guardar',
+    })
+
+    const sesion = registrarGuardado({
+      status: 'confirmado',
+      accion: 'borrador',
+      detalle: detalleConfirmado,
+    })
+
+    expect(local.estado.formulario.comentario).toBe('Cambio sin guardar')
+    expect(sesion.formularioDePartida).toEqual(
+      formularioDesdeDetalle(detalleConfirmado),
+    )
+    expect(sesion.formularioDePartida.comentario).toBe(
+      'Cambio sin guardar (normalizado por el backend)',
+    )
+    expect(sesion.formularioDePartida.usuarioProximaTareaId).toBe(usuarioB.id)
+    expect(sesion.estado.formulario).toEqual(sesion.formularioDePartida)
+    expect(solicitarCancelarEdicion(sesion).status).toBe('sin-cambios')
   })
 
   it('un guardado fallido conserva los valores y el punto de partida anterior', async () => {

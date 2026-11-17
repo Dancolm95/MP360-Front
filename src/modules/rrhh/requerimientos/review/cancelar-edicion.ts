@@ -1,9 +1,10 @@
 import type {
   ComandosRequerimientosPort,
-  DetalleRequerimientoEditable,
+  MotivoRequerimiento,
 } from '../contracts'
 import { formularioDesdeDetalle } from '../form/helpers'
 import type { FormularioRequerimientoInput } from '../model'
+import { parsearRemuneracionPen, validarVacantes } from '../model'
 import type {
   EstadoEdicionRevision,
   EstadoOperacion,
@@ -23,7 +24,10 @@ export type DecisionDescarte = 'aceptar' | 'rechazar' | 'cancelar'
  */
 export interface EdicionEnCurso {
   readonly estado: EstadoEdicionRevision
-  /** Valores persistidos al abrir la edición; es lo que se restaura al descartar. */
+  /**
+   * Valores confirmados por el backend: los de la apertura y los de cada
+   * guardado confirmado. Es lo que se restaura al descartar.
+   */
   readonly formularioDePartida: FormularioRequerimientoInput
   readonly descartePendiente: boolean
 }
@@ -67,24 +71,36 @@ export interface ResultadoGuardadoEnCurso {
   readonly operacion: EstadoOperacion
 }
 
+export type BorradorConfirmado = Extract<
+  EstadoOperacion,
+  { readonly status: 'confirmado'; readonly accion: 'borrador' }
+>
+
 function mismoValor(
   campo: keyof FormularioRequerimientoInput,
   actual: FormularioRequerimientoInput[keyof FormularioRequerimientoInput],
   partida: FormularioRequerimientoInput[keyof FormularioRequerimientoInput],
+  motivo: MotivoRequerimiento | null,
 ): boolean {
-  // Los controles devuelven cadenas: `2` y `'2'` no son un cambio de valor.
+  // Los controles devuelven cadenas; se comparan con la validación del modelo,
+  // no con una conversión laxa, para que un texto inválido cuente como cambio.
   if (campo === 'vacantes') {
-    const normalizar = (valor: typeof actual) =>
-      valor === null || valor === '' ? null : String(valor).trim()
-    return normalizar(actual) === normalizar(partida)
+    const actualValidado = validarVacantes(actual)
+    const partidaValidada = validarVacantes(partida)
+    return (
+      actualValidado.ok &&
+      partidaValidada.ok &&
+      actualValidado.value === partidaValidada.value
+    )
   }
   if (campo === 'remuneracionMensual') {
-    const normalizar = (valor: typeof actual) => {
-      if (typeof valor !== 'string' || valor.trim() === '') return null
-      const numero = Number(valor)
-      return Number.isFinite(numero) ? numero : valor.trim()
-    }
-    return normalizar(actual) === normalizar(partida)
+    const actualValidada = parsearRemuneracionPen(actual, motivo)
+    const partidaValidada = parsearRemuneracionPen(partida, motivo)
+    return (
+      actualValidada.ok &&
+      partidaValidada.ok &&
+      actualValidada.value.centavos === partidaValidada.value.centavos
+    )
   }
   return Object.is(actual, partida)
 }
@@ -98,7 +114,9 @@ function mismoFormulario(
   ) as (keyof FormularioRequerimientoInput)[]
   return (
     Object.keys(partida).length === campos.length &&
-    campos.every((campo) => mismoValor(campo, formulario[campo], partida[campo]))
+    campos.every((campo) =>
+      mismoValor(campo, formulario[campo], partida[campo], formulario.motivo),
+    )
   )
 }
 
@@ -182,22 +200,30 @@ export function resolverDescarte(
   }
 }
 
-/** Tras un guardado confirmado, lo persistido pasa a ser el nuevo punto de partida. */
+/**
+ * Solo un borrador confirmado por el backend puede mover el punto de partida:
+ * sus valores persistidos sustituyen a los locales y reabren el formulario.
+ */
 export function registrarGuardado(
-  edicion: EdicionEnCurso,
-  detalle: DetalleRequerimientoEditable,
+  confirmado: BorradorConfirmado,
 ): EdicionEnCurso {
+  const formulario = formularioDesdeDetalle(confirmado.detalle)
   return {
-    estado: edicion.estado,
-    formularioDePartida: formularioDesdeDetalle(detalle),
+    estado: {
+      paso: 'edicion',
+      formulario,
+      revision: null,
+      operacion: confirmado,
+    },
+    formularioDePartida: { ...formulario },
     descartePendiente: false,
   }
 }
 
 /**
  * «Guardar borrador» sobre la sesión de edición: delega en T-RH-09 y, solo con
- * el guardado confirmado, mueve el punto de partida de «Cancelar edición» a lo
- * persistido. Un fallo conserva la entrada y el punto de partida anterior.
+ * el guardado confirmado, sustituye formulario y punto de partida por los
+ * valores persistidos. Un fallo conserva la entrada y el punto de partida.
  */
 export async function guardarBorradorEnCurso(
   edicion: EdicionEnCurso,
@@ -205,16 +231,18 @@ export async function guardarBorradorEnCurso(
   port: ComandosRequerimientosPort | null,
 ): Promise<ResultadoGuardadoEnCurso> {
   const resultado = await guardarBorrador(edicion.estado, solicitud, port)
-  const sesion: EdicionEnCurso = { ...edicion, estado: resultado.estado }
 
   if (
     resultado.operacion.status === 'confirmado' &&
     resultado.operacion.accion === 'borrador'
   ) {
     return {
-      edicion: registrarGuardado(sesion, resultado.operacion.detalle),
+      edicion: registrarGuardado(resultado.operacion),
       operacion: resultado.operacion,
     }
   }
-  return { edicion: sesion, operacion: resultado.operacion }
+  return {
+    edicion: { ...edicion, estado: resultado.estado },
+    operacion: resultado.operacion,
+  }
 }
