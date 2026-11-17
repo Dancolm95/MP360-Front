@@ -111,9 +111,10 @@
 ### T-RH-11 — Detalle UX-04 (resumen, cobertura, plazo, alertas, historial)
 - [ ] Hecha
 - **Depende de:** T-RH-03.
+- **Decisión del 17-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual de UX-04 la desarrolla el usuario en una rama aparte. Se implementan el modelo de detalle (resumen en lectura, remuneración, solicitadas/cubiertas/pendientes, plazo, alertas e historial normalizado con usuario, fecha/hora, acción, estado anterior/nuevo y comentario) y las reglas derivadas de cobertura y alertas, sin componentes de vista y sin tocar `src/app/**`, `globals.css`, `tray/**` ni `form/**`.
 - **Traza:** RH-REQ-01 §7.3; §10 criterios 13 (cobertura) y 19.
 - **Entrada:** contrato de detalle/historial.
-- **Salida:** resumen en lectura, remuneración, solicitadas/cubiertas/pendientes, plazo, alertas e historial con usuario, fecha/hora, acción, estado anterior/nuevo y comentario.
+- **Salida:** modelo de detalle en lectura —resumen, remuneración, solicitadas/cubiertas/pendientes, plazo, alertas e historial con usuario, fecha/hora, acción, estado anterior/nuevo y comentario— y las reglas derivadas de cobertura y alertas, sin componentes de vista.
 - **Hecho cuando:** criterio 19 y la parte de cobertura del criterio 13 verificables.
 
 ### T-RH-12 — Aprobar/Observar/Cancelar y fijación de plazo administrativo
