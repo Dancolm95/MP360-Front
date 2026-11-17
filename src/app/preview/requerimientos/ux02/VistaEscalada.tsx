@@ -1,12 +1,12 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
-import { DisenoPagina6 } from './DisenoPagina6'
 
 const ANCHO = 1920
 const ALTO = 1176
 
-export function VistaEscalada() {
+export function VistaEscalada({ children }: { children: ReactNode }) {
   const contenedor = useRef<HTMLDivElement>(null)
   const [escala, setEscala] = useState(0)
 
@@ -36,7 +36,7 @@ export function VistaEscalada() {
           visibility: escala > 0 ? 'visible' : 'hidden',
         }}
       >
-        <DisenoPagina6 />
+        {children}
       </div>
     </div>
   )

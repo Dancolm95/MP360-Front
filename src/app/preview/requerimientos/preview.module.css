@@ -149,3 +149,10 @@
   border-radius: 6px;
   box-shadow: 0 10px 30px rgba(28, 28, 28, 0.12);
 }
+
+.barra__separador {
+  width: 1px;
+  height: 20px;
+  margin: 0 2px;
+  background: rgba(255, 255, 255, 0.18);
+}

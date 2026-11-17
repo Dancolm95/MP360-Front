@@ -1,0 +1,174 @@
+import {
+  ACCIONES_RAPIDAS,
+  COLABORADORES_PANEL,
+  MIS_ACCESOS,
+  NAVEGACION,
+} from './datos'
+
+export function Icono({ nombre }: { nombre: string }) {
+  return (
+    <span className="ux02-i" aria-hidden="true">
+      {nombre}
+    </span>
+  )
+}
+
+export function Cabecera() {
+  return (
+    <header className="ux02-cabecera">
+      <span className="ux02-marca">
+        <img src="/preview/mp360/img/logo-mp-dark.png" alt="MP 360" />
+      </span>
+      <span className="ux02-divisor" aria-hidden="true" />
+      <div className="ux02-reloj">
+        <span className="ux02-reloj__hora">15:22</span>
+        <span className="ux02-reloj__fecha">
+          <span className="ux02-reloj__dia">Martes</span>
+          <span className="ux02-reloj__fecha-dia">15 de octubre</span>
+        </span>
+      </div>
+
+      <div className="ux02-busqueda">
+        <Icono nombre="search" />
+        <input type="text" placeholder="Buscar en MP 360" aria-label="Buscar en MP 360" />
+      </div>
+
+      <div className="ux02-acciones">
+        <button type="button" className="ux02-cuadro" aria-label="Mensajes">
+          <Icono nombre="chat_bubble" />
+        </button>
+        <button type="button" className="ux02-cuadro" aria-label="Configuración">
+          <Icono nombre="settings" />
+        </button>
+        <button type="button" className="ux02-cuadro ux02-cuadro--notif" aria-label="Notificaciones">
+          <Icono nombre="notifications" />
+          <span className="ux02-notificacion">1</span>
+        </button>
+
+        <button type="button" className="ux02-usuario">
+          <span className="ux02-usuario__avatar">
+            <img src="/preview/mp360/img/rodrigo.jpg" alt="" />
+          </span>
+          <span className="ux02-usuario__datos">
+            <span className="ux02-usuario__nombre">Rodrigo Ayala</span>
+            <span className="ux02-usuario__rol">Colaborador</span>
+          </span>
+        </button>
+      </div>
+    </header>
+  )
+}
+
+export function Navegacion({ submenu = true }: { submenu?: boolean }) {
+  return (
+    <nav className="ux02-nav" aria-label="Secciones de RR. HH.">
+      <button type="button" className="ux02-nav__modulo">
+        <span>Recursos Humanos</span>
+        <Icono nombre="expand_more" />
+      </button>
+
+      <ul className="ux02-nav__tabs">
+        {NAVEGACION.map((item) => (
+          <li
+            key={item.etiqueta}
+            style={{ width: `${item.ancho}px` }}
+            className={[
+              'ux02-nav__tab',
+              item.activo ? 'ux02-nav__tab--activo' : '',
+              item.dosLineas ? 'ux02-nav__tab--dos-lineas' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
+            <button type="button">
+              <Icono nombre={item.icono} />
+              <span>{item.etiqueta}</span>
+              {item.activo ? (
+                <span className="ux02-i ux02-nav__chevron" aria-hidden="true">
+                  expand_more
+                </span>
+              ) : null}
+            </button>
+
+            {item.activo && submenu ? (
+              <div className="ux02-submenu">
+                <button type="button">Nuevo</button>
+                <button type="button">Detalle</button>
+              </div>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+export function PanelLateral() {
+  return (
+    <aside className="ux02-rail" aria-label="Panel contextual">
+      <div className="ux02-rail__titulo">
+        Acciones rápidas
+        <Icono nombre="add" />
+      </div>
+      <div className="ux02-rail__tarjeta ux02-rail__tarjeta--acciones">
+        {ACCIONES_RAPIDAS.map((accion, indice) => (
+          <button key={`${accion}-${indice}`} type="button" className="ux02-rail__boton">
+            {accion}
+          </button>
+        ))}
+      </div>
+
+      <div className="ux02-rail__accesos">
+        <div className="ux02-rail__titulo">
+          Mis accesos
+          <Icono nombre="chevron_right" />
+        </div>
+        <div className="ux02-rail__accesos-lista">
+          {MIS_ACCESOS.map((acceso) => (
+            <button key={acceso} type="button" className="ux02-rail__acceso">
+              {acceso}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="ux02-rail__eventos">
+        <div className="ux02-rail__titulo ux02-rail__titulo--eventos">
+          Próximos Eventos
+          <Icono nombre="calendar_month" />
+        </div>
+        <div className="ux02-rail__tarjeta ux02-rail__tarjeta--eventos">
+          <span className="ux02-rail__evento-titulo">Cumpleaños / Agosto</span>
+          {COLABORADORES_PANEL.map((persona) => (
+            <span key={persona.nombre} className="ux02-rail__evento">
+              <span className="ux02-rail__evento-avatar">
+                <img src={`/preview/mp360/img/${persona.foto}`} alt="" />
+              </span>
+              <span className="ux02-rail__evento-datos">
+                <span>{persona.nombre}</span>
+                <span className="ux02-rail__evento-fecha">{persona.fecha}</span>
+              </span>
+            </span>
+          ))}
+          <button type="button" className="ux02-rail__ver-mas">Ver más</button>
+        </div>
+      </div>
+    </aside>
+  )
+}
+
+export function Pie() {
+  return (
+    <footer className="ux02-pie">
+      <span className="ux02-pie__marca">
+        <img src="/preview/mp360/img/logo-mp-white.png" alt="MP 360" />
+      </span>
+      <p className="ux02-pie__eslogan">
+        Un nuevo sistema que unifica, planifica y ejecuta.
+      </p>
+      <span className="ux02-pie__derechos">
+        © 2026 Manpower SAC. Derechos Reservados
+      </span>
+    </footer>
+  )
+}

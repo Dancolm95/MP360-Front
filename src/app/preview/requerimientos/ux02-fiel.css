@@ -1,6 +1,7 @@
-/* Replica visual del tablero "Bandeja de Requerimientos" del diseño elegido
-   (MP360 Diseño Elegido 2026.ai, mesa 6). Medidas y colores tomados del
-   artboard vectorial, no del PDF de pantallas. */
+/* Réplica visual del diseño elegido (MP360 Diseño Elegido 2026.ai):
+   mesa 6 (bandeja, UX-02), mesas 7–8 (alta y confirmación, UX-03) y
+   mesa 9 (detalle, UX-04). Medidas y colores tomados del artboard
+   vectorial, no del PDF de pantallas. */
 
 @font-face {
   font-family: 'Montserrat';
@@ -1147,4 +1148,1018 @@
   margin-bottom: -3px;
   font-size: 13px;
   color: var(--gris-medio);
+}
+
+/* ---------- UX-03: formulario y confirmación sobre la bandeja ---------- */
+
+.ux03-fondo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux03-velo {
+  position: absolute;
+  inset: 192px 0 97px;
+  z-index: 1;
+  background: rgba(24, 47, 51, 0.5);
+}
+
+.ux03-modal {
+  position: absolute;
+  z-index: 2;
+  left: 583px;
+  top: 251px;
+  width: 650px;
+  height: 682px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.ux03-modal__cabecera {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 24px 0 0 19px;
+}
+
+.ux03-modal__icono {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e4e9fd;
+  color: var(--azul);
+}
+
+.ux03-modal__icono .ux02-i {
+  font-size: 26px;
+}
+
+.ux03-modal__titulos {
+  padding-top: 1px;
+}
+
+.ux03-modal__titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--negro);
+}
+
+.ux03-modal__subtitulo {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--gris);
+}
+
+.ux03-modal__cerrar {
+  position: absolute;
+  top: 27px;
+  right: 33px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gris-boton);
+  cursor: pointer;
+}
+
+.ux03-modal__cerrar svg {
+  display: block;
+}
+
+.ux03-pasos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 22px 0 0 87px;
+  padding: 0;
+  list-style: none;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.ux03-paso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c6c6c6;
+}
+
+.ux03-paso--activo {
+  color: var(--azul);
+}
+
+.ux03-paso__numero {
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gris-boton);
+  color: var(--negro);
+  font-size: 12px;
+}
+
+.ux03-paso--activo .ux03-paso__numero {
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux03-pasos__conector {
+  width: 87px;
+  height: 2px;
+  margin-left: 3px;
+  background: var(--gris-boton);
+}
+
+.ux03-campos {
+  display: grid;
+  grid-template-columns: 286px 286px;
+  column-gap: 19px;
+  row-gap: 12px;
+  margin: 15px 0 0 30px;
+}
+
+.ux03-campo {
+  display: flex;
+  flex-direction: column;
+}
+
+.ux03-etiqueta {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 16px;
+  color: var(--negro);
+}
+
+.ux03-etiqueta label {
+  cursor: default;
+}
+
+.ux03-obligatorio {
+  margin-left: 4px;
+  color: #ff0000;
+}
+
+.ux03-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  margin-top: 7px;
+  padding: 0 10px;
+  border: 1px solid #eeeeee;
+  border-radius: 3px;
+  background: #fff;
+  font: inherit;
+  font-size: 15px;
+  color: var(--gris);
+  text-align: left;
+}
+
+.ux03-control input,
+.ux03-control textarea {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+}
+
+.ux03-control input::placeholder,
+.ux03-control textarea::placeholder {
+  color: var(--gris);
+  opacity: 1;
+}
+
+.ux03-control--select {
+  cursor: pointer;
+}
+
+.ux03-control__marcador {
+  flex: 1 1 auto;
+}
+
+.ux03-control .ux02-i {
+  font-size: 18px;
+  color: var(--gris);
+}
+
+.ux03-control--area {
+  height: 72px;
+  align-items: stretch;
+  padding: 8px 10px;
+}
+
+.ux03-control--area textarea {
+  resize: none;
+  line-height: 1.4;
+}
+
+.ux03-campo--ancho {
+  margin: 14px 0 0 30px;
+  width: 591px;
+}
+
+.ux03-modal__pie {
+  position: absolute;
+  right: 30px;
+  bottom: 20px;
+  display: flex;
+  gap: 11px;
+}
+
+.ux03-btn {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ux03-btn .ux02-i {
+  font-size: 17px;
+}
+
+.ux03-btn--borrador {
+  width: 172px;
+  border: 1px solid var(--borde);
+  background: #fff;
+  color: #a9a9a9;
+}
+
+.ux03-btn--enviar {
+  width: 170px;
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux03-modal--confirmacion {
+  padding: 25px 30px 0;
+  text-align: center;
+}
+
+.ux03-exito {
+  position: relative;
+  width: 77px;
+  height: 77px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #e6f8ea;
+  transform: translateX(-9px);
+}
+
+.ux03-exito__circulo {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 57px;
+  height: 57px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #53ab5f;
+  color: #fff;
+}
+
+.ux03-exito__circulo .ux02-i {
+  font-size: 36px;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.ux03-exito__confeti {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  border-radius: 1px;
+}
+
+.ux03-exito__confeti--azul {
+  left: -46px;
+  top: 12px;
+  background: #0071b9;
+  transform: rotate(-18deg);
+}
+
+.ux03-exito__confeti--ambar {
+  left: 64px;
+  top: -6px;
+  background: #f8ad3b;
+  transform: rotate(24deg);
+}
+
+.ux03-exito__confeti--rojo {
+  left: -32px;
+  top: 46px;
+  background: #ff0000;
+  transform: rotate(30deg);
+}
+
+.ux03-exito__confeti--verde {
+  left: 78px;
+  top: 30px;
+  background: #22b273;
+  transform: rotate(-26deg);
+}
+
+.ux03-modal__titulo--centrado {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.ux03-modal__texto {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.1;
+  color: var(--gris);
+}
+
+.ux03-modal__texto + .ux03-modal__texto {
+  margin-top: 3px;
+}
+
+.ux03-resumen {
+  width: 590px;
+  height: 325px;
+  margin: 23px 0 0;
+  padding: 14px 36px 0;
+  border-radius: 4px;
+  background: #f3f4f9;
+  text-align: left;
+}
+
+.ux03-resumen__cabecera {
+  display: grid;
+  grid-template-columns: 301px 217px;
+  align-items: baseline;
+}
+
+.ux03-resumen__codigo {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ux03-resumen__divisoria {
+  margin: 13px 0 0;
+  border: 0;
+  border-top: 1px solid #d1d2d5;
+}
+
+.ux03-resumen__columnas {
+  display: grid;
+  grid-template-columns: 301px 217px;
+  margin-top: 12px;
+}
+
+.ux03-par {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ux03-par + .ux03-par {
+  margin-top: 10px;
+}
+
+.ux03-par__etiqueta {
+  font-size: 13px;
+  line-height: 16px;
+  color: var(--gris);
+}
+
+.ux03-par__valor {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--negro);
+}
+
+.ux03-par__valor--enlace {
+  color: var(--azul);
+}
+
+.ux03-resumen__estado {
+  display: grid;
+  grid-template-columns: 301px 217px;
+  align-items: center;
+  margin-top: 28px;
+}
+
+.ux03-par__estado {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 27px;
+  margin-left: -7px;
+  padding: 0 9px;
+  border-radius: 14px;
+  background: #f2e7d8;
+  color: #e4831e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ux03-par__estado .ux02-i {
+  font-size: 15px;
+}
+
+.ux03-nota {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  width: 590px;
+  height: 51px;
+  margin-top: 13px;
+  padding: 0 18px 0 39px;
+  border-radius: 4px;
+  background: #f3f4f9;
+  text-align: left;
+  font-size: 13px;
+  color: var(--gris);
+}
+
+.ux03-nota .ux02-i {
+  font-size: 25px;
+  color: var(--azul);
+}
+
+.ux03-modal__pie--confirmacion {
+  left: 33px;
+  right: 30px;
+  justify-content: space-between;
+}
+
+.ux03-btn--correo {
+  width: 171px;
+  border: 1px solid var(--azul);
+  background: #fff;
+  color: var(--azul);
+}
+
+.ux03-btn--correo .ux02-i {
+  color: var(--azul);
+}
+
+/* ---------- UX-04: detalle del requerimiento ---------- */
+
+.ux04-main {
+  padding-top: 34px;
+}
+
+.ux04-cabecera {
+  position: relative;
+  height: 70px;
+}
+
+.ux04-migas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 14px;
+  color: var(--azul);
+}
+
+.ux04-migas__sep {
+  color: var(--gris-medio);
+}
+
+.ux04-migas__activo {
+  border-bottom: 1px solid var(--azul);
+  padding-bottom: 2px;
+}
+
+.ux04-cabecera__fila {
+  display: flex;
+  align-items: center;
+  gap: 19px;
+  margin-top: 11px;
+}
+
+.ux04-titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--negro);
+}
+
+.ux04-badge-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  margin-top: 2px;
+  padding: 0 8px;
+  border-radius: 15px;
+  background: #f4e7d3;
+  color: #e4831e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ux04-badge-estado .ux02-i {
+  font-size: 16px;
+}
+
+.ux04-btn-volver {
+  position: absolute;
+  right: 0;
+  top: 6px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux04-btn-volver .ux02-i {
+  font-size: 20px;
+}
+
+.ux04-resumen {
+  position: relative;
+  height: 205px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux04-resumen__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 13px 27px 0 26px;
+}
+
+.ux04-tarjeta__titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--negro);
+}
+
+.ux04-tarjeta__subtitulo {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--gris);
+}
+
+.ux04-btn-contorno {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  border: 1px solid var(--azul);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--azul);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux04-btn-contorno .ux02-i {
+  font-size: 18px;
+}
+
+.ux04-grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 67px;
+  display: grid;
+  grid-template-columns: 243px 259px 273px 273px 273px 253px;
+  grid-template-rows: 67px 61px;
+}
+
+.ux04-celda {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 12px 0 28px;
+  border-left: 1px solid var(--separador);
+}
+
+.ux04-celda--primera {
+  padding-left: 57px;
+  border-left: 0;
+}
+
+.ux04-celda:nth-child(n + 7) {
+  border-top: 1px solid var(--separador);
+  padding-top: 9px;
+}
+
+.ux04-celda:nth-child(n + 7) .ux04-valor {
+  margin-top: 5px;
+}
+
+.ux04-celda__etiqueta {
+  font-size: 13px;
+  line-height: 1;
+  color: #787878;
+}
+
+.ux04-valor {
+  margin-top: 3px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--negro);
+}
+
+.ux04-badge-empresa {
+  align-self: flex-start;
+  margin-top: 0;
+  width: 98px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 2px;
+  background: var(--azul);
+  color: #fff;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ux04-badge-fecha {
+  align-self: flex-start;
+  margin-top: 2px;
+  width: 90px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: #fcf0dd;
+  color: #e4831e;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ux04-postulantes {
+  position: relative;
+  height: 535px;
+  margin-top: 19px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux04-postulantes__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px 28px 0 25px;
+}
+
+.ux04-btn-primario {
+  height: 37px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux04-btn-primario .ux02-i {
+  font-size: 19px;
+}
+
+.ux04-filtros {
+  position: absolute;
+  left: 24px;
+  right: 29px;
+  top: 76px;
+  display: flex;
+  align-items: flex-end;
+  gap: 25px;
+}
+
+.ux04-buscador {
+  width: 613px;
+  height: 38px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid #eeeeee;
+  border-radius: 3px;
+  font-size: 15px;
+  color: var(--gris);
+}
+
+.ux04-buscador .ux02-i {
+  font-size: 20px;
+  color: var(--gris-medio);
+}
+
+.ux04-filtro {
+  display: flex;
+  flex-direction: column;
+  width: 201px;
+}
+
+.ux04-filtro__etiqueta {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 16px;
+  color: var(--negro);
+}
+
+.ux04-select {
+  height: 38px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border: 1px solid #eeeeee;
+  border-radius: 3px;
+  background: #fff;
+  font: inherit;
+  font-size: 16px;
+  color: var(--negro);
+  cursor: pointer;
+}
+
+.ux04-select .ux02-i {
+  font-size: 18px;
+  color: var(--gris);
+}
+
+.ux04-tabla {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 153px;
+}
+
+.ux04-tabla__fila {
+  display: grid;
+  grid-template-columns: 285px 163px 211px 187px 172px 177px 138px 132px 107px;
+  align-items: center;
+  height: 62px;
+  font-size: 15px;
+  color: var(--texto);
+  text-align: center;
+}
+
+.ux04-tabla__cabecera {
+  height: 53px;
+  background: #f8f7f9;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--texto);
+  line-height: 1.2;
+}
+
+.ux04-tabla__fila + .ux04-tabla__fila {
+  border-top: 1px solid #f1f1f1;
+}
+
+.ux04-col-candidato {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding-left: 38px;
+  text-align: left;
+}
+
+.ux04-tabla__cabecera .ux04-col-candidato {
+  padding-left: 83px;
+}
+
+.ux04-check {
+  flex: 0 0 21px;
+  width: 21px;
+  height: 21px;
+  border: 1px solid #c9c9c9;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.ux04-avatar {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  margin-left: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #808080;
+  color: #fff;
+}
+
+.ux04-avatar .ux02-i {
+  font-size: 26px;
+}
+
+.ux04-candidato {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-left: 6px;
+}
+
+.ux04-candidato__nombre {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--negro);
+  line-height: 1;
+}
+
+.ux04-candidato__nac {
+  font-size: 13px;
+  color: #808080;
+  line-height: 1;
+}
+
+.ux04-col-documento {
+  padding-right: 50px;
+  text-align: right;
+}
+
+.ux04-col-puesto {
+  padding-left: 26px;
+  text-align: left;
+}
+
+.ux04-tabla__cabecera .ux04-col-puesto {
+  padding-left: 0;
+  text-align: center;
+}
+
+.ux04-col-detalle {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux04-col-actualizado {
+  padding-right: 16px;
+  text-align: right;
+}
+
+.ux04-tabla__cabecera .ux04-col-actualizado {
+  padding-right: 0;
+  text-align: center;
+}
+
+.ux04-col-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 14px;
+}
+
+.ux04-tabla__cabecera .ux04-col-detalle {
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux04-badge {
+  display: inline-grid;
+  place-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ux04-badge--azul,
+.ux04-badge--preseleccionado {
+  background: #e1e7f8;
+  color: var(--azul);
+}
+
+.ux04-badge--seleccionado {
+  background: #fcf0dd;
+  color: #e4831e;
+}
+
+.ux04-badge--finalista {
+  background: #c1fdbf;
+  color: #588f59;
+}
+
+.ux04-badge--contratado {
+  background: #f5bec4;
+  color: #af3633;
+}
+
+.ux04-enlace {
+  border: 0;
+  background: transparent;
+  color: var(--azul);
+  font: inherit;
+  font-size: 15px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ux04-menu-puntos {
+  width: 26px;
+  height: 26px;
+  border: 0;
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.ux04-menu-puntos .ux02-i {
+  font-size: 20px;
+}
+
+.ux04-paginacion {
+  position: absolute;
+  left: 36px;
+  right: 24px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ux04-paginacion__texto {
+  margin-right: auto;
+  font-size: 13px;
+  color: var(--gris);
+}
+
+.ux04-pagina {
+  width: 47px;
+  height: 47px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--gris);
+  font: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.ux04-pagina--activa {
+  border-color: var(--azul-acento);
+  background: var(--azul-acento);
+  color: #fff;
 }
