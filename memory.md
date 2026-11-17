@@ -42,6 +42,7 @@
 - CORE-01 v0.6 está en `docs/specs/core/CORE-01-contenedor-erp/spec.md`, aprobada funcionalmente el 10 de noviembre de 2026. Bloqueos del corte resueltos o excluidos expresamente: C-01/C-03/C-04 con contrato técnico resuelto el 10-nov-2026 (planes v1.1); C-02 (salida voluntaria) incluido como requisito con contrato técnico resuelto el 10-nov-2026; C-05 (QA visual del PDF) excluido del corte como verificación diferida; P-04 se mantiene con contrato provisional y matriz final externa. No hay bloqueos funcionales; solo P-04 sigue abierta como decisión técnica.
 - RH-REQ-01 v0.7 y CORE-01 v0.6 están aprobadas funcionalmente e independientemente el 10 de noviembre de 2026; esa aprobación no cubre contratos técnicos, P-04, stack ni QA visual.
 - UX/UI V1.2 fue verificada directamente mediante exportación de texto; su contraste para UX-02/03/04, §8 y §12 está incorporado en la spec v0.7. Ya no hay bloqueo de acceso para esta revisión.
+- Bloqueo operativo (17-nov-2026): el entorno dejó de exponer la delegación en subagentes (`subagent`) al cerrar T-RH-10. El cierre documental de T-RH-10 (`c8929dd`) y el acotamiento de T-RH-11 (`67e22f1`) los ejecutó el coordinador directamente, limitado a `docs/specs/**` y `memory.md`, sin tocar código ni requisitos. **T-RH-11 no se ha iniciado** por falta del agente implementer; requiere reactivar la delegación antes de continuar.
 
 ## Última verificación
 
