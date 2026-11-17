@@ -82,8 +82,10 @@ function mismoValor(
   partida: FormularioRequerimientoInput[keyof FormularioRequerimientoInput],
   motivo: MotivoRequerimiento | null,
 ): boolean {
-  // Los controles devuelven cadenas; se comparan con la validación del modelo,
-  // no con una conversión laxa, para que un texto inválido cuente como cambio.
+  // La igualdad exacta cubre campos vacíos y textos inválidos idénticos; la
+  // validación del modelo decide las equivalencias canónicas restantes.
+  if (Object.is(actual, partida)) return true
+
   if (campo === 'vacantes') {
     const actualValidado = validarVacantes(actual)
     const partidaValidada = validarVacantes(partida)

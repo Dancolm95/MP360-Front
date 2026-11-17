@@ -35,7 +35,11 @@ import {
   type MockCommandResults,
 } from '../fixtures'
 import type { CambioFormulario } from '../form/helpers'
-import { formularioDesdeDetalle } from '../form/helpers'
+import {
+  FORMULARIO_VACIO,
+  crearFormularioVacio,
+  formularioDesdeDetalle,
+} from '../form/helpers'
 import type { FormularioRequerimientoInput } from '../model'
 import {
   crearEstadoEdicion,
@@ -392,6 +396,67 @@ describe('cancelar edición: confirmación de descarte', () => {
       valor: '1500.01',
     })
     expect(solicitarCancelarEdicion(conOtroImporte).status).toBe(
+      'confirmacion-pendiente',
+    )
+  })
+
+  it('no pide confirmación con un formulario vacío', () => {
+    const edicion = crearEdicionEnCurso(crearFormularioVacio(catalogos))
+
+    expect(solicitarCancelarEdicion(edicion).status).toBe('sin-cambios')
+  })
+
+  it('no pide confirmación con un borrador de vacantes y remuneración vacías', () => {
+    const edicion = crearEdicionEnCurso({
+      ...FORMULARIO_VACIO,
+      motivo: 'reemplazo',
+      empresaId: empresaA.id,
+      vacantes: null,
+      remuneracionMensual: null,
+    })
+
+    expect(solicitarCancelarEdicion(edicion).status).toBe('sin-cambios')
+  })
+
+  it('equipara el importe con ceros a la izquierda', () => {
+    const edicion = crearEdicionEnCurso(
+      { ...formularioPersistido, remuneracionMensual: '01500.00' },
+      formularioPersistido,
+    )
+
+    expect(solicitarCancelarEdicion(edicion).status).toBe('sin-cambios')
+  })
+
+  it('equipara 0.00 en Practicante', () => {
+    const practicante: FormularioRequerimientoInput = {
+      ...FORMULARIO_VACIO,
+      motivo: 'practicante',
+      remuneracionMensual: '0.00',
+    }
+    const edicion = crearEdicionEnCurso(
+      { ...practicante, remuneracionMensual: '0.0' },
+      practicante,
+    )
+
+    expect(solicitarCancelarEdicion(edicion).status).toBe('sin-cambios')
+  })
+
+  it('equipara textos inválidos idénticos pero no uno distinto', () => {
+    const baseInvalida: FormularioRequerimientoInput = {
+      ...FORMULARIO_VACIO,
+      motivo: 'otros',
+      remuneracionMensual: '1500.000',
+      vacantes: ' 2 ',
+    }
+    const edicion = crearEdicionEnCurso(baseInvalida)
+
+    expect(solicitarCancelarEdicion(edicion).status).toBe('sin-cambios')
+
+    const conOtroTexto = editar(edicion, {
+      campo: 'remuneracionMensual',
+      valor: '1500.00x',
+    })
+    expect(solicitarCancelarEdicion(conOtroTexto).status).toBe(
       'confirmacion-pendiente',
     )
   })
