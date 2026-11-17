@@ -312,7 +312,7 @@ describe('restauración del contexto de bandeja (RH-REQ-01 §7.3, §10-22)', () 
     ])
   })
 
-  it('repone la dirección inicial ante una dirección de orden desconocida', () => {
+  it('repone el orden inicial ante una dirección de orden desconocida', () => {
     const resultado = restaurarConsultaBandeja(
       {
         filtros: {},
@@ -323,10 +323,7 @@ describe('restauración del contexto de bandeja (RH-REQ-01 §7.3, §10-22)', () 
     )
 
     expect(resultado.estado).toBe('incompleto')
-    expect(resultado.consulta.orden).toEqual({
-      campo: 'empresa',
-      direccion: 'desc',
-    })
+    expect(resultado.consulta.orden).toEqual(ORDEN_INICIAL)
     expect(resultado.ajustes).toEqual([
       {
         campo: 'orden.direccion',
@@ -535,23 +532,39 @@ describe('restauración del contexto de bandeja (RH-REQ-01 §7.3, §10-22)', () 
     ])
   })
 
-  it('respaldo selectivo: repone solo las dimensiones inservibles', () => {
-    const resultado = restaurarConsultaBandeja(
-      {
-        filtros: { estados: ['aprobado'], empresas: [empresaA.id] },
-        orden: { campo: 'urgencia', direccion: 'asc' },
-        paginacion: { pagina: 0, tamanoPagina: 7 },
-      },
-      opciones,
-    )
+  it.each([
+    {
+      caso: 'campo de orden y página inválidos',
+      orden: { campo: 'urgencia', direccion: 'asc' },
+      paginacion: { pagina: 0, tamanoPagina: 7 },
+      paginacionEsperada: { pagina: 1, tamanoPagina: 10 },
+    },
+    {
+      caso: 'dirección de orden inválida con página válida',
+      orden: { campo: 'empresa', direccion: 'lateral' },
+      paginacion: { pagina: 4, tamanoPagina: 10 },
+      paginacionEsperada: { pagina: 4, tamanoPagina: 10 },
+    },
+  ])(
+    'respaldo selectivo: repone solo las dimensiones inservibles ($caso)',
+    ({ orden, paginacion, paginacionEsperada }) => {
+      const resultado = restaurarConsultaBandeja(
+        {
+          filtros: { estados: ['aprobado'], empresas: [empresaA.id] },
+          orden,
+          paginacion,
+        },
+        opciones,
+      )
 
-    expect(resultado.estado).toBe('incompleto')
-    expect(resultado.consulta).toEqual({
-      filtros: { estados: ['aprobado'], empresas: [empresaA.id] },
-      orden: { ...ORDEN_INICIAL },
-      paginacion: { pagina: 1, tamanoPagina: 10 },
-    })
-  })
+      expect(resultado.estado).toBe('incompleto')
+      expect(resultado.consulta).toEqual({
+        filtros: { estados: ['aprobado'], empresas: [empresaA.id] },
+        orden: { ...ORDEN_INICIAL },
+        paginacion: paginacionEsperada,
+      })
+    },
+  )
 
   it('es idempotente: restaurar la consulta restaurada no aplica ajustes', () => {
     const primera = restaurarConsultaBandeja(contextoCompleto, opciones)

@@ -10,6 +10,7 @@ import {
   type MotivoSaneoContextoBandeja,
   type OpcionesContextoBandeja,
 } from './contexto-bandeja'
+import { ORDEN_INICIAL } from './valores-bandeja'
 
 /**
  * Calidad del contexto recuperado: `restaurado` no aplicó cambios y
@@ -202,13 +203,19 @@ export function restaurarConsultaBandeja(
 
   const saneo = sanearContextoBandejaConAjustes(contexto, opciones)
   const ajustes: AjusteRestauracionBandeja[] = [...saneo.ajustes]
+  // La decisión de B-02 repone el orden inicial completo ante cualquier
+  // defecto de orden; el saneo compartido conserva el campo si solo falla la
+  // dirección.
+  const ordenConDefecto = saneo.ajustes.some(
+    (item) => item.campo === 'orden' || item.campo.startsWith('orden.'),
+  )
   const consulta: ConsultaBandeja = {
     filtros: retirarReferenciasAusentes(
       saneo.contexto.filtros,
       referenciasDe(opciones),
       ajustes,
     ),
-    orden: saneo.contexto.orden,
+    orden: ordenConDefecto ? { ...ORDEN_INICIAL } : saneo.contexto.orden,
     paginacion: saneo.contexto.paginacion,
   }
 
