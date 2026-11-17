@@ -23,7 +23,8 @@ Fase de **implementación por tareas (SDD)**: specs aprobadas funcionalmente, pl
 │   │   ├── README.md            # Convención de organización de specs
 │   │   ├── core/CORE-01-…/      # Capacidades compartidas del ERP
 │   │   └── rrhh/RH-REQ-01-…/    # Capacidades del módulo RR. HH.
-│   └── Inventario_y_conciliacion_RRHH.md
+│   ├── Inventario_y_conciliacion_RRHH.md
+│   └── Prototipo_visual_ventanas.md
 ├── .opencode/
 │   ├── agents/                  # coordinator, planner, implementer, reviewer
 │   └── commands/                # Comandos /sdd-*
