@@ -135,6 +135,7 @@
 - **Salida:** ajuste solo para Administrativo en Aprobado/En reclutamiento con motivo y rango 15–30; recálculo desde la aprobación original; historial que conserva actor, fecha/hora, motivo, valores y fechas; eventos históricos que no se borran ni se simulan como correos.
 - **Hecho cuando:** criterio 7 verificable (17→20 recalcula desde la misma aprobación).
 - **Orden (17-nov-2026):** se ejecuta después de T-RH-15, cuyo cómputo usa para recalcular la fecha objetivo (criterio 7).
+- **Decisión del 17-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual de UX-04 la desarrolla el usuario en una rama aparte. Su **primer paso** es extraer el rango 15–30 y su validador a un módulo neutral del dominio, de modo que `acciones`, `deadlines` y `form/helpers` dejen de duplicarlo y no aparezca un ciclo de importación entre `acciones` y `deadlines` al usar el ajuste el cómputo de T-RH-15. Después se implementan la elegibilidad del ajuste (solo Administrativo en Aprobado/En reclutamiento), el motivo obligatorio, el rango 15–30, el recálculo de fecha objetivo y umbrales desde la aprobación original, y la generación del evento de historial con actor, fecha/hora, motivo, valores anterior y nuevo y ambas fechas, sin borrar ni simular eventos ni correos. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `review/` ni `detail/**`; el refactor del rango puede tocar `acciones/reglas.ts`, `deadlines/plazos.ts` y `form/helpers.ts`.
 
 ### T-RH-14 — «Volver a bandeja» con contexto
 - [ ] Hecha
