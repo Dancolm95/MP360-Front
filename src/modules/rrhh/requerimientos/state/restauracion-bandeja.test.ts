@@ -7,12 +7,14 @@ import type {
   DepartamentoId,
   EmpresaId,
   FechaISO,
+  FiltrosBandeja,
   PuestoId,
   SubareaId,
   Usuario,
   UsuarioId,
 } from '../contracts'
 import {
+  CLAVES_FILTRO_BANDEJA,
   contextoBandejaInicial,
   crearStoreContextoBandeja,
   type ContextoBandeja,
@@ -116,6 +118,39 @@ describe('restauración del contexto de bandeja (RH-REQ-01 §7.3, §10-22)', () 
 
     expect(resultado.estado).toBe('restaurado')
     expect(resultado.consulta).toEqual(contextoCompleto)
+    expect(resultado.ajustes).toEqual([])
+  })
+
+  it('conserva todos los filtros que acepta el saneo compartido', () => {
+    const filtros: FiltrosBandeja = {
+      estados: ['aprobado'],
+      motivos: ['reemplazo'],
+      empresas: [empresaA.id],
+      areas: [areaA.id],
+      subareas: [subareaA.id],
+      puestos: [puestoA.id],
+      solicitantes: [usuarioA.id],
+      periodoAprobacion: {
+        desde: fecha('2026-01-01'),
+        hasta: fecha('2026-01-31'),
+      },
+    }
+
+    expect(Object.keys(filtros).sort()).toEqual(
+      [...CLAVES_FILTRO_BANDEJA].sort(),
+    )
+
+    const resultado = restaurarConsultaBandeja(
+      {
+        filtros,
+        orden: { ...ORDEN_INICIAL },
+        paginacion: { pagina: 1, tamanoPagina: 10 },
+      },
+      opciones,
+    )
+
+    expect(resultado.estado).toBe('restaurado')
+    expect(resultado.consulta.filtros).toEqual(filtros)
     expect(resultado.ajustes).toEqual([])
   })
 
@@ -500,7 +535,25 @@ describe('restauración del contexto de bandeja (RH-REQ-01 §7.3, §10-22)', () 
     ])
   })
 
-  it('ida y vuelta: la consulta restaurada vuelve a producir el mismo contexto', () => {
+  it('respaldo selectivo: repone solo las dimensiones inservibles', () => {
+    const resultado = restaurarConsultaBandeja(
+      {
+        filtros: { estados: ['aprobado'], empresas: [empresaA.id] },
+        orden: { campo: 'urgencia', direccion: 'asc' },
+        paginacion: { pagina: 0, tamanoPagina: 7 },
+      },
+      opciones,
+    )
+
+    expect(resultado.estado).toBe('incompleto')
+    expect(resultado.consulta).toEqual({
+      filtros: { estados: ['aprobado'], empresas: [empresaA.id] },
+      orden: { ...ORDEN_INICIAL },
+      paginacion: { pagina: 1, tamanoPagina: 10 },
+    })
+  })
+
+  it('es idempotente: restaurar la consulta restaurada no aplica ajustes', () => {
     const primera = restaurarConsultaBandeja(contextoCompleto, opciones)
     const segunda = restaurarConsultaBandeja(primera.consulta, opciones)
 
