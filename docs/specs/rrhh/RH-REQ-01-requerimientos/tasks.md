@@ -196,6 +196,7 @@
 ### T-RH-18 — «Abrir proceso en Selección»
 - [ ] Hecha
 - **Depende de:** T-RH-16.
+- **Decisión del 18-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual la desarrolla el usuario en una rama aparte. Se implementa la apertura de proceso consumiendo la guarda de T-RH-16 y la puerta versionada de T-RH-17, con permanencia en Aprobado hasta la confirmación de Selección, error reintentable y sin cambio optimista; la ejecución del comando se apoya en el puerto y su evidencia es con mocks. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `form/**`, `review/**` ni `detail/**`.
 - **Traza:** plan §2.1; §10 criterios 8 y 26.
 - **Entrada:** contrato de apertura (T-RH-02).
 - **Salida:** acción explícita desde el detalle de un Aprobado; sin optimismo (permanece Aprobado hasta confirmación); error reintentable; transición Aprobado → En reclutamiento solo con confirmación de Selección.
@@ -204,6 +205,7 @@
 ### T-RH-19 — Primer día real de Alta y cobertura
 - [ ] Hecha
 - **Depende de:** T-RH-16.
+- **Decisión del 18-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual la desarrolla el usuario en una rama aparte. Se implementa el registro del primer día real en solo lectura y el efecto en cobertura (cubiertas solo al confirmarse, `pendientes = solicitadas − cubiertas`, paso a Cubierto al llegar a cero y fecha objetivo sin cambios), consumiendo T-RH-15 y T-RH-16 sin recalcular plazos. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `form/**`, `review/**` ni `detail/**`.
 - **Traza:** plan §2.2; §10 criterio 9.
 - **Entrada:** contrato de Alta (T-RH-02).
 - **Salida:** primer día real en solo lectura solo para cobertura; `cubiertas` incrementa solo al confirmarse; `pendientes = solicitadas − cubiertas`; Cubierto al llegar a cero; fecha objetivo sin cambio.
@@ -212,6 +214,7 @@
 ### T-RH-20 — Reversión de cobertura
 - [ ] Hecha
 - **Depende de:** T-RH-19.
+- **Decisión del 18-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual la desarrolla el usuario en una rama aparte. Se implementa la solicitud motivada de reversión y el efecto del evento auditado de Selección sobre los contadores y el estado, con rechazo o fallo que conserva e informa, y trazabilidad de solicitud y evento; sin ejecutar la integración real. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `form/**`, `review/**` ni `detail/**`.
 - **Traza:** plan §2.3; §10 criterios 10 y 27.
 - **Entrada:** contrato de reversión (T-RH-02).
 - **Salida:** solicitud por RR. HH. con motivo; los contadores solo cambian con el evento auditado confirmado de Selección; Cubierto → En reclutamiento; rechazo/fallo conserva e informa; solicitud y evento auditados.
@@ -220,6 +223,7 @@
 ### T-RH-21 — «Asociar candidato» (navegación)
 - [ ] Hecha
 - **Depende de:** T-RH-18.
+- **Decisión del 18-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual la desarrolla el usuario en una rama aparte. Se implementa la elegibilidad de «Asociar candidato» (solo con capacidad y en En reclutamiento) y la resolución de la navegación al proceso ya creado, sin crear proceso ni vínculo. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `form/**`, `review/**` ni `detail/**`.
 - **Traza:** plan §2; §10 criterio 11.
 - **Entrada:** contrato de navegación (T-RH-02).
 - **Salida:** solo RR. HH. con capacidad en En reclutamiento; navega al proceso ya creado en Selección; no crea proceso ni vínculo; vínculos/desvínculos proceden de Selección.
@@ -228,6 +232,7 @@
 ### T-RH-22 — Remuneración previa al alta (solo lectura)
 - [ ] Hecha
 - **Depende de:** T-RH-11.
+- **Decisión del 18-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual la desarrolla el usuario en una rama aparte. Se implementa la lectura de la remuneración previa al alta sin editar ni duplicar el ajuste, con la regla de que Alta no hereda la excepción `0.00` y no confirma con `0.00`, y sin modificar el requerimiento aprobado. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `form/**`, `review/**` ni `detail/**`.
 - **Traza:** plan §2.4; §10 criterio 25.
 - **Entrada:** contrato del ajuste de Alta (T-RH-02).
 - **Salida:** RH-REQ-01 no edita ni duplica el ajuste; si se muestra, es solo lectura; Alta no hereda la excepción `0.00` y no confirma con `0.00`; el ajuste no modifica el requerimiento aprobado.
