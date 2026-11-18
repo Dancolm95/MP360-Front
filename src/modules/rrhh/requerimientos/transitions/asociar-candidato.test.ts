@@ -295,21 +295,6 @@ describe('navegación de «Asociar candidato»', () => {
     },
   )
 
-  it('Aprobado no alcanza el proceso aunque exista la referencia', () => {
-    const detalle = detalleCompleto({
-      estado: 'aprobado',
-      procesoSeleccion: proceso,
-    })
-
-    const resultado = resolverNavegacionAsociarCandidato(detalle)
-
-    expect(resultado).toMatchObject({
-      status: 'estado-invalido',
-      estadoActual: 'aprobado',
-    })
-    expect(resultado).not.toHaveProperty('destino')
-  })
-
   it('rechaza explícitamente En reclutamiento sin referencia de proceso', () => {
     const detalle = detalleCompleto({ procesoSeleccion: null })
     const antes = structuredClone(detalle)

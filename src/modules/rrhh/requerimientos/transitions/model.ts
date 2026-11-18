@@ -61,12 +61,6 @@ export const TRANSICIONES: Readonly<
     origenes: ['aprobado'],
     destino: 'mismo-estado',
   },
-  /** La navegación a Selección no cambia estado: solo se decide su elegibilidad. */
-  'asociar-candidato': {
-    accion: 'asociar-candidato',
-    origenes: ['en-reclutamiento'],
-    destino: 'mismo-estado',
-  },
   'confirmar-apertura-proceso': {
     accion: null,
     origenes: ['aprobado'],

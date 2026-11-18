@@ -6,7 +6,8 @@ import type {
   MotivoDenegacion,
   ProcesoSeleccionRef,
 } from '../contracts'
-import { evaluarTransicion } from './maquina'
+import { accionConcedida } from '../model'
+import { MENSAJES_RECHAZO } from './maquina'
 
 export type ResultadoNavegacionAsociarCandidato =
   | {
@@ -16,6 +17,7 @@ export type ResultadoNavegacionAsociarCandidato =
     }
   | {
       readonly status: 'sin-autorizacion'
+      /** El ámbito lo resuelve el backend en `accionesPermitidas`; aquí solo consta la capacidad. */
       readonly motivo: MotivoDenegacion
       readonly mensaje: string
     }
@@ -39,20 +41,21 @@ export const MENSAJE_SIN_PROCESO =
 export function resolverNavegacionAsociarCandidato(
   detalle: DetalleRequerimiento,
 ): ResultadoNavegacionAsociarCandidato {
-  const veredicto = evaluarTransicion(detalle, { suceso: 'asociar-candidato' })
-
-  if (!veredicto.permitida) {
-    if (veredicto.motivo === 'sin-autorizacion') {
-      return {
-        status: 'sin-autorizacion',
-        motivo: 'capacidad',
-        mensaje: veredicto.mensaje,
-      }
+  // «Asociar candidato» es navegación de §7.3, no una transición de §6: por eso
+  // su elegibilidad se decide aquí y no amplía la máquina de estados.
+  if (!accionConcedida(detalle, 'asociar-candidato')) {
+    return {
+      status: 'sin-autorizacion',
+      motivo: 'capacidad',
+      mensaje: MENSAJES_RECHAZO['sin-autorizacion'],
     }
+  }
+
+  if (detalle.estado !== 'en-reclutamiento') {
     return {
       status: 'estado-invalido',
       estadoActual: detalle.estado,
-      mensaje: veredicto.mensaje,
+      mensaje: MENSAJES_RECHAZO['suceso-no-aplica-al-estado'],
     }
   }
 

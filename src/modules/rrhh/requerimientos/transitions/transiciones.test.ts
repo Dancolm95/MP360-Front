@@ -371,7 +371,6 @@ const ORIGENES_ESPERADOS: Readonly<
   'fijar-plazo': ['pendiente-aprobacion'],
   'ajustar-plazo': ['aprobado', 'en-reclutamiento'],
   'iniciar-apertura-proceso': ['aprobado'],
-  'asociar-candidato': ['en-reclutamiento'],
   'confirmar-apertura-proceso': ['aprobado'],
   'confirmar-primer-dia-real': ['en-reclutamiento'],
   'confirmar-reversion-cobertura': ['cubierto', 'en-reclutamiento'],
@@ -389,7 +388,6 @@ function destinoEsperado(
     case 'fijar-plazo':
     case 'ajustar-plazo':
     case 'iniciar-apertura-proceso':
-    case 'asociar-candidato':
       return origen
     case 'enviar':
     case 'reenviar':
@@ -434,7 +432,6 @@ function solicitudPara(suceso: Suceso) {
     case 'fijar-plazo':
     case 'ajustar-plazo':
     case 'iniciar-apertura-proceso':
-    case 'asociar-candidato':
       return { suceso } as const
   }
 }
