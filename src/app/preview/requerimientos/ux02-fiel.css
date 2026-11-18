@@ -3343,29 +3343,89 @@
   --azul-suave: #e1e7f8;
   --azul-acento: #294bee;
   --ux06-linea: #cccdd2;
-  background:
-    radial-gradient(
-      120% 105% at 104% 52%,
-      #ccd3f0 0%,
-      #d6dcf2 28%,
-      #e3e7f5 48%,
-      #f0f1f4 70%,
-      #f6f5f4 84%
-    );
+  background: linear-gradient(
+    118deg,
+    #f6f5f4 0%,
+    #f6f5f4 28%,
+    #eeeff3 40%,
+    #e8ebf2 51%,
+    #cdd4f1 100%
+  );
 }
 
 .ux06-main {
-  padding-top: 34px;
+  padding-top: 0;
 }
 
 .ux06-columna {
   width: 1571.5px;
   flex: 0 0 1571.5px;
+  padding-top: 34px;
+}
+
+.ux06-lienzo .ux02-rail {
+  position: relative;
+  padding-top: 50px;
+}
+
+/* El render dibuja un panel translúcido detrás del rail solo en esta ventana. */
+.ux06-lienzo .ux02-rail::before {
+  content: '';
+  position: absolute;
+  top: 42px;
+  left: 1px;
+  z-index: -1;
+  width: 230px;
+  height: 820px;
+  border-radius: 4px;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.46) 0%,
+    rgba(255, 255, 255, 0.38) 22%,
+    rgba(255, 255, 255, 0.34) 70%,
+    rgba(255, 255, 255, 0.22) 100%
+  );
+}
+
+.ux06-lienzo .ux02-rail__titulo {
+  padding-left: 17px;
+}
+
+.ux06-lienzo .ux02-rail > .ux02-rail__titulo:first-child {
+  padding-left: 26px;
+}
+
+.ux06-lienzo .ux02-rail__tarjeta--acciones {
+  height: 335px;
+}
+
+.ux06-lienzo .ux02-rail__accesos {
+  margin-top: 29px;
+}
+
+.ux06-lienzo .ux02-rail__accesos-lista {
+  margin-top: 12px;
+}
+
+.ux06-lienzo .ux02-rail__eventos {
+  margin-top: 43px;
+}
+
+.ux06-lienzo .ux02-rail__tarjeta--eventos {
+  margin-top: 13px;
+  height: 132px;
+  padding: 4px 14px 10px;
+}
+
+/* El prototipo compartido omite el signo; el diseño de la p. 11 lo dibuja. */
+.ux06-lienzo .ux02-rail__ver-mas::after {
+  content: '+';
+  margin-left: 5px;
 }
 
 .ux06-breadcrumb {
   color: #969696;
-  gap: 10px;
+  gap: 12px;
 }
 
 .ux06-breadcrumb .ux02-breadcrumb__activo {
@@ -3374,7 +3434,7 @@
 
 .ux06-cabecera {
   position: relative;
-  height: 72px;
+  height: 71px;
 }
 
 .ux06-cabecera__fila {
@@ -3386,7 +3446,7 @@
 }
 
 .ux06-titulo {
-  margin: 0;
+  margin: 0 0 0 -2px;
   font-family: 'Montserrat', sans-serif;
   font-size: 20px;
   font-weight: 700;
@@ -3398,7 +3458,7 @@
   height: 30px;
   display: inline-flex;
   align-items: center;
-  padding: 0 8px;
+  padding: 0 10px;
   border-radius: 15px;
   background: var(--azul-suave);
   color: var(--azul);
@@ -3434,7 +3494,7 @@
   display: grid;
   grid-template-columns: 1053px 500px;
   column-gap: 18.5px;
-  row-gap: 19px;
+  row-gap: 16px;
 }
 
 .ux06-tarjeta {
@@ -3446,20 +3506,20 @@
 
 .ux06-resumen {
   grid-column: 1 / -1;
-  height: 172px;
+  height: 175px;
 }
 
 .ux06-evaluacion {
-  height: 214px;
+  height: 218px;
 }
 
 .ux06-acciones {
-  height: 216px;
+  height: 218px;
 }
 
 .ux06-documentos,
 .ux06-historial {
-  height: 245.5px;
+  height: 249px;
 }
 
 .ux06-titulo-tarjeta {
@@ -3511,7 +3571,7 @@
 }
 
 .ux06-persona__dni {
-  margin-top: 4px;
+  margin-top: 1px;
   font-size: 13px;
   line-height: 1;
   color: #808080;
@@ -3534,7 +3594,7 @@
 }
 
 .ux06-dato--empresa {
-  left: 665.5px;
+  left: 667.5px;
 }
 
 .ux06-dato--tipo {
@@ -3542,7 +3602,7 @@
 }
 
 .ux06-dato--responsable {
-  left: 1117.5px;
+  left: 1114px;
 }
 
 .ux06-dato--actualizacion {
@@ -3558,7 +3618,7 @@
 }
 
 .ux06-dato dd {
-  margin: 5px 0 0;
+  margin: 3px 0 0;
   font-size: 15px;
   font-weight: 600;
   line-height: 1.1;
@@ -3571,8 +3631,9 @@
 }
 
 .ux06-badge-empresa {
-  width: 97px;
-  height: 22px;
+  margin-left: -3px;
+  width: 99px;
+  height: 23px;
   display: grid;
   place-items: center;
   border-radius: 2px;
@@ -3615,10 +3676,10 @@
 
 .ux06-progreso__linea {
   position: absolute;
-  top: 112.5px;
+  top: 111.5px;
   left: 120px;
   width: 1170px;
-  height: 4px;
+  height: 5px;
   background: var(--ux06-linea);
 }
 
@@ -3700,19 +3761,19 @@
 }
 
 .ux06-paso:nth-child(2) .ux06-paso__etiqueta {
-  left: 40px;
+  left: 39px;
 }
 
 .ux06-paso:nth-child(3) .ux06-paso__etiqueta {
-  left: 49px;
+  left: 48px;
 }
 
 .ux06-paso:nth-child(4) .ux06-paso__etiqueta {
-  left: 40px;
+  left: 39px;
 }
 
 .ux06-paso:nth-child(5) .ux06-paso__etiqueta {
-  left: 29.5px;
+  left: 28.5px;
 }
 
 .ux06-paso[data-estado='pendiente'] .ux06-paso__etiqueta {
@@ -3724,8 +3785,8 @@
 .ux06-evaluacion__cabecera {
   position: absolute;
   top: 16px;
-  left: 31px;
-  right: 16.5px;
+  left: 28px;
+  right: 15.5px;
   height: 28px;
   display: flex;
   align-items: center;
@@ -3746,7 +3807,7 @@
   display: flex;
   align-items: center;
   gap: 11px;
-  padding: 0 19px 0 22px;
+  padding: 0 14px 0 17px;
   border: 1px solid var(--azul);
   border-radius: 4px;
   background: #fff;
@@ -3781,25 +3842,25 @@
 }
 
 .ux06-evaluacion__celda {
-  padding: 16.5px 0 0 23px;
+  padding: 15.5px 0 0 20px;
   border-left: 1px solid var(--separador);
 }
 
 .ux06-evaluacion__celda:first-child {
   border-left: 0;
-  padding-left: 23.5px;
+  padding-left: 20.5px;
 }
 
 .ux06-evaluacion__celda:nth-child(2) {
-  padding-left: 38.5px;
+  padding-left: 35.5px;
 }
 
 .ux06-evaluacion__celda:nth-child(4) {
-  padding-left: 50.5px;
+  padding-left: 47.5px;
 }
 
 .ux06-evaluacion__celda dt {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1;
   color: #808080;
@@ -3807,7 +3868,7 @@
 }
 
 .ux06-evaluacion__celda dd {
-  margin: 5.5px 0 0;
+  margin: 3.5px 0 0;
   font-size: 15px;
   font-weight: 600;
   line-height: 1.1;
@@ -3816,19 +3877,19 @@
 }
 
 .ux06-evaluacion__comentario {
-  padding: 12.5px 0 0 23.5px;
+  padding: 3.5px 0 0 21.5px;
   border-top: 1px solid var(--separador);
 }
 
 .ux06-evaluacion__rotulo {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1;
   color: #808080;
 }
 
 .ux06-evaluacion__texto {
-  margin: 9.5px 19.5px 0 1px;
+  margin: 3.5px 19.5px 0 1px;
   height: 28px;
   display: flex;
   align-items: center;
@@ -3843,29 +3904,29 @@
 
 .ux06-acciones .ux06-titulo-tarjeta {
   position: absolute;
-  top: 19px;
+  top: 18px;
   left: 34px;
 }
 
 .ux06-acciones__lista {
   position: absolute;
   top: 49px;
-  left: 31.5px;
+  left: 31px;
   display: flex;
   flex-direction: column;
 }
 
 .ux06-btn-accion {
-  width: 441px;
+  width: 440px;
   border-radius: 4px;
   background: #fff;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .ux06-btn-accion--primario {
-  height: 37px;
+  height: 38px;
   border: 0;
   background: var(--azul);
   color: #fff;
@@ -3879,12 +3940,13 @@
 }
 
 .ux06-btn-accion--peligro {
-  height: 39px;
-  margin-top: 11px;
+  height: 41px;
+  margin-top: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 2px;
+  padding-right: 14px;
   border: 1px solid #eb3c34;
   color: #eb3c34;
 }
@@ -3897,13 +3959,13 @@
 
 .ux06-documentos .ux06-titulo-tarjeta {
   position: absolute;
-  top: 25px;
-  left: 31px;
+  top: 27px;
+  left: 28px;
 }
 
 .ux06-documentos__tabla {
   position: absolute;
-  top: 53px;
+  top: 56px;
   left: 26.5px;
   width: 1011px;
   height: 176px;
@@ -3914,7 +3976,7 @@
 
 .ux06-documentos__fila {
   position: relative;
-  height: 58.1px;
+  height: 57.5px;
   display: flex;
   align-items: center;
 }
@@ -3926,10 +3988,10 @@
 .ux06-documentos__icono {
   position: absolute;
   top: 50%;
-  left: 17.5px;
-  width: 29px;
-  height: 29px;
-  margin-top: -14.5px;
+  left: 15.5px;
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -3943,7 +4005,7 @@
 
 .ux06-documentos__datos {
   position: absolute;
-  left: 59.5px;
+  left: 57.5px;
   top: 50%;
   margin-top: -17px;
   display: flex;
@@ -3970,10 +4032,10 @@
 .ux06-badge-validado {
   position: absolute;
   top: 50%;
-  left: 515px;
-  width: 128px;
-  height: 30px;
-  margin-top: -15px;
+  left: 514px;
+  width: 129px;
+  height: 31px;
+  margin-top: -15.5px;
   display: grid;
   place-items: center;
   border-radius: 15px;
@@ -3986,7 +4048,7 @@
 .ux06-enlace {
   position: absolute;
   top: 50%;
-  left: 806.5px;
+  left: 803.5px;
   margin-top: -8px;
   height: 16px;
   display: flex;
@@ -4024,20 +4086,20 @@
 }
 
 .ux06-menu-puntos .ux02-i {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 /* Historial */
 
 .ux06-historial .ux06-titulo-tarjeta {
   position: absolute;
-  top: 21px;
-  left: 36px;
+  top: 23px;
+  left: 33px;
 }
 
 .ux06-historial__linea {
   position: absolute;
-  top: 76px;
+  top: 75px;
   left: 46px;
   width: 4px;
   height: 138px;
@@ -4057,7 +4119,8 @@
 }
 
 .ux06-historial__marca .ux02-i {
-  font-size: 12px;
+  font-size: 13px;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
 }
 
 .ux06-historial__marca[data-estado='pendiente'] {
@@ -4065,19 +4128,19 @@
 }
 
 .ux06-historial__marca[data-indice='1'] {
-  top: 68px;
+  top: 67px;
 }
 
 .ux06-historial__marca[data-indice='2'] {
-  top: 111px;
+  top: 110px;
 }
 
 .ux06-historial__marca[data-indice='3'] {
-  top: 159px;
+  top: 158px;
 }
 
 .ux06-historial__marca[data-indice='4'] {
-  top: 214px;
+  top: 213px;
 }
 
 .ux06-historial__hitos {
@@ -4094,19 +4157,19 @@
 }
 
 .ux06-hito[data-indice='1'] {
-  top: 60.5px;
+  top: 59.5px;
 }
 
 .ux06-hito[data-indice='2'] {
-  top: 103px;
+  top: 102px;
 }
 
 .ux06-hito[data-indice='3'] {
-  top: 152.5px;
+  top: 151.5px;
 }
 
 .ux06-hito[data-indice='4'] {
-  top: 199px;
+  top: 198px;
 }
 
 .ux06-hito__fecha {
@@ -4127,8 +4190,8 @@
 
 .ux06-paginacion {
   position: absolute;
-  right: 16px;
-  bottom: 16px;
+  right: 14px;
+  bottom: 17px;
   display: flex;
   gap: 7.5px;
 }

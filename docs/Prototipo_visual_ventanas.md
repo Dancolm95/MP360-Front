@@ -126,7 +126,7 @@ public/preview/mp360/
 | UX-03b Confirmación | Sin cambios solicitados | 7,9 / 255 |
 | UX-04 Detalle | Sin cambios solicitados | 10,0 / 255 |
 | Candidatos (PDF p. 10) | Pendiente de revisión visual | 8,9 / 255 |
-| Candidato (PDF p. 11) | Pendiente de revisión visual | 8,9 / 255 |
+| Candidato (PDF p. 11) | Calibrada; pendiente de revisión visual | 6,3 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
