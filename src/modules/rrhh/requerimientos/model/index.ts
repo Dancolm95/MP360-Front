@@ -5,6 +5,7 @@ export * from './estados'
 export * from './etiquetas'
 export * from './formato'
 export * from './formulario'
+export * from './remuneracion-previa-alta'
 export * from './reversion-cobertura'
 export {
   comprobarJerarquiaOrganizacional,
