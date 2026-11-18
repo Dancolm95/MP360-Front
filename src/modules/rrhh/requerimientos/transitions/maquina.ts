@@ -3,11 +3,15 @@ import type {
   EstadoRequerimiento,
 } from '../contracts'
 import {
+  DIAS_HABILES_ADMINISTRATIVOS,
+  situacionPlazoAprobacion,
+} from '../deadlines'
+import {
   accionConcedida,
+  clasificacionDeDetalle,
   esAccionElegible,
   esCausalCancelacion,
   motivoEstadoNoAplicable,
-  situacionPlazoAprobacion,
 } from '../model'
 import { TRANSICIONES } from './model'
 import type {
@@ -27,7 +31,7 @@ const MENSAJES_RECHAZO: Readonly<Record<MotivoRechazoTransicion, string>> = {
   'clasificacion-no-aplicable':
     'La acción solo aplica a requerimientos de clasificación administrativa.',
   'plazo-administrativo-invalido':
-    'El plazo administrativo debe ser un entero entre 15 y 30 días hábiles antes de aprobar.',
+    `El plazo administrativo debe ser un entero entre ${DIAS_HABILES_ADMINISTRATIVOS.minimo} y ${DIAS_HABILES_ADMINISTRATIVOS.maximo} días hábiles antes de aprobar.`,
   'confirmacion-requerida': 'Confirma la cancelación del requerimiento.',
   'causal-requerida':
     'Selecciona una causal válida: menor carga laboral o creación por error.',
@@ -134,7 +138,12 @@ export function evaluarTransicion(
     case 'reenviar':
       return permitida(detalle, solicitud.suceso, 'pendiente-aprobacion')
     case 'aprobar':
-      if (situacionPlazoAprobacion(detalle) === 'invalido') {
+      if (
+        situacionPlazoAprobacion(
+          clasificacionDeDetalle(detalle),
+          detalle.plazo,
+        ) === 'invalido'
+      ) {
         return rechazo(
           detalle,
           solicitud.suceso,

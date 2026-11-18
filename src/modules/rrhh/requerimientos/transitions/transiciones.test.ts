@@ -456,6 +456,13 @@ describe('modelo explícito de transiciones', () => {
   it('solo declara Cancelado como estado terminal', () => {
     expect(ESTADOS_TERMINALES).toEqual(['cancelado'])
   })
+
+  it('declara exactamente las causales de cancelación de §6', () => {
+    expect(CAUSALES_CANCELACION).toEqual([
+      'menor-carga-laboral',
+      'creacion-por-error',
+    ])
+  })
 })
 
 describe('matriz de transiciones permitidas y rechazadas', () => {
@@ -1056,18 +1063,31 @@ describe('API pura', () => {
     }
   })
 
-  it('es determinista y no muta el detalle', () => {
-    const detalle = detalleCompleto({ estado: 'pendiente-aprobacion' })
-    const copia = structuredClone(detalle)
-
+  it('es determinista al evaluar todos los sucesos', () => {
     const primero = SUCESOS_TRANSICION.map((suceso) =>
-      evaluarTransicion(detallePara(ORIGENES_ESPERADOS[suceso][0]), solicitudPara(suceso)),
+      evaluarTransicion(
+        detallePara(ORIGENES_ESPERADOS[suceso][0]),
+        solicitudPara(suceso),
+      ),
     )
     const segundo = SUCESOS_TRANSICION.map((suceso) =>
-      evaluarTransicion(detallePara(ORIGENES_ESPERADOS[suceso][0]), solicitudPara(suceso)),
+      evaluarTransicion(
+        detallePara(ORIGENES_ESPERADOS[suceso][0]),
+        solicitudPara(suceso),
+      ),
     )
 
     expect(primero).toEqual(segundo)
+  })
+
+  it('no muta el detalle recibido', () => {
+    const detalle = Object.freeze(
+      detalleCompleto({ estado: 'pendiente-aprobacion' }),
+    )
+    const copia = structuredClone(detalle)
+
+    evaluarTransicion(detalle, { suceso: 'aprobar' })
+
     expect(detalle).toEqual(copia)
   })
 })

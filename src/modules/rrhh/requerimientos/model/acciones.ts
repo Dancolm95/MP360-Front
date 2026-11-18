@@ -4,7 +4,6 @@ import type {
   DetalleRequerimiento,
   EstadoRequerimiento,
 } from '../contracts'
-import { esDiasHabilesAdministrativos } from '../deadlines/rango'
 import { ESTADOS_CANCELABLES } from './estados'
 
 /**
@@ -78,23 +77,4 @@ export function motivoEstadoNoAplicable(
       : 'clasificacion-no-aplicable'
   }
   return null
-}
-
-export type SituacionPlazoAprobacion = 'no-aplica' | 'valido' | 'invalido'
-
-/**
- * Un Administrativo solo se aprueba con un plazo entero 15–30; un Operativo no
- * lo requiere. No calcula fechas ni días hábiles.
- */
-export function situacionPlazoAprobacion(
-  detalle: DetalleRequerimiento,
-): SituacionPlazoAprobacion {
-  if (clasificacionDeDetalle(detalle) !== 'administrativo') return 'no-aplica'
-
-  const plazo = detalle.plazo
-  const dias =
-    plazo?.clasificacion === 'administrativo'
-      ? plazo.duracionDiasHabiles
-      : null
-  return esDiasHabilesAdministrativos(dias) ? 'valido' : 'invalido'
 }

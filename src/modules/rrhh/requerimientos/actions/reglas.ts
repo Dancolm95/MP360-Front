@@ -2,8 +2,9 @@ import type { DetalleRequerimientoCompleto } from '../contracts'
 import {
   DIAS_HABILES_ADMINISTRATIVOS,
   esDiasHabilesAdministrativos,
+  situacionPlazoAprobacion,
 } from '../deadlines'
-import { esCausalCancelacion, situacionPlazoAprobacion } from '../model'
+import { clasificacionDeDetalle, esCausalCancelacion } from '../model'
 import type {
   ErrorAccion,
   ResultadoPlazoValidado,
@@ -26,7 +27,14 @@ export function comentarioNormalizado(
 export function validarPlazoAdministrativoParaAprobar(
   detalle: DetalleRequerimientoCompleto,
 ): readonly ErrorAccion[] {
-  if (situacionPlazoAprobacion(detalle) !== 'invalido') return []
+  if (
+    situacionPlazoAprobacion(
+      clasificacionDeDetalle(detalle),
+      detalle.plazo,
+    ) !== 'invalido'
+  ) {
+    return []
+  }
 
   return [
     {

@@ -11,6 +11,8 @@ export {
   seleccionarAlertaVigente,
 } from './evaluacion'
 export { derivarDuracionAplicable } from './duracion'
+export type { SituacionPlazoAprobacion } from './plazo-aprobacion'
+export { situacionPlazoAprobacion } from './plazo-aprobacion'
 export {
   DIAS_HABILES_ADMINISTRATIVOS,
   esDiasHabilesAdministrativos,
