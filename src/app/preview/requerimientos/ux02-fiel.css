@@ -6870,3 +6870,569 @@
 .ux07-pasos--datos .ux07-paso:nth-child(4) {
   gap: 15px;
 }
+
+/* Paso 3: resumen final de validaciones */
+
+.ux07-resumen {
+  margin-top: 11px;
+}
+
+.ux07-resumen__progreso {
+  top: 44px;
+  bottom: auto;
+  left: 1360px;
+  width: 215.5px;
+  height: 5px;
+}
+
+.ux07-resumen__datos,
+.ux07-resumen__info {
+  position: relative;
+}
+
+.ux07-resumen__datos {
+  height: 696px;
+}
+
+.ux07-resumen__info {
+  height: 591px;
+}
+
+.ux07-resumen__titulo {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ux07-resumen__info .ux07-resumen__titulo {
+  left: 30px;
+}
+
+.ux07-resumen__marca {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  align-self: flex-start;
+  margin-top: 1px;
+  background: var(--azul);
+}
+
+.ux07-resumen__titulo h2 {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ux07-resumen__banda {
+  position: absolute;
+  left: 20px;
+  right: 26px;
+  top: 60px;
+  height: 66px;
+  border-radius: 4px;
+  background: #edf3fd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 26px 0 20px;
+}
+
+.ux07-resumen__info .ux07-resumen__banda {
+  left: 25px;
+  right: 20px;
+}
+
+.ux07-resumen__banda--validaciones {
+  top: 256px;
+}
+
+.ux07-resumen__banda-titulo {
+  position: relative;
+  top: -1px;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #000;
+}
+
+.ux07-resumen__revisado {
+  position: relative;
+  top: -2px;
+  width: 143px;
+  height: 31px;
+  flex: 0 0 143px;
+  border-radius: 15.5px;
+  background: #489a57;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-left: 17px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ux07-resumen__revisado-icono {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  display: flex;
+}
+
+.ux07-resumen__revisado-circulo {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fff;
+  color: #489a57;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux07-resumen__revisado-circulo svg {
+  width: 15px;
+  height: 15px;
+}
+
+.ux07-resumen__persona {
+  position: absolute;
+  left: 38px;
+  top: 137px;
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+}
+
+.ux07-resumen__avatar {
+  display: block;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 56px;
+  color: var(--azul);
+}
+
+.ux07-resumen__avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux07-resumen__ver-foto {
+  margin-top: 5px;
+  width: 170px;
+  height: 49px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: #fff;
+  color: #808080;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ux07-resumen__ficha {
+  position: absolute;
+  left: 37px;
+  top: 198px;
+  width: 671px;
+}
+
+.ux07-resumen__fila {
+  position: relative;
+  display: grid;
+  grid-template-columns: 155px 220px 136px 160px;
+  align-items: flex-start;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.ux07-resumen__fila:nth-child(1) {
+  height: 31px;
+  padding-top: 3.5px;
+}
+
+.ux07-resumen__fila:nth-child(2) {
+  height: 46px;
+  padding-top: 17.5px;
+}
+
+.ux07-resumen__fila:nth-child(3) {
+  height: 40px;
+  padding-top: 16.5px;
+}
+
+.ux07-resumen__fila:nth-child(4) {
+  height: 51px;
+  padding-top: 21.5px;
+}
+
+.ux07-resumen__fila:nth-child(5) {
+  height: 41px;
+  padding-top: 15.5px;
+}
+
+.ux07-resumen__fila:nth-child(6) {
+  height: 49px;
+  padding-top: 19.5px;
+}
+
+.ux07-resumen__fila:nth-child(7) {
+  height: 49px;
+  padding-top: 15.5px;
+  border-bottom: 0;
+}
+
+.ux07-resumen__fila--media {
+  border-bottom: 0;
+}
+
+.ux07-resumen__fila--media::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 347px;
+  height: 1px;
+  background: #e3e3e3;
+}
+
+.ux07-resumen__etiqueta {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  color: #666;
+}
+
+.ux07-resumen__valor {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ux07-resumen__editar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--azul);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.ux07-resumen__editar .ux02-i {
+  font-size: 15px;
+}
+
+.ux07-resumen__editar--direccion {
+  position: absolute;
+  right: 52px;
+  top: 480px;
+}
+
+.ux07-resumen__pago {
+  position: absolute;
+  left: 29px;
+  top: 505px;
+  width: 711px;
+  height: 127px;
+  border-radius: 4px;
+  background: #edf3fd;
+}
+
+.ux07-resumen__pago-fila {
+  position: relative;
+  width: 671px;
+  margin-left: 8px;
+  display: grid;
+  grid-template-columns: 155px 220px 136px 160px;
+  align-items: flex-start;
+}
+
+.ux07-resumen__pago-fila:nth-child(1) {
+  height: 38px;
+  padding-top: 11.5px;
+}
+
+.ux07-resumen__pago-fila:nth-child(2) {
+  height: 49px;
+  padding-top: 19.5px;
+}
+
+.ux07-resumen__pago-fila:nth-child(3) {
+  height: 39px;
+  padding-top: 14.5px;
+}
+
+.ux07-resumen__pago-fila:nth-child(1)::after,
+.ux07-resumen__pago-fila:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 347px;
+  height: 1px;
+  background: #e8ebf0;
+}
+
+.ux07-resumen__editar--pago {
+  position: absolute;
+  right: 17px;
+  bottom: 4px;
+}
+
+.ux07-resumen__info-persona {
+  position: absolute;
+  left: 42px;
+  top: 137px;
+  width: 700px;
+  height: 100px;
+}
+
+.ux07-resumen__info-persona .ux07-resumen__avatar {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.ux07-resumen__info-datos {
+  position: absolute;
+  left: 88px;
+  top: 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  white-space: nowrap;
+}
+
+.ux07-resumen__info-nombre {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #333;
+}
+
+.ux07-resumen__info-dato {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 14px;
+  color: #808080;
+}
+
+.ux07-resumen__tallas {
+  position: absolute;
+  top: 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux07-resumen__tallas--izquierda {
+  left: 224px;
+}
+
+.ux07-resumen__tallas--derecha {
+  left: 479px;
+}
+
+.ux07-resumen__talla {
+  display: grid;
+  grid-template-columns: 152px 60px;
+  align-items: center;
+  height: 30px;
+}
+
+.ux07-resumen__talla-etiqueta {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux07-resumen__talla-valor {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #333;
+}
+
+.ux07-resumen__editar--info {
+  position: absolute;
+  right: 51px;
+  top: 207px;
+}
+
+.ux07-resumen__divisor {
+  position: absolute;
+  left: 25px;
+  right: 20px;
+  top: 234px;
+  height: 1px;
+  background: #f1f1f1;
+}
+
+.ux07-resumen__lista {
+  position: absolute;
+  left: 25px;
+  right: 20px;
+  top: 321px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ux07-resumen__validacion {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 31px;
+}
+
+.ux07-resumen__validacion:nth-child(1) {
+  top: 22px;
+}
+
+.ux07-resumen__validacion:nth-child(2) {
+  top: 80px;
+}
+
+.ux07-resumen__validacion:nth-child(3) {
+  top: 141px;
+}
+
+.ux07-resumen__validacion:nth-child(4) {
+  top: 195px;
+}
+
+.ux07-resumen__validacion-icono {
+  position: absolute;
+  left: 30px;
+  top: 0;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux07-resumen__validacion-icono--completado {
+  background: #489a57;
+}
+
+.ux07-resumen__validacion-icono--proceso {
+  background: var(--azul);
+}
+
+.ux07-resumen__validacion-icono--pendiente {
+  background: #666;
+}
+
+.ux07-resumen__validacion-icono svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ux07-resumen__validacion-icono .ux02-i {
+  font-size: 19px;
+}
+
+.ux07-resumen__validacion-copia {
+  position: absolute;
+  left: 96px;
+  top: 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux07-resumen__validacion-titulo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.ux07-resumen__validacion-descripcion {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 15px;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux07-resumen__estado {
+  position: absolute;
+  left: 417px;
+  top: 5px;
+  width: 128px;
+  height: 31px;
+  border-radius: 15.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ux07-resumen__estado--completado {
+  background: #b0ffb9;
+  color: #489a57;
+}
+
+.ux07-resumen__estado--proceso {
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux07-resumen__estado--pendiente {
+  background: #808080;
+  color: #fff;
+}
+
+.ux07-resumen__fecha {
+  position: absolute;
+  left: 590px;
+  top: 13px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 15px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.ux07-resumen__acciones {
+  height: 82.5px;
+  margin-top: 25px;
+}

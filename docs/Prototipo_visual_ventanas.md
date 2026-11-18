@@ -63,6 +63,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `colaborador-boletas-proceso` | Ficha de colaborador (boletas con proceso) | PDF p. 19 (UX-08) | 1920 × 1176 | `?ux=colaborador-boletas-proceso` |
 | `alta-seleccion` | Alta: selección de candidato y requerimiento | PDF p. 13 (UX-07) | 1920 × 1176 | `?ux=alta-seleccion` |
 | `alta-datos` | Alta: datos personales y de trabajo | PDF p. 14 (UX-07) | 1920 × 1176 | `?ux=alta-datos` |
+| `alta-resumen` | Alta: resumen de validaciones | PDF p. 15 (UX-07) | 1920 × 1176 | `?ux=alta-resumen` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -104,7 +105,7 @@ src/app/preview/requerimientos/
 ├── candidato/               # detalle y evaluación de candidato (PDF p. 11, UX-06)
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
-├── alta/                    # alta: selección de candidato y requerimiento (PDF p. 13, UX-07)
+├── alta/                    # alta: selección, datos y resumen (PDF pp. 13-15, UX-07)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -143,6 +144,7 @@ public/preview/mp360/
 | Colaborador boletas · proceso (PDF p. 19) | Pendiente de revisión visual | 7,1 / 255 |
 | Alta · selección (PDF p. 13) | Pendiente de revisión visual | 8,1 / 255 |
 | Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,9 / 255 |
+| Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -224,6 +226,15 @@ resuelven en la implementación funcional, no aquí:
     tal cual, igual que los campos sin desplegable (fecha, forma de pago, tipo de cuenta,
     documento, grado de educación y cant. de hijos). Se mantiene el azul `#2b48e9` solo
     para esta ventana y no se añaden validaciones ni estados ausentes.
+15. **Alta · resumen de validaciones (PDF p. 15)**: tercer paso del alta, con el mismo cromo,
+    columnas y barra de acciones. El stepper dibuja los cinco pasos en azul y el subrayado
+    bajo «Validación Final». Se replica solo lo dibujado: el resumen de datos del colaborador,
+    la información adicional con sus tallas y las cuatro validaciones con sus indicadores
+    (Completado, En Proceso, Pendiente), fechas y botones; sin validación real ni confirmación
+    de alta. Se conservan las erratas «Colaborades», «Documento Ident.», «Deposito a cuenta»,
+    «Ahorro», «Talla de Pantalón» y «registradao.», y el doble título «Resumen Final de
+    validaciones» de ambas tarjetas. Los datos de muestra (DNI 7142123456, fechas 15/10/2026)
+    no son reglas. Se mantiene el azul `#2b48e9` solo para las ventanas del alta.
 
 ## 9. Cierre y siguiente paso
 

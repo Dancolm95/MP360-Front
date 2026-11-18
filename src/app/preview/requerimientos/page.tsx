@@ -16,6 +16,7 @@ import { BandejaColaboradores } from './colaboradores/BandejaColaboradores'
 import { FichaColaborador } from './colaborador/FichaColaborador'
 import { AltaSeleccion } from './alta/AltaSeleccion'
 import { AltaDatos } from './alta/AltaDatos'
+import { AltaResumen } from './alta/AltaResumen'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -36,6 +37,7 @@ type Diseno =
   | 'colaborador-boletas-proceso'
   | 'alta-seleccion'
   | 'alta-datos'
+  | 'alta-resumen'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -176,6 +178,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <AltaDatos />,
+  },
+  {
+    id: 'alta-resumen',
+    etiqueta: 'Alta · resumen',
+    referencia: '/preview/mp360/img/referencia-alta-resumen.jpg',
+    descripcion: 'Alta: resumen de validaciones',
+    ancho: 1920,
+    alto: 1176,
+    componente: <AltaResumen />,
   },
   {
     id: 'login',

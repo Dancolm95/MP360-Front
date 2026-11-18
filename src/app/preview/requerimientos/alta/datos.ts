@@ -111,3 +111,101 @@ export const FILAS_TALLAS: readonly (readonly CampoAlta[])[] = [
     { etiqueta: 'Talla de Casaca', valor: 'L', control: 'select', ancho: 'medio' },
   ],
 ]
+
+export interface DatoResumen {
+  readonly etiqueta: string
+  readonly valor: string
+}
+
+export const TITULO_RESUMEN = 'Resumen Final de validaciones'
+export const ETIQUETA_REVISADO = 'Revisado'
+
+export const FILAS_RESUMEN_DATOS: readonly {
+  readonly izquierda: DatoResumen
+  readonly derecha?: DatoResumen
+}[] = [
+  {
+    izquierda: { etiqueta: 'Nombre completo:', valor: 'Luis Torres Caycho' },
+    derecha: { etiqueta: 'Tipo de Personal', valor: 'Operativo' },
+  },
+  {
+    izquierda: { etiqueta: 'Documento Ident.', valor: '714212345' },
+    derecha: { etiqueta: 'Puesto:', valor: 'Operario de Almacén' },
+  },
+  {
+    izquierda: { etiqueta: 'Estado Civil', valor: 'Soltero' },
+    derecha: { etiqueta: 'Área', valor: 'Operaciones' },
+  },
+  {
+    izquierda: { etiqueta: 'Fecha de Nacimiento', valor: '12 / 08 / 1996' },
+    derecha: { etiqueta: 'Sede', valor: 'Lima' },
+  },
+  { izquierda: { etiqueta: 'Teléfono', valor: '999 999 999' } },
+  { izquierda: { etiqueta: 'Correo Electrónico', valor: 'correodeluis@gmail.com' } },
+  { izquierda: { etiqueta: 'Dirección', valor: 'Av. Los Olivos 123' } },
+]
+
+export const RESUMEN_PAGO = {
+  primera: {
+    izquierda: { etiqueta: 'Forma de Pago', valor: 'Deposito a cuenta' },
+    derecha: { etiqueta: 'Cuenta/CCI', valor: '12121212121212121212' },
+  },
+  segunda: { etiqueta: 'Banco', valor: 'BCP' },
+  tercera: { etiqueta: 'Tipo de Cuenta', valor: 'Ahorro' },
+  editar: 'Editar',
+} as const
+
+export const RESUMEN_INFO = {
+  nombre: 'Luis Torres',
+  nacionalidad: 'Peruano',
+  dni: '7142123456',
+  tallasIzquierda: [
+    { etiqueta: 'Talla de Polo', valor: 'L' },
+    { etiqueta: 'Talla de Camisa', valor: 'L' },
+    { etiqueta: 'Talla de Casaca', valor: 'L' },
+  ],
+  tallasDerecha: [
+    { etiqueta: 'Talla de Calzado', valor: '42' },
+    { etiqueta: 'Talla de Pantalón', valor: '32' },
+  ],
+  editar: 'Editar',
+} as const
+
+export type EstadoValidacion = 'completado' | 'proceso' | 'pendiente'
+
+export const VALIDACIONES_RESUMEN: readonly {
+  readonly titulo: string
+  readonly descripcion: string
+  readonly estado: EstadoValidacion
+  readonly etiqueta: string
+  readonly fecha: string
+}[] = [
+  {
+    titulo: 'Antecedentes',
+    descripcion: 'Verificación de Antecedentes de colaborador',
+    estado: 'completado',
+    etiqueta: 'Completado',
+    fecha: 'Fecha 15/10/2026',
+  },
+  {
+    titulo: 'Verificación Domiciliaria',
+    descripcion: 'Validación de domicilio registradao.',
+    estado: 'completado',
+    etiqueta: 'Completado',
+    fecha: 'Fecha 15/10/2026',
+  },
+  {
+    titulo: 'Experiencia / CUL',
+    descripcion: 'Validación de experiencia y CUL.',
+    estado: 'proceso',
+    etiqueta: 'En Proceso',
+    fecha: '-',
+  },
+  {
+    titulo: 'Alta SUNAT',
+    descripcion: 'Confirmación del alta en SUNAT.',
+    estado: 'pendiente',
+    etiqueta: 'Pendiente',
+    fecha: '-',
+  },
+]
