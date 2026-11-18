@@ -59,6 +59,11 @@ export {
   fijarPlazoAdministrativo,
   observarRequerimiento,
 } from './ejecucion'
+export type {
+  ResultadoIniciarAperturaProceso,
+  SolicitudInicioAperturaProceso,
+} from './apertura-proceso'
+export { iniciarAperturaProcesoSeleccion } from './apertura-proceso'
 export type { FalloComandoContrato } from './resultados'
 export {
   MENSAJE_CONFLICTO_VERSION,

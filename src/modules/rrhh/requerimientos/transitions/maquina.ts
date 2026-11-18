@@ -23,7 +23,9 @@ import type {
   TransicionRechazada,
 } from './types'
 
-const MENSAJES_RECHAZO: Readonly<Record<MotivoRechazoTransicion, string>> = {
+export const MENSAJES_RECHAZO: Readonly<
+  Record<MotivoRechazoTransicion, string>
+> = {
   'sin-autorizacion':
     'No tienes permiso para ejecutar esta acción en el requerimiento.',
   'suceso-no-aplica-al-estado':

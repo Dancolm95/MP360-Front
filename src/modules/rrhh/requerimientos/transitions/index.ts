@@ -12,6 +12,8 @@ export type {
   DestinoTransicion,
 } from './model'
 export { TRANSICIONES } from './model'
-export { evaluarTransicion } from './maquina'
+export { evaluarTransicion, MENSAJES_RECHAZO } from './maquina'
+export type { ResultadoConfirmacionAperturaProceso } from './apertura-proceso'
+export { confirmarAperturaProcesoSeleccion } from './apertura-proceso'
 export type { EfectoVencimiento } from './vencimiento'
 export { efectoVencimiento } from './vencimiento'
