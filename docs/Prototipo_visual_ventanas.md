@@ -64,6 +64,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `alta-seleccion` | Alta: selección de candidato y requerimiento | PDF p. 13 (UX-07) | 1920 × 1176 | `?ux=alta-seleccion` |
 | `alta-datos` | Alta: datos personales y de trabajo | PDF p. 14 (UX-07) | 1920 × 1176 | `?ux=alta-datos` |
 | `alta-resumen` | Alta: resumen de validaciones | PDF p. 15 (UX-07) | 1920 × 1176 | `?ux=alta-resumen` |
+| `alta-confirmacion` | Alta: confirmación | PDF p. 16 (UX-07) | 1920 × 1176 | `?ux=alta-confirmacion` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -105,7 +106,7 @@ src/app/preview/requerimientos/
 ├── candidato/               # detalle y evaluación de candidato (PDF p. 11, UX-06)
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
-├── alta/                    # alta: selección, datos y resumen (PDF pp. 13-15, UX-07)
+├── alta/                    # alta: selección, datos, resumen y confirmación (PDF pp. 13-16, UX-07)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -145,6 +146,7 @@ public/preview/mp360/
 | Alta · selección (PDF p. 13) | Pendiente de revisión visual | 8,1 / 255 |
 | Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,9 / 255 |
 | Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
+| Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -235,9 +237,20 @@ resuelven en la implementación funcional, no aquí:
     «Ahorro», «Talla de Pantalón» y «registradao.», y el doble título «Resumen Final de
     validaciones» de ambas tarjetas. Los datos de muestra (DNI 7142123456, fechas 15/10/2026)
     no son reglas. Se mantiene el azul `#2b48e9` solo para las ventanas del alta.
+16. **Alta · confirmación (PDF p. 16)**: cuarto y último paso del alta. El stepper repite
+    los cinco pasos en azul con el subrayado bajo «Validación Final»; se replica la pantalla
+    de éxito con su icono y confeti, el título y el mensaje, la tarjeta «Datos del
+    Colaborador» con la insignia «Activo», el bloque «Procesos Posteriores» con sus cuatro
+    indicadores y los tres botones dibujados. No hay redirecciones ni acciones: los botones
+    y el enlace «EPP y Equipos» son presentacionales. Se conservan como literales las
+    erratas «Colaborades», «en el modulo de Colaboradores» y «Lima- Sede Principal», y los
+    datos de muestra (COL-0000125, 12 / 10 / 2026) no son reglas. El azul medido es
+    `#2b48e9`, igual que en los pasos 1–3.
 
 ## 9. Cierre y siguiente paso
 
+- Con `alta-seleccion`, `alta-datos`, `alta-resumen` y `alta-confirmacion` quedan
+  replicados los **cuatro pasos del alta** (PDF pp. 13–16, UX-07).
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

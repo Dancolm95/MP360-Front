@@ -171,6 +171,78 @@ export const RESUMEN_INFO = {
   editar: 'Editar',
 } as const
 
+export const CONFIRMACION_ALTA = {
+  titulo: '¡Alta de Colaborador exitoso!',
+  mensaje:
+    'El Colaborador ha sido registrado correctamente en MP360 y su información se encuentra disponible',
+  mensajeFinal: 'en el modulo de Colaboradores',
+  estado: 'Activo',
+} as const
+
+export const CONFIRMACION_DATOS: readonly {
+  readonly izquierda: DatoResumen
+  readonly derecha: DatoResumen
+}[] = [
+  {
+    izquierda: { etiqueta: 'Nombre completo:', valor: 'Luis Torres Caycho' },
+    derecha: { etiqueta: 'Código de Colaborador', valor: 'COL-0000125' },
+  },
+  {
+    izquierda: { etiqueta: 'Documento Ident.', valor: '714212345' },
+    derecha: { etiqueta: 'Puesto:', valor: 'Operario de Almacén' },
+  },
+  {
+    izquierda: { etiqueta: 'Nacionalidad', valor: 'Peruano' },
+    derecha: { etiqueta: 'Área', valor: 'Operaciones' },
+  },
+  {
+    izquierda: { etiqueta: 'Fecha de Ingreso', valor: '12 / 10 / 2026' },
+    derecha: { etiqueta: 'Sede', valor: 'Lima- Sede Principal' },
+  },
+]
+
+export type EstadoProceso = 'completado' | 'proceso' | 'pendiente'
+
+export const PROCESOS_POSTERIORES: readonly {
+  readonly titulo: string
+  readonly detalle: string
+  readonly enlace?: string
+  readonly estado: EstadoProceso
+  readonly etiqueta: string
+}[] = [
+  {
+    titulo: 'Registro MP360',
+    detalle: '15 / 10 / 2026 15:22',
+    estado: 'completado',
+    etiqueta: 'Completo',
+  },
+  {
+    titulo: 'Creación Usuario ERP',
+    detalle: '15 / 10 / 2026 15:22',
+    estado: 'completado',
+    etiqueta: 'Completo',
+  },
+  {
+    titulo: 'Alta en SUNAT',
+    detalle: 'Se notificará al completar',
+    estado: 'proceso',
+    etiqueta: 'En Proceso',
+  },
+  {
+    titulo: 'Entrega de EPP',
+    detalle: 'Asignación desde',
+    enlace: 'EPP y Equipos',
+    estado: 'pendiente',
+    etiqueta: 'Pendiente',
+  },
+]
+
+export const ACCIONES_CONFIRMACION = [
+  { etiqueta: 'Ver ficha del Colaborador', icono: 'person', primaria: false },
+  { etiqueta: 'Registrar otro colaborador', icono: 'edit_document', primaria: false },
+  { etiqueta: 'Ir a Colaboradores', icono: 'description', primaria: true },
+] as const
+
 export type EstadoValidacion = 'completado' | 'proceso' | 'pendiente'
 
 export const VALIDACIONES_RESUMEN: readonly {
