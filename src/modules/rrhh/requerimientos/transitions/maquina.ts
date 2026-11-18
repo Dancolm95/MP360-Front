@@ -135,6 +135,7 @@ export function evaluarTransicion(
     case 'fijar-plazo':
     case 'ajustar-plazo':
     case 'iniciar-apertura-proceso':
+    case 'asociar-candidato':
       return permitida(detalle, solicitud.suceso, detalle.estado)
     case 'enviar':
     case 'reenviar':

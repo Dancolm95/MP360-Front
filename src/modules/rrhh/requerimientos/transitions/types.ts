@@ -16,6 +16,7 @@ export const SUCESOS_TRANSICION = [
   'fijar-plazo',
   'ajustar-plazo',
   'iniciar-apertura-proceso',
+  'asociar-candidato',
   'confirmar-apertura-proceso',
   'confirmar-primer-dia-real',
   'confirmar-reversion-cobertura',
@@ -36,6 +37,7 @@ export type SolicitudTransicion =
         | 'fijar-plazo'
         | 'ajustar-plazo'
         | 'iniciar-apertura-proceso'
+        | 'asociar-candidato'
       >
     }
   | {

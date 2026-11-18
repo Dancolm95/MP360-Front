@@ -15,6 +15,11 @@ export { TRANSICIONES } from './model'
 export { evaluarTransicion, MENSAJES_RECHAZO } from './maquina'
 export type { ResultadoConfirmacionAperturaProceso } from './apertura-proceso'
 export { confirmarAperturaProcesoSeleccion } from './apertura-proceso'
+export type { ResultadoNavegacionAsociarCandidato } from './asociar-candidato'
+export {
+  MENSAJE_SIN_PROCESO,
+  resolverNavegacionAsociarCandidato,
+} from './asociar-candidato'
 export type {
   ConfirmacionPrimerDiaReal,
   ResultadoConfirmacionPrimerDiaReal,
