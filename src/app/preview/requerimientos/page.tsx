@@ -14,6 +14,7 @@ import { BandejaCandidatos } from './candidatos/BandejaCandidatos'
 import { DetalleCandidato } from './candidato/DetalleCandidato'
 import { BandejaColaboradores } from './colaboradores/BandejaColaboradores'
 import { FichaColaborador } from './colaborador/FichaColaborador'
+import { AltaSeleccion } from './alta/AltaSeleccion'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -32,6 +33,7 @@ type Diseno =
   | 'colaborador'
   | 'colaborador-boletas'
   | 'colaborador-boletas-proceso'
+  | 'alta-seleccion'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -154,6 +156,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <FichaColaborador tabActiva={1} varianteBoletas="proceso" />,
+  },
+  {
+    id: 'alta-seleccion',
+    etiqueta: 'Alta · selección',
+    referencia: '/preview/mp360/img/referencia-alta-seleccion.jpg',
+    descripcion: 'Alta: selección de candidato y requerimiento',
+    ancho: 1920,
+    alto: 1176,
+    componente: <AltaSeleccion />,
   },
   {
     id: 'login',

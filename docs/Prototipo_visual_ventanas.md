@@ -61,6 +61,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `colaborador` | Ficha de colaborador (resumen) | PDF p. 17 (UX-08) | 1920 × 1176 | `?ux=colaborador` |
 | `colaborador-boletas` | Ficha de colaborador (boletas de pago) | PDF p. 18 (UX-08) | 1920 × 1176 | `?ux=colaborador-boletas` |
 | `colaborador-boletas-proceso` | Ficha de colaborador (boletas con proceso) | PDF p. 19 (UX-08) | 1920 × 1176 | `?ux=colaborador-boletas-proceso` |
+| `alta-seleccion` | Alta: selección de candidato y requerimiento | PDF p. 13 (UX-07) | 1920 × 1176 | `?ux=alta-seleccion` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -102,6 +103,7 @@ src/app/preview/requerimientos/
 ├── candidato/               # detalle y evaluación de candidato (PDF p. 11, UX-06)
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
+├── alta/                    # alta: selección de candidato y requerimiento (PDF p. 13, UX-07)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -138,6 +140,7 @@ public/preview/mp360/
 | Colaborador (PDF p. 17) | Pendiente de revisión visual | 7,1 / 255 |
 | Colaborador boletas (PDF p. 18) | Pendiente de revisión visual | 7,3 / 255 |
 | Colaborador boletas · proceso (PDF p. 19) | Pendiente de revisión visual | 7,1 / 255 |
+| Alta · selección (PDF p. 13) | Pendiente de revisión visual | 8,1 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -203,6 +206,13 @@ resuelven en la implementación funcional, no aquí:
     activa en ninguna página revisada (17, 18, 19 y 36). La p. 36 es el calendario de asistencia
     (UX-22) y la cobertura de `main` ya registra UX-20 sin página. Esta rama replica lo dibujado
     y deja la discrepancia documentada aquí; el inventario no se modifica.
+13. **Alta · selección (PDF p. 13)**: el inventario la describe como «Parcial; solo
+    búsqueda»; se replica únicamente lo dibujado —pasos del alta, búsqueda y resultados de
+    colaboradores, selección de requerimiento, tipo de ingreso y acciones—, sin añadir
+    campos, validaciones ni estados ausentes. Se conserva la errata «Colaborades» del
+    breadcrumb y los datos de muestra (RQ-0222, Luis Torres). El azul medido es `#2b48e9`,
+    igual que las páginas 10–12, aplicado solo a esta ventana; la maqueta usa además un
+    fondo cálido-lavanda compartido con la ficha (p. 17).
 
 ## 9. Cierre y siguiente paso
 
