@@ -106,6 +106,26 @@ export const BOLETAS: readonly Boleta[] = Array.from({ length: 8 }, () => BOLETA
 
 export const PAGINAS_BOLETAS = [1, 2, 3, 4, 5, 6] as const
 
+export interface BoletaProceso {
+  readonly mes: string
+  readonly horasExtras: string
+  readonly recargos: string
+  readonly horasNoTrabajadas: string
+  readonly diasNoTrabajados: string
+  readonly proceso: string
+}
+
+const BOLETA_PROCESO: BoletaProceso = {
+  mes: '10-2026',
+  horasExtras: '0.0hrs',
+  recargos: '0.0hrs',
+  horasNoTrabajadas: '0.0hrs',
+  diasNoTrabajados: '0.0 días',
+  proceso: 'Septiembre 2026',
+}
+
+export const BOLETAS_PROCESO: readonly BoletaProceso[] = Array.from({ length: 8 }, () => BOLETA_PROCESO)
+
 export interface PanelFicha {
   readonly clave: 'afiliacion' | 'tallas' | 'cuenta'
   readonly titulo: string

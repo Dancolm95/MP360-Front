@@ -31,6 +31,7 @@ type Diseno =
   | 'colaboradores'
   | 'colaborador'
   | 'colaborador-boletas'
+  | 'colaborador-boletas-proceso'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -144,6 +145,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <FichaColaborador tabActiva={1} />,
+  },
+  {
+    id: 'colaborador-boletas-proceso',
+    etiqueta: 'Colaborador boletas · proceso',
+    referencia: '/preview/mp360/img/referencia-colaborador-boletas-proceso.jpg',
+    descripcion: 'Ficha: boletas de pago con proceso',
+    ancho: 1920,
+    alto: 1176,
+    componente: <FichaColaborador tabActiva={1} varianteBoletas="proceso" />,
   },
   {
     id: 'login',

@@ -5635,3 +5635,97 @@
   color: #fff;
   font-weight: 700;
 }
+
+/* ---------- Ficha: boletas con proceso (PDF p. 19) ---------- */
+
+.ux08f-proceso__scroll::before {
+  right: 0;
+  left: auto;
+  width: 465px;
+}
+
+.ux08f-proceso__tabla {
+  width: 1093px;
+}
+
+.ux08f-proceso__fila {
+  grid-template-columns: 146px 146px 137px 136px 151px 175px 202px;
+}
+
+.ux08f-proceso__fila.ux08f-boletas__cabecera > *:nth-child(2) {
+  padding-left: 36px;
+}
+
+.ux08f-proceso__fila.ux08f-boletas__cabecera > *:nth-child(3) {
+  padding-left: 21px;
+}
+
+.ux08f-proceso__fila.ux08f-boletas__cabecera > *:nth-child(4) {
+  padding-left: 10px;
+}
+
+.ux08f-proceso__fila.ux08f-boletas__cabecera > *:nth-child(5) {
+  padding-left: 24px;
+}
+
+.ux08f-proceso__fila.ux08f-boletas__cabecera > *:nth-child(6) {
+  padding-left: 26px;
+}
+
+.ux08f-proceso__fila.ux08f-boletas__cabecera > *:nth-child(7) {
+  padding-left: 41px;
+}
+
+.ux08f-proceso__fila .ux08f-boletas__celda:nth-child(2) {
+  padding-left: 41px;
+}
+
+.ux08f-proceso__fila .ux08f-boletas__celda:nth-child(3) {
+  padding-left: 29px;
+}
+
+.ux08f-proceso__fila .ux08f-boletas__celda:nth-child(4) {
+  padding-left: 28px;
+}
+
+.ux08f-proceso__fila .ux08f-boletas__celda:nth-child(5) {
+  padding-left: 38px;
+}
+
+.ux08f-proceso__fila .ux08f-boletas__celda:nth-child(6) {
+  padding-left: 29px;
+}
+
+.ux08f-proceso__fila .ux08f-proceso__celda-acciones {
+  padding-left: 40px;
+}
+
+.ux08f-proceso__acciones {
+  position: relative;
+  top: 1px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.ux08f-proceso__accion {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7a7a7a;
+  cursor: pointer;
+}
+
+.ux08f-proceso__accion .ux02-i {
+  font-size: 28px;
+  color: #7a7a7a;
+}
+
+.ux08f-proceso__accion--imprimir .ux02-i {
+  font-size: 26px;
+}

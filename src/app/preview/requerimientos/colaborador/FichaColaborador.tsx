@@ -2,6 +2,7 @@ import { Cabecera, Icono, Navegacion, PanelLateral, Pie } from '../ux02/Cromo'
 import type { ParDato } from './datos'
 import {
   BOLETAS,
+  BOLETAS_PROCESO,
   COLABORADOR,
   DATOS_CONTRATO,
   DATOS_LABORALES,
@@ -201,7 +202,140 @@ function Casilla() {
   return <span className="ux08f-boletas__casilla" aria-hidden="true" />
 }
 
-function Boletas() {
+function AccionesBoleta() {
+  return (
+    <div className="ux08f-proceso__acciones">
+      <button type="button" className="ux08f-proceso__accion" aria-label="Ver boleta">
+        <Icono nombre="visibility" />
+      </button>
+      <button
+        type="button"
+        className="ux08f-proceso__accion ux08f-proceso__accion--imprimir"
+        aria-label="Imprimir boleta"
+      >
+        <Icono nombre="print" />
+      </button>
+    </div>
+  )
+}
+
+function Paginacion() {
+  return (
+    <div className="ux08f-boletas__paginacion">
+      <span className="ux08f-boletas__resumen">Mostrando 10 de 246</span>
+      <div className="ux08f-boletas__paginas">
+        <button
+          type="button"
+          className="ux08f-boletas__pagina ux08f-boletas__pagina--anterior"
+          aria-label="Página anterior"
+        >
+          <Icono nombre="chevron_left" />
+        </button>
+        {PAGINAS_BOLETAS.map((pagina) => (
+          <button
+            key={pagina}
+            type="button"
+            className={`ux08f-boletas__pagina${pagina === 1 ? ' ux08f-boletas__pagina--activa' : ''}`}
+            aria-current={pagina === 1 ? 'page' : undefined}
+          >
+            {pagina}
+          </button>
+        ))}
+        <button type="button" className="ux08f-boletas__pagina" aria-label="Página siguiente">
+          <Icono nombre="chevron_right" />
+        </button>
+        <button type="button" className="ux08f-boletas__pagina" aria-label="Última página">
+          <Icono nombre="chevron_right" />
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function BoletasProceso() {
+  return (
+    <div
+      className="ux08f-boletas__tabla ux08f-proceso__tabla"
+      role="table"
+      aria-label="Boletas de pago por proceso"
+    >
+      <div className="ux08f-boletas__fila ux08f-boletas__cabecera ux08f-proceso__fila" role="row">
+        <div role="columnheader" className="ux08f-boletas__th ux08f-boletas__th--mes">
+          <Casilla />
+          <span className="ux08f-boletas__rotulo">
+            Mes
+            <Icono nombre="unfold_more" />
+          </span>
+        </div>
+        <div role="columnheader" className="ux08f-boletas__th">
+          Horas
+          <br />
+          Extras
+        </div>
+        <div role="columnheader" className="ux08f-boletas__th">
+          Recargos
+        </div>
+        <div role="columnheader" className="ux08f-boletas__th">
+          Horas no
+          <br />
+          Trabajadas
+        </div>
+        <div role="columnheader" className="ux08f-boletas__th">
+          Días no
+          <br />
+          Trabajados
+        </div>
+        <div role="columnheader" className="ux08f-boletas__th">
+          Proceso
+        </div>
+        <div role="columnheader" className="ux08f-boletas__th">
+          Acciones
+        </div>
+      </div>
+
+      <div className="ux08f-boletas__cuerpo">
+        {BOLETAS_PROCESO.map((boleta, indice) => (
+          <div key={indice} className="ux08f-boletas__fila ux08f-proceso__fila" role="row">
+            <div role="cell" className="ux08f-boletas__celda-mes">
+              <Casilla />
+              <span>{boleta.mes}</span>
+            </div>
+            <div role="cell" className="ux08f-boletas__celda">
+              {boleta.horasExtras}
+            </div>
+            <div role="cell" className="ux08f-boletas__celda">
+              {boleta.recargos}
+            </div>
+            <div role="cell" className="ux08f-boletas__celda">
+              {boleta.horasNoTrabajadas}
+            </div>
+            <div role="cell" className="ux08f-boletas__celda">
+              {boleta.diasNoTrabajados}
+            </div>
+            <div role="cell" className="ux08f-boletas__celda">
+              {boleta.proceso}
+            </div>
+            <div role="cell" className="ux08f-boletas__celda ux08f-proceso__celda-acciones">
+              <AccionesBoleta />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Boletas({ variante }: { variante?: 'proceso' }) {
+  if (variante === 'proceso') {
+    return (
+      <div className="ux08f-boletas">
+        <div className="ux08f-boletas__scroll ux08f-proceso__scroll" aria-hidden="true" />
+        <BoletasProceso />
+        <Paginacion />
+      </div>
+    )
+  }
+
   return (
     <div className="ux08f-boletas">
       <div className="ux08f-boletas__scroll" aria-hidden="true" />
@@ -283,43 +417,18 @@ function Boletas() {
         </div>
       </div>
 
-      <div className="ux08f-boletas__paginacion">
-        <span className="ux08f-boletas__resumen">Mostrando 10 de 246</span>
-        <div className="ux08f-boletas__paginas">
-          <button
-            type="button"
-            className="ux08f-boletas__pagina ux08f-boletas__pagina--anterior"
-            aria-label="Página anterior"
-          >
-            <Icono nombre="chevron_left" />
-          </button>
-          {PAGINAS_BOLETAS.map((pagina) => (
-            <button
-              key={pagina}
-              type="button"
-              className={`ux08f-boletas__pagina${pagina === 1 ? ' ux08f-boletas__pagina--activa' : ''}`}
-              aria-current={pagina === 1 ? 'page' : undefined}
-            >
-              {pagina}
-            </button>
-          ))}
-          <button
-            type="button"
-            className="ux08f-boletas__pagina"
-            aria-label="Página siguiente"
-          >
-            <Icono nombre="chevron_right" />
-          </button>
-          <button type="button" className="ux08f-boletas__pagina" aria-label="Última página">
-            <Icono nombre="chevron_right" />
-          </button>
-        </div>
-      </div>
+      <Paginacion />
     </div>
   )
 }
 
-export function FichaColaborador({ tabActiva = 0 }: { tabActiva?: number } = {}) {
+export function FichaColaborador({
+  tabActiva = 0,
+  varianteBoletas,
+}: {
+  tabActiva?: number
+  varianteBoletas?: 'proceso'
+} = {}) {
   return (
     <div className="ux02-lienzo ux08f-lienzo">
       <Cabecera />
@@ -332,7 +441,7 @@ export function FichaColaborador({ tabActiva = 0 }: { tabActiva?: number } = {})
             <section className="ux08f-ficha" aria-label="Ficha del colaborador">
               <Tabs activa={tabActiva} />
               {tabActiva === 1 ? (
-                <Boletas />
+                <Boletas variante={varianteBoletas} />
               ) : (
                 <>
                   <Contrato />

@@ -60,6 +60,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `colaboradores` | Bandeja de colaboradores | PDF p. 12 (UX-08) | 1920 × 1176 | `?ux=colaboradores` |
 | `colaborador` | Ficha de colaborador (resumen) | PDF p. 17 (UX-08) | 1920 × 1176 | `?ux=colaborador` |
 | `colaborador-boletas` | Ficha de colaborador (boletas de pago) | PDF p. 18 (UX-08) | 1920 × 1176 | `?ux=colaborador-boletas` |
+| `colaborador-boletas-proceso` | Ficha de colaborador (boletas con proceso) | PDF p. 19 (UX-08) | 1920 × 1176 | `?ux=colaborador-boletas-proceso` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -83,7 +84,8 @@ pnpm build && pnpm start --port 3210
 
 El preview escala cada lienzo al ancho disponible (`VistaEscalada`): cada ventana declara su
 ancho y alto, de modo que conviven los formatos 1920 × 1176 (RR. HH.) y 1920 × 1080 (acceso)
-sin reflow interno.
+sin reflow interno. La barra flotante de selección envuelve sus opciones en varias filas cuando
+no caben en el ancho de la ventana.
 
 ## 5. Estructura del código del prototipo
 
@@ -99,7 +101,7 @@ src/app/preview/requerimientos/
 ├── candidatos/              # bandeja de candidatos (PDF p. 10, UX-05)
 ├── candidato/               # detalle y evaluación de candidato (PDF p. 11, UX-06)
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
-├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-18, UX-08)
+├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -135,6 +137,7 @@ public/preview/mp360/
 | Colaboradores (PDF p. 12) | Pendiente de revisión visual | 8,9 / 255 |
 | Colaborador (PDF p. 17) | Pendiente de revisión visual | 7,1 / 255 |
 | Colaborador boletas (PDF p. 18) | Pendiente de revisión visual | 7,3 / 255 |
+| Colaborador boletas · proceso (PDF p. 19) | Pendiente de revisión visual | 7,1 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -188,6 +191,18 @@ resuelven en la implementación funcional, no aquí:
     la barra horizontal bajo las pestañas, los importes con «s/» y las celdas «0.0hrs» y
     «0.0 días». La tabla no dibuja filtros ni acciones de fila; no se añaden. Se mantiene el
     azul `#2b48e9` y el fondo cálido-lavanda de esta ficha.
+12. **Ficha de colaborador · Boletas con proceso (PDF p. 19)**: la misma ficha con «Boletas de
+    Pago» activa, pero con la tabla desplazada al final de su recorrido horizontal. La medición
+    de la página da el tirador de la barra en el extremo derecho (x ≈ 1107–1570 de 1920), la
+    columna «Mes» congelada y siete columnas visibles —Mes, Horas Extras, Recargos, Horas no
+    Trabajadas, Días no Trabajados, Proceso y Acciones—, sin Sueldo Bruto, Sueldo Neto ni Aporte
+    Empleador. Las filas de muestra repiten 10-2026, 0.0hrs, 0.0 días y «Septiembre 2026», y la
+    columna Acciones dibuja un ojo y una impresora; no se añaden otras acciones. **Nota de
+    divergencia:** el inventario de `main` rotula la p. 19 como «Ficha: asistencia», pero el
+    render y el OCR muestran la tabla de boletas descrita; la pestaña «Asistencia» no aparece
+    activa en ninguna página revisada (17, 18, 19 y 36). La p. 36 es el calendario de asistencia
+    (UX-22) y la cobertura de `main` ya registra UX-20 sin página. Esta rama replica lo dibujado
+    y deja la discrepancia documentada aquí; el inventario no se modifica.
 
 ## 9. Cierre y siguiente paso
 
