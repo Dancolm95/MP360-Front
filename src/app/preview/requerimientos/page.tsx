@@ -30,6 +30,7 @@ type Diseno =
   | 'candidato'
   | 'colaboradores'
   | 'colaborador'
+  | 'colaborador-boletas'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -134,6 +135,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <FichaColaborador />,
+  },
+  {
+    id: 'colaborador-boletas',
+    etiqueta: 'Colaborador boletas',
+    referencia: '/preview/mp360/img/referencia-colaborador-boletas.jpg',
+    descripcion: 'Ficha: boletas de pago',
+    ancho: 1920,
+    alto: 1176,
+    componente: <FichaColaborador tabActiva={1} />,
   },
   {
     id: 'login',

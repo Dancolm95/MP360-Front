@@ -1,10 +1,12 @@
 import { Cabecera, Icono, Navegacion, PanelLateral, Pie } from '../ux02/Cromo'
 import type { ParDato } from './datos'
 import {
+  BOLETAS,
   COLABORADOR,
   DATOS_CONTRATO,
   DATOS_LABORALES,
   DATOS_PERSONALES,
+  PAGINAS_BOLETAS,
   PANELES,
   REMUNERACION,
   TABS,
@@ -108,7 +110,7 @@ function Encabezado() {
   )
 }
 
-function Tabs() {
+function Tabs({ activa }: { activa: number }) {
   return (
     <div className="ux08f-tabs" role="tablist" aria-label="Secciones de la ficha">
       {TABS.map((tab, indice) => (
@@ -116,8 +118,8 @@ function Tabs() {
           key={tab.etiqueta}
           type="button"
           role="tab"
-          aria-selected={indice === 0}
-          className={`ux08f-tab${indice === 0 ? ' ux08f-tab--activo' : ''}`}
+          aria-selected={indice === activa}
+          className={`ux08f-tab${indice === activa ? ' ux08f-tab--activo' : ''}`}
         >
           <Icono nombre={tab.icono} />
           <span>{tab.etiqueta}</span>
@@ -195,7 +197,129 @@ function ResumenDerecha() {
   )
 }
 
-export function FichaColaborador() {
+function Casilla() {
+  return <span className="ux08f-boletas__casilla" aria-hidden="true" />
+}
+
+function Boletas() {
+  return (
+    <div className="ux08f-boletas">
+      <div className="ux08f-boletas__scroll" aria-hidden="true" />
+
+      <div className="ux08f-boletas__tabla" role="table" aria-label="Boletas de pago">
+        <div className="ux08f-boletas__fila ux08f-boletas__cabecera" role="row">
+          <div role="columnheader" className="ux08f-boletas__th ux08f-boletas__th--mes">
+            <Casilla />
+            <span className="ux08f-boletas__rotulo">
+              Mes
+              <Icono nombre="unfold_more" />
+            </span>
+          </div>
+          <div role="columnheader" className="ux08f-boletas__th">
+            Sueldo
+            <br />
+            Bruto
+          </div>
+          <div role="columnheader" className="ux08f-boletas__th">
+            Sueldo
+            <br />
+            Neto
+          </div>
+          <div role="columnheader" className="ux08f-boletas__th">
+            Aporte
+            <br />
+            Empleador
+          </div>
+          <div role="columnheader" className="ux08f-boletas__th">
+            Horas
+            <br />
+            Extras
+          </div>
+          <div role="columnheader" className="ux08f-boletas__th">
+            Recargos
+          </div>
+          <div role="columnheader" className="ux08f-boletas__th">
+            Horas no
+            <br />
+            Trabajadas
+          </div>
+          <div role="columnheader" className="ux08f-boletas__th">
+            Días no
+            <br />
+            Trabajados
+          </div>
+        </div>
+
+        <div className="ux08f-boletas__cuerpo">
+          {BOLETAS.map((boleta, indice) => (
+            <div key={indice} className="ux08f-boletas__fila" role="row">
+              <div role="cell" className="ux08f-boletas__celda-mes">
+                <Casilla />
+                <span>{boleta.mes}</span>
+              </div>
+              <div role="cell" className="ux08f-boletas__celda">
+                {boleta.sueldoBruto}
+              </div>
+              <div role="cell" className="ux08f-boletas__celda">
+                {boleta.sueldoNeto}
+              </div>
+              <div role="cell" className="ux08f-boletas__celda">
+                {boleta.aporteEmpleador}
+              </div>
+              <div role="cell" className="ux08f-boletas__celda">
+                {boleta.horasExtras}
+              </div>
+              <div role="cell" className="ux08f-boletas__celda">
+                {boleta.recargos}
+              </div>
+              <div role="cell" className="ux08f-boletas__celda">
+                {boleta.horasNoTrabajadas}
+              </div>
+              <div role="cell" className="ux08f-boletas__celda">
+                {boleta.diasNoTrabajados}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="ux08f-boletas__paginacion">
+        <span className="ux08f-boletas__resumen">Mostrando 10 de 246</span>
+        <div className="ux08f-boletas__paginas">
+          <button
+            type="button"
+            className="ux08f-boletas__pagina ux08f-boletas__pagina--anterior"
+            aria-label="Página anterior"
+          >
+            <Icono nombre="chevron_left" />
+          </button>
+          {PAGINAS_BOLETAS.map((pagina) => (
+            <button
+              key={pagina}
+              type="button"
+              className={`ux08f-boletas__pagina${pagina === 1 ? ' ux08f-boletas__pagina--activa' : ''}`}
+              aria-current={pagina === 1 ? 'page' : undefined}
+            >
+              {pagina}
+            </button>
+          ))}
+          <button
+            type="button"
+            className="ux08f-boletas__pagina"
+            aria-label="Página siguiente"
+          >
+            <Icono nombre="chevron_right" />
+          </button>
+          <button type="button" className="ux08f-boletas__pagina" aria-label="Última página">
+            <Icono nombre="chevron_right" />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function FichaColaborador({ tabActiva = 0 }: { tabActiva?: number } = {}) {
   return (
     <div className="ux02-lienzo ux08f-lienzo">
       <Cabecera />
@@ -206,9 +330,15 @@ export function FichaColaborador() {
           <div className="ux08f-tablero">
             <Perfil />
             <section className="ux08f-ficha" aria-label="Ficha del colaborador">
-              <Tabs />
-              <Contrato />
-              <ResumenDerecha />
+              <Tabs activa={tabActiva} />
+              {tabActiva === 1 ? (
+                <Boletas />
+              ) : (
+                <>
+                  <Contrato />
+                  <ResumenDerecha />
+                </>
+              )}
             </section>
           </div>
         </div>

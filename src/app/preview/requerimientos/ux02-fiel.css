@@ -5374,3 +5374,264 @@
 .ux08f-lienzo .ux02-rail__ver-mas::after {
   content: ' +';
 }
+
+/* ---------- UX-08 · Ficha de colaborador · Boletas de pago (PDF p. 18) ---------- */
+
+.ux08f-boletas {
+  position: absolute;
+  inset: 0;
+}
+
+.ux08f-boletas__scroll {
+  position: absolute;
+  left: 27px;
+  top: 86px;
+  width: 1072px;
+  height: 6px;
+  border-radius: 3px;
+  background: #e3e3e3;
+}
+
+.ux08f-boletas__scroll::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 466px;
+  border-radius: 3px;
+  background: #797979;
+}
+
+.ux08f-boletas__tabla {
+  position: absolute;
+  left: 28px;
+  top: 113px;
+  width: 1115px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ux08f-boletas__fila {
+  display: grid;
+  grid-template-columns: 147px 145px 138px 136px 152px 127px 151px 119px;
+}
+
+.ux08f-boletas__fila > * {
+  min-width: 0;
+  border-left: 1px solid #f3f3f3;
+}
+
+.ux08f-boletas__fila > *:first-child {
+  border-left: 0;
+}
+
+.ux08f-boletas__cabecera {
+  height: 54px;
+  border-bottom: 1px solid #efefef;
+  border-radius: 10px 0 0 0;
+  background: #f8f7f9;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 15px;
+  color: #000;
+}
+
+.ux08f-boletas__cabecera > * {
+  display: flex;
+  align-items: center;
+  border-left-color: #efefef;
+}
+
+.ux08f-boletas__cabecera > *:nth-child(1) {
+  padding-left: 23px;
+  gap: 30px;
+}
+
+.ux08f-boletas__cabecera > *:nth-child(2) {
+  padding-left: 39px;
+}
+
+.ux08f-boletas__cabecera > *:nth-child(3) {
+  padding-left: 28px;
+}
+
+.ux08f-boletas__cabecera > *:nth-child(4) {
+  padding-left: 26px;
+}
+
+.ux08f-boletas__cabecera > *:nth-child(5) {
+  padding-left: 48px;
+}
+
+.ux08f-boletas__cabecera > *:nth-child(6) {
+  padding-left: 28px;
+}
+
+.ux08f-boletas__cabecera > *:nth-child(7) {
+  padding-left: 26px;
+}
+
+.ux08f-boletas__cabecera > *:nth-child(8) {
+  padding-left: 25px;
+}
+
+.ux08f-boletas__rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ux08f-boletas__rotulo .ux02-i {
+  font-size: 14px;
+  color: #000;
+}
+
+.ux08f-boletas__casilla {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila {
+  border-bottom: 1px solid #f3f3f3;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  color: #1c1c1c;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila:nth-child(1) {
+  height: 58px;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila:nth-child(2) {
+  height: 62px;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila:nth-child(3) {
+  height: 61px;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila:nth-child(4) {
+  height: 68px;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila:nth-child(5) {
+  height: 59px;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila:nth-child(6) {
+  height: 62px;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila:nth-child(7) {
+  height: 61px;
+}
+
+.ux08f-boletas__cuerpo .ux08f-boletas__fila:nth-child(8) {
+  height: 68px;
+}
+
+.ux08f-boletas__celda {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.ux08f-boletas__celda-mes {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding-left: 23px;
+  color: #6b6b6b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ux08f-boletas__celda:nth-child(2) {
+  padding-left: 37px;
+}
+
+.ux08f-boletas__celda:nth-child(3) {
+  padding-left: 28px;
+}
+
+.ux08f-boletas__celda:nth-child(4) {
+  padding-left: 26px;
+}
+
+.ux08f-boletas__celda:nth-child(5) {
+  padding-left: 44px;
+}
+
+.ux08f-boletas__celda:nth-child(6) {
+  padding-left: 26px;
+}
+
+.ux08f-boletas__celda:nth-child(7) {
+  padding-left: 36px;
+}
+
+.ux08f-boletas__celda:nth-child(8) {
+  padding-left: 30px;
+}
+
+.ux08f-boletas__paginacion {
+  position: absolute;
+  left: 511px;
+  top: 688px;
+  width: 597px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ux08f-boletas__resumen {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #000;
+  position: relative;
+  top: 4px;
+}
+
+.ux08f-boletas__paginas {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.ux08f-boletas__pagina {
+  width: 47px;
+  height: 46px;
+  border: 1px solid #f4f4f4;
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #5c5c5c;
+  cursor: pointer;
+}
+
+.ux08f-boletas__pagina .ux02-i {
+  font-size: 18px;
+  color: #5c5c5c;
+}
+
+.ux08f-boletas__pagina--anterior {
+  margin-right: 8px;
+}
+
+.ux08f-boletas__pagina--activa {
+  border-color: var(--azul);
+  background: var(--azul);
+  color: #fff;
+  font-weight: 700;
+}

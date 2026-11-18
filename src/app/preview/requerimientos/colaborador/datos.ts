@@ -79,6 +79,33 @@ export const REMUNERACION = {
   estado: 'Vigente',
 } as const
 
+export interface Boleta {
+  readonly mes: string
+  readonly sueldoBruto: string
+  readonly sueldoNeto: string
+  readonly aporteEmpleador: string
+  readonly horasExtras: string
+  readonly recargos: string
+  readonly horasNoTrabajadas: string
+  readonly diasNoTrabajados: string
+}
+
+const BOLETA: Boleta = {
+  mes: '10-2026',
+  sueldoBruto: 's/2,300',
+  sueldoNeto: 's/2,038.49',
+  aporteEmpleador: 's/215.97',
+  horasExtras: '0.0hrs',
+  recargos: '0.0hrs',
+  horasNoTrabajadas: '0.0hrs',
+  diasNoTrabajados: '0.0 días',
+}
+
+// La maqueta dibuja ocho filas idénticas aunque el pie anuncie «Mostrando 10 de 246».
+export const BOLETAS: readonly Boleta[] = Array.from({ length: 8 }, () => BOLETA)
+
+export const PAGINAS_BOLETAS = [1, 2, 3, 4, 5, 6] as const
+
 export interface PanelFicha {
   readonly clave: 'afiliacion' | 'tallas' | 'cuenta'
   readonly titulo: string

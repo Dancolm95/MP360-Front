@@ -59,6 +59,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `candidato` | Detalle y evaluación de candidato | PDF p. 11 (UX-06) | 1920 × 1176 | `?ux=candidato` |
 | `colaboradores` | Bandeja de colaboradores | PDF p. 12 (UX-08) | 1920 × 1176 | `?ux=colaboradores` |
 | `colaborador` | Ficha de colaborador (resumen) | PDF p. 17 (UX-08) | 1920 × 1176 | `?ux=colaborador` |
+| `colaborador-boletas` | Ficha de colaborador (boletas de pago) | PDF p. 18 (UX-08) | 1920 × 1176 | `?ux=colaborador-boletas` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -98,7 +99,7 @@ src/app/preview/requerimientos/
 ├── candidatos/              # bandeja de candidatos (PDF p. 10, UX-05)
 ├── candidato/               # detalle y evaluación de candidato (PDF p. 11, UX-06)
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
-├── colaborador/             # ficha de colaborador, resumen (PDF p. 17, UX-08)
+├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-18, UX-08)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -133,6 +134,7 @@ public/preview/mp360/
 | Candidato (PDF p. 11) | Calibrada; pendiente de revisión visual | 6,3 / 255 |
 | Colaboradores (PDF p. 12) | Pendiente de revisión visual | 8,9 / 255 |
 | Colaborador (PDF p. 17) | Pendiente de revisión visual | 7,1 / 255 |
+| Colaborador boletas (PDF p. 18) | Pendiente de revisión visual | 7,3 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -180,6 +182,12 @@ resuelven en la implementación funcional, no aquí:
     acciones que la página no dibuje. Además del azul `#2b48e9`, esta ventana ajusta su propio
     fondo (cálido al noroeste, lavanda al sureste) para acercarse al render; el cromo
     compartido no cambia.
+11. **Ficha de colaborador · Boletas de Pago (PDF p. 18)**: reutiliza la ficha de la p. 17 con
+    la pestaña «Boletas de Pago» activa y sustituye el contenido central por la tabla dibujada.
+    Se replican tal cual sus ocho filas de muestra (aunque el pie diga «Mostrando 10 de 246»),
+    la barra horizontal bajo las pestañas, los importes con «s/» y las celdas «0.0hrs» y
+    «0.0 días». La tabla no dibuja filtros ni acciones de fila; no se añaden. Se mantiene el
+    azul `#2b48e9` y el fondo cálido-lavanda de esta ficha.
 
 ## 9. Cierre y siguiente paso
 
