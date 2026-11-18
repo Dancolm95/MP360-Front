@@ -185,6 +185,7 @@
 ### T-RH-17 — Concurrencia versionada (comandos)
 - [ ] Hecha
 - **Depende de:** T-RH-16.
+- **Decisión del 17-nov-2026:** la tarea se acota a **lógica y estado**, sin componentes de vista. Se implementa el tratamiento uniforme de la concurrencia versionada para los comandos listados en el «Hecho cuando»: rechazo sin persistir cuando la versión está desactualizada, conservación de la entrada, exposición de los datos vigentes y nueva decisión o reintento, reutilizando la máquina de T-RH-16 y el mapeo de errores de `actions/resultados.ts` en lugar de duplicarlos; sin correos simulados. `transitions/` se limita a decidir y describir; la ejecución y la persistencia siguen en los puertos.
 - **Traza:** RH-REQ-01 §6; §10 criterio 12.
 - **Entrada:** comandos versionados.
 - **Salida:** rechazo sin persistir de comandos sobre versión desactualizada; conserva la entrada; muestra los datos vigentes; permite nueva decisión/reintento; sin correo simulado.
