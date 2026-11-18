@@ -65,6 +65,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `alta-datos` | Alta: datos personales y de trabajo | PDF p. 14 (UX-07) | 1920 × 1176 | `?ux=alta-datos` |
 | `alta-resumen` | Alta: resumen de validaciones | PDF p. 15 (UX-07) | 1920 × 1176 | `?ux=alta-resumen` |
 | `alta-confirmacion` | Alta: confirmación | PDF p. 16 (UX-07) | 1920 × 1176 | `?ux=alta-confirmacion` |
+| `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -107,6 +108,7 @@ src/app/preview/requerimientos/
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
 ├── alta/                    # alta: selección, datos, resumen y confirmación (PDF pp. 13-16, UX-07)
+├── licencias/               # bandeja de licencias y ausencias (PDF p. 24, UX-13)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -147,6 +149,7 @@ public/preview/mp360/
 | Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,9 / 255 |
 | Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
 | Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
+| Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -246,11 +249,25 @@ resuelven en la implementación funcional, no aquí:
     erratas «Colaborades», «en el modulo de Colaboradores» y «Lima- Sede Principal», y los
     datos de muestra (COL-0000125, 12 / 10 / 2026) no son reglas. El azul medido es
     `#2b48e9`, igual que en los pasos 1–3.
+17. **Bandeja de licencias y ausencias (PDF p. 24)**: la pestaña activa es «Asistencia» —no
+    «Inicio»— y su submenú dibuja «Licencia y Ausencias» y «Registrar»; el dibujo alterna el
+    singular en el título, el breadcrumb, el submenú y el botón «Registrar Solicitud» con el
+    plural de la pestaña «Licencias y Ausencias». El azul medido en esta página es `#2249f2`
+    —el token base del prototipo, no el `#2b48e9` de las páginas 10–19—. Se replican las
+    erratas y artefactos literales: «Ultimos 30 dias», «Aprobadas / Registrada», «Sin
+    impacto», «Dpt. Adminstración», el buscador «Buscar candidatos por nombre, DNI o
+    puesto...» y la repetición de «Contratos por Vencer» en Acciones rápidas. La maqueta no
+    dibuja casillas marcadas, filtros aplicados ni más estados: no se añaden. Solo se replica
+    la bandeja; el registro (p. 25) y el detalle/subsanación (p. 26) quedan en tareas
+    posteriores.
 
 ## 9. Cierre y siguiente paso
 
 - Con `alta-seleccion`, `alta-datos`, `alta-resumen` y `alta-confirmacion` quedan
   replicados los **cuatro pasos del alta** (PDF pp. 13–16, UX-07).
+- Con `licencias` queda replicada la **bandeja de licencias y ausencias** (PDF p. 24,
+  UX-13); el bloque de Licencias continúa con el registro (p. 25) y el detalle/subsanación
+  (p. 26), aún no implementados.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

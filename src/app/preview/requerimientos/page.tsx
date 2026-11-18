@@ -18,6 +18,7 @@ import { AltaSeleccion } from './alta/AltaSeleccion'
 import { AltaDatos } from './alta/AltaDatos'
 import { AltaResumen } from './alta/AltaResumen'
 import { AltaConfirmacion } from './alta/AltaConfirmacion'
+import { BandejaLicencias } from './licencias/BandejaLicencias'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -40,6 +41,7 @@ type Diseno =
   | 'alta-datos'
   | 'alta-resumen'
   | 'alta-confirmacion'
+  | 'licencias'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -198,6 +200,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <AltaConfirmacion />,
+  },
+  {
+    id: 'licencias',
+    etiqueta: 'Licencias',
+    referencia: '/preview/mp360/img/referencia-licencias.jpg',
+    descripcion: 'Bandeja de licencias y ausencias',
+    ancho: 1920,
+    alto: 1176,
+    componente: <BandejaLicencias />,
   },
   {
     id: 'login',
