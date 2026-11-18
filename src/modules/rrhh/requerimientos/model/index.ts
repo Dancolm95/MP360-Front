@@ -1,5 +1,6 @@
 export type * from './types'
 export * from './acciones'
+export * from './cobertura'
 export * from './estados'
 export * from './etiquetas'
 export * from './formato'

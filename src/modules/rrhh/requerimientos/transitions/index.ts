@@ -15,5 +15,10 @@ export { TRANSICIONES } from './model'
 export { evaluarTransicion, MENSAJES_RECHAZO } from './maquina'
 export type { ResultadoConfirmacionAperturaProceso } from './apertura-proceso'
 export { confirmarAperturaProcesoSeleccion } from './apertura-proceso'
+export type {
+  ConfirmacionPrimerDiaReal,
+  ResultadoConfirmacionPrimerDiaReal,
+} from './primer-dia-real'
+export { confirmarPrimerDiaReal } from './primer-dia-real'
 export type { EfectoVencimiento } from './vencimiento'
 export { efectoVencimiento } from './vencimiento'

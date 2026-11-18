@@ -64,6 +64,11 @@ export type {
   SolicitudInicioAperturaProceso,
 } from './apertura-proceso'
 export { iniciarAperturaProcesoSeleccion } from './apertura-proceso'
+export type {
+  ComandoLeerPrimerDiaReal,
+  ResultadoLeerPrimerDiaReal,
+} from './primer-dia-real'
+export { leerPrimerDiaRealVigente } from './primer-dia-real'
 export type { FalloComandoContrato } from './resultados'
 export {
   MENSAJE_CONFLICTO_VERSION,
