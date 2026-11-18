@@ -176,6 +176,7 @@
 ### T-RH-16 — Máquina de estados y transiciones
 - [ ] Hecha
 - **Depende de:** T-RH-15, T-RH-12.
+- **Decisión del 17-nov-2026:** la tarea se acota a **lógica y estado** porque la capa visual la desarrolla el usuario en una rama aparte. Se implementa la máquina de transiciones de §6 con guardas explícitas por estado y capacidad, consumiendo `actions` (comandos versionados), `deadlines` (cumplimiento y vencimiento) y el detalle con `autorizacion`; las transiciones condicionadas por integración se modelan con guardas verificables pero **no ejecutan** los comandos de T-RH-18…20. Centraliza `ESTADOS_CANCELABLES` y unifica el listado de acciones elegibles para evitar dos fuentes de verdad, y consume el paso a `incumplido` de T-RH-15 sin recalcularlo. No se crean componentes de vista ni se tocan `src/app/**`, `globals.css`, `tray/**`, `form/**`, `review/**` ni `detail/**`.
 - **Traza:** RH-REQ-01 §6; §10 criterios 8 y 10 (parcial).
 - **Entrada:** reglas de §6.
 - **Salida:** transiciones Borrador → Pendiente → Aprobado/Observado, En reclutamiento, Cubierto y Cancelado, con causales de cancelación.
