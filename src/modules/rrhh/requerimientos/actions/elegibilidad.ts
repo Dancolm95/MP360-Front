@@ -1,70 +1,15 @@
-import type {
-  Clasificacion,
-  DetalleRequerimiento,
-  EstadoRequerimiento,
-} from '../contracts'
+import type { DetalleRequerimiento } from '../contracts'
+import {
+  ACCIONES_ELEGIBLES,
+  accionConcedida,
+  motivoEstadoNoAplicable,
+} from '../model'
 import type {
   AccionEvaluada,
   AccionEvaluable,
-  AccionGestion,
   EvaluacionAcciones,
   MotivoAccionNoDisponible,
 } from './types'
-import { ACCIONES_GESTION } from './types'
-
-const ESTADOS_CANCELABLES: readonly EstadoRequerimiento[] = [
-  'borrador',
-  'pendiente-aprobacion',
-  'observado',
-  'aprobado',
-  'en-reclutamiento',
-]
-
-/**
- * Clasificación derivable del detalle. En un requerimiento completo manda el
- * puesto, del que se deriva la clasificación; en un borrador puede no existir.
- */
-export function clasificacionDeDetalle(
-  detalle: DetalleRequerimiento,
-): Clasificacion | null {
-  if ('puesto' in detalle) return detalle.puesto.clasificacion
-  if (detalle.plazo !== null) return detalle.plazo.clasificacion
-  return null
-}
-
-function motivoNoEjecutable(
-  detalle: DetalleRequerimiento,
-  accion: AccionEvaluable,
-): MotivoAccionNoDisponible | null {
-  switch (accion) {
-    case 'aprobar':
-    case 'observar':
-      return detalle.estado === 'pendiente-aprobacion'
-        ? null
-        : 'estado-no-aplicable'
-    case 'cancelar':
-      return ESTADOS_CANCELABLES.includes(detalle.estado)
-        ? null
-        : 'estado-no-aplicable'
-    case 'fijar-plazo':
-      if (detalle.estado !== 'pendiente-aprobacion') {
-        return 'estado-no-aplicable'
-      }
-      return clasificacionDeDetalle(detalle) === 'administrativo'
-        ? null
-        : 'clasificacion-no-aplicable'
-    case 'ajustar-plazo':
-      if (
-        detalle.estado !== 'aprobado' &&
-        detalle.estado !== 'en-reclutamiento'
-      ) {
-        return 'estado-no-aplicable'
-      }
-      return clasificacionDeDetalle(detalle) === 'administrativo'
-        ? null
-        : 'clasificacion-no-aplicable'
-  }
-}
 
 function mensajeNoDisponible(
   accion: AccionEvaluable,
@@ -99,7 +44,7 @@ export function evaluarAccion(
   detalle: DetalleRequerimiento,
   accion: AccionEvaluable,
 ): AccionEvaluada {
-  const visible = detalle.autorizacion.accionesPermitidas.includes(accion)
+  const visible = accionConcedida(detalle, accion)
   if (!visible) {
     const motivo: MotivoAccionNoDisponible = 'sin-autorizacion'
     return {
@@ -111,7 +56,7 @@ export function evaluarAccion(
     }
   }
 
-  const motivo = motivoNoEjecutable(detalle, accion)
+  const motivo = motivoEstadoNoAplicable(detalle, accion)
   return {
     accion,
     visible: true,
@@ -124,13 +69,13 @@ export function evaluarAccion(
 export function evaluarAcciones(
   detalle: DetalleRequerimiento,
 ): EvaluacionAcciones {
-  const acciones = ACCIONES_GESTION.map((accion) =>
+  const acciones = ACCIONES_ELEGIBLES.map((accion) =>
     evaluarAccion(detalle, accion),
   )
   return {
     estado: detalle.estado,
     acciones,
-    ejecutables: ACCIONES_GESTION.filter((accion) =>
+    ejecutables: ACCIONES_ELEGIBLES.filter((accion) =>
       acciones.some(
         (evaluada) => evaluada.accion === accion && evaluada.ejecutable,
       ),
@@ -140,7 +85,7 @@ export function evaluarAcciones(
 
 export function esAccionEjecutable(
   evaluacion: EvaluacionAcciones,
-  accion: AccionGestion,
+  accion: AccionEvaluable,
 ): boolean {
   return evaluacion.ejecutables.includes(accion)
 }

@@ -50,7 +50,7 @@ import {
   createMockComandosRequerimientos,
   creacionFixture,
 } from '../fixtures'
-import type { AccionGestion } from '..'
+import type { AccionEvaluable } from '..'
 import type {
   MockCommandResults,
   MockComandosRequerimientosPort,
@@ -300,7 +300,7 @@ describe('elegibilidad de acciones de gestión', () => {
   const casos: readonly {
     readonly estado: string
     readonly clasificacion?: Clasificacion
-    readonly esperadas: readonly AccionGestion[]
+    readonly esperadas: readonly AccionEvaluable[]
   }[] = [
     { estado: 'borrador', esperadas: ['cancelar'] },
     {
@@ -314,8 +314,11 @@ describe('elegibilidad de acciones de gestión', () => {
       esperadas: ['aprobar', 'observar', 'cancelar', 'fijar-plazo'],
     },
     { estado: 'observado', esperadas: ['cancelar'] },
-    { estado: 'aprobado', esperadas: ['cancelar'] },
-    { estado: 'en-reclutamiento', esperadas: ['cancelar'] },
+    { estado: 'aprobado', esperadas: ['cancelar', 'ajustar-plazo'] },
+    {
+      estado: 'en-reclutamiento',
+      esperadas: ['cancelar', 'ajustar-plazo'],
+    },
     { estado: 'cubierto', esperadas: [] },
     { estado: 'cancelado', esperadas: [] },
   ]
@@ -336,7 +339,7 @@ describe('elegibilidad de acciones de gestión', () => {
       const evaluacion = evaluarAcciones(detalle)
 
       expect(evaluacion.estado).toBe(estado)
-      expect(evaluacion.acciones).toHaveLength(4)
+      expect(evaluacion.acciones).toHaveLength(5)
       expect(evaluacion.acciones.every((accion) => accion.visible)).toBe(true)
       expect(evaluacion.ejecutables).toEqual(esperadas)
     },
@@ -372,7 +375,7 @@ describe('elegibilidad de acciones de gestión', () => {
       motivo: 'estado-no-aplicable',
     })
     expect(aprobar?.mensaje).toContain('pendiente de aprobación')
-    expect(evaluacion.ejecutables).toEqual(['cancelar'])
+    expect(evaluacion.ejecutables).toEqual(['cancelar', 'ajustar-plazo'])
   })
 
   it('no ofrece fijar plazo a un Operativo aunque el backend lo conceda', () => {

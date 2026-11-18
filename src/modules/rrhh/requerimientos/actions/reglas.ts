@@ -1,24 +1,14 @@
-import type {
-  CausalCancelacion,
-  DetalleRequerimientoCompleto,
-} from '../contracts'
+import type { DetalleRequerimientoCompleto } from '../contracts'
 import {
   DIAS_HABILES_ADMINISTRATIVOS,
   esDiasHabilesAdministrativos,
 } from '../deadlines'
-import { clasificacionDeDetalle } from './elegibilidad'
+import { esCausalCancelacion, situacionPlazoAprobacion } from '../model'
 import type {
   ErrorAccion,
   ResultadoPlazoValidado,
   SolicitudCancelacion,
 } from './types'
-import { CAUSALES_CANCELACION } from './types'
-
-export function esCausalCancelacion(
-  valor: unknown,
-): valor is CausalCancelacion {
-  return CAUSALES_CANCELACION.includes(valor as CausalCancelacion)
-}
 
 export function comentarioNormalizado(
   comentario: string | null | undefined,
@@ -36,15 +26,7 @@ export function comentarioNormalizado(
 export function validarPlazoAdministrativoParaAprobar(
   detalle: DetalleRequerimientoCompleto,
 ): readonly ErrorAccion[] {
-  if (clasificacionDeDetalle(detalle) !== 'administrativo') return []
-
-  const plazo = detalle.plazo
-  const dias =
-    plazo?.clasificacion === 'administrativo'
-      ? plazo.duracionDiasHabiles
-      : null
-
-  if (esDiasHabilesAdministrativos(dias)) return []
+  if (situacionPlazoAprobacion(detalle) !== 'invalido') return []
 
   return [
     {

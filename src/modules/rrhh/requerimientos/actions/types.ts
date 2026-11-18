@@ -1,6 +1,5 @@
 import type { ContractError } from '../../../../shared'
 import type {
-  AccionRequerimiento,
   CausalCancelacion,
   ConflictoVersion,
   DetalleRequerimientoCancelado,
@@ -10,36 +9,33 @@ import type {
   EstadoRequerimiento,
   MotivoDenegacion,
 } from '../contracts'
+import type {
+  AccionElegible,
+  MotivoEstadoNoAplicable,
+} from '../model'
+import { ACCIONES_ELEGIBLES } from '../model'
 
 /**
  * Acciones de UX-04 que T-RH-12 gobierna. Las demás acciones del contrato
  * (edición, envío, integración) pertenecen a otras tareas.
  */
 export type AccionGestion = Extract<
-  AccionRequerimiento,
+  AccionElegible,
   'aprobar' | 'observar' | 'cancelar' | 'fijar-plazo'
 >
 
-/**
- * Acciones de UX-04 con elegibilidad por estado y capacidades. El ajuste
- * auditado del plazo comparte la evaluación por registro, pero no forma parte
- * del conjunto que `evaluarAcciones` recorre por defecto.
- */
-export type AccionAjustePlazo = 'ajustar-plazo'
+export type AccionAjustePlazo = Extract<AccionElegible, 'ajustar-plazo'>
 
-export type AccionEvaluable = AccionGestion | AccionAjustePlazo
+export type AccionEvaluable = AccionElegible
 
-export const ACCIONES_GESTION: readonly AccionGestion[] = [
-  'aprobar',
-  'observar',
-  'cancelar',
-  'fijar-plazo',
-]
+/** Subconjunto de T-RH-12; el ajuste auditado lo ejecuta T-RH-13. */
+export const ACCIONES_GESTION: readonly AccionGestion[] = ACCIONES_ELEGIBLES.filter(
+  (accion): accion is AccionGestion => accion !== 'ajustar-plazo',
+)
 
 export type MotivoAccionNoDisponible =
   | 'sin-autorizacion'
-  | 'estado-no-aplicable'
-  | 'clasificacion-no-aplicable'
+  | MotivoEstadoNoAplicable
 
 export interface AccionEvaluada {
   readonly accion: AccionEvaluable
@@ -54,7 +50,7 @@ export interface AccionEvaluada {
 export interface EvaluacionAcciones {
   readonly estado: EstadoRequerimiento
   readonly acciones: readonly AccionEvaluada[]
-  readonly ejecutables: readonly AccionGestion[]
+  readonly ejecutables: readonly AccionEvaluable[]
 }
 
 export type CampoAccion =
@@ -178,8 +174,3 @@ export type ResultadoPlazoValidado =
       readonly ok: false
       readonly error: ErrorAccion
     }
-
-export const CAUSALES_CANCELACION: readonly CausalCancelacion[] = [
-  'menor-carga-laboral',
-  'creacion-por-error',
-]

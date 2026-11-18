@@ -1,4 +1,6 @@
 export type * from './types'
+export * from './acciones'
+export * from './estados'
 export * from './etiquetas'
 export * from './formato'
 export * from './formulario'

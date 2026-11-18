@@ -11,10 +11,10 @@ import type {
   ResultadoFijarPlazo as ResultadoFijarPlazoContrato,
   ResultadoObservar as ResultadoObservarContrato,
 } from '../contracts'
+import { esCausalCancelacion } from '../model'
 import { evaluarAccion } from './elegibilidad'
 import {
   comentarioNormalizado,
-  esCausalCancelacion,
   validarCancelacion,
   validarComentarioObservacion,
   validarDiasHabilesAdministrativos,

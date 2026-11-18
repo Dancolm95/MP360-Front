@@ -17,10 +17,12 @@ export type {
   ResultadoPlazoValidado,
   SolicitudCancelacion,
 } from './types'
+export { ACCIONES_GESTION } from './types'
 export {
-  ACCIONES_GESTION,
   CAUSALES_CANCELACION,
-} from './types'
+  clasificacionDeDetalle,
+  esCausalCancelacion,
+} from '../model'
 export type {
   AjustePlazoProyectado,
   ContextoAjustePlazo,
@@ -33,14 +35,12 @@ export {
   calcularAjustePlazoAdministrativo,
 } from './ajuste-plazo'
 export {
-  clasificacionDeDetalle,
   esAccionEjecutable,
   evaluarAccion,
   evaluarAcciones,
 } from './elegibilidad'
 export {
   comentarioNormalizado,
-  esCausalCancelacion,
   validarCancelacion,
   validarComentarioObservacion,
   validarDiasHabilesAdministrativos,
