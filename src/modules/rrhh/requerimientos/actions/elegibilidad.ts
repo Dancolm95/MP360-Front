@@ -9,8 +9,8 @@ import type {
   AccionGestion,
   EvaluacionAcciones,
   MotivoAccionNoDisponible,
-} from './tipos'
-import { ACCIONES_GESTION } from './tipos'
+} from './types'
+import { ACCIONES_GESTION } from './types'
 
 const ESTADOS_CANCELABLES: readonly EstadoRequerimiento[] = [
   'borrador',

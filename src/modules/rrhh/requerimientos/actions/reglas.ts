@@ -11,8 +11,8 @@ import type {
   ErrorAccion,
   ResultadoPlazoValidado,
   SolicitudCancelacion,
-} from './tipos'
-import { CAUSALES_CANCELACION } from './tipos'
+} from './types'
+import { CAUSALES_CANCELACION } from './types'
 
 export function esCausalCancelacion(
   valor: unknown,

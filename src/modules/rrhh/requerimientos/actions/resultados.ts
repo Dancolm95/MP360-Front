@@ -10,7 +10,7 @@ import type {
   CampoAccion,
   ErrorAccion,
   FalloAccion,
-} from './tipos'
+} from './types'
 
 function campoDeContrato(campo: CampoRequerimiento): CampoAccion {
   if (

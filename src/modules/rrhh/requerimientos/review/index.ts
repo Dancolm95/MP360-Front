@@ -29,23 +29,15 @@ export type {
   OpcionesRevision,
   RevisionRequerimiento,
   TipoEnvio,
-} from './modelo'
+} from './model'
 export {
   ETIQUETAS_CAMPO_REVISION,
   ETIQUETAS_ERROR_CAMPO,
-  NO_APLICA,
-  NO_DISPONIBLE,
-  PENDIENTE_DEFINIR,
-  SIN_ASIGNAR,
-  SIN_COLABORADOR,
-  SIN_COMPLETAR,
-  SIN_DETERMINAR,
-  SIN_SUBAREA,
   borradorDesdeFormulario,
   crearDuracionRevision,
   crearRevision,
   erroresRevision,
-} from './modelo'
+} from './model'
 export type {
   AccionOperacion,
   DatoConfirmacion,

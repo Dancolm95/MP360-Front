@@ -8,7 +8,7 @@ import type {
 /**
  * Valores canónicos que comparten el estado y la presentación de la bandeja.
  * Viven aquí para que el saneo de la persistencia no dependa de `tray/**`;
- * `tray/formato` y `tray/filtros` los reexportan.
+ * `tray/filtros` reexporta el orden inicial y la bandeja los lee directamente.
  */
 export const ESTADOS: readonly EstadoRequerimiento[] = [
   'borrador',

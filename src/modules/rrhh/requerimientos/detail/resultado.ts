@@ -1,7 +1,7 @@
 import type { ContractError } from '../../../../shared'
 import type { ResultadoDetalle } from '../contracts'
-import type { DetalleUx04, OpcionesDetalleUx04 } from './modelo'
-import { crearDetalleUx04 } from './modelo'
+import type { DetalleUx04, OpcionesDetalleUx04 } from './model'
+import { crearDetalleUx04 } from './model'
 
 export interface MensajeEstadoDetalle {
   readonly titulo: string

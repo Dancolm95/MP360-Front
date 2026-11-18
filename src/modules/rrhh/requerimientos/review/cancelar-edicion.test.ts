@@ -34,13 +34,15 @@ import {
   creacionFixture,
   type MockCommandResults,
 } from '../fixtures'
-import type { CambioFormulario } from '../form/helpers'
+import type {
+  CambioFormulario,
+  FormularioRequerimientoInput,
+} from '../model'
 import {
   FORMULARIO_VACIO,
   crearFormularioVacio,
   formularioDesdeDetalle,
-} from '../form/helpers'
-import type { FormularioRequerimientoInput } from '../model'
+} from '../model'
 import {
   crearEstadoEdicion,
   editarFormulario,

@@ -21,12 +21,10 @@ import type {
 } from '../contracts'
 import {
   ALERTA_LABELS,
-  ESTADOS,
   ESTADO_LABELS,
-  MOTIVOS,
   MOTIVO_LABELS,
   formatearFecha,
-} from './formato'
+} from '../model'
 import {
   FILTROS_FORMULARIO_VACIOS,
   ORDEN_INICIAL,
@@ -40,6 +38,7 @@ import {
   validarPeriodo,
   type EstadoFiltrosFormulario,
 } from './filtros'
+import { ESTADOS, MOTIVOS } from '../state/valores-bandeja'
 import type { ContextoBandeja, SeleccionRequerimiento } from '../state'
 
 type EstadoResultado =

@@ -16,19 +16,18 @@ import type {
   ResultadoEnvioAprobacion,
   ResultadoGuardarBorrador,
 } from '../contracts'
-import type { CambioFormulario } from '../form/helpers'
-import { MOTIVO_ETIQUETAS, aplicarCambio } from '../form/helpers'
-import type { FormularioRequerimientoInput } from '../model'
+import type { CambioFormulario, FormularioRequerimientoInput } from '../model'
+import {
+  MOTIVO_ETIQUETAS,
+  SIN_ASIGNAR,
+  aplicarCambio,
+} from '../model'
 import type {
   ErrorRevision,
   OpcionesRevision,
   RevisionRequerimiento,
-} from './modelo'
-import {
-  SIN_ASIGNAR,
-  borradorDesdeFormulario,
-  crearRevision,
-} from './modelo'
+} from './model'
+import { borradorDesdeFormulario, crearRevision } from './model'
 
 export type PasoEdicionRevision = 'edicion' | 'revision' | 'confirmacion'
 export type AccionOperacion = 'envio' | 'borrador'

@@ -33,7 +33,7 @@ import {
   AVISO_DURACION,
   crearFormularioVacio,
   FORMULARIO_VACIO,
-} from './helpers'
+} from '../model'
 
 afterEach(cleanup)
 

@@ -16,11 +16,11 @@ export type {
   ResultadoAccionObservar,
   ResultadoPlazoValidado,
   SolicitudCancelacion,
-} from './tipos'
+} from './types'
 export {
   ACCIONES_GESTION,
   CAUSALES_CANCELACION,
-} from './tipos'
+} from './types'
 export type {
   AjustePlazoProyectado,
   ContextoAjustePlazo,

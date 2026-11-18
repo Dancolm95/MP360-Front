@@ -32,11 +32,11 @@ import {
   aplicarCambio,
   clasificacionFormulario,
   crearFormularioVacio,
-  derivarDuracionAplicable,
   formularioDesdeBorrador,
   formularioDesdeDetalle,
-  puestosDisponibles,
-} from './helpers'
+} from '../model'
+import { derivarDuracionAplicable } from '../deadlines'
+import { puestosDisponibles } from './helpers'
 
 const id = <T>(value: string) => value as T
 

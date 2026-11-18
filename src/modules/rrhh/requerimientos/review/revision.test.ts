@@ -38,20 +38,18 @@ import {
 import {
   AVISO_DURACION,
   FORMULARIO_VACIO,
-  contextoDesdeCatalogos,
-  formularioDesdeDetalle,
-} from '../form/helpers'
-import { validarParaEnvio, type FormularioRequerimientoInput } from '../model'
-import {
   NO_APLICA,
   PENDIENTE_DEFINIR,
   SIN_ASIGNAR,
   SIN_COMPLETAR,
   SIN_DETERMINAR,
   SIN_SUBAREA,
-  crearRevision,
-  type OpcionesRevision,
-} from './modelo'
+  contextoDesdeCatalogos,
+  formularioDesdeDetalle,
+  validarParaEnvio,
+  type FormularioRequerimientoInput,
+} from '../model'
+import { crearRevision, type OpcionesRevision } from './model'
 import {
   crearEstadoEdicion,
   editarFormulario,

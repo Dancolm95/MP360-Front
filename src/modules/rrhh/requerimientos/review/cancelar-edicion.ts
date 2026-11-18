@@ -2,9 +2,12 @@ import type {
   ComandosRequerimientosPort,
   MotivoRequerimiento,
 } from '../contracts'
-import { formularioDesdeDetalle } from '../form/helpers'
 import type { FormularioRequerimientoInput } from '../model'
-import { parsearRemuneracionPen, validarVacantes } from '../model'
+import {
+  formularioDesdeDetalle,
+  parsearRemuneracionPen,
+  validarVacantes,
+} from '../model'
 import type {
   EstadoEdicionRevision,
   EstadoOperacion,

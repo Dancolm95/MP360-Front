@@ -9,30 +9,25 @@ import {
   AVISO_DURACION,
   CLASIFICACION_ETIQUETAS,
   MOTIVO_ETIQUETAS,
+  NO_APLICA,
+  NO_DISPONIBLE,
+  PENDIENTE_DEFINIR,
+  SIN_ASIGNAR,
+  SIN_COLABORADOR,
+  SIN_COMPLETAR,
+  SIN_DETERMINAR,
+  SIN_SUBAREA,
   clasificacionFormulario,
   contextoDesdeCatalogos,
-  derivarDuracionAplicable,
-} from '../form/helpers'
-import {
   parsearRemuneracionPen,
   validarParaEnvio,
   validarVacantes,
+  type CampoFormulario,
+  type CodigoErrorFormulario,
+  type ErrorFormulario,
+  type FormularioRequerimientoInput,
 } from '../model'
-import type {
-  CampoFormulario,
-  CodigoErrorFormulario,
-  ErrorFormulario,
-  FormularioRequerimientoInput,
-} from '../model'
-
-export const SIN_COMPLETAR = 'Sin completar'
-export const SIN_SUBAREA = 'Sin subárea'
-export const SIN_ASIGNAR = 'Sin asignar'
-export const SIN_COLABORADOR = 'Sin colaborador'
-export const NO_APLICA = 'No aplica'
-export const NO_DISPONIBLE = 'No disponible'
-export const SIN_DETERMINAR = 'Sin determinar'
-export const PENDIENTE_DEFINIR = 'Pendiente de definir'
+import { derivarDuracionAplicable } from '../deadlines'
 
 export type ModoRevision = 'creacion' | 'edicion'
 export type TipoEnvio = 'envio' | 'reenvio'

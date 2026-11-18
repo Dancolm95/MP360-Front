@@ -32,7 +32,7 @@ import type {
   ResultadoAccionFijarPlazo,
   ResultadoAccionObservar,
   SolicitudCancelacion,
-} from './tipos'
+} from './types'
 
 /**
  * Aprobar un pendiente. La clasificación administrativa exige un plazo válido

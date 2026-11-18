@@ -28,7 +28,6 @@ import type {
   EventoHistorialId,
   FechaISO,
   InstanteISO,
-  MockCommandResults,
   PlazoAdministrativoFijado,
   PlazoAdministrativoPendiente,
   PlazoOperativo,
@@ -43,18 +42,20 @@ import type {
   Usuario,
   UsuarioId,
 } from '..'
+import { ajustarPlazoAdministrativo, calcularPlazo } from '..'
 import {
-  ajustarPlazoAdministrativo,
-  calcularPlazo,
   comandoFixture,
   createMockComandosRequerimientos,
   creacionFixture,
-} from '..'
+} from '../fixtures'
 import type {
   ContextoAjustePlazo,
-  MockComandosRequerimientosPort,
   SolicitudAjustePlazo,
 } from '..'
+import type {
+  MockCommandResults,
+  MockComandosRequerimientosPort,
+} from '../fixtures'
 
 const id = <T>(value: string) => value as T
 const fecha = (value: string) => value as FechaISO

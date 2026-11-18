@@ -23,7 +23,7 @@ import {
   falloValidacion,
   mapearFalloComando,
 } from './resultados'
-import type { ErrorAccion, FalloAccion } from './tipos'
+import type { ErrorAccion, FalloAccion } from './types'
 
 export interface SolicitudAjustePlazo {
   readonly diasHabiles: unknown

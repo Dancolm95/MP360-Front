@@ -36,7 +36,7 @@ import {
   creacionFixture,
   type MockCommandResults,
 } from '../fixtures'
-import { formularioDesdeDetalle } from '../form/helpers'
+import { formularioDesdeDetalle } from '../model'
 import {
   crearEstadoEdicion,
   editarFormulario,

@@ -23,10 +23,10 @@ import type {
   Usuario,
 } from '../contracts'
 import {
+  ALERTA_LABELS,
   CLASIFICACION_ETIQUETAS,
+  ESTADO_LABELS,
   MOTIVO_ETIQUETAS,
-} from '../form/helpers'
-import {
   NO_APLICA,
   NO_DISPONIBLE,
   PENDIENTE_DEFINIR,
@@ -35,8 +35,8 @@ import {
   SIN_COMPLETAR,
   SIN_DETERMINAR,
   SIN_SUBAREA,
-} from '../review/modelo'
-import { ALERTA_LABELS, ESTADO_LABELS, formatearFecha } from '../tray/formato'
+  formatearFecha,
+} from '../model'
 
 export const SIN_FECHA_OBJETIVO = 'Sin fecha objetivo'
 

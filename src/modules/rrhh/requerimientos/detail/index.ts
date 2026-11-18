@@ -14,7 +14,7 @@ export type {
   PlazoDetalle,
   PrimerDiaRealDetalle,
   ResumenDetalle,
-} from './modelo'
+} from './model'
 export {
   ACCION_HISTORIAL_ETIQUETAS,
   CAMPOS_RESUMEN,
@@ -25,6 +25,6 @@ export {
   SIN_FECHA_OBJETIVO,
   crearDetalleUx04,
   valorResumen,
-} from './modelo'
+} from './model'
 export type { MensajeEstadoDetalle, ResultadoDetalleUx04 } from './resultado'
 export { modelarResultadoDetalle } from './resultado'

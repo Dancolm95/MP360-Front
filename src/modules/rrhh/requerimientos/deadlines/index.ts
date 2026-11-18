@@ -10,6 +10,7 @@ export {
   evaluarPlazo,
   seleccionarAlertaVigente,
 } from './evaluacion'
+export { derivarDuracionAplicable } from './duracion'
 export {
   DIAS_HABILES_ADMINISTRATIVOS,
   esDiasHabilesAdministrativos,

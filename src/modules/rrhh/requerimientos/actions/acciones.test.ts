@@ -24,7 +24,6 @@ import type {
   ErrorIntegracion,
   EstadoRequerimientoCompleto,
   InstanteISO,
-  MockCommandResults,
   PlazoAdministrativoFijado,
   PlazoAdministrativoPendiente,
   PlazoOperativo,
@@ -42,17 +41,20 @@ import type {
 import {
   aprobarRequerimiento,
   cancelarRequerimiento,
-  comandoFixture,
-  createMockComandosRequerimientos,
-  creacionFixture,
   evaluarAcciones,
   fijarPlazoAdministrativo,
   observarRequerimiento,
 } from '..'
+import {
+  comandoFixture,
+  createMockComandosRequerimientos,
+  creacionFixture,
+} from '../fixtures'
+import type { AccionGestion } from '..'
 import type {
-  AccionGestion,
+  MockCommandResults,
   MockComandosRequerimientosPort,
-} from '..'
+} from '../fixtures'
 
 const id = <T>(value: string) => value as T
 const instante = (value: string) => value as InstanteISO

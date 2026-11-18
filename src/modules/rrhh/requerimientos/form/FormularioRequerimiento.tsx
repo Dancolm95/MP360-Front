@@ -23,14 +23,16 @@ import {
   CLASIFICACION_ETIQUETAS,
   MOTIVO_ETIQUETAS,
   aplicarCambio,
-  areasDisponibles,
   clasificacionFormulario,
-  derivarDuracionAplicable,
+  type CambioFormulario,
+} from '../model'
+import { derivarDuracionAplicable } from '../deadlines'
+import {
+  areasDisponibles,
   distritosDisponibles,
   provinciasDisponibles,
   puestosDisponibles,
   subareasDisponibles,
-  type CambioFormulario,
 } from './helpers'
 
 export interface FormularioRequerimientoProps {
