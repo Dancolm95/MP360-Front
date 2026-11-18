@@ -13,6 +13,7 @@ import { DisenoDetalle } from './ux04/DisenoDetalle'
 import { BandejaCandidatos } from './candidatos/BandejaCandidatos'
 import { DetalleCandidato } from './candidato/DetalleCandidato'
 import { BandejaColaboradores } from './colaboradores/BandejaColaboradores'
+import { FichaColaborador } from './colaborador/FichaColaborador'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -28,6 +29,7 @@ type Diseno =
   | 'candidatos'
   | 'candidato'
   | 'colaboradores'
+  | 'colaborador'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -123,6 +125,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <BandejaColaboradores />,
+  },
+  {
+    id: 'colaborador',
+    etiqueta: 'Colaborador',
+    referencia: '/preview/mp360/img/referencia-colaborador.jpg',
+    descripcion: 'Ficha de colaborador',
+    ancho: 1920,
+    alto: 1176,
+    componente: <FichaColaborador />,
   },
   {
     id: 'login',

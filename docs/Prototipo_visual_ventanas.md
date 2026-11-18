@@ -1,6 +1,6 @@
 # Prototipo visual de ventanas — rama `codex/rh-vis`
 
-**Última actualización:** 17 de noviembre de 2026.
+**Última actualización:** 18 de noviembre de 2026.
 **Carácter:** documento de rama. Describe el alcance y el estado del prototipo visual que
 vive en `codex/rh-vis`. **No es una spec, no añade requisitos y no sustituye** a
 `docs/constitution.md`, a `docs/specs/` ni a `memory.md`.
@@ -58,6 +58,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `candidatos` | Bandeja de candidatos | PDF p. 10 (UX-05) | 1920 × 1176 | `?ux=candidatos` |
 | `candidato` | Detalle y evaluación de candidato | PDF p. 11 (UX-06) | 1920 × 1176 | `?ux=candidato` |
 | `colaboradores` | Bandeja de colaboradores | PDF p. 12 (UX-08) | 1920 × 1176 | `?ux=colaboradores` |
+| `colaborador` | Ficha de colaborador (resumen) | PDF p. 17 (UX-08) | 1920 × 1176 | `?ux=colaborador` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -97,6 +98,7 @@ src/app/preview/requerimientos/
 ├── candidatos/              # bandeja de candidatos (PDF p. 10, UX-05)
 ├── candidato/               # detalle y evaluación de candidato (PDF p. 11, UX-06)
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
+├── colaborador/             # ficha de colaborador, resumen (PDF p. 17, UX-08)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -130,6 +132,7 @@ public/preview/mp360/
 | Candidatos (PDF p. 10) | Pendiente de revisión visual | 8,9 / 255 |
 | Candidato (PDF p. 11) | Calibrada; pendiente de revisión visual | 6,3 / 255 |
 | Colaboradores (PDF p. 12) | Pendiente de revisión visual | 8,9 / 255 |
+| Colaborador (PDF p. 17) | Pendiente de revisión visual | 7,1 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -171,6 +174,12 @@ resuelven en la implementación funcional, no aquí:
    `#2b48e9`, igual que en las páginas 10 y 11, y se aplica solo a esta ventana. La maqueta
    no dibuja la etiqueta de arte «UX-08» ni la línea divisoria entre las dos últimas filas de
    la tabla; se replica tal cual.
+10. **Ficha de colaborador (PDF p. 17)**: la maqueta mantiene «Colaboradores» como pestaña
+    activa pero no dibuja submenú; la navegación se replica sin él. Se conservan las erratas
+    del dibujo («Documetnos», «Operador logistico...») y sus datos de muestra. No se añaden
+    acciones que la página no dibuje. Además del azul `#2b48e9`, esta ventana ajusta su propio
+    fondo (cálido al noroeste, lavanda al sureste) para acercarse al render; el cromo
+    compartido no cambia.
 
 ## 9. Cierre y siguiente paso
 

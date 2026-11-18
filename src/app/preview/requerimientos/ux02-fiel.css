@@ -4669,3 +4669,708 @@
   background: #efefef;
   color: #1c1c1c;
 }
+
+/* ---------- UX-08 · Ficha de colaborador (PDF p. 17) ---------- */
+
+.ux08f-lienzo {
+  --azul: #2b48e9;
+  --azul-acento: #2b48e9;
+  --azul-suave: #e1e7f8;
+
+  background:
+    radial-gradient(1300px 900px at 100% 68%, rgba(178, 196, 240, 0.6), rgba(198, 211, 242, 0) 70%),
+    linear-gradient(112deg, #f6f5f3 0%, #f6f5f3 28%, #e9ecf4 62%, #dde3f4 100%);
+}
+
+.ux08f-encabezado {
+  position: relative;
+  height: 101px;
+}
+
+.ux08f-breadcrumb {
+  position: absolute;
+  left: 0;
+  top: 33px;
+  font-size: 12px;
+}
+
+.ux08f-breadcrumb > span:last-child {
+  color: #808080;
+}
+
+.ux08f-titulo {
+  position: absolute;
+  left: -2px;
+  top: 70px;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #1c1c1c;
+}
+
+.ux08f-subtitulo {
+  position: absolute;
+  left: 234px;
+  top: 76px;
+  margin: 0;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 12.7px;
+  font-weight: 600;
+  line-height: 12px;
+  color: #4f4f4f;
+}
+
+.ux08f-estado {
+  position: absolute;
+  right: 1px;
+  top: 57px;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.ux08f-estado__etiqueta {
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 14px;
+  color: #747474;
+}
+
+.ux08f-estado__selector {
+  width: 137px;
+  height: 36px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 32px;
+  cursor: pointer;
+}
+
+.ux08f-estado__punto {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: #5d985e;
+}
+
+.ux08f-estado__valor {
+  margin-left: 6px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5d985e;
+}
+
+.ux08f-estado__selector .ux02-i {
+  margin-left: auto;
+  font-size: 15px;
+  color: #808080;
+}
+
+.ux08f-tablero {
+  display: flex;
+  gap: 17px;
+}
+
+/* ---------- Columna izquierda: perfil ---------- */
+
+.ux08f-perfil {
+  position: relative;
+  width: 411px;
+  height: 750px;
+  flex: 0 0 411px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.ux08f-avatar {
+  position: absolute;
+  left: 33px;
+  top: 32px;
+  width: 88px;
+  height: 88px;
+  display: block;
+}
+
+.ux08f-avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux08f-avatar__editar {
+  position: absolute;
+  left: 65px;
+  top: 70px;
+  width: 23px;
+  height: 23px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--azul);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux08f-avatar__editar .ux02-i {
+  font-size: 12px;
+  color: #fff;
+}
+
+.ux08f-perfil__datos {
+  position: absolute;
+  left: 161px;
+  top: 33px;
+}
+
+.ux08f-perfil__nombre {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #1c1c1c;
+}
+
+.ux08f-perfil__cargo {
+  margin: 4px 0 0;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 15px;
+  color: #1c1c1c;
+}
+
+.ux08f-perfil__ubicacion {
+  margin: 5px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 13px;
+  color: #6f6f6f;
+}
+
+.ux08f-badge-activo {
+  position: absolute;
+  left: -1px;
+  top: 67px;
+  width: 127px;
+  height: 30px;
+  border-radius: 15px;
+  background: #5d985e;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ux08f-badge-activo__marca {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux08f-badge-activo__marca .ux02-i {
+  font-size: 14px;
+  color: #5d985e;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+}
+
+.ux08f-perfil__titulo {
+  position: absolute;
+  left: 33px;
+  top: 157px;
+  margin: 0;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #1c1c1c;
+}
+
+.ux08f-pares {
+  position: absolute;
+  left: 35px;
+  top: 193px;
+  width: 345px;
+  margin: 0;
+}
+
+.ux08f-pares + .ux08f-pares {
+  top: 384px;
+}
+
+.ux08f-par {
+  display: grid;
+  grid-template-columns: 182px 1fr;
+  height: 45px;
+}
+
+.ux08f-par__dato dt {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 13px;
+  color: #6b6b6b;
+}
+
+.ux08f-par__dato dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #1c1c1c;
+}
+
+.ux08f-perfil__acciones {
+  position: absolute;
+  left: 31px;
+  top: 597px;
+  width: 332px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ux08f-btn {
+  height: 38px;
+  border-radius: 4px;
+  background: #fff;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ux08f-btn--solido {
+  border: 0;
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux08f-btn--peligro {
+  border: 1.5px solid #e5372e;
+  color: #e5372e;
+}
+
+.ux08f-btn--contorno {
+  border: 1.5px solid var(--azul);
+  color: var(--azul);
+}
+
+/* ---------- Columna central: ficha ---------- */
+
+.ux08f-ficha {
+  position: relative;
+  width: 1145px;
+  height: 750px;
+  flex: 0 0 1145px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.ux08f-tabs {
+  position: absolute;
+  left: 35px;
+  top: 24px;
+  display: flex;
+  gap: 22px;
+}
+
+.ux08f-tab {
+  height: 52px;
+  padding-bottom: 4px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 22px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  color: #a3a3a3;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ux08f-tab .ux02-i {
+  font-size: 15px;
+  color: #b4b4b4;
+}
+
+.ux08f-tab--activo {
+  background: var(--azul-suave);
+  color: var(--azul);
+  font-weight: 600;
+}
+
+.ux08f-tab--activo .ux02-i {
+  color: var(--azul);
+}
+
+.ux08f-contrato {
+  position: absolute;
+  left: 75px;
+  top: 144px;
+  width: 430px;
+  margin: 0;
+}
+
+.ux08f-contrato__fila {
+  display: grid;
+  grid-template-columns: 184px 1fr;
+  align-items: baseline;
+  height: 45px;
+}
+
+.ux08f-contrato__fila dt {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #545454;
+}
+
+.ux08f-contrato__fila dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux08f-derecha {
+  position: absolute;
+  left: 590px;
+  top: 95px;
+  width: 516px;
+}
+
+.ux08f-remuneracion__cabecera {
+  position: relative;
+  height: 31px;
+}
+
+.ux08f-cuadro {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 15px;
+  height: 15px;
+  background: var(--azul);
+}
+
+.ux08f-panel__titulo {
+  position: absolute;
+  left: 27px;
+  top: 2px;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux08f-remuneracion__cabecera .ux08f-cuadro {
+  left: 36px;
+  top: 16px;
+}
+
+.ux08f-remuneracion__cabecera .ux08f-panel__titulo {
+  left: 62px;
+  top: 15px;
+}
+
+.ux08f-btn-historial {
+  position: absolute;
+  right: 30px;
+  top: 0;
+  width: 121px;
+  height: 31px;
+  border: 1px solid var(--azul);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--azul);
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ux08f-remuneracion {
+  position: relative;
+  margin: 30px 0 0 28px;
+  width: 378px;
+  height: 76px;
+  border-radius: 6px;
+  background: #eef3fc;
+}
+
+.ux08f-remuneracion__monto {
+  position: absolute;
+  left: 24px;
+  top: 17px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux08f-remuneracion__cifra {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 21px;
+  color: #1c1c1c;
+}
+
+.ux08f-remuneracion__detalle {
+  margin-top: 1px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #1c1c1c;
+}
+
+.ux08f-badge-vigente {
+  position: absolute;
+  left: 220px;
+  top: 20px;
+  width: 127px;
+  height: 30px;
+  border-radius: 15px;
+  background: #5d985e;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ux08f-badge-vigente__marca {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux08f-badge-vigente__marca .ux02-i {
+  font-size: 14px;
+  color: #5d985e;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+}
+
+.ux08f-panel {
+  position: relative;
+  width: 516px;
+  height: 150px;
+  margin-top: 19px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.ux08f-panel--tallas {
+  margin-top: 12px;
+}
+
+.ux08f-panel--cuenta {
+  margin-top: 13px;
+}
+
+.ux08f-panel__cabecera {
+  position: absolute;
+  left: 34px;
+  top: 26px;
+}
+
+.ux08f-panel__cabecera .ux08f-cuadro {
+  top: 2px;
+}
+
+.ux08f-panel__cabecera .ux08f-panel__titulo {
+  left: 32px;
+  top: 0;
+}
+
+.ux08f-btn-editar {
+  position: absolute;
+  right: 31px;
+  top: 17px;
+  width: 126px;
+  height: 34px;
+  border: 1px solid var(--azul);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--azul);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ux08f-btn-editar .ux02-i {
+  font-size: 15px;
+}
+
+.ux08f-panel__cabecera::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 34px;
+  width: 450px;
+  height: 1px;
+  background: #949494;
+}
+
+.ux08f-campos {
+  position: absolute;
+  left: 33px;
+  right: 33px;
+  top: 60px;
+  height: 64px;
+  margin: 0;
+  display: grid;
+}
+
+.ux08f-campo {
+  padding: 18px 0 0 5px;
+  border-left: 1px solid #b3b3b3;
+}
+
+.ux08f-campo:first-child {
+  border-left: 0;
+  padding-left: 5px;
+}
+
+.ux08f-campo dt {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 13px;
+  color: #757575;
+}
+
+.ux08f-campo dd {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #1c1c1c;
+}
+
+.ux08f-panel--afiliacion .ux08f-campos {
+  grid-template-columns: 167px 122px 161px;
+}
+
+.ux08f-panel--afiliacion .ux08f-campo:nth-child(2) {
+  padding-left: 31px;
+}
+
+.ux08f-panel--afiliacion .ux08f-campo:nth-child(3) {
+  padding-left: 46px;
+}
+
+.ux08f-panel--tallas .ux08f-campos {
+  grid-template-columns: 64px 111px 106px 94px 75px;
+}
+
+.ux08f-panel--tallas .ux08f-campo:nth-child(2) {
+  padding-left: 33px;
+}
+
+.ux08f-panel--tallas .ux08f-campo:nth-child(3) {
+  padding-left: 32px;
+}
+
+.ux08f-panel--tallas .ux08f-campo:nth-child(4) {
+  padding-left: 32px;
+}
+
+.ux08f-panel--tallas .ux08f-campo:nth-child(5) {
+  padding-left: 33px;
+}
+
+.ux08f-panel--cuenta .ux08f-campos {
+  grid-template-columns: 126px 161px 163px;
+}
+
+.ux08f-panel--cuenta .ux08f-campo:nth-child(2) {
+  padding-left: 32px;
+}
+
+.ux08f-panel--cuenta .ux08f-campo:nth-child(3) {
+  padding-left: 45px;
+}
+
+.ux08f-lienzo .ux02-rail__tarjeta {
+  margin-top: 17px;
+}
+
+.ux08f-lienzo .ux02-rail__tarjeta--acciones {
+  height: 335px;
+  padding-top: 15px;
+  gap: 12.6px;
+}
+
+.ux08f-lienzo .ux02-rail__accesos {
+  margin-top: 29px;
+}
+
+.ux08f-lienzo .ux02-rail__eventos {
+  margin-top: 42px;
+}
+
+.ux08f-lienzo .ux02-rail > .ux02-rail__titulo:first-child {
+  justify-content: flex-start;
+  gap: 7px;
+  font-size: 14.5px;
+}
+
+.ux08f-lienzo .ux02-rail__tarjeta--eventos {
+  margin-top: 14px;
+  padding: 4px 13px 10px 15px;
+}
+
+.ux08f-lienzo .ux02-rail__evento {
+  gap: 9px;
+}
+
+.ux08f-lienzo .ux02-rail__evento + .ux02-rail__evento {
+  margin-top: 12px;
+}
+
+.ux08f-lienzo .ux02-rail__ver-mas {
+  font-size: 13px;
+}
+
+.ux08f-lienzo .ux02-rail__ver-mas::after {
+  content: ' +';
+}
