@@ -20,5 +20,14 @@ export type {
   ResultadoConfirmacionPrimerDiaReal,
 } from './primer-dia-real'
 export { confirmarPrimerDiaReal } from './primer-dia-real'
+export type {
+  ConfirmacionReversionCobertura,
+  MotivoRechazoReversion,
+  ResultadoConfirmacionReversionCobertura,
+} from './reversion-cobertura'
+export {
+  confirmarReversionCobertura,
+  MENSAJE_REVERSION_NO_RETROCEDE,
+} from './reversion-cobertura'
 export type { EfectoVencimiento } from './vencimiento'
 export { efectoVencimiento } from './vencimiento'

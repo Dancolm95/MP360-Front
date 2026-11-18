@@ -69,6 +69,8 @@ export type {
   ResultadoLeerPrimerDiaReal,
 } from './primer-dia-real'
 export { leerPrimerDiaRealVigente } from './primer-dia-real'
+export type { ResultadoAccionSolicitarReversion } from './reversion-cobertura'
+export { solicitarReversionCobertura } from './reversion-cobertura'
 export type { FalloComandoContrato } from './resultados'
 export {
   MENSAJE_CONFLICTO_VERSION,
