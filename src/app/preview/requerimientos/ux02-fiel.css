@@ -3335,3 +3335,827 @@
   justify-content: flex-start;
   gap: 8px;
 }
+
+/* ---------- UX-06: detalle y evaluación de candidato (PDF p. 11) ---------- */
+
+.ux06-lienzo {
+  --azul: #2b48e9;
+  --azul-suave: #e1e7f8;
+  --azul-acento: #294bee;
+  --ux06-linea: #cccdd2;
+  background:
+    radial-gradient(
+      120% 105% at 104% 52%,
+      #ccd3f0 0%,
+      #d6dcf2 28%,
+      #e3e7f5 48%,
+      #f0f1f4 70%,
+      #f6f5f4 84%
+    );
+}
+
+.ux06-main {
+  padding-top: 34px;
+}
+
+.ux06-columna {
+  width: 1571.5px;
+  flex: 0 0 1571.5px;
+}
+
+.ux06-breadcrumb {
+  color: #969696;
+  gap: 10px;
+}
+
+.ux06-breadcrumb .ux02-breadcrumb__activo {
+  color: var(--azul);
+}
+
+.ux06-cabecera {
+  position: relative;
+  height: 72px;
+}
+
+.ux06-cabecera__fila {
+  display: flex;
+  align-items: center;
+  gap: 12.5px;
+  margin-top: 16px;
+  height: 30px;
+}
+
+.ux06-titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--negro);
+}
+
+.ux06-badge-estado {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 15px;
+  background: var(--azul-suave);
+  color: var(--azul);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ux06-btn-volver {
+  position: absolute;
+  top: 5.5px;
+  right: -2px;
+  width: 231.5px;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux06-btn-volver .ux02-i {
+  font-size: 20px;
+}
+
+.ux06-tablero {
+  display: grid;
+  grid-template-columns: 1053px 500px;
+  column-gap: 18.5px;
+  row-gap: 19px;
+}
+
+.ux06-tarjeta {
+  position: relative;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux06-resumen {
+  grid-column: 1 / -1;
+  height: 172px;
+}
+
+.ux06-evaluacion {
+  height: 214px;
+}
+
+.ux06-acciones {
+  height: 216px;
+}
+
+.ux06-documentos,
+.ux06-historial {
+  height: 245.5px;
+}
+
+.ux06-titulo-tarjeta {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--negro);
+}
+
+/* Resumen del postulante */
+
+.ux06-persona {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.ux06-avatar {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.ux06-avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux06-persona__datos {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1px;
+}
+
+.ux06-persona__nombre {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux06-persona__dni {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux06-ficha {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+}
+
+.ux06-dato {
+  position: absolute;
+  top: 24px;
+}
+
+.ux06-dato--puesto {
+  left: 398px;
+}
+
+.ux06-dato--empresa {
+  left: 665.5px;
+}
+
+.ux06-dato--tipo {
+  left: 880.5px;
+}
+
+.ux06-dato--responsable {
+  left: 1117.5px;
+}
+
+.ux06-dato--actualizacion {
+  left: 1310.5px;
+}
+
+.ux06-dato dt {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux06-dato dd {
+  margin: 5px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux06-dato--empresa dd {
+  margin-top: 2px;
+}
+
+.ux06-badge-empresa {
+  width: 97px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 2px;
+  background: var(--azul);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ux06-ficha__divisor {
+  position: absolute;
+  top: 19px;
+  width: 1px;
+  height: 41.5px;
+  background: var(--separador);
+}
+
+.ux06-ficha__divisor--puesto {
+  left: 604.5px;
+}
+
+.ux06-ficha__divisor--empresa {
+  left: 821.5px;
+}
+
+.ux06-ficha__divisor--tipo {
+  left: 1056px;
+}
+
+.ux06-ficha__divisor--responsable {
+  left: 1273px;
+}
+
+/* Etapas */
+
+.ux06-progreso {
+  position: absolute;
+  inset: 0;
+}
+
+.ux06-progreso__linea {
+  position: absolute;
+  top: 112.5px;
+  left: 120px;
+  width: 1170px;
+  height: 4px;
+  background: var(--ux06-linea);
+}
+
+.ux06-progreso__linea--hecha {
+  width: 252.5px;
+  background: #5d985e;
+}
+
+.ux06-pasos {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ux06-paso {
+  position: absolute;
+  top: 97px;
+  width: 30px;
+  height: 30px;
+}
+
+.ux06-paso:nth-child(1) {
+  left: 120px;
+}
+
+.ux06-paso:nth-child(2) {
+  left: 402.5px;
+}
+
+.ux06-paso:nth-child(3) {
+  left: 688px;
+}
+
+.ux06-paso:nth-child(4) {
+  left: 973px;
+}
+
+.ux06-paso:nth-child(5) {
+  left: 1258px;
+}
+
+.ux06-paso__marca {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ux06-linea);
+}
+
+.ux06-paso__marca .ux02-i {
+  font-size: 20px;
+  color: #fff;
+}
+
+.ux06-paso[data-estado='completada'] .ux06-paso__marca {
+  background: #5d985e;
+}
+
+.ux06-paso[data-estado='actual'] .ux06-paso__marca {
+  background: var(--azul);
+}
+
+.ux06-paso__etiqueta {
+  position: absolute;
+  top: 31.5px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux06-paso:nth-child(1) .ux06-paso__etiqueta {
+  left: 34.5px;
+}
+
+.ux06-paso:nth-child(2) .ux06-paso__etiqueta {
+  left: 40px;
+}
+
+.ux06-paso:nth-child(3) .ux06-paso__etiqueta {
+  left: 49px;
+}
+
+.ux06-paso:nth-child(4) .ux06-paso__etiqueta {
+  left: 40px;
+}
+
+.ux06-paso:nth-child(5) .ux06-paso__etiqueta {
+  left: 29.5px;
+}
+
+.ux06-paso[data-estado='pendiente'] .ux06-paso__etiqueta {
+  color: var(--ux06-linea);
+}
+
+/* Evaluación y entrevista */
+
+.ux06-evaluacion__cabecera {
+  position: absolute;
+  top: 16px;
+  left: 31px;
+  right: 16.5px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.ux06-evaluacion__meta {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux06-btn-contorno {
+  height: 28px;
+  margin-left: 13px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 19px 0 22px;
+  border: 1px solid var(--azul);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--azul);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ux06-btn-contorno .ux02-i {
+  font-size: 15px;
+}
+
+.ux06-evaluacion__tabla {
+  position: absolute;
+  top: 53px;
+  left: 26.5px;
+  width: 1011px;
+  height: 144px;
+  border: 1px solid var(--separador);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ux06-evaluacion__campos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  height: 66px;
+}
+
+.ux06-evaluacion__celda {
+  padding: 16.5px 0 0 23px;
+  border-left: 1px solid var(--separador);
+}
+
+.ux06-evaluacion__celda:first-child {
+  border-left: 0;
+  padding-left: 23.5px;
+}
+
+.ux06-evaluacion__celda:nth-child(2) {
+  padding-left: 38.5px;
+}
+
+.ux06-evaluacion__celda:nth-child(4) {
+  padding-left: 50.5px;
+}
+
+.ux06-evaluacion__celda dt {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux06-evaluacion__celda dd {
+  margin: 5.5px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux06-evaluacion__comentario {
+  padding: 12.5px 0 0 23.5px;
+  border-top: 1px solid var(--separador);
+}
+
+.ux06-evaluacion__rotulo {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  color: #808080;
+}
+
+.ux06-evaluacion__texto {
+  margin: 9.5px 19.5px 0 1px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding-left: 17px;
+  background: #f6f6fb;
+  font-size: 14px;
+  font-weight: 500;
+  color: #808080;
+}
+
+/* Acciones del postulante */
+
+.ux06-acciones .ux06-titulo-tarjeta {
+  position: absolute;
+  top: 19px;
+  left: 34px;
+}
+
+.ux06-acciones__lista {
+  position: absolute;
+  top: 49px;
+  left: 31.5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux06-btn-accion {
+  width: 441px;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ux06-btn-accion--primario {
+  height: 37px;
+  border: 0;
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux06-btn-accion--contorno {
+  height: 39px;
+  margin-top: 7px;
+  border: 1px solid var(--azul);
+  color: var(--azul);
+}
+
+.ux06-btn-accion--peligro {
+  height: 39px;
+  margin-top: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid #eb3c34;
+  color: #eb3c34;
+}
+
+.ux06-btn-accion--peligro .ux02-i {
+  font-size: 16px;
+}
+
+/* Documentos */
+
+.ux06-documentos .ux06-titulo-tarjeta {
+  position: absolute;
+  top: 25px;
+  left: 31px;
+}
+
+.ux06-documentos__tabla {
+  position: absolute;
+  top: 53px;
+  left: 26.5px;
+  width: 1011px;
+  height: 176px;
+  border: 1px solid var(--borde);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ux06-documentos__fila {
+  position: relative;
+  height: 58.1px;
+  display: flex;
+  align-items: center;
+}
+
+.ux06-documentos__fila + .ux06-documentos__fila {
+  border-top: 1px solid var(--separador);
+}
+
+.ux06-documentos__icono {
+  position: absolute;
+  top: 50%;
+  left: 17.5px;
+  width: 29px;
+  height: 29px;
+  margin-top: -14.5px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #c1fdbf;
+  color: #5d985e;
+}
+
+.ux06-documentos__icono .ux02-i {
+  font-size: 16px;
+}
+
+.ux06-documentos__datos {
+  position: absolute;
+  left: 59.5px;
+  top: 50%;
+  margin-top: -17px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux06-documentos__nombre {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux06-documentos__detalle {
+  margin-top: 3px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux06-badge-validado {
+  position: absolute;
+  top: 50%;
+  left: 515px;
+  width: 128px;
+  height: 30px;
+  margin-top: -15px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: #c1fdbf;
+  color: #5d985e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ux06-enlace {
+  position: absolute;
+  top: 50%;
+  left: 806.5px;
+  margin-top: -8px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  color: var(--azul);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ux06-enlace .ux02-i {
+  font-size: 16px;
+}
+
+.ux06-menu-puntos {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  width: 20px;
+  height: 26px;
+  margin-top: -13px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #333;
+  padding: 0;
+  cursor: pointer;
+}
+
+.ux06-menu-puntos .ux02-i {
+  font-size: 18px;
+}
+
+/* Historial */
+
+.ux06-historial .ux06-titulo-tarjeta {
+  position: absolute;
+  top: 21px;
+  left: 36px;
+}
+
+.ux06-historial__linea {
+  position: absolute;
+  top: 76px;
+  left: 46px;
+  width: 4px;
+  height: 138px;
+  background: var(--ux06-linea);
+}
+
+.ux06-historial__marca {
+  position: absolute;
+  left: 40px;
+  width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux06-historial__marca .ux02-i {
+  font-size: 12px;
+}
+
+.ux06-historial__marca[data-estado='pendiente'] {
+  background: var(--ux06-linea);
+}
+
+.ux06-historial__marca[data-indice='1'] {
+  top: 68px;
+}
+
+.ux06-historial__marca[data-indice='2'] {
+  top: 111px;
+}
+
+.ux06-historial__marca[data-indice='3'] {
+  top: 159px;
+}
+
+.ux06-historial__marca[data-indice='4'] {
+  top: 214px;
+}
+
+.ux06-historial__hitos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ux06-hito {
+  position: absolute;
+  left: 75.5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux06-hito[data-indice='1'] {
+  top: 60.5px;
+}
+
+.ux06-hito[data-indice='2'] {
+  top: 103px;
+}
+
+.ux06-hito[data-indice='3'] {
+  top: 152.5px;
+}
+
+.ux06-hito[data-indice='4'] {
+  top: 199px;
+}
+
+.ux06-hito__fecha {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: #808080;
+}
+
+.ux06-hito__titulo {
+  margin-top: 3px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux06-paginacion {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 7.5px;
+}
+
+.ux06-pagina {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: #808080;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+.ux06-pagina .ux02-i {
+  font-size: 20px;
+}
+
+.ux06-pagina--activa {
+  border-color: var(--azul);
+  background: var(--azul);
+  color: #fff;
+  font-weight: 700;
+}
