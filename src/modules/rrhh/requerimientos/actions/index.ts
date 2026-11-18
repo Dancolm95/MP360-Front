@@ -4,9 +4,12 @@ export type {
   AccionEvaluada,
   AccionGestion,
   CampoAccion,
+  ConflictoComandoVersionado,
+  DecisionTransicionComando,
   ErrorAccion,
   EvaluacionAcciones,
   FalloAccion,
+  FalloComandoVersionado,
   MotivoAccionNoDisponible,
   OpcionesAprobar,
   ResultadoAccion,
@@ -14,8 +17,12 @@ export type {
   ResultadoAccionCancelar,
   ResultadoAccionFijarPlazo,
   ResultadoAccionObservar,
+  ResultadoComandoVersionado,
   ResultadoPlazoValidado,
   SolicitudCancelacion,
+  SolicitudComandoVersionado,
+  TransicionRechazadaComando,
+  VeredictoTransicionComando,
 } from './types'
 export { ACCIONES_GESTION } from './types'
 export {
@@ -53,4 +60,12 @@ export {
   observarRequerimiento,
 } from './ejecucion'
 export type { FalloComandoContrato } from './resultados'
-export { mapearFalloComando } from './resultados'
+export {
+  MENSAJE_CONFLICTO_VERSION,
+  mapearFalloComando,
+  mapearFalloComandoVersionado,
+} from './resultados'
+export {
+  comandoConVersionVigente,
+  ejecutarComandoVersionado,
+} from './concurrencia'

@@ -1,13 +1,16 @@
 import type { ContractError } from '../../../../shared'
 import type {
   CausalCancelacion,
+  ComandoVersionado,
   ConflictoVersion,
+  DetalleRequerimiento,
   DetalleRequerimientoCancelado,
   DetalleRequerimientoCompleto,
   DiasHabilesAdministrativos,
   ErrorIntegracion,
   EstadoRequerimiento,
   MotivoDenegacion,
+  ResultadoComando,
 } from '../contracts'
 import type {
   AccionElegible,
@@ -116,6 +119,67 @@ export type FalloAccion =
       readonly entradaConservada: true
       readonly reintentable: false
     }
+
+/**
+ * Veredicto de `evaluarTransicion` (T-RH-16). Se declara estructuralmente para
+ * que `actions/` aplique la máquina sin importar de `transitions/`.
+ */
+export interface VeredictoTransicionComando {
+  readonly permitida: boolean
+  readonly motivo?: string
+  readonly mensaje?: string
+}
+
+export interface ConflictoComandoVersionado<C extends ComandoVersionado> {
+  readonly status: 'conflicto-version'
+  readonly conflicto: ConflictoVersion
+  /** El comando exacto enviado, con su versión desactualizada. */
+  readonly entrada: C
+  readonly datosVigentes: DetalleRequerimiento
+  readonly versionVigente: number
+  readonly mensaje: string
+  readonly entradaConservada: true
+  readonly reintentable: true
+}
+
+export interface TransicionRechazadaComando<C extends ComandoVersionado> {
+  readonly status: 'transicion-rechazada'
+  readonly veredicto: VeredictoTransicionComando
+  readonly entrada: C
+  readonly mensaje: string
+  readonly entradaConservada: true
+  readonly reintentable: false
+}
+
+export type FalloComandoVersionado<C extends ComandoVersionado> =
+  | ConflictoComandoVersionado<C>
+  | TransicionRechazadaComando<C>
+  | Exclude<FalloAccion, { readonly status: 'conflicto-version' }>
+
+export type ResultadoComandoVersionado<C extends ComandoVersionado, T> =
+  | {
+      readonly status: 'confirmado'
+      readonly comando: C
+      readonly datos: T
+    }
+  | FalloComandoVersionado<C>
+
+export type DecisionTransicionComando =
+  | {
+      readonly tipo: 'transicion'
+      readonly veredicto: VeredictoTransicionComando
+    }
+  /** Solicitar reversión no cambia estado por sí sola: no hay transición que aplicar. */
+  | { readonly tipo: 'no-transicion' }
+
+export interface SolicitudComandoVersionado<
+  C extends ComandoVersionado,
+  T,
+> {
+  readonly comando: C
+  readonly decision: DecisionTransicionComando
+  readonly ejecutar: (comando: C) => Promise<ResultadoComando<T>>
+}
 
 export type ResultadoAccionAprobar =
   | {

@@ -1,5 +1,6 @@
 import type {
   CampoRequerimiento,
+  ComandoVersionado,
   DetalleRequerimiento,
   ErrorValidacion,
   ResultadoComando,
@@ -10,6 +11,7 @@ import type {
   CampoAccion,
   ErrorAccion,
   FalloAccion,
+  FalloComandoVersionado,
 } from './types'
 
 function campoDeContrato(campo: CampoRequerimiento): CampoAccion {
@@ -89,6 +91,32 @@ export function mapearFalloComando(
         entradaConservada: true,
         reintentable: false,
       }
+  }
+}
+
+export const MENSAJE_CONFLICTO_VERSION =
+  'Los datos del requerimiento cambiaron. Revisa la versión vigente antes de decidir de nuevo.'
+
+/**
+ * Conserva la entrada exacta junto al conflicto para que la vista pueda mostrar
+ * los datos vigentes y reconstruir el comando con la versión actualizada.
+ */
+export function mapearFalloComandoVersionado<C extends ComandoVersionado>(
+  comando: C,
+  resultado: FalloComandoContrato,
+): FalloComandoVersionado<C> {
+  const fallo = mapearFalloComando(resultado)
+  if (fallo.status !== 'conflicto-version') return fallo
+
+  return {
+    status: 'conflicto-version',
+    conflicto: fallo.conflicto,
+    entrada: comando,
+    datosVigentes: fallo.conflicto.datosVigentes,
+    versionVigente: fallo.conflicto.versionVigente,
+    mensaje: MENSAJE_CONFLICTO_VERSION,
+    entradaConservada: true,
+    reintentable: true,
   }
 }
 
