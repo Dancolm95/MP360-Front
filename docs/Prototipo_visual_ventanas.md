@@ -62,6 +62,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `colaborador-boletas` | Ficha de colaborador (boletas de pago) | PDF p. 18 (UX-08) | 1920 × 1176 | `?ux=colaborador-boletas` |
 | `colaborador-boletas-proceso` | Ficha de colaborador (boletas con proceso) | PDF p. 19 (UX-08) | 1920 × 1176 | `?ux=colaborador-boletas-proceso` |
 | `alta-seleccion` | Alta: selección de candidato y requerimiento | PDF p. 13 (UX-07) | 1920 × 1176 | `?ux=alta-seleccion` |
+| `alta-datos` | Alta: datos personales y de trabajo | PDF p. 14 (UX-07) | 1920 × 1176 | `?ux=alta-datos` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -141,6 +142,7 @@ public/preview/mp360/
 | Colaborador boletas (PDF p. 18) | Pendiente de revisión visual | 7,3 / 255 |
 | Colaborador boletas · proceso (PDF p. 19) | Pendiente de revisión visual | 7,1 / 255 |
 | Alta · selección (PDF p. 13) | Pendiente de revisión visual | 8,1 / 255 |
+| Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,9 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -213,6 +215,15 @@ resuelven en la implementación funcional, no aquí:
     breadcrumb y los datos de muestra (RQ-0222, Luis Torres). El azul medido es `#2b48e9`,
     igual que las páginas 10–12, aplicado solo a esta ventana; la maqueta usa además un
     fondo cálido-lavanda compartido con la ficha (p. 17).
+14. **Alta · datos personales y de trabajo (PDF p. 14)**: segundo paso del alta, con el
+    mismo cromo, stepper y barra de acciones del primero. Se replica solo lo dibujado: el
+    resumen del candidato, la rejilla de datos personales, los métodos de pago, la foto y
+    las tallas. Se conservan como literales las erratas del dibujo «Tipo de documetno»,
+    «15/10&2026», «RQ - 02222», «Metodos de pago» y «Máx500kbp». El stepper dibuja los
+    pasos 1 a 4 en azul y el 5 en gris, con el subrayado de progreso desplazado; se replica
+    tal cual, igual que los campos sin desplegable (fecha, forma de pago, tipo de cuenta,
+    documento, grado de educación y cant. de hijos). Se mantiene el azul `#2b48e9` solo
+    para esta ventana y no se añaden validaciones ni estados ausentes.
 
 ## 9. Cierre y siguiente paso
 

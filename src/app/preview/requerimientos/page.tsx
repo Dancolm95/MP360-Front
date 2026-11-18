@@ -15,6 +15,7 @@ import { DetalleCandidato } from './candidato/DetalleCandidato'
 import { BandejaColaboradores } from './colaboradores/BandejaColaboradores'
 import { FichaColaborador } from './colaborador/FichaColaborador'
 import { AltaSeleccion } from './alta/AltaSeleccion'
+import { AltaDatos } from './alta/AltaDatos'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -34,6 +35,7 @@ type Diseno =
   | 'colaborador-boletas'
   | 'colaborador-boletas-proceso'
   | 'alta-seleccion'
+  | 'alta-datos'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -165,6 +167,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <AltaSeleccion />,
+  },
+  {
+    id: 'alta-datos',
+    etiqueta: 'Alta · datos',
+    referencia: '/preview/mp360/img/referencia-alta-datos.jpg',
+    descripcion: 'Alta: datos personales y de trabajo',
+    ancho: 1920,
+    alto: 1176,
+    componente: <AltaDatos />,
   },
   {
     id: 'login',

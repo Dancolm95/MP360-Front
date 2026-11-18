@@ -6573,3 +6573,300 @@
   background: #efefef;
   color: #1c1c1c;
 }
+
+/* Paso 2: datos personales y de trabajo */
+
+.ux07-pasos--datos {
+  height: 42px;
+}
+
+.ux07-pasos__conector--activo {
+  background: var(--azul);
+}
+
+.ux07-pasos__activo--datos {
+  top: 44px;
+  bottom: auto;
+  left: 462px;
+  width: 690.5px;
+  height: 5px;
+}
+
+.ux07-datos {
+  margin-top: 17px;
+}
+
+.ux07-datos__personales {
+  position: relative;
+  height: 696px;
+  padding: 0 19px 0 19.5px;
+}
+
+.ux07-datos__resumen {
+  position: relative;
+  width: 717px;
+  height: 136px;
+  margin-top: 29px;
+  border-radius: 4px;
+  background: #f6fbf8;
+}
+
+.ux07-datos__persona {
+  position: absolute;
+  left: 20px;
+  top: 21px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux07-datos__persona .ux07-persona {
+  margin-left: 14px;
+  padding-top: 3px;
+}
+
+.ux07-datos__badge {
+  position: absolute;
+  left: auto;
+  right: 28px;
+  top: 28px;
+}
+
+.ux07-datos__resumen-datos {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 82px;
+  display: grid;
+  grid-template-columns: 282px 256px 1fr;
+}
+
+.ux07-datos__resumen-dato {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: 2px;
+}
+
+.ux07-datos__resumen-dato + .ux07-datos__resumen-dato {
+  padding-left: 20px;
+}
+
+.ux07-datos__resumen-dato + .ux07-datos__resumen-dato::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 1px;
+  height: 34px;
+  background: #e4e4e4;
+}
+
+.ux07-datos__resumen-etiqueta {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #808080;
+}
+
+.ux07-datos__resumen-valor {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux07-datos__resumen-valor--azul {
+  color: var(--azul);
+}
+
+.ux07-datos__personales .ux07-seccion__cabecera {
+  margin-top: 26px;
+}
+
+.ux07-datos__personales .ux07-seccion__titulo {
+  left: 28px;
+}
+
+.ux07-datos__filas {
+  display: flex;
+  flex-direction: column;
+}
+
+.ux07-datos__fila {
+  display: flex;
+  gap: 16px;
+}
+
+.ux07-datos__campo {
+  width: 223.5px;
+  flex: 0 0 auto;
+}
+
+.ux07-datos__campo--medio {
+  width: 226px;
+}
+
+.ux07-datos__campo--correo {
+  width: 358px;
+}
+
+.ux07-datos__campo--direccion {
+  width: 328px;
+}
+
+.ux07-datos__campo--cuenta {
+  width: 468px;
+}
+
+.ux07-datos__campo .ux07-campo__etiqueta {
+  padding-left: 14px;
+}
+
+.ux07-datos__fila > .ux07-datos__campo:nth-child(2) .ux07-campo__etiqueta {
+  padding-left: 6px;
+}
+
+.ux07-datos__fila > .ux07-datos__campo:nth-child(3) .ux07-campo__etiqueta {
+  padding-left: 7px;
+}
+
+.ux07-datos__entrada {
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.ux07-datos__selector {
+  font-weight: 500;
+}
+
+.ux07-datos__filas--personales {
+  margin-top: 12.5px;
+}
+
+.ux07-datos__filas--personales .ux07-datos__fila:last-child {
+  gap: 20px;
+}
+
+.ux07-datos__filas--personales .ux07-datos__fila:nth-child(n+2) {
+  margin-top: 24.5px;
+}
+
+.ux07-datos__filas--personales .ux07-datos__fila:nth-child(n+4) {
+  margin-top: 19.5px;
+}
+
+.ux07-datos__pago {
+  position: relative;
+  height: 233.5px;
+  padding: 0 22px;
+}
+
+.ux07-datos__pago .ux07-seccion__cabecera {
+  margin-top: 17px;
+}
+
+.ux07-datos__pago .ux07-datos__filas {
+  margin-top: 15px;
+}
+
+.ux07-datos__pago .ux07-datos__fila + .ux07-datos__fila {
+  margin-top: 25.5px;
+}
+
+.ux07-datos__adicional {
+  position: relative;
+  height: 349px;
+  margin-top: 15px;
+  padding: 0 22px;
+}
+
+.ux07-datos__adicional .ux07-seccion__cabecera {
+  margin-top: 21px;
+}
+
+.ux07-datos__foto {
+  position: relative;
+  width: 342px;
+  height: 82px;
+  margin: 37px 0 0 16px;
+  border: 1px dashed #e3e3e3;
+  border-radius: 4px;
+}
+
+.ux07-datos__foto-muestra {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 130px;
+  height: 60px;
+  border-radius: 4px;
+  background: #eef3fc;
+  color: var(--azul);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux07-datos__foto-muestra svg {
+  width: 61px;
+  height: 61px;
+}
+
+.ux07-datos__foto-datos {
+  position: absolute;
+  left: 157px;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux07-datos__foto-titulo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ux07-datos__foto-accion,
+.ux07-datos__foto-formato {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 19px;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux07-datos__tallas {
+  margin-top: 26.5px;
+}
+
+.ux07-datos__tallas .ux07-datos__fila + .ux07-datos__fila {
+  margin-top: 24.5px;
+}
+
+.ux07-datos__acciones {
+  margin-top: 16.5px;
+}
+
+.ux07-pasos--datos .ux07-paso {
+  gap: 7px;
+}
+
+.ux07-pasos--datos .ux07-paso:nth-child(1) {
+  gap: 7px;
+}
+
+.ux07-pasos--datos .ux07-paso:nth-child(4) {
+  gap: 15px;
+}
