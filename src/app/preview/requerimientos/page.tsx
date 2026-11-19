@@ -22,6 +22,7 @@ import { BandejaLicencias } from './licencias/BandejaLicencias'
 import { RegistroLicencia } from './licencias/RegistroLicencia'
 import { DetalleLicencia } from './licencias/DetalleLicencia'
 import { AsignacionesEpp } from './epp/AsignacionesEpp'
+import { DevolucionEpp } from './epp/DevolucionEpp'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -45,6 +46,7 @@ type Diseno =
   | 'alta-resumen'
   | 'alta-confirmacion'
   | 'epp'
+  | 'epp-devolucion'
   | 'licencias'
   | 'licencia-registro'
   | 'licencia-detalle'
@@ -215,6 +217,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <AsignacionesEpp />,
+  },
+  {
+    id: 'epp-devolucion',
+    etiqueta: 'EPP · devolución',
+    referencia: '/preview/mp360/img/referencia-epp-devolucion.jpg',
+    descripcion: 'Devolución y reposición de EPP',
+    ancho: 1920,
+    alto: 1176,
+    componente: <DevolucionEpp />,
   },
   {
     id: 'licencias',

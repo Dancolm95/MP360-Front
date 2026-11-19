@@ -66,6 +66,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `alta-resumen` | Alta: resumen de validaciones | PDF p. 15 (UX-07) | 1920 × 1176 | `?ux=alta-resumen` |
 | `alta-confirmacion` | Alta: confirmación | PDF p. 16 (UX-07) | 1920 × 1176 | `?ux=alta-confirmacion` |
 | `epp` | Asignaciones de EPP y equipos | PDF p. 22 (UX-11) | 1920 × 1176 | `?ux=epp` |
+| `epp-devolucion` | Devolución y reposición de EPP | PDF p. 23 (UX-12) | 1920 × 1176 | `?ux=epp-devolucion` |
 | `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
 | `licencia-registro` | Registro de licencia/ausencia | PDF p. 25 (UX-14) | 1920 × 1176 | `?ux=licencia-registro` |
 | `licencia-detalle` | Detalle y subsanación de licencia | PDF p. 26 (UX-15) | 1920 × 1176 | `?ux=licencia-detalle` |
@@ -90,8 +91,19 @@ artefactos literales: «Stock Minimo», el buscador «Buscar candidatos por nomb
 puesto...», dos badges «Dañado» con relleno distinto (ámbar y rojo) y las fechas con
 espacios irregulares. La pestaña compartida conserva «Asistencia» en singular frente al
 «Asistencias» del render. Medidas de la fuente en `.cache/epp-p22-medidas.md` (no
-versionado). Solo se replica la p. 22; la devolución/reposición (p. 23, UX-12) queda en
-tarea posterior.
+versionado). La devolución/reposición (p. 23, UX-12) se replica en el modo `epp-devolucion`.
+
+**Nota sobre la p. 23:** lienzo de 1920 × 1176 con la pestaña «EPP y Equipos» activa y
+**sin submenú dibujado** —a diferencia de la p. 22—; el azul medido sigue siendo `#2249f2`.
+El breadcrumb tiene tres niveles (`R.R.H.H / EPP y equipos / Devolución y Reposición`) y el
+hero añade el botón «Registrar Movimiento». Bajo él se dibujan una tarjeta de filtros de
+139 px con «Tipo de Movimiento», «Estado», «Motivo» e «Implemento»; un panel blanco de 549 px
+con cuatro indicadores de 64 px; la barra de orden; una tabla de diez columnas y seis filas
+con badges; y el paginador. La maqueta **no dibuja el formulario completo de movimiento**, así
+que no se añade: solo se replica la bandeja y el botón que lo invoca. Se conservan las erratas
+y artefactos literales: «Candidato» como cabecera de la tabla, «Stock Minimo» sin tilde, la
+cantidad «L» en las reposiciones y las fechas «15 / 10 / 2026» con espacios. Medidas de la
+fuente en `.cache/epp-p23-medidas.md` (no versionado).
 
 **Nota sobre la p. 25:** lienzo de 1920 × 1176 con el mismo cromo de la p. 24 —pestaña
 «Asistencia» activa y sin submenú— y el azul medido `#2249f2`. Bajo el hero hay un stepper
@@ -188,6 +200,7 @@ public/preview/mp360/
 | Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
 | Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
 | EPP (PDF p. 22) | Pendiente de revisión visual | 7,5 / 255 |
+| EPP · devolución (PDF p. 23) | Pendiente de revisión visual | 7,9 / 255 |
 | Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
 | Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,6 / 255 |
 | Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,5 / 255 |
@@ -333,16 +346,25 @@ resuelven en la implementación funcional, no aquí:
     badges y paginador; sin filtros aplicados, casillas marcadas, acciones ni estados
     adicionales. Se conservan como literales las erratas y artefactos «Stock Minimo», el
     buscador «Buscar candidatos por nombre, DNI o puesto...», los dos badges «Dañado» con
-    relleno distinto (ámbar y rojo) y las fechas con espacios irregulares. La p. 23
-    (devolución/reposición, UX-12) queda para una tarea posterior.
+    relleno distinto (ámbar y rojo) y las fechas con espacios irregulares.
+21. **Devolución y reposición de EPP (PDF p. 23)**: segunda pantalla del bloque, con el mismo
+    cromo y la pestaña «EPP y Equipos» activa, pero **sin submenú dibujado**. Se replica solo lo
+    dibujado: breadcrumb de tres niveles, título y subtítulo, botón «Registrar Movimiento»,
+    búsqueda y cuatro filtros, cuatro indicadores, barra de orden, tabla de diez columnas con
+    badges y paginador. El inventario advierte que es «referencia visual de bandeja; no se
+    observa el formulario completo de movimiento»: por eso no se añade modal, panel ni campos
+    de alta. Se conservan como literales las erratas y artefactos del dibujo —«Candidato» como
+    cabecera de la tabla, «Stock Minimo» sin tilde, la cantidad «L» en las reposiciones y las
+    fechas «15 / 10 / 2026» con espacios— y sus datos de muestra no son reglas. El azul medido
+    es `#2249f2`, igual que en la p. 22.
 
 ## 9. Cierre y siguiente paso
 
 - Con `alta-seleccion`, `alta-datos`, `alta-resumen` y `alta-confirmacion` quedan
   replicados los **cuatro pasos del alta** (PDF pp. 13–16, UX-07).
-- Con `epp` queda replicada la **bandeja de asignaciones de EPP y equipos** (PDF p. 22,
-  UX-11), primera pantalla del bloque de EPP; la devolución/reposición (p. 23, UX-12) queda
-  pendiente.
+- Con `epp` y `epp-devolucion` quedan replicadas las **dos pantallas del bloque de EPP**:
+  la **bandeja de asignaciones de EPP y equipos** (PDF p. 22, UX-11) y la **devolución y
+  reposición** (PDF p. 23, UX-12).
 - Con `licencias`, `licencia-registro` y `licencia-detalle` queda replicado el **bloque
   completo de Licencias** (PDF pp. 24-26): la **bandeja de licencias y ausencias** (UX-13), el
   **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**

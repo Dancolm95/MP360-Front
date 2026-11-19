@@ -7,11 +7,11 @@ import {
   type IconoEstadistica,
 } from './datos'
 
-function Casilla() {
+export function Casilla() {
   return <span className="ux11-casilla" aria-hidden="true" />
 }
 
-function Avatar() {
+export function Avatar() {
   return (
     <span className="ux11-avatar" aria-hidden="true">
       <svg viewBox="0 0 34 34" focusable="false">
@@ -23,7 +23,7 @@ function Avatar() {
   )
 }
 
-function Orden() {
+export function Orden() {
   return (
     <svg
       className="ux11-orden-icono"
@@ -42,7 +42,7 @@ function Orden() {
   )
 }
 
-function Flecha({ sentido }: { sentido: 'izquierda' | 'derecha' }) {
+export function Flecha({ sentido }: { sentido: 'izquierda' | 'derecha' }) {
   return (
     <svg
       className="ux11-flecha"
@@ -60,7 +60,7 @@ function Flecha({ sentido }: { sentido: 'izquierda' | 'derecha' }) {
   )
 }
 
-function IconoEstadistica({ tipo }: { tipo: IconoEstadistica }) {
+export function IconoEstadistica({ tipo }: { tipo: IconoEstadistica }) {
   if (tipo === 'caja') {
     return (
       <svg
@@ -230,7 +230,7 @@ function Estadisticas() {
   )
 }
 
-function Barra() {
+export function Barra() {
   return (
     <div className="ux11-barra">
       <span className="ux11-ordenar">Ordenar por:</span>
@@ -356,7 +356,7 @@ function Tabla() {
   )
 }
 
-function Paginacion() {
+export function Paginacion() {
   return (
     <div className="ux11-paginacion">
       <span className="ux11-paginacion__texto">Mostrando 10 de 246</span>

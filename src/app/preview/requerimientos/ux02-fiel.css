@@ -11277,3 +11277,87 @@
   height: 14px;
   display: block;
 }
+
+/* ---------- UX-12 · Devolución y reposición de EPP (PDF p. 23) ---------- */
+
+.ux11-devolucion__breadcrumb > span:not(.ux02-breadcrumb__activo):not(.ux02-breadcrumb__sep) {
+  color: var(--gris-medio);
+}
+
+.ux11-devolucion .ux11-barra {
+  height: 64px;
+}
+
+.ux11-devolucion__tabla .ux11-tabla__fila {
+  grid-template-columns:
+    286px 172px 138px 140px 121px 128px 138px 142px 165px 1fr;
+}
+
+.ux11-devolucion__tabla .ux11-tabla__cabecera {
+  height: 54px;
+}
+
+.ux11-devolucion__tabla .ux11-tabla__cuerpo {
+  padding-bottom: 34px;
+}
+
+/* Alturas medidas de las seis filas de la p. 23. */
+.ux11-devolucion__tabla .ux11-tabla__cuerpo .ux11-fila:nth-child(1) { height: 57px; }
+.ux11-devolucion__tabla .ux11-tabla__cuerpo .ux11-fila:nth-child(2) { height: 51px; }
+.ux11-devolucion__tabla .ux11-tabla__cuerpo .ux11-fila:nth-child(3) { height: 53px; }
+.ux11-devolucion__tabla .ux11-tabla__cuerpo .ux11-fila:nth-child(4) { height: 56px; }
+.ux11-devolucion__tabla .ux11-tabla__cuerpo .ux11-fila:nth-child(5) { height: 51px; }
+.ux11-devolucion__tabla .ux11-tabla__cuerpo .ux11-fila:nth-child(6) { height: 51px; }
+
+.ux11-devolucion__tipo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 93px;
+  height: 29px;
+  border-radius: 15px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.ux11-devolucion__tipo--devolucion {
+  background: #fffdb3;
+  color: #f8ad3b;
+}
+
+.ux11-devolucion__tipo--reposicion {
+  background: #e3eafe;
+  color: #1c4cf7;
+}
+
+.ux11-devolucion__tabla .ux11-estado {
+  width: 93px;
+}
+
+.ux11-devolucion__estado--disponible {
+  background: #b0ffb9;
+  color: #489a57;
+}
+
+.ux11-devolucion__estado--pendiente {
+  background: #fffdb3;
+  color: #f8ad3b;
+}
+
+.ux11-celda--gris.ux11-devolucion__implemento {
+  padding: 0 24px;
+  white-space: normal;
+  line-height: 1.15;
+}
+
+.ux11-celda--gris.ux11-devolucion__motivo {
+  padding: 0 16px;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.ux11-devolucion__motivo-texto {
+  display: block;
+  max-width: 58px;
+  text-align: left;
+}
