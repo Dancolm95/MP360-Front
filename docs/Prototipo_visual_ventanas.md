@@ -66,6 +66,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `alta-resumen` | Alta: resumen de validaciones | PDF p. 15 (UX-07) | 1920 × 1176 | `?ux=alta-resumen` |
 | `alta-confirmacion` | Alta: confirmación | PDF p. 16 (UX-07) | 1920 × 1176 | `?ux=alta-confirmacion` |
 | `onboarding` | Bandeja de onboarding (En curso) | PDF p. 20 (UX-09/10) | 1920 × 1176 | `?ux=onboarding` |
+| `onboarding-sin` | Bandeja de onboarding (Sin onboarding) | PDF p. 21 (UX-09/10) | 1920 × 1176 | `?ux=onboarding-sin` |
 | `epp` | Asignaciones de EPP y equipos | PDF p. 22 (UX-11) | 1920 × 1176 | `?ux=epp` |
 | `epp-devolucion` | Devolución y reposición de EPP | PDF p. 23 (UX-12) | 1920 × 1176 | `?ux=epp-devolucion` |
 | `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
@@ -96,9 +97,23 @@ badge «Activo» y cuatro filas vacías recortadas por el panel; el paginador qu
 fondo. Se replican las erratas y
 artefactos literales: «Onborading» como título, «Sin Responsabless», el buscador «Buscar
 candidatos por nombre, DNI o puesto...», «Tipo de personal» en minúscula y «Acciones rápidas»
-con el mismo listado duplicado del cromo. La variante «Sin onboarding» (p. 21) queda en una
-tarea posterior; el componente acepta la pestaña activa para reutilizarse. Medidas de la
-fuente en `.cache/p20-render.png` (no versionado).
+con el mismo listado duplicado del cromo. La variante «Sin onboarding» (p. 21) reutiliza este
+componente con el estado `sin-onboarding`. Medidas de la fuente en `.cache/p20-render.png`
+(no versionado).
+
+**Nota sobre la p. 21:** misma ventana con la pestaña «Sin Onboarding» activa (borde y texto
+azules; «En curso» y «Finalizados» en gris) y el cromo idéntico a la p. 20 —pestaña
+«Offboarding» resaltada en la navegación y **sin submenú**—. El panel añade a la derecha de las
+pestañas una fila de vistas: «Colaboradores» (activa, con icono de casa y fondo `#dfe7f9`),
+«Colaboradores sin Ficha», «Tareas» y «Analítica», todas en gris salvo la primera. Los cuatro
+indicadores se estrechan (282 px por tarjeta frente a 293) y bajan 8 px, mientras la barra de
+orden y la tabla conservan su posición. El resto de la bandeja se repite literal: filtros,
+tabla con la fila «Luis Torres Caycho», badge «Activo», cuatro filas vacías y paginador
+«Mostrando 10 de 246». Se conservan las erratas «Onborading» y «Sin Responsabless»; «Sin
+Onboarding» mantiene la mayúscula dibujada y «Analítica» su tilde. El azul medido es `#2249f2`
+y el paginador activo `#1c4cf7`, iguales a la p. 20. El contenido de la p. 21 aparece ~2 px
+desplazado respecto a la p. 20 en el render del PDF; se replica la geometría de la p. 20 para no
+mover el cromo. Medidas de la fuente en `.cache/p21-render.png` (no versionado).
 
 **Nota sobre la p. 22:** lienzo de 1920 × 1176 con la pestaña «EPP y Equipos» activa y un
 submenú dibujado con «Detalle» —resaltado— y «Devolución y Reposición». El azul medido es
@@ -175,7 +190,7 @@ src/app/preview/requerimientos/
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
 ├── alta/                    # alta: selección, datos, resumen y confirmación (PDF pp. 13-16, UX-07)
-├── onboarding/              # bandeja de onboarding en curso (PDF p. 20, UX-09/10)
+├── onboarding/              # bandeja de onboarding (PDF pp. 20-21, UX-09/10)
 ├── epp/                     # asignaciones de EPP y equipos (PDF p. 22, UX-11)
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
@@ -219,6 +234,7 @@ public/preview/mp360/
 | Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
 | Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
 | Onboarding · En curso (PDF p. 20) | Pendiente de revisión visual | 5,6 / 255 |
+| Onboarding · Sin onboarding (PDF p. 21) | Pendiente de revisión visual | 6,2 / 255 |
 | EPP (PDF p. 22) | Pendiente de revisión visual | 7,5 / 255 |
 | EPP · devolución (PDF p. 23) | Pendiente de revisión visual | 7,9 / 255 |
 | Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
@@ -383,8 +399,16 @@ resuelven en la implementación funcional, no aquí:
     Colaboradores». Se replican tal cual, junto con «Sin Responsabless» y el buscador
     «Buscar candidatos por nombre, DNI o puesto...». La maqueta dibuja el rail de la p. 22 algo
     más arriba y con las tarjetas 2 px más altas; el ajuste se limita a `.ux09-lienzo`. No se
-    añaden acciones, filtros aplicados ni estados: la pestaña «Sin onboarding» (p. 21) queda
-    para una tarea posterior. El azul medido es `#2249f2`.
+    añaden acciones, filtros aplicados ni estados. El azul medido es `#2249f2`.
+23. **Bandeja de onboarding «Sin onboarding» (PDF p. 21)**: segunda y última pantalla del bloque.
+    Reutiliza la bandeja de la p. 20 con el estado `sin-onboarding`: activa la pestaña «Sin
+    Onboarding», añade la fila de vistas «Colaboradores / Colaboradores sin Ficha / Tareas /
+    Analítica» —solo la primera dibujada como activa— y estrecha y desplaza los indicadores. El
+    cromo no cambia: «Offboarding» sigue resaltada en la navegación y sin submenú, igual que en
+    la p. 20. Se conservan las erratas y artefactos literales del dibujo —«Onborading», «Sin
+    Responsabless», el buscador de candidatos— y no se añaden tablas, acciones ni estados que la
+    página no dibuje. Los datos de muestra (COL-00125, Luis Torres, 12 / 09 / 2026) no son
+    reglas. El azul medido es `#2249f2`; el paginador activo, `#1c4cf7`.
 
 ## 9. Cierre y siguiente paso
 
@@ -393,6 +417,8 @@ resuelven en la implementación funcional, no aquí:
 - Con `epp` y `epp-devolucion` quedan replicadas las **dos pantallas del bloque de EPP**:
   la **bandeja de asignaciones de EPP y equipos** (PDF p. 22, UX-11) y la **devolución y
   reposición** (PDF p. 23, UX-12).
+- Con `onboarding` y `onboarding-sin` queda replicado el **bloque completo de Onboarding**
+  (PDF pp. 20-21, UX-09/10): la bandeja «En curso» y su variante «Sin onboarding».
 - Con `licencias`, `licencia-registro` y `licencia-detalle` queda replicado el **bloque
   completo de Licencias** (PDF pp. 24-26): la **bandeja de licencias y ausencias** (UX-13), el
   **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**

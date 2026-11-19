@@ -7,8 +7,13 @@ import {
 } from './datos'
 
 export type PestanaOnboarding = 'En curso' | 'Sin Onboarding' | 'Finalizados'
+export type EstadoOnboarding = 'en-curso' | 'sin-onboarding'
 
 const PESTANAS: readonly PestanaOnboarding[] = ['En curso', 'Sin Onboarding', 'Finalizados']
+const PESTANA_POR_ESTADO: Record<EstadoOnboarding, PestanaOnboarding> = {
+  'en-curso': 'En curso',
+  'sin-onboarding': 'Sin Onboarding',
+}
 const COLUMNAS = 10
 
 function Casilla() {
@@ -136,7 +141,7 @@ function Filtros() {
 
 function Pestanas({ activa }: { activa: PestanaOnboarding }) {
   return (
-    <div className="ux09-tabs" role="group" aria-label="Estado del onboarding">
+    <div className="ux09-tabs__grupo" role="group" aria-label="Estado del onboarding">
       {PESTANAS.map((pestana) => (
         <button
           key={pestana}
@@ -151,9 +156,36 @@ function Pestanas({ activa }: { activa: PestanaOnboarding }) {
   )
 }
 
-function Indicadores() {
+function Subtabs() {
   return (
-    <div className="ux09-stats">
+    <div className="ux09-sin__subtabs" role="group" aria-label="Vistas de onboarding">
+      <button
+        type="button"
+        className="ux09-sin__sub ux09-sin__sub--activa"
+        aria-pressed="true"
+      >
+        <Icono nombre="home" />
+        Colaboradores
+      </button>
+      <button type="button" className="ux09-sin__sub" aria-pressed="false">
+        <Icono nombre="edit_document" />
+        Colaboradores sin Ficha
+      </button>
+      <button type="button" className="ux09-sin__sub" aria-pressed="false">
+        <Icono nombre="business_center" />
+        Tareas
+      </button>
+      <button type="button" className="ux09-sin__sub" aria-pressed="false">
+        <Icono nombre="person" />
+        Analítica
+      </button>
+    </div>
+  )
+}
+
+function Indicadores({ estrecho }: { estrecho: boolean }) {
+  return (
+    <div className={`ux09-stats${estrecho ? ' ux09-sin__stats' : ''}`}>
       {INDICADORES_ONBOARDING.map((indicador) => (
         <div key={indicador.etiqueta} className="ux09-stat">
           <span className="ux09-stat__etiqueta">{indicador.etiqueta}</span>
@@ -351,12 +383,14 @@ function Paginacion() {
 }
 
 export function BandejaOnboarding({
-  pestanaActiva = 'En curso',
+  estado = 'en-curso',
 }: {
-  pestanaActiva?: PestanaOnboarding
+  estado?: EstadoOnboarding
 } = {}) {
+  const sinOnboarding = estado === 'sin-onboarding'
+
   return (
-    <div className="ux02-lienzo ux09-lienzo">
+    <div className={`ux02-lienzo ux09-lienzo${sinOnboarding ? ' ux09-sin' : ''}`}>
       <Cabecera />
       <Navegacion activo="Offboarding" submenu={false} chevronActivo={false} />
       <div className="ux02-main">
@@ -364,8 +398,11 @@ export function BandejaOnboarding({
           <Encabezado />
           <Filtros />
           <div className="ux09-panel">
-            <Pestanas activa={pestanaActiva} />
-            <Indicadores />
+            <div className="ux09-tabs">
+              <Pestanas activa={PESTANA_POR_ESTADO[estado]} />
+              {sinOnboarding ? <Subtabs /> : null}
+            </div>
+            <Indicadores estrecho={sinOnboarding} />
             <Barra />
             <Tabla />
           </div>

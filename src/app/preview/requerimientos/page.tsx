@@ -47,6 +47,7 @@ type Diseno =
   | 'alta-resumen'
   | 'alta-confirmacion'
   | 'onboarding'
+  | 'onboarding-sin'
   | 'epp'
   | 'epp-devolucion'
   | 'licencias'
@@ -219,6 +220,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <BandejaOnboarding />,
+  },
+  {
+    id: 'onboarding-sin',
+    etiqueta: 'Onboarding · sin',
+    referencia: '/preview/mp360/img/referencia-onboarding-sin.jpg',
+    descripcion: 'Bandeja de onboarding · Sin onboarding',
+    ancho: 1920,
+    alto: 1176,
+    componente: <BandejaOnboarding estado="sin-onboarding" />,
   },
   {
     id: 'epp',

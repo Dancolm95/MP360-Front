@@ -11617,6 +11617,7 @@
 }
 
 .ux09-panel {
+  position: relative;
   height: 521px;
   margin-top: 18px;
   border: 1px solid var(--borde);
@@ -11629,6 +11630,11 @@
   display: flex;
   gap: 8px;
   padding: 16px 21px 0;
+}
+
+.ux09-tabs__grupo {
+  display: flex;
+  gap: 8px;
 }
 
 .ux09-tab {
@@ -12020,4 +12026,59 @@
   width: 8px;
   height: 14px;
   display: block;
+}
+
+/* ---------- UX-09 «Sin onboarding» (PDF p. 21) ---------- */
+
+.ux09-sin__subtabs {
+  position: absolute;
+  top: 8px;
+  left: 876px;
+  height: 51px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.ux09-sin__sub {
+  height: 51px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #b0b0b0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ux09-sin__sub .ux02-i {
+  font-size: 17px;
+}
+
+.ux09-sin__sub--activa {
+  width: 161px;
+  margin-right: -7px;
+  padding: 0 0 0 19px;
+  gap: 4px;
+  background: var(--azul-suave);
+  color: var(--azul);
+  font-weight: 700;
+}
+
+/* La p. 21 estrecha los indicadores y los baja 8 px; la barra de orden
+   mantiene su posición, así que se compensa el desplazamiento. */
+.ux09-sin__stats {
+  grid-template-columns: repeat(4, 282px);
+  gap: 3px;
+  margin: 17px 0 0 23px;
+}
+
+.ux09-sin .ux09-barra {
+  margin-top: -7px;
 }
