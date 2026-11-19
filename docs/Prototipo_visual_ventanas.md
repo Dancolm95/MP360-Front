@@ -65,6 +65,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `alta-datos` | Alta: datos personales y de trabajo | PDF p. 14 (UX-07) | 1920 × 1176 | `?ux=alta-datos` |
 | `alta-resumen` | Alta: resumen de validaciones | PDF p. 15 (UX-07) | 1920 × 1176 | `?ux=alta-resumen` |
 | `alta-confirmacion` | Alta: confirmación | PDF p. 16 (UX-07) | 1920 × 1176 | `?ux=alta-confirmacion` |
+| `epp` | Asignaciones de EPP y equipos | PDF p. 22 (UX-11) | 1920 × 1176 | `?ux=epp` |
 | `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
 | `licencia-registro` | Registro de licencia/ausencia | PDF p. 25 (UX-14) | 1920 × 1176 | `?ux=licencia-registro` |
 | `licencia-detalle` | Detalle y subsanación de licencia | PDF p. 26 (UX-15) | 1920 × 1176 | `?ux=licencia-detalle` |
@@ -79,6 +80,18 @@ No forman parte del prototipo visual: están ahí solo para contraste.
 **Nota sobre `a-05`:** es la misma pantalla de Inicio con el **selector de módulo**
 abierto —no el filtro de Área/Subárea—. Se replica como modo propio `inicio-modulo` para
 compararlo y como interacción del botón «Recursos Humanos» en `inicio`.
+
+**Nota sobre la p. 22:** lienzo de 1920 × 1176 con la pestaña «EPP y Equipos» activa y un
+submenú dibujado con «Detalle» —resaltado— y «Devolución y Reposición». El azul medido es
+`#2249f2`, igual que en las páginas 24–26. Bajo el hero (93 px) se dibujan una tarjeta de
+filtros de 139 px, un panel blanco de 549 px con cuatro indicadores de 64 px, la barra de
+orden y la tabla de seis filas, y el paginador sobre el fondo. Se replican las erratas y
+artefactos literales: «Stock Minimo», el buscador «Buscar candidatos por nombre, DNI o
+puesto...», dos badges «Dañado» con relleno distinto (ámbar y rojo) y las fechas con
+espacios irregulares. La pestaña compartida conserva «Asistencia» en singular frente al
+«Asistencias» del render. Medidas de la fuente en `.cache/epp-p22-medidas.md` (no
+versionado). Solo se replica la p. 22; la devolución/reposición (p. 23, UX-12) queda en
+tarea posterior.
 
 **Nota sobre la p. 25:** lienzo de 1920 × 1176 con el mismo cromo de la p. 24 —pestaña
 «Asistencia» activa y sin submenú— y el azul medido `#2249f2`. Bajo el hero hay un stepper
@@ -132,6 +145,7 @@ src/app/preview/requerimientos/
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
 ├── alta/                    # alta: selección, datos, resumen y confirmación (PDF pp. 13-16, UX-07)
+├── epp/                     # asignaciones de EPP y equipos (PDF p. 22, UX-11)
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
@@ -173,6 +187,7 @@ public/preview/mp360/
 | Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,9 / 255 |
 | Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
 | Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
+| EPP (PDF p. 22) | Pendiente de revisión visual | 7,5 / 255 |
 | Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
 | Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,6 / 255 |
 | Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,5 / 255 |
@@ -310,11 +325,24 @@ resuelven en la implementación funcional, no aquí:
     «7 DÍAS» frente a los 3 días del resto de la ficha, «calendaria», «RR.HH» sin punto y
     «Adjunto . PDF» en ambos archivos— y sus datos de muestra no son reglas. El azul medido
     es `#2249f2`, igual que en las páginas 24 y 25.
+20. **Asignaciones de EPP y equipos (PDF p. 22)**: la pestaña activa es «EPP y Equipos» y su
+    submenú dibuja «Detalle» —resaltado— y «Devolución y Reposición». El cromo compartido
+    mantiene «Asistencia» en singular frente al «Asistencias» del render; no se modifica para
+    no alterar el resto de ventanas. El azul medido es `#2249f2`. Se replica solo lo dibujado:
+    búsqueda y cuatro filtros, cuatro indicadores, barra de orden, tabla de seis filas con
+    badges y paginador; sin filtros aplicados, casillas marcadas, acciones ni estados
+    adicionales. Se conservan como literales las erratas y artefactos «Stock Minimo», el
+    buscador «Buscar candidatos por nombre, DNI o puesto...», los dos badges «Dañado» con
+    relleno distinto (ámbar y rojo) y las fechas con espacios irregulares. La p. 23
+    (devolución/reposición, UX-12) queda para una tarea posterior.
 
 ## 9. Cierre y siguiente paso
 
 - Con `alta-seleccion`, `alta-datos`, `alta-resumen` y `alta-confirmacion` quedan
   replicados los **cuatro pasos del alta** (PDF pp. 13–16, UX-07).
+- Con `epp` queda replicada la **bandeja de asignaciones de EPP y equipos** (PDF p. 22,
+  UX-11), primera pantalla del bloque de EPP; la devolución/reposición (p. 23, UX-12) queda
+  pendiente.
 - Con `licencias`, `licencia-registro` y `licencia-detalle` queda replicado el **bloque
   completo de Licencias** (PDF pp. 24-26): la **bandeja de licencias y ausencias** (UX-13), el
   **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**

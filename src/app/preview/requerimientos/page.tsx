@@ -21,6 +21,7 @@ import { AltaConfirmacion } from './alta/AltaConfirmacion'
 import { BandejaLicencias } from './licencias/BandejaLicencias'
 import { RegistroLicencia } from './licencias/RegistroLicencia'
 import { DetalleLicencia } from './licencias/DetalleLicencia'
+import { AsignacionesEpp } from './epp/AsignacionesEpp'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -43,6 +44,7 @@ type Diseno =
   | 'alta-datos'
   | 'alta-resumen'
   | 'alta-confirmacion'
+  | 'epp'
   | 'licencias'
   | 'licencia-registro'
   | 'licencia-detalle'
@@ -204,6 +206,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <AltaConfirmacion />,
+  },
+  {
+    id: 'epp',
+    etiqueta: 'EPP',
+    referencia: '/preview/mp360/img/referencia-epp.jpg',
+    descripcion: 'Asignaciones de EPP y equipos',
+    ancho: 1920,
+    alto: 1176,
+    componente: <AsignacionesEpp />,
   },
   {
     id: 'licencias',
