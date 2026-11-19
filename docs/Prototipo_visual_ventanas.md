@@ -1,6 +1,6 @@
 # Prototipo visual de ventanas — rama `codex/rh-vis`
 
-**Última actualización:** 18 de noviembre de 2026.
+**Última actualización:** 19 de noviembre de 2026.
 **Carácter:** documento de rama. Describe el alcance y el estado del prototipo visual que
 vive en `codex/rh-vis`. **No es una spec, no añade requisitos y no sustituye** a
 `docs/constitution.md`, a `docs/specs/` ni a `memory.md`.
@@ -66,6 +66,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `alta-resumen` | Alta: resumen de validaciones | PDF p. 15 (UX-07) | 1920 × 1176 | `?ux=alta-resumen` |
 | `alta-confirmacion` | Alta: confirmación | PDF p. 16 (UX-07) | 1920 × 1176 | `?ux=alta-confirmacion` |
 | `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
+| `licencia-registro` | Registro de licencia/ausencia | PDF p. 25 (UX-14) | 1920 × 1176 | `?ux=licencia-registro` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -77,6 +78,16 @@ No forman parte del prototipo visual: están ahí solo para contraste.
 **Nota sobre `a-05`:** es la misma pantalla de Inicio con el **selector de módulo**
 abierto —no el filtro de Área/Subárea—. Se replica como modo propio `inicio-modulo` para
 compararlo y como interacción del botón «Recursos Humanos» en `inicio`.
+
+**Nota sobre la p. 25:** lienzo de 1920 × 1176 con el mismo cromo de la p. 24 —pestaña
+«Asistencia» activa y sin submenú— y el azul medido `#2249f2`. Bajo el hero hay un stepper
+de 4 pasos (banda `#f6f9fe` de 1591 × 49, tres pasos en azul y «Confirmación» en gris, barra
+de progreso de 968 px). El formulario se dibuja en tres columnas dentro de 1587 px: selección
+de colaborador (520), tipo de solicitud e información general (625) y sustento, impacto y
+observaciones (427); la barra de acciones (772 × 81) flota bajo las dos últimas. Se replican
+las erratas y artefactos literales: breadcrumb «Colaborades», subtítulo copiado del alta,
+«calendaria» en el aviso y «7 días» para un rango del 20 al 24 de noviembre. Medidas
+detalladas de la fuente en `.cache/licencias-p25-medidas.md` (no versionado).
 
 ## 4. Cómo ejecutarlo
 
@@ -108,7 +119,7 @@ src/app/preview/requerimientos/
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
 ├── alta/                    # alta: selección, datos, resumen y confirmación (PDF pp. 13-16, UX-07)
-├── licencias/               # bandeja de licencias y ausencias (PDF p. 24, UX-13)
+├── licencias/               # bandeja y registro de licencias (PDF pp. 24-25)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -150,6 +161,7 @@ public/preview/mp360/
 | Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
 | Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
 | Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
+| Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,6 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -260,14 +272,26 @@ resuelven en la implementación funcional, no aquí:
     dibuja casillas marcadas, filtros aplicados ni más estados: no se añaden. Solo se replica
     la bandeja; el registro (p. 25) y el detalle/subsanación (p. 26) quedan en tareas
     posteriores.
+18. **Registro de licencia/ausencia (PDF p. 25)**: formulario de registro con el mismo cromo y
+    lenguaje visual del alta y de la bandeja. La pestaña activa vuelve a ser «Asistencia»,
+    esta vez **sin submenú**. Se replica solo lo dibujado: selección de colaborador, tipo de
+    solicitud, información general, sustento documental, impacto en asistencia y planilla,
+    observaciones y la barra Cancelar / Guardar Borrador / Continuar, sin validaciones,
+    cálculos, estados de carga ni navegación. Se conservan como literales las erratas
+    «Colaborades» y «calendaria», el subtítulo copiado del alta («Formaliza el ingreso del
+    candidato seleccionado…»), el placeholder «Buscar por nombre, DNI....» y el dato de
+    muestra «7 días» para el rango del 20 al 24 de noviembre. El azul medido es `#2249f2`.
+    La maqueta dibuja el formulario 14 px más ancho que la columna compartida; el sobrante
+    se replica dentro del bloque de registro y no altera el cromo ni el rail. Los controles
+    (selects, fechas, zona de carga y botones) son presentacionales.
 
 ## 9. Cierre y siguiente paso
 
 - Con `alta-seleccion`, `alta-datos`, `alta-resumen` y `alta-confirmacion` quedan
   replicados los **cuatro pasos del alta** (PDF pp. 13–16, UX-07).
-- Con `licencias` queda replicada la **bandeja de licencias y ausencias** (PDF p. 24,
-  UX-13); el bloque de Licencias continúa con el registro (p. 25) y el detalle/subsanación
-  (p. 26), aún no implementados.
+- Con `licencias` y `licencia-registro` quedan replicadas la **bandeja de licencias y
+  ausencias** (PDF p. 24, UX-13) y el **registro de licencia/ausencia** (PDF p. 25, UX-14);
+  el bloque de Licencias continúa con el detalle/subsanación (p. 26), aún no implementado.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

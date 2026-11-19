@@ -120,3 +120,49 @@ export const ESTADISTICAS = [
 ] as const
 
 export const PAGINAS = [1, 2, 3, 4, 5, 6] as const
+
+export interface ColaboradorRegistro {
+  readonly nombre: string
+  readonly cargo: string
+  readonly dni: string
+}
+
+export const COLABORADOR_ENCONTRADO = {
+  nombre: 'Luis Torres',
+  nacionalidad: 'Peruano',
+  dni: '7142123456',
+  correo: 'correodeluisito@gmail.com',
+  numero: '999 999 999',
+} as const
+
+export const COLABORADORES_REGISTRO: readonly ColaboradorRegistro[] = [
+  { nombre: 'Luis Torres', cargo: 'Operario de Almacén', dni: '7142123456' },
+  { nombre: 'Luis Torres', cargo: 'Operario de Almacén', dni: '7142123456' },
+  { nombre: 'Luis Torres', cargo: 'Operario de Almacén', dni: '7142123456' },
+  { nombre: 'Luis Torres', cargo: 'Operario de Almacén', dni: '7142123456' },
+]
+
+export const PASOS_REGISTRO = [
+  'Tipo de Solicitud',
+  'Información General',
+  'Sustento Documental',
+  'Confirmación',
+] as const
+
+export const TIPOS_SOLICITUD = [
+  {
+    titulo: 'Licencia con Goce',
+    descripcion: 'Vacaciones, licencia médica, maternidad, entre otros.',
+  },
+  { titulo: 'Licencia sin goce', descripcion: 'Por motivos personales.' },
+  { titulo: 'Ausencia', descripcion: 'Justificada o injustificada.' },
+  {
+    titulo: 'Permiso por horas',
+    descripcion: 'Permiso personal, citas médicas, asuntos particulares.',
+  },
+] as const
+
+export const SUSTENTOS = [
+  { archivo: 'Solicitud_Vacaciones.pdf', peso: '300KB', tipo: 'pdf' },
+  { archivo: 'itinerario_viaje.png', peso: '1.2MB', tipo: 'png' },
+] as const

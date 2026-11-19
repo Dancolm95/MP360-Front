@@ -19,6 +19,7 @@ import { AltaDatos } from './alta/AltaDatos'
 import { AltaResumen } from './alta/AltaResumen'
 import { AltaConfirmacion } from './alta/AltaConfirmacion'
 import { BandejaLicencias } from './licencias/BandejaLicencias'
+import { RegistroLicencia } from './licencias/RegistroLicencia'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -42,6 +43,7 @@ type Diseno =
   | 'alta-resumen'
   | 'alta-confirmacion'
   | 'licencias'
+  | 'licencia-registro'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -209,6 +211,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <BandejaLicencias />,
+  },
+  {
+    id: 'licencia-registro',
+    etiqueta: 'Licencia · registro',
+    referencia: '/preview/mp360/img/referencia-licencia-registro.jpg',
+    descripcion: 'Registro de licencia/ausencia',
+    ancho: 1920,
+    alto: 1176,
+    componente: <RegistroLicencia />,
   },
   {
     id: 'login',

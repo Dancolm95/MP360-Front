@@ -8615,3 +8615,1108 @@
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
 }
+
+/* ---------- UX-13 · Registro de licencia (PDF p. 25) ---------- */
+
+.ux13-registro,
+.ux13-registro *,
+.ux13-registro *::before,
+.ux13-registro *::after {
+  box-sizing: border-box;
+}
+
+.ux13-registro__hero {
+  position: relative;
+  height: 94px;
+  padding-top: 27px;
+}
+
+.ux13-registro__hero .ux13-titulo-fila {
+  margin-top: 22px;
+  gap: 16px;
+}
+
+.ux13-registro__hero .ux13-titulo {
+  margin-left: -2px;
+}
+
+.ux13-registro__volver {
+  position: absolute;
+  top: 30px;
+  right: 1px;
+  width: 230px;
+  height: 49px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 5px 10px rgba(34, 73, 242, 0.28);
+  cursor: pointer;
+}
+
+.ux13-registro__volver .ux02-i {
+  font-size: 17px;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+}
+
+/* Stepper */
+
+.ux13-registro__pasos {
+  position: relative;
+  width: 1591.5px;
+  height: 49px;
+  margin-left: -1.5px;
+  border-radius: 4px;
+  background: #f6f9fe;
+}
+
+.ux13-registro__paso {
+  position: absolute;
+  top: 13.5px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.ux13-registro__paso:nth-child(1) {
+  left: 57.5px;
+  gap: 15px;
+}
+
+.ux13-registro__paso:nth-child(2) {
+  left: 389.5px;
+}
+
+.ux13-registro__paso:nth-child(3) {
+  left: 738.5px;
+}
+
+.ux13-registro__paso:nth-child(4) {
+  left: 1102px;
+}
+
+.ux13-registro__paso-numero {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  border-radius: 50%;
+  background: #969696;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ux13-registro__paso-etiqueta {
+  position: relative;
+  top: 2px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 21px;
+  color: #969696;
+  white-space: nowrap;
+}
+
+.ux13-registro__paso--activo .ux13-registro__paso-numero {
+  background: var(--azul);
+}
+
+.ux13-registro__paso--activo .ux13-registro__paso-etiqueta {
+  color: var(--azul);
+}
+
+.ux13-registro__conector {
+  position: absolute;
+  top: 26.5px;
+  width: 144.5px;
+  height: 2px;
+  background: #969696;
+}
+
+.ux13-registro__conector:nth-child(5) {
+  left: 226.5px;
+}
+
+.ux13-registro__conector:nth-child(6) {
+  left: 562px;
+}
+
+.ux13-registro__conector:nth-child(7) {
+  left: 925px;
+}
+
+.ux13-registro__progreso {
+  position: absolute;
+  left: 8px;
+  bottom: 0;
+  width: 968px;
+  height: 5px;
+  background: var(--azul);
+}
+
+/* Rejilla del formulario */
+
+.ux13-registro__cuerpo {
+  position: relative;
+  width: 1587px;
+  height: 696px;
+  margin: 11px 0 0 4.5px;
+}
+
+.ux13-registro__card {
+  position: relative;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.ux13-registro__col-izq {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 520px;
+  height: 696px;
+}
+
+.ux13-registro__col-med {
+  position: absolute;
+  left: 526px;
+  top: 0;
+  width: 625px;
+}
+
+.ux13-registro__col-der {
+  position: absolute;
+  left: 1160px;
+  top: 0;
+  width: 427px;
+}
+
+.ux13-registro__card--tipo {
+  height: 267px;
+}
+
+.ux13-registro__card--info {
+  height: 322px;
+  margin-top: 11px;
+}
+
+.ux13-registro__card--sustento {
+  height: 267px;
+}
+
+.ux13-registro__card--impacto {
+  height: 320px;
+  margin-top: 12px;
+}
+
+.ux13-registro__seccion {
+  position: absolute;
+  left: 26px;
+  top: 21px;
+  height: 20px;
+}
+
+.ux13-registro__card--tipo .ux13-registro__seccion,
+.ux13-registro__card--info .ux13-registro__seccion {
+  left: 25px;
+}
+
+.ux13-registro__card--info .ux13-registro__seccion {
+  top: 17px;
+}
+
+.ux13-registro__card--impacto .ux13-registro__seccion {
+  top: 20px;
+}
+
+.ux13-registro__seccion--izq {
+  left: 17px;
+  top: 15px;
+}
+
+.ux13-registro__card--impacto .ux13-registro__seccion--obs {
+  top: 187px;
+}
+
+.ux13-registro__marca {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 15px;
+  height: 15px;
+  background: var(--azul);
+}
+
+.ux13-registro__seccion-titulo {
+  position: relative;
+  top: 2px;
+  margin: 0 0 0 22px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux13-registro__seccion--izq .ux13-registro__seccion-titulo {
+  margin-left: 24px;
+}
+
+.ux13-registro__opcional {
+  margin-left: 8px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #808080;
+}
+
+/* Columna izquierda */
+
+.ux13-registro__etiqueta {
+  position: absolute;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 13px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ux13-registro__etiqueta--detalle {
+  left: 29px;
+  top: 50px;
+}
+
+.ux13-registro__etiqueta--tipo-personal {
+  left: 294px;
+  top: 50px;
+}
+
+.ux13-registro__buscador {
+  position: absolute;
+  left: 16px;
+  top: 71px;
+  width: 267px;
+  height: 38px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+}
+
+.ux13-registro__buscador .ux02-i {
+  font-size: 18px;
+  color: #808080;
+}
+
+.ux13-registro__buscador input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  color: #666;
+}
+
+.ux13-registro__buscador input::placeholder {
+  color: #808080;
+}
+
+.ux13-registro__select {
+  position: absolute;
+  height: 38px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 15px;
+  color: #666;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ux13-registro__select .ux02-i {
+  font-size: 18px;
+  color: #808080;
+}
+
+.ux13-registro__select--tipo-personal {
+  left: 290px;
+  top: 71px;
+  width: 202px;
+}
+
+.ux13-registro__avatar {
+  display: block;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.ux13-registro__avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux13-registro__encontrado {
+  position: absolute;
+  left: 17px;
+  top: 138px;
+  width: 490px;
+  height: 144px;
+  border-radius: 4px;
+  background: #f5fbf8;
+}
+
+.ux13-registro__encontrado > .ux13-registro__avatar {
+  position: absolute;
+  left: 20px;
+  top: 21px;
+}
+
+.ux13-registro__nombre {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.ux13-registro__encontrado > .ux13-registro__nombre {
+  position: absolute;
+  left: 78px;
+  top: 21px;
+}
+
+.ux13-registro__persona-dato {
+  position: absolute;
+  left: 78px;
+  font-size: 12px;
+  line-height: 14px;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux13-registro__persona-dato--nac {
+  top: 36px;
+}
+
+.ux13-registro__persona-dato--dni {
+  top: 50px;
+}
+
+.ux13-registro__badge {
+  position: absolute;
+  left: 266px;
+  top: 28px;
+  height: 24px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: #489a57;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.ux13-registro__dato-etiqueta {
+  position: absolute;
+  font-size: 12px;
+  line-height: 12px;
+  color: #808080;
+}
+
+.ux13-registro__dato-valor {
+  position: absolute;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.ux13-registro__dato-etiqueta--correo {
+  left: 23px;
+  top: 78px;
+}
+
+.ux13-registro__dato-valor--correo {
+  left: 23px;
+  top: 91px;
+}
+
+.ux13-registro__dato-etiqueta--numero {
+  left: 294px;
+  top: 78px;
+}
+
+.ux13-registro__dato-valor--numero {
+  left: 294px;
+  top: 91px;
+}
+
+.ux13-registro__encontrado-sep {
+  position: absolute;
+  left: 272px;
+  top: 79px;
+  width: 1px;
+  height: 42px;
+  background: #e3e3e3;
+}
+
+.ux13-registro__lista-titulo {
+  position: absolute;
+  left: 46px;
+  top: 300px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 15px;
+  color: #808080;
+}
+
+.ux13-registro__lista {
+  position: absolute;
+  inset: 0;
+}
+
+.ux13-registro__fila {
+  position: absolute;
+  left: 37px;
+  width: 452px;
+  height: 82px;
+}
+
+.ux13-registro__fila:nth-child(1) {
+  top: 322px;
+}
+
+.ux13-registro__fila:nth-child(2) {
+  top: 412px;
+}
+
+.ux13-registro__fila:nth-child(3) {
+  top: 507px;
+}
+
+.ux13-registro__fila:nth-child(4) {
+  top: 602px;
+}
+
+.ux13-registro__fila > .ux13-registro__avatar {
+  position: absolute;
+  left: 0;
+  top: 12px;
+}
+
+.ux13-registro__nombre--fila {
+  position: absolute;
+  left: 56px;
+  top: 8px;
+}
+
+.ux13-registro__fila-cargo,
+.ux13-registro__fila-dni {
+  position: absolute;
+  left: 56px;
+  font-size: 12px;
+  line-height: 14px;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux13-registro__fila-cargo {
+  top: 26px;
+}
+
+.ux13-registro__fila-dni {
+  top: 41px;
+}
+
+.ux13-registro__seleccion {
+  position: absolute;
+  left: 292px;
+  top: 34px;
+  width: 107px;
+  height: 28px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: #b0b0b0;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ux13-registro__seleccion--activa {
+  border: 0;
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux13-registro__lista-sep {
+  position: absolute;
+  left: 39px;
+  width: 450px;
+  height: 1px;
+  background: #ebebeb;
+}
+
+.ux13-registro__lista-sep--1 {
+  top: 402px;
+}
+
+.ux13-registro__lista-sep--2 {
+  top: 498px;
+}
+
+.ux13-registro__lista-sep--3 {
+  top: 593px;
+}
+
+.ux13-registro__scroll {
+  position: absolute;
+  left: 498px;
+  top: 345px;
+  width: 7px;
+  height: 62px;
+  border-radius: 4px;
+  background: #808080;
+}
+
+/* Tipo de solicitud */
+
+.ux13-registro__tipos {
+  position: absolute;
+  inset: 0;
+}
+
+.ux13-registro__tipo {
+  position: absolute;
+  width: 284px;
+  height: 82px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.ux13-registro__tipo:nth-child(1) {
+  left: 26px;
+  top: 65px;
+}
+
+.ux13-registro__tipo:nth-child(2) {
+  left: 318px;
+  top: 65px;
+}
+
+.ux13-registro__tipo:nth-child(3) {
+  left: 26px;
+  top: 158px;
+}
+
+.ux13-registro__tipo:nth-child(4) {
+  left: 318px;
+  top: 158px;
+}
+
+.ux13-registro__tipo--activa {
+  border-color: var(--azul);
+  background: #edf3fd;
+}
+
+.ux13-registro__radio {
+  position: absolute;
+  left: 24px;
+  top: 27px;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  border: 2px solid #efefef;
+  border-radius: 50%;
+  background: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.ux13-registro__radio:checked {
+  border: 7px solid var(--azul);
+}
+
+.ux13-registro__tipo-texto {
+  position: absolute;
+  left: 66px;
+  top: 16px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux13-registro__tipo-titulo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #000;
+}
+
+.ux13-registro__tipo--activa .ux13-registro__tipo-titulo {
+  color: var(--azul);
+}
+
+.ux13-registro__tipo-desc {
+  margin-top: 1px;
+  font-size: 13px;
+  line-height: 16px;
+  color: #666;
+}
+
+/* Información general */
+
+.ux13-registro__etiqueta--tipo-especifico {
+  left: 33px;
+  top: 56px;
+}
+
+.ux13-registro__etiqueta--modalidad {
+  left: 326px;
+  top: 56px;
+}
+
+.ux13-registro__etiqueta--fechas {
+  left: 33px;
+  top: 140px;
+}
+
+.ux13-registro__etiqueta--area {
+  left: 326px;
+  top: 140px;
+}
+
+.ux13-registro__select--tipo-especifico {
+  left: 27px;
+  top: 81px;
+  width: 284px;
+  height: 39px;
+}
+
+.ux13-registro__select--modalidad {
+  left: 322px;
+  top: 81px;
+  width: 284px;
+  height: 39px;
+}
+
+.ux13-registro__select--area {
+  left: 322px;
+  top: 165px;
+  width: 284px;
+  height: 39px;
+}
+
+.ux13-registro__fechas {
+  position: absolute;
+  left: 27px;
+  top: 165px;
+  width: 286px;
+  height: 63px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux13-registro__fecha {
+  position: absolute;
+  top: 0;
+  height: 61px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 15px;
+  color: #666;
+}
+
+.ux13-registro__fecha:nth-child(1) {
+  left: 14px;
+}
+
+.ux13-registro__fecha:nth-child(3) {
+  left: 151px;
+}
+
+.ux13-registro__fecha .ux02-i {
+  font-size: 12px;
+  color: #808080;
+}
+
+.ux13-registro__fecha-divisor {
+  position: absolute;
+  left: 139px;
+  top: 10px;
+  width: 1px;
+  height: 42px;
+  background: #efefef;
+}
+
+.ux13-registro__aviso {
+  position: absolute;
+  left: 27px;
+  top: 255px;
+  width: 579px;
+  height: 53px;
+  border-radius: 4px;
+  background: #edf3fd;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 18px;
+}
+
+.ux13-registro__aviso-icono {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  color: var(--azul);
+}
+
+.ux13-registro__aviso-texto {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #4f4f4f;
+}
+
+/* Sustento documental */
+
+.ux13-registro__dropzone {
+  position: absolute;
+  left: 25px;
+  top: 58px;
+  width: 379px;
+  height: 92px;
+  border: 0;
+  border-radius: 2px;
+  background: #edf3fd;
+  color: var(--azul);
+  cursor: pointer;
+}
+
+.ux13-registro__nube {
+  position: absolute;
+  left: 172px;
+  top: 13px;
+  width: 34px;
+  height: 34px;
+  overflow: visible;
+}
+
+.ux13-registro__drop-texto {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 49px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #1c1c1c;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ux13-registro__drop-enlace {
+  color: var(--azul);
+  font-weight: 700;
+}
+
+.ux13-registro__drop-formatos {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 68px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #808080;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ux13-registro__archivo {
+  position: absolute;
+  left: 24px;
+  width: 380px;
+  height: 46px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux13-registro__archivo--1 {
+  top: 158px;
+}
+
+.ux13-registro__archivo--2 {
+  top: 208px;
+}
+
+.ux13-registro__archivo-icono {
+  position: absolute;
+  left: 14px;
+  top: 11px;
+  width: 20px;
+  height: 24px;
+}
+
+.ux13-registro__archivo-datos {
+  position: absolute;
+  left: 31px;
+  top: 9px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux13-registro__archivo-nombre {
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 15px;
+  color: #1c1c1c;
+}
+
+.ux13-registro__archivo-peso {
+  font-size: 11px;
+  line-height: 13px;
+  color: #808080;
+}
+
+.ux13-registro__archivo-quitar {
+  position: absolute;
+  right: 11px;
+  top: 14px;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  background: transparent;
+  color: #808080;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.ux13-registro__aspa {
+  width: 13px;
+  height: 13px;
+}
+
+/* Impacto y observaciones */
+
+.ux13-registro__impacto {
+  position: absolute;
+  left: 22px;
+  top: 66px;
+  width: 379px;
+  height: 93px;
+  border-radius: 4px;
+  background: #edf3fd;
+}
+
+.ux13-registro__impacto-icono {
+  position: absolute;
+  top: 36px;
+  width: 24px;
+  height: 24px;
+  color: var(--azul);
+}
+
+.ux13-registro__impacto-icono--calendario {
+  left: 18px;
+}
+
+.ux13-registro__impacto-icono--documento {
+  left: 198px;
+}
+
+.ux13-registro__impacto-dato {
+  position: absolute;
+  top: 27px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux13-registro__impacto-dato--dias {
+  left: 51px;
+}
+
+.ux13-registro__impacto-dato--planilla {
+  left: 228px;
+}
+
+.ux13-registro__impacto-etiqueta {
+  font-size: 12.5px;
+  line-height: 14px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.ux13-registro__impacto-valor {
+  margin-top: 2px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #000;
+}
+
+.ux13-registro__impacto-sep {
+  position: absolute;
+  left: 185px;
+  top: 19px;
+  width: 1px;
+  height: 58px;
+  background: #969696;
+}
+
+.ux13-registro__pill {
+  margin-top: 3px;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 13px;
+  background: #b0ffb9;
+  color: #489a57;
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 26px;
+  white-space: nowrap;
+}
+
+.ux13-registro__obs-caja {
+  position: absolute;
+  left: 24px;
+  top: 221px;
+  width: 380px;
+  height: 88px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux13-registro__obs-texto {
+  margin: 0;
+  padding: 10px 14px 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  color: #666;
+}
+
+.ux13-registro__obs-contador {
+  position: absolute;
+  right: 11px;
+  bottom: 11px;
+  font-size: 13px;
+  line-height: 12px;
+  color: #808080;
+}
+
+/* Barra de acciones */
+
+.ux13-registro__acciones {
+  position: absolute;
+  left: 794px;
+  top: 616px;
+  width: 772px;
+  height: 81px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.ux13-registro__btn {
+  position: absolute;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux13-registro__btn--cancelar {
+  left: 31px;
+  top: 21px;
+  width: 180px;
+  height: 39px;
+  border: 1px solid var(--borde);
+  background: #fff;
+  color: #666;
+}
+
+.ux13-registro__btn--borrador {
+  left: 349px;
+  top: 22px;
+  width: 197px;
+  height: 38px;
+  border: 2px solid var(--azul);
+  background: #fff;
+  color: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.ux13-registro__btn--borrador .ux02-i {
+  font-size: 17px;
+}
+
+.ux13-registro__btn--continuar {
+  left: 559px;
+  top: 22px;
+  width: 179px;
+  height: 38px;
+  border: 0;
+  background: var(--azul);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ux13-registro__btn--continuar .ux02-i {
+  font-size: 16px;
+}
