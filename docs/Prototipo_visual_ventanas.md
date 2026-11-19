@@ -67,6 +67,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `alta-confirmacion` | Alta: confirmación | PDF p. 16 (UX-07) | 1920 × 1176 | `?ux=alta-confirmacion` |
 | `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
 | `licencia-registro` | Registro de licencia/ausencia | PDF p. 25 (UX-14) | 1920 × 1176 | `?ux=licencia-registro` |
+| `licencia-detalle` | Detalle y subsanación de licencia | PDF p. 26 (UX-15) | 1920 × 1176 | `?ux=licencia-detalle` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -88,6 +89,18 @@ observaciones (427); la barra de acciones (772 × 81) flota bajo las dos última
 las erratas y artefactos literales: breadcrumb «Colaborades», subtítulo copiado del alta,
 «calendaria» en el aviso y «7 días» para un rango del 20 al 24 de noviembre. Medidas
 detalladas de la fuente en `.cache/licencias-p25-medidas.md` (no versionado).
+
+**Nota sobre la p. 26:** lienzo de 1920 × 1176 con el cromo de la p. 24 —pestaña
+«Asistencia» activa y sin submenú— y el azul medido `#2249f2`. Bajo el hero, una ficha blanca
+(1572 × 171) resume la solicitud en seis bloques y dibuja una línea de tiempo de cuatro hitos
+(Registro y En revisión completados, Subsanación y Aprobada pendientes). El contenido se
+reparte en tres columnas —información y documentos (514), impacto, observaciones y alertas
+(526), resumen y acciones (506)— sobre un lienzo de 1572 px. Se replican las erratas y
+artefactos literales: breadcrumb «Postulante» y botón «Volver a Postulantes», «Secundaria
+Completa» como motivo, el periodo «19 /10 /2026 - 21/10/2026» con espacios, «Requerimiento
+aprobado» como tipo de permiso, «7 DÍAS» frente a los 3 días del resto de la ficha,
+«calendaria», «RR.HH» sin punto final y «Adjunto . PDF» en ambos archivos. Medidas de la
+fuente en `.cache/licencias-p26-medidas.md` (no versionado).
 
 ## 4. Cómo ejecutarlo
 
@@ -119,7 +132,7 @@ src/app/preview/requerimientos/
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
 ├── alta/                    # alta: selección, datos, resumen y confirmación (PDF pp. 13-16, UX-07)
-├── licencias/               # bandeja y registro de licencias (PDF pp. 24-25)
+├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -162,6 +175,7 @@ public/preview/mp360/
 | Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
 | Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
 | Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,6 / 255 |
+| Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,5 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -284,14 +298,27 @@ resuelven en la implementación funcional, no aquí:
     La maqueta dibuja el formulario 14 px más ancho que la columna compartida; el sobrante
     se replica dentro del bloque de registro y no altera el cromo ni el rail. Los controles
     (selects, fechas, zona de carga y botones) son presentacionales.
+19. **Detalle y subsanación de licencia (PDF p. 26)**: tercera pantalla del bloque, con el
+    cromo de la bandeja y la pestaña «Asistencia» sin submenú. Se replica solo lo dibujado: la
+    ficha de la solicitud con identidad, cinco campos y la línea de tiempo; la información de
+    la solicitud; los documentos del postulante con su zona de carga; el impacto en asistencia
+    y planilla; las observaciones; las alertas y destinatarios; el resumen de solicitud y las
+    tres acciones. No hay lógica de subsanación, validaciones ni transiciones: los botones,
+    enlaces y controles son presentacionales. Se conservan como literales las erratas y
+    artefactos del dibujo —«Postulante» y «Volver a Postulantes», «Secundaria Completa» como
+    motivo, «19 /10 /2026 - 21/10/2026», «Requerimiento aprobado» como tipo de permiso,
+    «7 DÍAS» frente a los 3 días del resto de la ficha, «calendaria», «RR.HH» sin punto y
+    «Adjunto . PDF» en ambos archivos— y sus datos de muestra no son reglas. El azul medido
+    es `#2249f2`, igual que en las páginas 24 y 25.
 
 ## 9. Cierre y siguiente paso
 
 - Con `alta-seleccion`, `alta-datos`, `alta-resumen` y `alta-confirmacion` quedan
   replicados los **cuatro pasos del alta** (PDF pp. 13–16, UX-07).
-- Con `licencias` y `licencia-registro` quedan replicadas la **bandeja de licencias y
-  ausencias** (PDF p. 24, UX-13) y el **registro de licencia/ausencia** (PDF p. 25, UX-14);
-  el bloque de Licencias continúa con el detalle/subsanación (p. 26), aún no implementado.
+- Con `licencias`, `licencia-registro` y `licencia-detalle` queda replicado el **bloque
+  completo de Licencias** (PDF pp. 24-26): la **bandeja de licencias y ausencias** (UX-13), el
+  **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**
+  (UX-15), las tres con el mismo cromo y el azul `#2249f2`.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

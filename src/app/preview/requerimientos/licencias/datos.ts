@@ -166,3 +166,57 @@ export const SUSTENTOS = [
   { archivo: 'Solicitud_Vacaciones.pdf', peso: '300KB', tipo: 'pdf' },
   { archivo: 'itinerario_viaje.png', peso: '1.2MB', tipo: 'png' },
 ] as const
+
+export const DETALLE_LICENCIA = {
+  colaborador: 'Luis Torres',
+  dni: '7142123456',
+  cargo: 'Operario de Almacén',
+  tipoSolicitud: 'Licencia Médica',
+  periodo: '19/10/2026 - 21/10/2026',
+  duracion: '3 días',
+  fechaRegistro: '15/10/2026',
+  responsable: 'Ricardo Cisterna',
+  motivo: 'Secundaria Completa',
+  periodoDetalle: '19 /10 /2026 - 21/10/2026',
+  comentario: 'Presento descanso médico por cuadro de gastritis.',
+  diasAusencia: '7 DÍAS',
+  impactoPlanilla: 'Sin Descuento',
+  observaciones:
+    'Las vacaciones fueron consultadas personalmente con el encargado del almacén previamente.',
+  notificacion: 'Notificada',
+  destinatarios: 'RR.HH, jefatura directa, planillas',
+  aviso: 'La licencia abarca 7 días calendaria del 20 al 24 de noviembre del 2026',
+  tipoPermiso: 'Requerimiento aprobado',
+  estadoActual: 'En Subsanación',
+  diasSolicitados: '3 DÍAS',
+  diasAprobados: '3 DÍAS',
+  saldoLicencias: '12 días',
+} as const
+
+export const CAMPOS_DETALLE = [
+  { etiqueta: 'Tipo de Solicitud', valor: DETALLE_LICENCIA.tipoSolicitud },
+  { etiqueta: 'Periodo de Licencia', valor: DETALLE_LICENCIA.periodo },
+  { etiqueta: 'Duración', valor: DETALLE_LICENCIA.duracion },
+  { etiqueta: 'Fecha de Registro', valor: DETALLE_LICENCIA.fechaRegistro },
+  { etiqueta: 'Responsable de revisión', valor: DETALLE_LICENCIA.responsable },
+] as const
+
+export const PASOS_DETALLE = [
+  { etiqueta: 'Registro', fecha: '19/10/2026', estado: 'completado' },
+  { etiqueta: 'En revisión', fecha: '19/10/2026', estado: 'actual' },
+  { etiqueta: 'Subsanación', fecha: null, estado: 'pendiente' },
+  { etiqueta: 'Aprobada', fecha: null, estado: 'pendiente' },
+] as const
+
+export const DOCUMENTOS_DETALLE = [
+  { archivo: 'Sustento Médico_2026.pdf', formato: 'PDF', peso: '425KB', tipo: 'pdf' },
+  { archivo: 'Sustento Médico_2026.png', formato: 'PDF', peso: '1MB', tipo: 'png' },
+] as const
+
+export const RESUMEN_DETALLE = [
+  { etiqueta: 'Tipo de Permiso', valor: DETALLE_LICENCIA.tipoPermiso, tono: null },
+  { etiqueta: 'Estado actual', valor: DETALLE_LICENCIA.estadoActual, tono: 'azul' },
+  { etiqueta: 'Días solicitados', valor: DETALLE_LICENCIA.diasSolicitados, tono: null },
+  { etiqueta: 'Días Aprobados', valor: DETALLE_LICENCIA.diasAprobados, tono: null },
+  { etiqueta: 'Saldo de licencias (año)', valor: DETALLE_LICENCIA.saldoLicencias, tono: null },
+] as const
