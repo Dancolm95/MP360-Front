@@ -65,6 +65,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `alta-datos` | Alta: datos personales y de trabajo | PDF p. 14 (UX-07) | 1920 × 1176 | `?ux=alta-datos` |
 | `alta-resumen` | Alta: resumen de validaciones | PDF p. 15 (UX-07) | 1920 × 1176 | `?ux=alta-resumen` |
 | `alta-confirmacion` | Alta: confirmación | PDF p. 16 (UX-07) | 1920 × 1176 | `?ux=alta-confirmacion` |
+| `onboarding` | Bandeja de onboarding (En curso) | PDF p. 20 (UX-09/10) | 1920 × 1176 | `?ux=onboarding` |
 | `epp` | Asignaciones de EPP y equipos | PDF p. 22 (UX-11) | 1920 × 1176 | `?ux=epp` |
 | `epp-devolucion` | Devolución y reposición de EPP | PDF p. 23 (UX-12) | 1920 × 1176 | `?ux=epp-devolucion` |
 | `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
@@ -81,6 +82,23 @@ No forman parte del prototipo visual: están ahí solo para contraste.
 **Nota sobre `a-05`:** es la misma pantalla de Inicio con el **selector de módulo**
 abierto —no el filtro de Área/Subárea—. Se replica como modo propio `inicio-modulo` para
 compararlo y como interacción del botón «Recursos Humanos» en `inicio`.
+
+**Nota sobre la p. 20:** lienzo de 1920 × 1176, primera pantalla del bloque de Onboarding
+(UX-09/10). La pestaña resaltada es **«Offboarding»**, no «Onboarding», y no dibuja submenú:
+el diseño deja «Onboarding» como pestaña inactiva aunque el breadcrumb, el título y los datos
+sean de onboarding. El cromo compartido se mantiene y el azul medido es `#2249f2`. Bajo el
+hero (93 px) se dibujan una tarjeta de filtros de 138 px (búsqueda, Estado, Puesto, Tipo de
+personal y Cargo), un panel blanco de 521 px con las pestañas «En curso» / «Sin Onboarding» /
+«Finalizados», cuatro indicadores sin icono (`Sin encargado`, `Sin Responsabless`,
+`Procesos a Tiempo`, `Procesos atrasados`, todos a 0), la barra de orden y una tabla de diez
+columnas —nueve rotuladas y la de acciones— con una fila de muestra («Luis Torres Caycho»),
+badge «Activo» y cuatro filas vacías recortadas por el panel; el paginador queda sobre el
+fondo. Se replican las erratas y
+artefactos literales: «Onborading» como título, «Sin Responsabless», el buscador «Buscar
+candidatos por nombre, DNI o puesto...», «Tipo de personal» en minúscula y «Acciones rápidas»
+con el mismo listado duplicado del cromo. La variante «Sin onboarding» (p. 21) queda en una
+tarea posterior; el componente acepta la pestaña activa para reutilizarse. Medidas de la
+fuente en `.cache/p20-render.png` (no versionado).
 
 **Nota sobre la p. 22:** lienzo de 1920 × 1176 con la pestaña «EPP y Equipos» activa y un
 submenú dibujado con «Detalle» —resaltado— y «Devolución y Reposición». El azul medido es
@@ -157,6 +175,7 @@ src/app/preview/requerimientos/
 ├── colaboradores/           # bandeja de colaboradores (PDF p. 12, UX-08)
 ├── colaborador/             # ficha, resumen y boletas (PDF pp. 17-19, UX-08)
 ├── alta/                    # alta: selección, datos, resumen y confirmación (PDF pp. 13-16, UX-07)
+├── onboarding/              # bandeja de onboarding en curso (PDF p. 20, UX-09/10)
 ├── epp/                     # asignaciones de EPP y equipos (PDF p. 22, UX-11)
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
@@ -199,6 +218,7 @@ public/preview/mp360/
 | Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,9 / 255 |
 | Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
 | Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
+| Onboarding · En curso (PDF p. 20) | Pendiente de revisión visual | 5,6 / 255 |
 | EPP (PDF p. 22) | Pendiente de revisión visual | 7,5 / 255 |
 | EPP · devolución (PDF p. 23) | Pendiente de revisión visual | 7,9 / 255 |
 | Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
@@ -357,6 +377,14 @@ resuelven en la implementación funcional, no aquí:
     cabecera de la tabla, «Stock Minimo» sin tilde, la cantidad «L» en las reposiciones y las
     fechas «15 / 10 / 2026» con espacios— y sus datos de muestra no son reglas. El azul medido
     es `#2249f2`, igual que en la p. 22.
+22. **Bandeja de onboarding en curso (PDF p. 20)**: primera pantalla del bloque de Onboarding.
+    La pestaña resaltada en el dibujo es «Offboarding» —con «Onboarding» inactiva— y no hay
+    submenú; el título dice «Onborading» y el hero usa el subtítulo «Gestión de Onboarding de
+    Colaboradores». Se replican tal cual, junto con «Sin Responsabless» y el buscador
+    «Buscar candidatos por nombre, DNI o puesto...». La maqueta dibuja el rail de la p. 22 algo
+    más arriba y con las tarjetas 2 px más altas; el ajuste se limita a `.ux09-lienzo`. No se
+    añaden acciones, filtros aplicados ni estados: la pestaña «Sin onboarding» (p. 21) queda
+    para una tarea posterior. El azul medido es `#2249f2`.
 
 ## 9. Cierre y siguiente paso
 

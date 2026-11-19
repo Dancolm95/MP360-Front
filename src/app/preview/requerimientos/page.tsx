@@ -18,6 +18,7 @@ import { AltaSeleccion } from './alta/AltaSeleccion'
 import { AltaDatos } from './alta/AltaDatos'
 import { AltaResumen } from './alta/AltaResumen'
 import { AltaConfirmacion } from './alta/AltaConfirmacion'
+import { BandejaOnboarding } from './onboarding/BandejaOnboarding'
 import { BandejaLicencias } from './licencias/BandejaLicencias'
 import { RegistroLicencia } from './licencias/RegistroLicencia'
 import { DetalleLicencia } from './licencias/DetalleLicencia'
@@ -45,6 +46,7 @@ type Diseno =
   | 'alta-datos'
   | 'alta-resumen'
   | 'alta-confirmacion'
+  | 'onboarding'
   | 'epp'
   | 'epp-devolucion'
   | 'licencias'
@@ -208,6 +210,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <AltaConfirmacion />,
+  },
+  {
+    id: 'onboarding',
+    etiqueta: 'Onboarding',
+    referencia: '/preview/mp360/img/referencia-onboarding.jpg',
+    descripcion: 'Bandeja de onboarding · En curso',
+    ancho: 1920,
+    alto: 1176,
+    componente: <BandejaOnboarding />,
   },
   {
     id: 'epp',
