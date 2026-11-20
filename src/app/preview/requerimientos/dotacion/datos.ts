@@ -186,6 +186,121 @@ export const FILAS_ESTRUCTURA_DOTACION: readonly FilaEstructura[] = [
   { nivel: 2, etiqueta: 'Coordinador Logístico', requeridos: '1', cubiertos: '1', pendientes: '0', cobertura: '100 %', tono: 'verde-oscuro' },
 ]
 
+export interface IndicadorAsignadoDotacion {
+  readonly etiqueta: string
+  readonly valor: string
+  readonly icono: string
+  readonly tono: 'azul' | 'verde' | 'ambar'
+}
+
+export const INDICADORES_ASIGNADOS_DOTACION: readonly IndicadorAsignadoDotacion[] = [
+  {
+    etiqueta: 'Colaboradores Asignados',
+    valor: '26',
+    icono: 'package',
+    tono: 'azul',
+  },
+  {
+    etiqueta: 'Colaboradores Activos',
+    valor: '26',
+    icono: 'person',
+    tono: 'verde',
+  },
+  {
+    etiqueta: 'En Descanso',
+    valor: '1',
+    icono: 'error_outline',
+    tono: 'ambar',
+  },
+  {
+    etiqueta: 'Próximos ingresos',
+    valor: '0',
+    icono: 'person',
+    tono: 'verde',
+  },
+]
+
+export const FILTROS_ASIGNADOS_DOTACION: readonly string[] = [
+  'Puesto',
+  'Tipo de Contrato',
+  'Nacionalidad',
+  'Estado',
+]
+
+export type TonoEstadoAsignado = 'verde' | 'ambar'
+
+export interface FilaAsignadoDotacion {
+  readonly nombre: string
+  readonly nacionalidad: string
+  readonly documento: string
+  readonly puesto: string
+  readonly contrato: string
+  readonly ingreso: string
+  readonly estado: string
+  readonly tono: TonoEstadoAsignado
+}
+
+/* La maqueta repite documento y fecha en las cinco filas y alterna Activo y
+   Descanso; «Mostrando 10 de 246» no coincide con las filas dibujadas. */
+export const FILAS_ASIGNADOS_DOTACION: readonly FilaAsignadoDotacion[] = [
+  {
+    nombre: 'Luis Torres',
+    nacionalidad: 'Peruano',
+    documento: '711234567',
+    puesto: 'Operario de Almacén',
+    contrato: 'Indefinido',
+    ingreso: '12 / 09 / 2026',
+    estado: 'Activo',
+    tono: 'verde',
+  },
+  {
+    nombre: 'Jaime Castillo',
+    nacionalidad: 'Extranjero',
+    documento: '711234567',
+    puesto: 'Operario de Almacén',
+    contrato: 'Determinado',
+    ingreso: '12 / 09 / 2026',
+    estado: 'Descanso',
+    tono: 'ambar',
+  },
+  {
+    nombre: 'Emilia Castellano',
+    nacionalidad: 'Peruano',
+    documento: '711234567',
+    puesto: 'Operario de Almacén',
+    contrato: 'Determinado',
+    ingreso: '12 / 09 / 2026',
+    estado: 'Activo',
+    tono: 'verde',
+  },
+  {
+    nombre: 'Diego Fiestas',
+    nacionalidad: 'Extranjero',
+    documento: '711234567',
+    puesto: 'Operario de Almacén',
+    contrato: 'Determinado',
+    ingreso: '12 / 09 / 2026',
+    estado: 'Activo',
+    tono: 'verde',
+  },
+  {
+    nombre: 'Luis Torres',
+    nacionalidad: 'Peruano',
+    documento: '711234567',
+    puesto: 'Operario de Almacén',
+    contrato: 'Indefinido',
+    ingreso: '12 / 09 / 2026',
+    estado: 'Activo',
+    tono: 'verde',
+  },
+]
+
+export const PAGINACION_ASIGNADOS_DOTACION = {
+  resumen: 'Mostrando 10 de 246',
+  paginas: [1, 2, 3, 4, 5, 6],
+  activa: 1,
+} as const
+
 export const ORDEN_DETALLE_DOTACION = 'Últimos registrados'
 export const RANGO_DETALLE_DOTACION = 'últimos 30 días'
 

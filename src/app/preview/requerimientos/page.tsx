@@ -57,6 +57,7 @@ type Diseno =
   | 'licencia-detalle'
   | 'dotacion'
   | 'dotacion-estructura'
+  | 'dotacion-asignados'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -296,6 +297,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <DetalleDotacion />,
+  },
+  {
+    id: 'dotacion-asignados',
+    etiqueta: 'Dotación · asignados',
+    referencia: '/preview/mp360/img/referencia-dotacion-asignados.jpg',
+    descripcion: 'Dotación por cliente · colaboradores asignados',
+    ancho: 1920,
+    alto: 1176,
+    componente: <DetalleDotacion pestanaActiva="asignados" />,
   },
   {
     id: 'login',
