@@ -49,7 +49,7 @@ function IconoAviso() {
   )
 }
 
-function Ficha() {
+export function FichaProcesoOffboarding() {
   const colaborador = COLABORADOR_CHECKLIST_OFFBOARDING
 
   return (
@@ -182,7 +182,7 @@ function Revisiones() {
   )
 }
 
-function Pie() {
+export function PieProcesoOffboarding() {
   return (
     <div className="ux16-checklist__pie">
       <p className="ux16-checklist__nota">
@@ -226,10 +226,10 @@ export function OffboardingChecklist() {
           <StepperOffboarding activo={2} activos={[1, 2, 3]} />
         </div>
 
-        <Ficha />
+        <FichaProcesoOffboarding />
         <Checklist />
         <Revisiones />
-        <Pie />
+        <PieProcesoOffboarding />
       </div>
     </MarcoOffboarding>
   )

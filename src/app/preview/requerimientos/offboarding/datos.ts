@@ -226,3 +226,36 @@ export const REVISIONES_AREAS_OFFBOARDING: readonly RevisionAreaOffboarding[] = 
 
 export const NOTA_CHECKLIST_OFFBOARDING =
   'Se encontrarán habilitadas los cuadros a marcar según el tipo de personal que este en proceso de offboarding.'
+
+export interface DatoLiquidacionOffboarding {
+  readonly etiqueta: string
+  readonly valor: string
+}
+
+export const RESUMEN_LIQUIDACION_OFFBOARDING: readonly DatoLiquidacionOffboarding[] = [
+  { etiqueta: 'Casual de cese:', valor: 'Renuncia voluntaria' },
+  { etiqueta: 'Fecha de cese:', valor: '20/10/2026' },
+  { etiqueta: 'Último día de labores:', valor: '20/10/2026' },
+]
+
+export interface FilaLiquidacionOffboarding {
+  readonly concepto: string
+  readonly detalle: string
+  readonly monto: string
+}
+
+// La maqueta dibuja el importe de la primera fila dentro de la columna Detalle.
+export const FILAS_LIQUIDACION_OFFBOARDING: readonly FilaLiquidacionOffboarding[] = [
+  { concepto: 'Remuneración base', detalle: 's/ 2.060.00', monto: '' },
+  { concepto: 'Vacaciones pendientes', detalle: '15 días', monto: 's/1,030.00' },
+  {
+    concepto: 'Descuentos (EPP/ equipos /adelantos)',
+    detalle: 'EPP no devuelto',
+    monto: '-  s/ 200.00',
+  },
+]
+
+export const TOTAL_LIQUIDACION_OFFBOARDING = {
+  etiqueta: 'Total liquidación (referencial)',
+  monto: 's/ 2,890.00',
+} as const

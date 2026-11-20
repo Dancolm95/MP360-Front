@@ -29,6 +29,7 @@ import { DevolucionEpp } from './epp/DevolucionEpp'
 import { BandejaOffboarding } from './offboarding/BandejaOffboarding'
 import { OffboardingDatos } from './offboarding/OffboardingDatos'
 import { OffboardingChecklist } from './offboarding/OffboardingChecklist'
+import { OffboardingLiquidacion } from './offboarding/OffboardingLiquidacion'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -61,6 +62,7 @@ type Diseno =
   | 'offboarding'
   | 'offboarding-datos'
   | 'offboarding-checklist'
+  | 'offboarding-liquidacion'
   | 'dotacion'
   | 'dotacion-estructura'
   | 'dotacion-asignados'
@@ -313,6 +315,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <OffboardingChecklist />,
+  },
+  {
+    id: 'offboarding-liquidacion',
+    etiqueta: 'Offboarding · liquidación',
+    referencia: '/preview/mp360/img/referencia-offboarding-liquidacion.jpg',
+    descripcion: 'Offboarding: liquidación',
+    ancho: 1920,
+    alto: 1176,
+    componente: <OffboardingLiquidacion />,
   },
   {
     id: 'dotacion',

@@ -16338,3 +16338,179 @@
   font-weight: 700;
   line-height: 1;
 }
+
+/* ---------- UX-17 · Offboarding: liquidación (PDF p. 30) ---------- */
+
+.ux16-liquidacion {
+  width: 1592px;
+  margin-left: -11.5px;
+}
+
+.ux16-liquidacion__stepper {
+  position: relative;
+  width: 1592px;
+  height: 49px;
+  margin-top: 1px;
+  border-radius: 4px;
+  background: #f7f9fe;
+}
+
+.ux16-liquidacion__stepper .ux16-datos__stepper {
+  margin-left: 9.5px;
+  background: transparent;
+}
+
+.ux16-liquidacion .ux16-datos__progreso {
+  left: 1024px;
+  width: 202px;
+}
+
+/* La p. 30 no dibuja el botón de regreso del resto de etapas. */
+.ux16-lienzo--liquidacion .ux16-btn-accion {
+  display: none;
+}
+
+.ux16-liquidacion__card {
+  height: 254px;
+  margin-top: 11px;
+  padding: 20px 27px 0 32px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux16-liquidacion__cabecera {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 16px;
+  padding-left: 2px;
+}
+
+.ux16-liquidacion__marca {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  border-radius: 1px;
+  background: var(--azul);
+}
+
+.ux16-liquidacion__titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: #1c1c1c;
+  white-space: nowrap;
+}
+
+.ux16-liquidacion__cuerpo {
+  display: grid;
+  grid-template-columns: 481px 1030px;
+  column-gap: 20px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.ux16-liquidacion__resumen {
+  height: 173px;
+  padding: 22px 30px 0 40px;
+  border-radius: 8px;
+  background: #e8ebfd;
+}
+
+.ux16-liquidacion__resumen-titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #2d2d2d;
+}
+
+.ux16-liquidacion__resumen-lista {
+  margin: 14px 0 0;
+}
+
+.ux16-liquidacion__resumen-fila {
+  display: flex;
+  gap: 4px;
+  line-height: 17px;
+}
+
+.ux16-liquidacion__resumen-fila + .ux16-liquidacion__resumen-fila {
+  margin-top: 9px;
+}
+
+.ux16-liquidacion__resumen-fila dt {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1c1c1c;
+}
+
+.ux16-liquidacion__resumen-fila dd {
+  margin: 0;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #808080;
+}
+
+.ux16-liquidacion__tabla {
+  border: 1px solid #e4e4e4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ux16-liquidacion__fila {
+  display: grid;
+  grid-template-columns: 472px 1fr 175px;
+  align-items: center;
+  height: 37px;
+  padding: 0 89px 0 37px;
+  border-top: 1px solid #e7e7e7;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+}
+
+.ux16-liquidacion__fila--cabecera {
+  height: 30px;
+  border-top: 0;
+  background: #eef3fc;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: #1c1c1c;
+}
+
+.ux16-liquidacion__fila:nth-child(3) {
+  height: 39px;
+}
+
+.ux16-liquidacion__fila:nth-child(4) {
+  height: 36px;
+}
+
+.ux16-liquidacion__fila--total {
+  height: 34px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: #1c1c1c;
+}
+
+.ux16-liquidacion__monto {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ux16-liquidacion__fila--total .ux16-liquidacion__monto {
+  color: var(--azul);
+}
+
+.ux16-liquidacion .ux16-checklist__pie {
+  margin-top: 25px;
+}
