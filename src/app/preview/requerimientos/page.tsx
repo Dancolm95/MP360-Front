@@ -27,6 +27,7 @@ import { ResumenDotacion } from './dotacion/ResumenDotacion'
 import { AsignacionesEpp } from './epp/AsignacionesEpp'
 import { DevolucionEpp } from './epp/DevolucionEpp'
 import { BandejaOffboarding } from './offboarding/BandejaOffboarding'
+import { OffboardingDatos } from './offboarding/OffboardingDatos'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -57,6 +58,7 @@ type Diseno =
   | 'licencia-registro'
   | 'licencia-detalle'
   | 'offboarding'
+  | 'offboarding-datos'
   | 'dotacion'
   | 'dotacion-estructura'
   | 'dotacion-asignados'
@@ -291,6 +293,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <BandejaOffboarding />,
+  },
+  {
+    id: 'offboarding-datos',
+    etiqueta: 'Offboarding · datos',
+    referencia: '/preview/mp360/img/referencia-offboarding-datos.jpg',
+    descripcion: 'Offboarding: datos y causal',
+    ancho: 1920,
+    alto: 1176,
+    componente: <OffboardingDatos />,
   },
   {
     id: 'dotacion',

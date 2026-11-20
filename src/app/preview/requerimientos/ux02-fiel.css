@@ -15218,3 +15218,640 @@
   height: 14px;
   display: block;
 }
+
+/* ---------- UX-17 · Offboarding: datos y causal (PDF p. 28) ---------- */
+
+.ux16-lienzo--datos .ux16-titulo-fila {
+  gap: 13px;
+}
+
+.ux16-lienzo--datos .ux16-breadcrumb {
+  letter-spacing: 0.6px;
+}
+
+.ux16-datos__stepper {
+  position: relative;
+  width: 1592px;
+  height: 49px;
+  margin-left: -2px;
+  border-radius: 4px;
+  background: #f7f9fe;
+}
+
+.ux16-datos__paso {
+  position: absolute;
+  top: 14px;
+  height: 21px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ux16-datos__paso--1 { left: 57px; }
+.ux16-datos__paso--2 { left: 389px; }
+.ux16-datos__paso--3 { left: 738px; }
+.ux16-datos__paso--4 { left: 1088px; }
+.ux16-datos__paso--5 { left: 1388px; }
+
+.ux16-datos__numero {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  border-radius: 50%;
+  background: #969696;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ux16-datos__numero--activo {
+  background: var(--azul-acento);
+}
+
+.ux16-datos__etiqueta {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #969696;
+  white-space: nowrap;
+}
+
+.ux16-datos__paso--activo .ux16-datos__etiqueta {
+  color: var(--azul);
+}
+
+.ux16-datos__conector {
+  position: absolute;
+  top: 27px;
+  width: 145px;
+  height: 2px;
+  background: #969696;
+}
+
+.ux16-datos__conector--1 { left: 226px; }
+.ux16-datos__conector--2 { left: 562px; }
+.ux16-datos__conector--3 { left: 925px; }
+.ux16-datos__conector--4 { left: 1203px; }
+
+.ux16-datos__progreso {
+  position: absolute;
+  left: 8px;
+  bottom: 0;
+  width: 239px;
+  height: 5px;
+  border-radius: 2px;
+  background: var(--azul);
+}
+
+.ux16-datos__rejilla {
+  display: grid;
+  grid-template-columns: 777px 775.5px;
+  column-gap: 20.5px;
+  align-items: start;
+  margin-top: 11px;
+}
+
+.ux16-datos__panel {
+  position: relative;
+  height: 696px;
+  padding: 19px 38px 0 20px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux16-datos__titulo-seccion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 20px;
+}
+
+.ux16-datos__card .ux16-datos__titulo-seccion {
+  gap: 9px;
+}
+
+.ux16-datos__marca {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  border-radius: 1px;
+  background: var(--azul);
+}
+
+.ux16-datos__titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: #333;
+}
+
+.ux16-datos__campos {
+  display: grid;
+  grid-template-columns: 265px 199px 199px;
+  column-gap: 10px;
+  margin-top: 9px;
+}
+
+.ux16-datos__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ux16-datos__campo-etiqueta {
+  position: relative;
+  top: 2px;
+  padding-left: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 13px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ux16-datos__campo--detalle .ux16-datos__campo-etiqueta {
+  padding-left: 14px;
+}
+
+.ux16-datos__entrada,
+.ux16-datos__busqueda,
+.ux16-datos__select {
+  height: 38px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+}
+
+.ux16-datos__entrada {
+  padding: 0 12px;
+}
+
+.ux16-datos__busqueda {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 14px;
+}
+
+.ux16-datos__busqueda .ux02-i {
+  font-size: 17px;
+  color: #808080;
+}
+
+.ux16-datos__busqueda input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  color: #666;
+}
+
+.ux16-datos__busqueda input::placeholder {
+  color: #666;
+  opacity: 1;
+}
+
+.ux16-datos__select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 10px 0 15px;
+  cursor: pointer;
+}
+
+.ux16-datos__select .ux02-i {
+  font-size: 20px;
+  color: #666;
+}
+
+.ux16-datos__seleccionado {
+  position: relative;
+  height: 144px;
+  margin-top: 29px;
+  padding: 21px 20px 0;
+  background: #f7fbf9;
+}
+
+.ux16-datos__identidad {
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux16-datos__avatar {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.ux16-datos__avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux16-datos__identidad-texto {
+  margin-left: 10px;
+  padding-top: 2px;
+}
+
+.ux16-datos__nombre {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #000;
+}
+
+.ux16-datos__meta {
+  margin: 0;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #808080;
+}
+
+.ux16-datos__insignia {
+  position: absolute;
+  top: 29px;
+  left: 267px;
+  height: 30px;
+  padding: 0 15px;
+  border-radius: 15px;
+  background: #5d985e;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ux16-datos__seleccionado-detalle {
+  display: grid;
+  grid-template-columns: 253px 217px 1fr;
+  height: 41px;
+  margin-top: 15px;
+}
+
+.ux16-datos__seleccionado-detalle > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 3px;
+}
+
+.ux16-datos__seleccionado-detalle > div + div {
+  padding-left: 21px;
+  border-left: 1px solid #dcdfdd;
+}
+
+.ux16-datos__seleccionado-detalle > div:last-child {
+  padding-left: 23px;
+}
+
+.ux16-datos__detalle-etiqueta {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #808080;
+}
+
+.ux16-datos__detalle-valor {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 15px;
+  color: #000;
+}
+
+.ux16-datos__detalle-enlace {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 16px;
+  color: var(--azul);
+}
+
+.ux16-datos__lista-titulo {
+  position: relative;
+  top: 4px;
+  margin: 17px 0 0 29px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #808080;
+}
+
+.ux16-datos__lista {
+  margin: 1px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ux16-datos__fila {
+  position: relative;
+  height: 95px;
+  padding: 20px 0 0 21px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux16-datos__fila:first-child {
+  height: 90px;
+}
+
+.ux16-datos__fila + .ux16-datos__fila::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 22px;
+  right: 13px;
+  height: 1px;
+  background: #e3e3e3;
+}
+
+.ux16-datos__fila-identidad {
+  margin: -2px 0 0 6px;
+}
+
+.ux16-datos__fila-identidad .ux16-datos__nombre {
+  line-height: 18px;
+}
+
+.ux16-datos__fila-identidad .ux16-datos__meta {
+  line-height: 13px;
+}
+
+.ux16-datos__fila-identidad .ux16-datos__meta + .ux16-datos__meta {
+  margin-top: 3px;
+}
+
+.ux16-datos__fila-datos {
+  position: absolute;
+  top: 21px;
+  left: 283px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux16-datos__fila-datos .ux16-datos__detalle-etiqueta {
+  margin-bottom: 2px;
+  line-height: 13px;
+}
+
+.ux16-datos__fila-valor {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 15px;
+  color: #000;
+}
+
+.ux16-datos__seleccionar {
+  position: absolute;
+  top: 42px;
+  left: 579px;
+  width: 107px;
+  height: 27px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: #c9c9c9;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ux16-datos__seleccionar--activo {
+  border: 0;
+  background: var(--azul);
+  color: #fff;
+}
+
+.ux16-datos__scroll {
+  position: absolute;
+  top: 344px;
+  right: 18px;
+  width: 7px;
+  height: 64px;
+  border-radius: 3.5px;
+  background: #969696;
+}
+
+.ux16-datos__card {
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux16-datos__card--causal {
+  height: 296px;
+  padding: 19px 36px 0 25px;
+}
+
+.ux16-datos__card--resumen {
+  height: 276px;
+  margin-top: 21px;
+  padding: 20px 36px 0 25px;
+}
+
+.ux16-datos__fila-campos {
+  display: grid;
+  grid-template-columns: 349px 339px;
+  column-gap: 23px;
+  margin-top: 9px;
+}
+
+.ux16-datos__campo--motivo {
+  margin-top: 13px;
+}
+
+.ux16-datos__motivo {
+  position: relative;
+  display: block;
+  height: 133px;
+}
+
+.ux16-datos__motivo textarea {
+  width: 100%;
+  height: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  resize: none;
+  outline: none;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #666;
+}
+
+.ux16-datos__contador {
+  position: absolute;
+  right: 12px;
+  bottom: 13px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  color: #808080;
+}
+
+.ux16-datos__cese {
+  height: 55px;
+  margin: 23px 0 0;
+  border: 1px solid var(--azul);
+  border-radius: 4px;
+  background: #edf3fd;
+  display: flex;
+  align-items: center;
+  padding: 8px 0 0 38px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+.ux16-datos__resumen-fila {
+  display: flex;
+  margin-top: 24px;
+}
+
+.ux16-datos__resumen-dato {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+}
+
+.ux16-datos__resumen-dato--1 { width: 140px; }
+.ux16-datos__resumen-dato--2 { width: 68px; margin-left: 112px; }
+.ux16-datos__resumen-dato--3 { width: 42px; margin-left: 96px; }
+.ux16-datos__resumen-dato--4 { width: 99px; margin-left: 105px; }
+
+.ux16-datos__resumen-etiqueta {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #666;
+  text-align: left;
+}
+
+.ux16-datos__resumen-valor {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 15px;
+  color: #000;
+}
+
+.ux16-datos__resumen-valor--azul {
+  color: var(--azul);
+}
+
+.ux16-datos__acciones {
+  height: 83px;
+  margin-top: 23px;
+  padding: 23px 36px 0 30px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux16-datos__cancelar {
+  width: 181px;
+  height: 37px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: #808080;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux16-datos__acciones-grupo {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 19px;
+}
+
+.ux16-datos__guardar {
+  width: 187px;
+  height: 38px;
+  border: 1px solid var(--azul);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux16-datos__guardar .ux02-i {
+  font-size: 17px;
+}
+
+.ux16-datos__continuar {
+  width: 178px;
+  height: 37px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux16-datos__chevron {
+  margin-left: 3px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}

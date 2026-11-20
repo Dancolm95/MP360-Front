@@ -76,6 +76,7 @@ export function MarcoOffboarding({
   subtitulo = 'Gestión de procesos de cese de colaboradores',
   accionEtiqueta = 'Iniciar Offboarding',
   accionIcono = 'post_add',
+  clase,
 }: {
   children: ReactNode
   breadcrumbFin?: string
@@ -83,9 +84,10 @@ export function MarcoOffboarding({
   subtitulo?: string
   accionEtiqueta?: string
   accionIcono?: string
+  clase?: string
 }) {
   return (
-    <div className="ux02-lienzo ux16-lienzo">
+    <div className={`ux02-lienzo ux16-lienzo${clase ? ` ${clase}` : ''}`}>
       <Cabecera />
       <Navegacion activo="Offboarding" submenu={false} chevronActivo={false} />
       <div className="ux02-main">

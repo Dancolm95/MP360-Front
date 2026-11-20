@@ -69,3 +69,61 @@ export const FILAS_OFFBOARDING: readonly FilaOffboarding[] = [
 ]
 
 export const PAGINAS_OFFBOARDING = [1, 2, 3, 4, 5, 6] as const
+
+export const PASOS_OFFBOARDING = [
+  'Datos y Causal',
+  'Checklist de salida',
+  'Revisiones por áreas',
+  'Liquidación',
+  'Cierre',
+] as const
+
+export interface ColaboradorOffboarding {
+  readonly nombre: string
+  readonly nacionalidad: string
+  readonly documento: string
+  readonly telefono: string
+  readonly correo: string
+}
+
+export const COLABORADOR_SELECCIONADO: ColaboradorOffboarding = {
+  nombre: 'Luis Torres',
+  nacionalidad: 'Nac: Peruano',
+  documento: 'DNI: 7142123456',
+  telefono: '999 999 999',
+  correo: 'correodeluisito@gmail.com',
+}
+
+const COLABORADOR_ENCONTRADO: ColaboradorOffboarding = {
+  nombre: 'Luis Torres',
+  nacionalidad: 'Nac: Peruano',
+  documento: 'DNI: 7142123456',
+  telefono: '999 999 99',
+  correo: 'correodeluisito@gmail.com',
+}
+
+export const COLABORADORES_ENCONTRADOS: readonly ColaboradorOffboarding[] = [
+  COLABORADOR_ENCONTRADO,
+  COLABORADOR_ENCONTRADO,
+  COLABORADOR_ENCONTRADO,
+  COLABORADOR_ENCONTRADO,
+]
+
+export interface DatoResumenOffboarding {
+  readonly etiqueta: string
+  readonly valor: string
+  readonly tono?: 'azul'
+}
+
+export const RESUMEN_OFFBOARDING: readonly DatoResumenOffboarding[] = [
+  { etiqueta: 'Estado del proceso', valor: 'En proceso', tono: 'azul' },
+  { etiqueta: 'Checklist', valor: '0/8' },
+  { etiqueta: 'Áreas', valor: '0/4' },
+  { etiqueta: 'Liquidicación', valor: 'Pendiente' },
+]
+
+export const CESE_PROGRAMADO_OFFBOARDING = 'Cese Programado : 20/10/2026'
+export const CAUSAL_OFFBOARDING = 'Renuncia voluntaria'
+export const FECHA_CESE_OFFBOARDING = '20/10/2026'
+export const MOTIVO_OFFBOARDING = 'Renuncia por motivos personales'
+export const CONTADOR_MOTIVO_OFFBOARDING = '32/200'
