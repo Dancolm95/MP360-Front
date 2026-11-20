@@ -31,6 +31,7 @@ import { OffboardingDatos } from './offboarding/OffboardingDatos'
 import { OffboardingChecklist } from './offboarding/OffboardingChecklist'
 import { OffboardingLiquidacion } from './offboarding/OffboardingLiquidacion'
 import { OffboardingCierre } from './offboarding/OffboardingCierre'
+import { CalendarioAsistencia } from './calendario/CalendarioAsistencia'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -69,6 +70,7 @@ type Diseno =
   | 'dotacion-estructura'
   | 'dotacion-asignados'
   | 'dotacion-historial'
+  | 'calendario'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -371,6 +373,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <DetalleDotacion pestanaActiva="historial" />,
+  },
+  {
+    id: 'calendario',
+    etiqueta: 'Calendario',
+    referencia: '/preview/mp360/img/referencia-calendario.jpg',
+    descripcion: 'Calendario de asistencia',
+    ancho: 1920,
+    alto: 1176,
+    componente: <CalendarioAsistencia />,
   },
   {
     id: 'login',

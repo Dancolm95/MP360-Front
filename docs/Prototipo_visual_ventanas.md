@@ -81,6 +81,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `dotacion-estructura` | Dotación por cliente · estructura de puestos | PDF p. 33 (UX-19) | 1920 × 1176 | `?ux=dotacion-estructura` |
 | `dotacion-asignados` | Dotación por cliente · colaboradores asignados | PDF p. 34 (UX-19) | 1920 × 1176 | `?ux=dotacion-asignados` |
 | `dotacion-historial` | Dotación por cliente · historial de cambios | PDF p. 35 (UX-19) | 1920 × 1176 | `?ux=dotacion-historial` |
+| `calendario` | Calendario de asistencia | PDF p. 36 (UX-22) | 1920 × 1176 | `?ux=calendario` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -348,6 +349,31 @@ breadcrumb «Colaborades», la fecha repetida «15/10/2026», el rótulo «Ajust
 reasignación» y «Valor nuevo» en minúscula. Medidas de la fuente en
 `.cache/p35-render.png` (no versionado).
 
+**Nota sobre la p. 36:** pantalla única del bloque Calendario de asistencia (UX-22),
+lienzo de 1920 × 1176. Reutiliza el cromo de la p. 24 —pestaña «Asistencia» activa,
+**sin submenú**— y el azul medido `#2249f2`, aplicado a las pestañas, el calendario y el
+panel de resumen. El breadcrumb dibuja «R.R.H.H / Licencia y Ausencias / Calendario de
+Asistencia» y el hero titula «Calendaria de Asistencia» —errata literal— con el subtítulo
+«Consulta y administra las licencias y ausencias de cada colaborador.» y el botón
+«Registrar Solicitud». Bajo él, una fila de cuatro pestañas —«Vacaciones», «Licencias y
+Ausencias», «Permisos» y «Calendario» activa— de 304/394/304/304 px y una tarjeta de filtros
+de 140 px con «Búsqueda», «Empresa», «Área / Subárea», «Tipo de Evento» y «Estado», más
+«Más Filtros», «Limpiar Filtros» y «Aplicar Filtros». El cuerpo se reparte en un panel de
+calendario de 1130 × 544 y otro de 425 × 544: el primero dibuja la barra «Noviembre 2026»
+con dos botones de 48 px, el conmutador Mes / Semana / Día (Mes activo) y «Hoy»; una
+rejilla de siete columnas por cinco semanas con cabecera `#f8f7f9`, celdas de 65,5 px y
+bordes `#efefef`; y la leyenda «Vacaciones / Licencia / Permisos / Ausencias». Se replican
+las marcas dibujadas: doble evento de Rodrigo Ayala el día 3 con contador `+5`, evento verde
+el día 6, el día 20 seleccionado con píldora azul y «Luis Torres (1/5)», sus continuaciones
+en 21 y 22, 24 y 25, y «Karem Lopez (1/5)» a «(3/5)» en 27–29; no se calculan festivos ni se
+inventan eventos. A la derecha, «Viernes, 20 de noviembre» con la tarjeta de vacaciones
+(banda `#c9e3fe`, píldora verde «En goce», «Luis Torres», el periodo
+«20/11/2026 - 25/11 / 2026 ( 5 días)» y «Ver Detalle»), la barra de desplazamiento y el
+«Resumen del periodo» con Vacaciones 12, Licencia 6, Permisos 8 y Ausencias sin cifra. Se
+conservan como literales «Calendaria», los iconos de casa, libro, maletín y persona de las
+pestañas, la tilde de «Mié» y los espacios del periodo. Medidas de la fuente en
+`.cache/p36-render.png` (no versionado).
+
 ## 4. Cómo ejecutarlo
 
 ```bash
@@ -383,6 +409,7 @@ src/app/preview/requerimientos/
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
 ├── offboarding/             # bandeja y etapas de offboarding (PDF pp. 27-31, UX-16/17)
 ├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-35, UX-18/19)
+├── calendario/              # calendario de asistencia (PDF p. 36, UX-22)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -439,6 +466,7 @@ public/preview/mp360/
 | Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,6 / 255 |
 | Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,9 / 255 |
 | Organización y dotación · historial (PDF p. 35) | Pendiente de revisión visual | 7,4 / 255 |
+| Calendario de asistencia (PDF p. 36) | Pendiente de revisión visual | 6,5 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -447,7 +475,8 @@ public/preview/mp360/
 
 El bloque Offboarding queda completo con cinco pantallas replicadas: bandeja (p. 27),
 datos y causal (p. 28), checklist y revisión por áreas (p. 29), liquidación (p. 30) y
-cierre (p. 31). El MAE es una medida de calibración contra el render del diseño, no un
+cierre (p. 31). El bloque Calendario de asistencia queda completo con su única pantalla
+(p. 36, UX-22). El MAE es una medida de calibración contra el render del diseño, no un
 criterio de aceptación: la validación es visual y la hace el usuario o el responsable
 funcional.
 
@@ -708,6 +737,18 @@ resuelven en la implementación funcional, no aquí:
     «EPPS», «En Proceso», «12 / 10 / 2026», «Lima- Sede Principal» y los espacios sueltos
     de «15 /10 /2026 15:22»; el hero dibuja «Proceso de offboarding» con minúscula y sin
     botón de regreso.
+33. **Calendario de asistencia (PDF p. 36)**: pantalla única del bloque (UX-22). Reutiliza
+    el cromo y el azul `#2249f2` de la p. 24, con la pestaña «Asistencia» activa y sin
+    submenú. Se replica solo lo dibujado: las cuatro pestañas internas, la tarjeta de
+    filtros, la barra de mes, el conmutador Mes / Semana / Día, la rejilla de cinco semanas
+    con sus marcas y la agenda del día con su resumen. Los eventos, el contador `+5`, el día
+    seleccionado y las cifras del resumen son los del dibujo: no se calculan festivos ni se
+    generan eventos. Se conservan como literales la errata «Calendaria de Asistencia» del
+    título, «Área / Subárea», «Tipo de Evento», «Mié», el periodo
+    «20/11/2026 - 25/11 / 2026 ( 5 días)» y la ausencia de cifra en «Ausencias». El icono
+    de vacaciones y el libro de licencia se dibujan como SVG porque el subconjunto de
+    Material Symbols no reproduce el parasol y el libro cerrado del diseño; el resto usa
+    los glifos del subconjunto (maletín «work» y documento con lápiz «edit_document»).
 
 ## 9. Cierre y siguiente paso
 
@@ -731,6 +772,9 @@ resuelven en la implementación funcional, no aquí:
   el resumen (p. 32), la estructura organizacional (p. 33), los colaboradores asignados
   (p. 34) y el historial de cambios (p. 35). Las tres variantes del detalle reutilizan
   `MarcoDotacion`, `DetalleDotacion` y la navegación del bloque.
+- Con `calendario` queda replicado el **bloque Calendario de asistencia** (PDF p. 36,
+  UX-22): una sola pantalla con la rejilla mensual, la leyenda y la agenda del día.
+  El bloque queda completo.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.
