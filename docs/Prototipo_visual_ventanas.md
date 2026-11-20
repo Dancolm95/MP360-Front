@@ -72,6 +72,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
 | `licencia-registro` | Registro de licencia/ausencia | PDF p. 25 (UX-14) | 1920 × 1176 | `?ux=licencia-registro` |
 | `licencia-detalle` | Detalle y subsanación de licencia | PDF p. 26 (UX-15) | 1920 × 1176 | `?ux=licencia-detalle` |
+| `offboarding` | Bandeja de offboarding | PDF p. 27 (UX-16) | 1920 × 1176 | `?ux=offboarding` |
 | `dotacion` | Organización y dotación · resumen | PDF p. 32 (UX-18) | 1920 × 1176 | `?ux=dotacion` |
 | `dotacion-estructura` | Dotación por cliente · estructura de puestos | PDF p. 33 (UX-19) | 1920 × 1176 | `?ux=dotacion-estructura` |
 | `dotacion-asignados` | Dotación por cliente · colaboradores asignados | PDF p. 34 (UX-19) | 1920 × 1176 | `?ux=dotacion-asignados` |
@@ -163,6 +164,25 @@ Completa» como motivo, el periodo «19 /10 /2026 - 21/10/2026» con espacios, �
 aprobado» como tipo de permiso, «7 DÍAS» frente a los 3 días del resto de la ficha,
 «calendaria», «RR.HH» sin punto final y «Adjunto . PDF» en ambos archivos. Medidas de la
 fuente en `.cache/licencias-p26-medidas.md` (no versionado).
+
+**Nota sobre la p. 27:** primera pantalla del bloque Offboarding (UX-16), lienzo de
+1920 × 1176. Reutiliza el cromo de las pp. 20–21 —pestaña «Offboarding» resaltada y **sin
+submenú**—, pero el azul medido es `#2b48e9`, como en las páginas 10–19 y 32, en lugar del
+`#2249f2` de onboarding. El breadcrumb dibuja «R.R.H.H / Offboarding» y el hero, el título
+«Offboarding», el subtítulo «Gestión de procesos de cese de colaboradores» y el botón
+«Iniciar Offboarding». Bajo él se dibujan una tarjeta de filtros de 137 px con la cabecera
+«Búsqueda», el buscador «Buscar candidatos por nombre, DNI o puesto...» y cuatro filtros
+(Estado, «Casual de cese», Empresa y Cargo, todos en «Todos»); un panel blanco de 522 px con
+las pestañas «En proceso» / «Pendiente de regularización» / «Cerrados», cuatro indicadores
+(18, 5, 3 y 12), la barra «Ordenar por: Últimos registrados» y una tabla de nueve columnas
+—Candidato, ID de Proceso, Causal de cese, Fecha de cese, Empresa, Área, Responsable, Estado
+y acciones— con tres filas de muestra idénticas (Luis Torres Caycho) y badges «Cerrado»
+(verde), «Pendiente» (gris) y «En proceso» (azul); el paginador queda sobre el fondo. Se
+replican las erratas y artefactos literales: «Casual de cese», el identificador
+«offL-00125», la fila y el documento repetidos, y «Mostrando 10 de 246» frente a las tres
+filas dibujadas. El paginador activo mide `#294bee`. Medidas de la fuente en
+`.cache/pdfp-27.png` (no versionado). Las etapas 28–31 (UX-17) quedan en tareas posteriores;
+`MarcoOffboarding` reserva el slot de contenido para su stepper.
 
 **Nota sobre la p. 32:** primera pantalla del bloque Organización y dotación (UX-18/19),
 lienzo de 1920 × 1176. La pestaña activa es «Organización y Dotación» —en dos líneas y sin
@@ -276,6 +296,7 @@ src/app/preview/requerimientos/
 ├── onboarding/              # bandeja de onboarding (PDF pp. 20-21, UX-09/10)
 ├── epp/                     # asignaciones de EPP y equipos (PDF p. 22, UX-11)
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
+├── offboarding/             # bandeja de offboarding (PDF p. 27, UX-16)
 ├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-35, UX-18/19)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
@@ -324,6 +345,7 @@ public/preview/mp360/
 | Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
 | Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,6 / 255 |
 | Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,5 / 255 |
+| Offboarding · bandeja (PDF p. 27) | Pendiente de revisión visual | 6,4 / 255 |
 | Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,5 / 255 |
 | Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,6 / 255 |
 | Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,9 / 255 |
@@ -538,6 +560,15 @@ resuelven en la implementación funcional, no aquí:
     de 246» frente a las cinco filas dibujadas; la reasignación deja vacíos sus valores y los
     importes numéricos usan gris y cuerpo menor. La maqueta no dibuja interacción de
     pestañas ni edición: la prop `pestanaActiva` solo cambia el resaltado.
+28. **Bandeja de offboarding (PDF p. 27)**: primera pantalla del bloque Offboarding. La
+    pestaña activa es «Offboarding» —sin submenú— y el azul medido es `#2b48e9`, aplicado
+    solo dentro de `.ux16-lienzo`; el paginador activo mide `#294bee`. Se replica solo lo
+    dibujado: cabecera de búsqueda y cuatro filtros, pestañas de estado, cuatro indicadores,
+    barra de orden, tabla de tres filas y paginador; no se añaden filtros aplicados, acciones
+    ni estados. Se conservan como literales las erratas «Casual de cese», el identificador
+    «offL-00125», la fila y el documento repetidos y «Mostrando 10 de 246» frente a las tres
+    filas. `MarcoOffboarding` deja preparado el contenido para el stepper de las etapas 28–31
+    (UX-17), que no se implementan en esta tarea.
 
 ## 9. Cierre y siguiente paso
 
@@ -552,6 +583,9 @@ resuelven en la implementación funcional, no aquí:
   completo de Licencias** (PDF pp. 24-26): la **bandeja de licencias y ausencias** (UX-13), el
   **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**
   (UX-15), las tres con el mismo cromo y el azul `#2249f2`.
+- Con `offboarding` queda replicada la **bandeja de offboarding** (PDF p. 27, UX-16) y su
+  modo con render de referencia; las etapas del proceso (PDF pp. 28-31, UX-17) quedan
+  pendientes en tareas posteriores.
 - Con `dotacion`, `dotacion-estructura`, `dotacion-asignados` y `dotacion-historial` queda
   replicado el **bloque completo de Organización y dotación** (PDF pp. 32-35, UX-18/19):
   el resumen (p. 32), la estructura organizacional (p. 33), los colaboradores asignados
