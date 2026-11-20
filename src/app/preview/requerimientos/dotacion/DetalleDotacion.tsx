@@ -5,11 +5,15 @@ import {
   COBERTURA_DETALLE_DOTACION,
   FILAS_ASIGNADOS_DOTACION,
   FILAS_ESTRUCTURA_DOTACION,
+  FILAS_HISTORIAL_DOTACION,
   FILTROS_ASIGNADOS_DOTACION,
+  FILTROS_HISTORIAL_DOTACION,
   INDICADORES_ASIGNADOS_DOTACION,
   INDICADORES_DETALLE_DOTACION,
+  INDICADORES_HISTORIAL_DOTACION,
   ORDEN_DETALLE_DOTACION,
   PAGINACION_ASIGNADOS_DOTACION,
+  PAGINACION_HISTORIAL_DOTACION,
   PESTANAS_DETALLE_DOTACION,
   RANGO_DETALLE_DOTACION,
   type PestanaDetalleDotacion,
@@ -109,6 +113,7 @@ function Pestanas({ activa }: { activa: PestanaDetalleDotacion }) {
       className={[
         'ux19-pestanas',
         activa === 'asignados' ? 'ux19-pestanas--asignados' : '',
+        activa === 'historial' ? 'ux19-pestanas--historial' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -452,12 +457,213 @@ function PaginacionAsignados() {
   )
 }
 
+function IndicadoresHistorial() {
+  return (
+    <section className="ux19-historial__kpis" aria-label="Indicadores de historial">
+      {INDICADORES_HISTORIAL_DOTACION.map((indicador, indice) => (
+        <div
+          key={indicador.etiqueta}
+          className={`ux19-historial__kpi ux19-historial__kpi--${indice + 1}`}
+        >
+          <span className={`ux19-historial__icono ux19-historial__icono--${indicador.tono}`}>
+            <Icono nombre={indicador.icono} />
+          </span>
+          <div className="ux19-historial__kpi-texto">
+            <span className="ux19-historial__kpi-etiqueta">{indicador.etiqueta}</span>
+            <strong className="ux19-historial__kpi-valor">{indicador.valor}</strong>
+          </div>
+        </div>
+      ))}
+    </section>
+  )
+}
+
+function FiltrosHistorial() {
+  return (
+    <section className="ux19-historial__filtros" aria-label="Filtros del historial">
+      <div className="ux19-historial__campos">
+        {FILTROS_HISTORIAL_DOTACION.map((filtro) => (
+          <div key={filtro} className="ux19-historial__campo">
+            <span className="ux19-historial__campo-etiqueta">{filtro}</span>
+            <button type="button" className="ux19-historial__select" aria-label={`${filtro}: Todos`}>
+              <span>Todos</span>
+              <Icono nombre="expand_more" />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="ux19-historial__filtros-acciones">
+        <button type="button" className="ux19-historial__aplicar">
+          <Icono nombre="filter_alt" />
+          Aplicar Filtros
+        </button>
+        <button type="button" className="ux19-historial__limpiar">
+          <Icono nombre="undo" />
+          Limpiar
+        </button>
+      </div>
+    </section>
+  )
+}
+
+function CabeceraHistorial() {
+  return (
+    <div className="ux19-historial__cabecera" role="row">
+      <span className="ux19-historial__th ux19-historial__th--fecha" role="columnheader">
+        <span className="ux19-historial__casilla" aria-hidden="true" />
+        <span className="ux19-historial__th-texto">Fecha</span>
+      </span>
+      <span className="ux19-historial__th ux19-historial__th--candidato" role="columnheader">
+        <span className="ux19-historial__th-texto">Candidato</span>
+        <span className="ux19-historial__orden" aria-hidden="true">
+          <FlechasOrden />
+        </span>
+      </span>
+      <span className="ux19-historial__th" role="columnheader">
+        <span className="ux19-historial__th-texto">Estado</span>
+        <span className="ux19-historial__orden" aria-hidden="true">
+          <FlechasOrden />
+        </span>
+      </span>
+      <span className="ux19-historial__th" role="columnheader">
+        <span className="ux19-historial__th-texto">
+          <span>Detalle del</span>
+          <span>cambio</span>
+        </span>
+        <span className="ux19-historial__orden" aria-hidden="true">
+          <FlechasOrden />
+        </span>
+      </span>
+      <span className="ux19-historial__th" role="columnheader">
+        <span className="ux19-historial__th-texto">
+          <span>Valor</span>
+          <span>Anterior</span>
+        </span>
+        <span className="ux19-historial__orden" aria-hidden="true">
+          <FlechasOrden />
+        </span>
+      </span>
+      <span className="ux19-historial__th" role="columnheader">
+        <span className="ux19-historial__th-texto">
+          <span>Valor</span>
+          <span>nuevo</span>
+        </span>
+        <span className="ux19-historial__orden" aria-hidden="true">
+          <FlechasOrden />
+        </span>
+      </span>
+      <span className="ux19-historial__th" role="columnheader">
+        <span className="ux19-historial__th-texto">Observación</span>
+        <span className="ux19-historial__orden" aria-hidden="true">
+          <FlechasOrden />
+        </span>
+      </span>
+      <span className="ux19-historial__th ux19-historial__th--acciones" role="columnheader">
+        <span className="ux19-historial__kebab" aria-hidden="true">
+          <Icono nombre="more_vert" />
+        </span>
+      </span>
+    </div>
+  )
+}
+
+function TablaHistorial() {
+  return (
+    <section className="ux19-historial__tabla" aria-label="Historial de cambios">
+      <CabeceraHistorial />
+      <div className="ux19-historial__cuerpo">
+        {FILAS_HISTORIAL_DOTACION.map((fila, indice) => (
+          <div
+            key={`${fila.nombre}-${indice}`}
+            className="ux19-historial__fila"
+            role="row"
+          >
+            <span className="ux19-historial__celda ux19-historial__celda--fecha">
+              <span className="ux19-historial__casilla" aria-hidden="true" />
+              <span className="ux19-historial__fecha">{fila.fecha}</span>
+            </span>
+            <span className="ux19-historial__celda ux19-historial__celda--candidato">
+              <span className="ux19-historial__avatar" aria-hidden="true">
+                <Icono nombre="person" />
+              </span>
+              <span className="ux19-historial__identidad">
+                <strong>{fila.nombre}</strong>
+                <span>Nac: {fila.nacionalidad}</span>
+              </span>
+            </span>
+            <span className="ux19-historial__celda ux19-historial__celda--estado">
+              <span className={`ux19-historial__badge ux19-historial__badge--${fila.tono}`}>
+                {fila.estado}
+              </span>
+            </span>
+            <span className="ux19-historial__celda ux19-historial__celda--cambio">
+              {fila.cambio}
+            </span>
+            <span className="ux19-historial__celda ux19-historial__valor">
+              {fila.anterior}
+            </span>
+            <span className="ux19-historial__celda ux19-historial__valor">
+              {fila.nuevo}
+            </span>
+            <span className="ux19-historial__celda ux19-historial__celda--observacion">
+              {fila.observacion}
+            </span>
+            <span className="ux19-historial__celda ux19-historial__celda--acciones">
+              <span className="ux19-historial__kebab" aria-hidden="true">
+                <Icono nombre="more_vert" />
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function PaginacionHistorial() {
+  return (
+    <nav className="ux19-historial__paginacion" aria-label="Paginación del historial">
+      <span className="ux19-historial__resumen">{PAGINACION_HISTORIAL_DOTACION.resumen}</span>
+      <div className="ux19-historial__paginas">
+        <button type="button" className="ux19-historial__pagina" aria-label="Página anterior">
+          <Chevron sentido="izquierda" />
+        </button>
+        {PAGINACION_HISTORIAL_DOTACION.paginas.map((pagina) => (
+          <button
+            key={pagina}
+            type="button"
+            className={[
+              'ux19-historial__pagina',
+              pagina === PAGINACION_HISTORIAL_DOTACION.activa
+                ? 'ux19-historial__pagina--activa'
+                : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            aria-current={pagina === PAGINACION_HISTORIAL_DOTACION.activa ? 'page' : undefined}
+          >
+            {pagina}
+          </button>
+        ))}
+        <button type="button" className="ux19-historial__pagina" aria-label="Página siguiente">
+          <Chevron sentido="derecha" />
+        </button>
+        <button type="button" className="ux19-historial__pagina" aria-label="Última página">
+          <Chevron sentido="derecha" />
+        </button>
+      </div>
+    </nav>
+  )
+}
+
 export function DetalleDotacion({
   pestanaActiva = 'dotacion',
 }: {
   pestanaActiva?: PestanaDetalleDotacion
 }) {
   const esAsignados = pestanaActiva === 'asignados'
+  const esHistorial = pestanaActiva === 'historial'
 
   return (
     <MarcoDotacion
@@ -478,6 +684,14 @@ export function DetalleDotacion({
                 <Orden />
                 <TablaAsignados />
                 <PaginacionAsignados />
+              </>
+            ) : esHistorial ? (
+              <>
+                <IndicadoresHistorial />
+                <FiltrosHistorial />
+                <Orden />
+                <TablaHistorial />
+                <PaginacionHistorial />
               </>
             ) : (
               <>

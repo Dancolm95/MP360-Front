@@ -75,6 +75,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `dotacion` | Organización y dotación · resumen | PDF p. 32 (UX-18) | 1920 × 1176 | `?ux=dotacion` |
 | `dotacion-estructura` | Dotación por cliente · estructura de puestos | PDF p. 33 (UX-19) | 1920 × 1176 | `?ux=dotacion-estructura` |
 | `dotacion-asignados` | Dotación por cliente · colaboradores asignados | PDF p. 34 (UX-19) | 1920 × 1176 | `?ux=dotacion-asignados` |
+| `dotacion-historial` | Dotación por cliente · historial de cambios | PDF p. 35 (UX-19) | 1920 × 1176 | `?ux=dotacion-historial` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -181,8 +182,7 @@ acciones con «Contratos por Vencer» duplicado y «Ver más +». Se replican la
 artefactos literales: «pendientes» en minúscula, el espacio de «Cobertura al 90 %» y el mismo
 dato de muestra en las seis tarjetas. Medidas de la fuente en
 `.cache/p32-render.png` (no versionado). La p. 33 (UX-19) se replica aparte en el modo
-`dotacion-estructura` y la p. 34 en `dotacion-asignados`; la página 35 queda para una
-tarea posterior.
+`dotacion-estructura`, la p. 34 en `dotacion-asignados` y la p. 35 en `dotacion-historial`.
 
 **Nota sobre la p. 33:** segunda pantalla del bloque, lienzo de 1920 × 1176. El cromo es el
 mismo de la p. 32 (pestaña «Licencias» y «Organización y Dotación» activa sin submenú), pero
@@ -223,6 +223,26 @@ inventario rotula la p. 34 como «colaboradores activos», pero la maqueta dibuj
 «Colaboradores asignados» y separa «Asignados» de «Activos» en los indicadores; se replica
 lo dibujado. Medidas de la fuente en `.cache/p34-render.png` (no versionado).
 
+**Nota sobre la p. 35:** cuarta y última pantalla del bloque, lienzo de 1920 × 1176.
+Reutiliza el cromo y la ficha de cliente de la p. 33; el azul medido sigue siendo
+`#2249f2`, aplicado solo dentro de `.ux19-lienzo`. La pestaña activa dibujada es
+**«Historial de cambios»** —la cuarta, con píldora `#dfe7f9`—; el inventario la rotula
+«historial de asignación», pero se replica el rótulo dibujado. Bajo ella, el panel dibuja
+cuatro indicadores de 64 px (`Cambios Registrados` 12, `Incrementos` 8, `Reducciones` 3 y
+`Ajuste de reasignación` 1, este último con icono morado `#b294f7` y glifo blanco), una
+fila de cuatro filtros (`Puesto`, `Tipo de Contrato`, `Nacionalidad`, `Estado`, todos en
+«Todos») con «Aplicar Filtros» en azul y «Limpiar» en gris, la barra «Ordenar por: Últimos
+registrados» con sus cinco controles y una tabla de ocho columnas más casilla y acciones:
+Fecha, Candidato, Estado, Detalle del cambio, Valor Anterior, Valor nuevo, Observación y
+menú. Se dibujan cinco filas (Luis Torres, Jaime Castillo, Emilia Castellano, Diego Fiestas
+y Luis Torres otra vez) con avatar gris, badges «Incremento» verde, «Reducción» ámbar y
+«Reasignación» azul marino; la reasignación deja vacíos Valor Anterior y Valor nuevo, y los
+valores numéricos se dibujan en gris y más pequeños que el resto. El paginador repite
+«Mostrando 10 de 246», seis páginas y dos flechas de avance. Se replican literales el
+breadcrumb «Colaborades», la fecha repetida «15/10/2026», el rótulo «Ajuste de
+reasignación» y «Valor nuevo» en minúscula. Medidas de la fuente en
+`.cache/p35-render.png` (no versionado).
+
 ## 4. Cómo ejecutarlo
 
 ```bash
@@ -256,7 +276,7 @@ src/app/preview/requerimientos/
 ├── onboarding/              # bandeja de onboarding (PDF pp. 20-21, UX-09/10)
 ├── epp/                     # asignaciones de EPP y equipos (PDF p. 22, UX-11)
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
-├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-34, UX-18/19)
+├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-35, UX-18/19)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -307,6 +327,7 @@ public/preview/mp360/
 | Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,5 / 255 |
 | Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,6 / 255 |
 | Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,9 / 255 |
+| Organización y dotación · historial (PDF p. 35) | Pendiente de revisión visual | 7,4 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -494,7 +515,7 @@ resuelven en la implementación funcional, no aquí:
     «Colaborades», el punto «.» en Pendientes de Calidad, la tercera acción vacía del rail y
     los dos verdes de los badges. La maqueta no dibuja interacción entre pestañas ni estados
     de edición: la prop `pestanaActiva` solo cambia el resaltado y el contenido permanece en
-    la estructura dibujada. La pestaña «Historial de cambios» (p. 35) sigue pendiente.
+    la estructura dibujada.
 26. **Colaboradores asignados de la dotación (PDF p. 34)**: el inventario rotula la p. 34 como
     «colaboradores activos», pero la maqueta activa la pestaña «Colaboradores asignados» y
     dibuja dos indicadores distintos, «Colaboradores Asignados» y «Colaboradores Activos»;
@@ -507,6 +528,16 @@ resuelven en la implementación funcional, no aquí:
     duplicada, el documento y la fecha repetidos y «Mostrando 10 de 246» frente a las cinco
     filas dibujadas. Las líneas verticales de la tabla solo recorren las cuatro primeras
     filas; no se añaden acciones, filtros aplicados ni estados.
+27. **Historial de cambios de la dotación (PDF p. 35)**: cuarta y última pantalla del bloque.
+    El inventario la rotula «historial de asignación», pero la maqueta dibuja la pestaña
+    «Historial de cambios» y se replica ese literal. Reutiliza el cromo, la ficha de cliente
+    y el azul `#2249f2` de la p. 33. Se replica solo lo dibujado: cuatro indicadores, cuatro
+    filtros, barra de orden, tabla de cinco filas con badges y paginador; no se añaden
+    acciones, filtros aplicados ni estados. Se conservan como literales «Colaborades»,
+    «Ajuste de reasignación», «Valor nuevo» en minúscula, la fecha repetida y «Mostrando 10
+    de 246» frente a las cinco filas dibujadas; la reasignación deja vacíos sus valores y los
+    importes numéricos usan gris y cuerpo menor. La maqueta no dibuja interacción de
+    pestañas ni edición: la prop `pestanaActiva` solo cambia el resaltado.
 
 ## 9. Cierre y siguiente paso
 
@@ -521,12 +552,11 @@ resuelven en la implementación funcional, no aquí:
   completo de Licencias** (PDF pp. 24-26): la **bandeja de licencias y ausencias** (UX-13), el
   **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**
   (UX-15), las tres con el mismo cromo y el azul `#2249f2`.
-- Con `dotacion`, `dotacion-estructura` y `dotacion-asignados` quedan replicados el
-  **resumen de Organización y dotación** (PDF p. 32, UX-18), el **detalle por cliente con la
-  estructura organizacional** (PDF p. 33, UX-19) y la pestaña de **colaboradores asignados**
-  (PDF p. 34, UX-19). El bloque sigue abierto: la pestaña «Historial de cambios» (PDF p. 35)
-  queda para una tarea posterior y reutilizará `MarcoDotacion`, `DetalleDotacion` y la
-  navegación del bloque.
+- Con `dotacion`, `dotacion-estructura`, `dotacion-asignados` y `dotacion-historial` queda
+  replicado el **bloque completo de Organización y dotación** (PDF pp. 32-35, UX-18/19):
+  el resumen (p. 32), la estructura organizacional (p. 33), los colaboradores asignados
+  (p. 34) y el historial de cambios (p. 35). Las tres variantes del detalle reutilizan
+  `MarcoDotacion`, `DetalleDotacion` y la navegación del bloque.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

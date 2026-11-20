@@ -301,6 +301,127 @@ export const PAGINACION_ASIGNADOS_DOTACION = {
   activa: 1,
 } as const
 
+export interface IndicadorHistorialDotacion {
+  readonly etiqueta: string
+  readonly valor: string
+  readonly icono: string
+  readonly tono: 'azul' | 'verde' | 'ambar' | 'morado'
+}
+
+export const INDICADORES_HISTORIAL_DOTACION: readonly IndicadorHistorialDotacion[] = [
+  {
+    etiqueta: 'Cambios Registrados',
+    valor: '12',
+    icono: 'package',
+    tono: 'azul',
+  },
+  {
+    etiqueta: 'Incrementos',
+    valor: '8',
+    icono: 'person',
+    tono: 'verde',
+  },
+  {
+    etiqueta: 'Reducciones',
+    valor: '3',
+    icono: 'error_outline',
+    tono: 'ambar',
+  },
+  {
+    etiqueta: 'Ajuste de reasignación',
+    valor: '1',
+    icono: 'person',
+    tono: 'morado',
+  },
+]
+
+export const FILTROS_HISTORIAL_DOTACION: readonly string[] = [
+  'Puesto',
+  'Tipo de Contrato',
+  'Nacionalidad',
+  'Estado',
+]
+
+export type TonoEstadoHistorial = 'verde' | 'ambar' | 'morado'
+
+export interface FilaHistorialDotacion {
+  readonly fecha: string
+  readonly nombre: string
+  readonly nacionalidad: string
+  readonly estado: string
+  readonly tono: TonoEstadoHistorial
+  readonly cambio: string
+  readonly anterior: string
+  readonly nuevo: string
+  readonly observacion: string
+}
+
+/* La maqueta deja vacíos los valores de la reasignación y repite «15/10/2026»
+   en las cinco filas; «Mostrando 10 de 246» no coincide con lo dibujado. */
+export const FILAS_HISTORIAL_DOTACION: readonly FilaHistorialDotacion[] = [
+  {
+    fecha: '15/10/2026',
+    nombre: 'Luis Torres',
+    nacionalidad: 'Peruano',
+    estado: 'Incremento',
+    tono: 'verde',
+    cambio: 'Operador de Planta',
+    anterior: '9',
+    nuevo: '10',
+    observacion: 'Aumento por mayor demanda operativa',
+  },
+  {
+    fecha: '15/10/2026',
+    nombre: 'Jaime Castillo',
+    nacionalidad: 'Extranjero',
+    estado: 'Reducción',
+    tono: 'ambar',
+    cambio: 'Auxiliar de Almacén',
+    anterior: '4',
+    nuevo: '3',
+    observacion: 'Ajuste por cierre de turno nocturno',
+  },
+  {
+    fecha: '15/10/2026',
+    nombre: 'Emilia Castellano',
+    nacionalidad: 'Peruano',
+    estado: 'Reasignación',
+    tono: 'morado',
+    cambio: 'Técnico de Mantenimiento',
+    anterior: '',
+    nuevo: '',
+    observacion: 'Traslado de colaborador',
+  },
+  {
+    fecha: '15/10/2026',
+    nombre: 'Diego Fiestas',
+    nacionalidad: 'Extranjero',
+    estado: 'Incremento',
+    tono: 'verde',
+    cambio: 'Operador de Planta',
+    anterior: '2',
+    nuevo: '4',
+    observacion: 'Refuerzo por auditoría de calidad',
+  },
+  {
+    fecha: '15/10/2026',
+    nombre: 'Luis Torres',
+    nacionalidad: 'Peruano',
+    estado: 'Incremento',
+    tono: 'verde',
+    cambio: 'Auxiliar de Almacén',
+    anterior: '2',
+    nuevo: '4',
+    observacion: 'Ajuste de estructura del área',
+  },
+]
+
+export const PAGINACION_HISTORIAL_DOTACION = {
+  resumen: 'Mostrando 10 de 246',
+  paginas: [1, 2, 3, 4, 5, 6],
+  activa: 1,
+} as const
+
 export const ORDEN_DETALLE_DOTACION = 'Últimos registrados'
 export const RANGO_DETALLE_DOTACION = 'últimos 30 días'
 

@@ -58,6 +58,7 @@ type Diseno =
   | 'dotacion'
   | 'dotacion-estructura'
   | 'dotacion-asignados'
+  | 'dotacion-historial'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -306,6 +307,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <DetalleDotacion pestanaActiva="asignados" />,
+  },
+  {
+    id: 'dotacion-historial',
+    etiqueta: 'Dotación · historial',
+    referencia: '/preview/mp360/img/referencia-dotacion-historial.jpg',
+    descripcion: 'Dotación por cliente · historial de cambios',
+    ancho: 1920,
+    alto: 1176,
+    componente: <DetalleDotacion pestanaActiva="historial" />,
   },
   {
     id: 'login',
