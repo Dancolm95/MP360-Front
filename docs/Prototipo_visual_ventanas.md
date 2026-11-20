@@ -73,6 +73,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `licencia-registro` | Registro de licencia/ausencia | PDF p. 25 (UX-14) | 1920 × 1176 | `?ux=licencia-registro` |
 | `licencia-detalle` | Detalle y subsanación de licencia | PDF p. 26 (UX-15) | 1920 × 1176 | `?ux=licencia-detalle` |
 | `dotacion` | Organización y dotación · resumen | PDF p. 32 (UX-18) | 1920 × 1176 | `?ux=dotacion` |
+| `dotacion-estructura` | Dotación por cliente · estructura de puestos | PDF p. 33 (UX-19) | 1920 × 1176 | `?ux=dotacion-estructura` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -177,9 +178,28 @@ Pendientes`, tres pares a la izquierda y dos a la derecha y el botón «Ver Deta
 sobre el fondo. El rail dibuja un icono de cierre en «Nuevo Reclutamiento», la lista de
 acciones con «Contratos por Vencer» duplicado y «Ver más +». Se replican las erratas y
 artefactos literales: «pendientes» en minúscula, el espacio de «Cobertura al 90 %» y el mismo
-dato de muestra en las seis tarjetas. Las páginas 33–35 (dotación por cliente, UX-19) no se
-implementan aquí: quedan para tareas posteriores. Medidas de la fuente en
-`.cache/p32-render.png` (no versionado).
+dato de muestra en las seis tarjetas. Medidas de la fuente en
+`.cache/p32-render.png` (no versionado). La p. 33 (UX-19) se replica aparte en el modo
+`dotacion-estructura`; las páginas 34–35 quedan para tareas posteriores.
+
+**Nota sobre la p. 33:** segunda pantalla del bloque, lienzo de 1920 × 1176. El cromo es el
+mismo de la p. 32 (pestaña «Licencias» y «Organización y Dotación» activa sin submenú), pero
+el azul medido vuelve al token base `#2249f2`, no al `#2b48e9` de la p. 32. El breadcrumb
+dibuja «R.R.H.H / Colaborades» —errata literal—; el hero titula «Detalle de dotación por
+cliente, área y cargo» con el subtítulo «Visualiza la dotación requerida y pendiente.» y un
+selector «Estado · Activo» a la derecha. Bajo el hero se dibujan una ficha de cliente (Honda)
+de 412 × 752 con cabecera oscura, avatar azul, badge «Activo», siete pares de datos, la
+píldora «Cobertura al 90 %» y los botones «Editar dotación» y «Ver en organización»; y un
+panel de 1143 × 752 con cuatro pestañas —«Resumen», «Dotación por área y cargo» (activa),
+«Colaboradores asignados» e «Historial de cambios»—, cuatro indicadores (26 requeridos, 24
+cubiertos, 2 pendientes y «92 % Cobertura»), la barra «Ordenar por: Últimos registrados» con
+sus cinco controles y la tarjeta «Estructura organizacional». La tarjeta dibuja una jerarquía
+de tres niveles (OPERACIONES → Producción / Calidad / Logística → cargos) con filas de grupo
+sangradas 11 y 59 px, conectores de despliegue, columnas Requeridos / Cubiertos / Pendientes
+/ Cobertura y badges de dos verdes (`#06cc14` y `#22b273`), ámbar (`#f8ad3b`) y amarillo
+(`#f9eb21`). Se replican literales el punto «.» en Pendientes de Calidad, el duplicado
+«Contratos por Vencer» con la tercera acción vacía y los nombres «Coordinador Logístico» y
+«Técnico de Mantenimiento». Medidas de la fuente en `.cache/p33-render.png` (no versionado).
 
 ## 4. Cómo ejecutarlo
 
@@ -214,7 +234,7 @@ src/app/preview/requerimientos/
 ├── onboarding/              # bandeja de onboarding (PDF pp. 20-21, UX-09/10)
 ├── epp/                     # asignaciones de EPP y equipos (PDF p. 22, UX-11)
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
-├── dotacion/                # resumen de organización y dotación (PDF p. 32, UX-18)
+├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-33, UX-18/19)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -263,6 +283,7 @@ public/preview/mp360/
 | Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,6 / 255 |
 | Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,5 / 255 |
 | Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,5 / 255 |
+| Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,6 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -442,7 +463,16 @@ resuelven en la implementación funcional, no aquí:
     tarjetas con su badge y sus pares de muestra, el paginador y el rail; no se añaden estados,
     filtros aplicados ni acciones. Se conservan como literales «pendientes», «Cobertura al
     90 %», el duplicado «Contratos por Vencer» y el icono de cierre de «Nuevo Reclutamiento».
-    Las páginas 33–35 (UX-19) quedan pendientes.
+    Las páginas 33–35 (UX-19) quedaban pendientes.
+25. **Detalle de dotación por cliente (PDF p. 33)**: el inventario rotula la p. 33 como
+    «estructura de puestos», pero el dibujo activa la pestaña «Dotación por área y cargo» y
+    titula la tarjeta «Estructura organizacional»; se replican esos literales. El cromo repite
+    la pestaña «Licencias» y el azul vuelve a `#2249f2`. Se conservan la errata del breadcrumb
+    «Colaborades», el punto «.» en Pendientes de Calidad, la tercera acción vacía del rail y
+    los dos verdes de los badges. La maqueta no dibuja interacción entre pestañas ni estados
+    de edición: la prop `pestanaActiva` solo cambia el resaltado y el contenido permanece en
+    la estructura dibujada. Las pestañas «Colaboradores asignados» e «Historial de cambios»
+    (pp. 34–35) siguen pendientes.
 
 ## 9. Cierre y siguiente paso
 
@@ -457,9 +487,11 @@ resuelven en la implementación funcional, no aquí:
   completo de Licencias** (PDF pp. 24-26): la **bandeja de licencias y ausencias** (UX-13), el
   **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**
   (UX-15), las tres con el mismo cromo y el azul `#2249f2`.
-- Con `dotacion` queda replicado el **resumen de Organización y dotación** (PDF p. 32, UX-18).
-  El bloque sigue abierto: las tres pestañas de dotación por cliente (PDF pp. 33–35, UX-19)
-  quedan para tareas posteriores y reutilizarán `MarcoDotacion` y la navegación del bloque.
+- Con `dotacion` y `dotacion-estructura` quedan replicados el **resumen de Organización y
+  dotación** (PDF p. 32, UX-18) y el **detalle por cliente con la estructura organizacional**
+  (PDF p. 33, UX-19). El bloque sigue abierto: las pestañas «Colaboradores asignados» e
+  «Historial de cambios» (PDF pp. 34–35) quedan para tareas posteriores y reutilizarán
+  `MarcoDotacion`, `DetalleDotacion` y la navegación del bloque.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

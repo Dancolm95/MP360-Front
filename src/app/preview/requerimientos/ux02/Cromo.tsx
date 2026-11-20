@@ -145,11 +145,13 @@ export function PanelLateral({
   iconoAccesos = 'chevron_right',
   iconoEventos = 'calendar_month',
   iconoAccionPrincipal,
+  acciones = ACCIONES_RAPIDAS,
 }: {
   iconoAcciones?: string
   iconoAccesos?: string | null
   iconoEventos?: string
-  iconoAccionPrincipal?: string
+  iconoAccionPrincipal?: string | null
+  acciones?: readonly string[]
 } = {}) {
   return (
     <aside className="ux02-rail" aria-label="Panel contextual">
@@ -158,7 +160,7 @@ export function PanelLateral({
         <Icono nombre={iconoAcciones} />
       </div>
       <div className="ux02-rail__tarjeta ux02-rail__tarjeta--acciones">
-        {ACCIONES_RAPIDAS.map((accion, indice) => (
+        {acciones.map((accion, indice) => (
           <button key={`${accion}-${indice}`} type="button" className="ux02-rail__boton">
             {accion}
             {indice === 0 && iconoAccionPrincipal ? (

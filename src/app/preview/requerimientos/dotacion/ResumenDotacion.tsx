@@ -9,9 +9,19 @@ import {
   NAVEGACION_DOTACION,
 } from './datos'
 
-export function MarcoDotacion({ children }: { children: ReactNode }) {
+export function MarcoDotacion({
+  children,
+  clase,
+  accionesRapidas,
+  iconoAccionPrincipal = 'close',
+}: {
+  children: ReactNode
+  clase?: string
+  accionesRapidas?: readonly string[]
+  iconoAccionPrincipal?: string | null
+}) {
   return (
-    <div className="ux02-lienzo ux18-lienzo">
+    <div className={['ux02-lienzo', 'ux18-lienzo', clase].filter(Boolean).join(' ')}>
       <Cabecera />
       <Navegacion
         activo="Organización y Dotación"
@@ -25,7 +35,8 @@ export function MarcoDotacion({ children }: { children: ReactNode }) {
           iconoAcciones="edit"
           iconoAccesos={null}
           iconoEventos="expand_more"
-          iconoAccionPrincipal="close"
+          iconoAccionPrincipal={iconoAccionPrincipal}
+          acciones={accionesRapidas}
         />
       </div>
       <Pie />
