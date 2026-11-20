@@ -30,6 +30,7 @@ import { BandejaOffboarding } from './offboarding/BandejaOffboarding'
 import { OffboardingDatos } from './offboarding/OffboardingDatos'
 import { OffboardingChecklist } from './offboarding/OffboardingChecklist'
 import { OffboardingLiquidacion } from './offboarding/OffboardingLiquidacion'
+import { OffboardingCierre } from './offboarding/OffboardingCierre'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -63,6 +64,7 @@ type Diseno =
   | 'offboarding-datos'
   | 'offboarding-checklist'
   | 'offboarding-liquidacion'
+  | 'offboarding-cierre'
   | 'dotacion'
   | 'dotacion-estructura'
   | 'dotacion-asignados'
@@ -324,6 +326,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <OffboardingLiquidacion />,
+  },
+  {
+    id: 'offboarding-cierre',
+    etiqueta: 'Offboarding · cierre',
+    referencia: '/preview/mp360/img/referencia-offboarding-cierre.jpg',
+    descripcion: 'Offboarding: confirmación',
+    ancho: 1920,
+    alto: 1176,
+    componente: <OffboardingCierre />,
   },
   {
     id: 'dotacion',

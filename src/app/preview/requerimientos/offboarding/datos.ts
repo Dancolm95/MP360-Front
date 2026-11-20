@@ -259,3 +259,40 @@ export const TOTAL_LIQUIDACION_OFFBOARDING = {
   etiqueta: 'Total liquidación (referencial)',
   monto: 's/ 2,890.00',
 } as const
+
+export interface DatoExColaboradorOffboarding {
+  readonly etiqueta: string
+  readonly valor: string
+}
+
+export const DATOS_EX_COLABORADOR_OFFBOARDING: readonly DatoExColaboradorOffboarding[] = [
+  { etiqueta: 'Nombre completo:', valor: 'Luis Torres Caycho' },
+  { etiqueta: 'Documento Ident.', valor: '714212345' },
+  { etiqueta: 'Nacionalidad', valor: 'Peruano' },
+  { etiqueta: 'Fecha de Ingreso', valor: '12 / 10 / 2026' },
+  { etiqueta: 'Código de Colaborador', valor: 'COL-0000125' },
+  { etiqueta: 'Puesto:', valor: 'Operario de Almacén' },
+  { etiqueta: 'Área', valor: 'Operaciones' },
+  { etiqueta: 'Sede', valor: 'Lima- Sede Principal' },
+]
+
+export type EstadoProcesoRealizado = 'Completo' | 'En Proceso' | 'Pendiente'
+
+export interface ProcesoRealizadoOffboarding {
+  readonly titulo: string
+  readonly detalle: string
+  readonly estado: EstadoProcesoRealizado
+}
+
+// La p. 31 escribe «EPPS» y conserva los espacios sueltos de las fechas.
+export const PROCESOS_REALIZADOS_OFFBOARDING: readonly ProcesoRealizadoOffboarding[] = [
+  { titulo: 'Entrega de EPPS', detalle: '15 /10 /2026 15:22', estado: 'Completo' },
+  { titulo: 'Revisión por áreas', detalle: '15 /10 /2026 15:22', estado: 'Completo' },
+  { titulo: 'Agenda de cita', detalle: 'Se notificará al completar', estado: 'En Proceso' },
+  { titulo: 'Entrega de liquidación', detalle: '', estado: 'Pendiente' },
+]
+
+export const TITULO_EXITO_OFFBOARDING = '¡Proceso de offboarding exitoso!'
+
+export const MENSAJE_EXITO_OFFBOARDING =
+  'El ex-colaborador ha sido registrado correctamente en su registro de offboarding.'
