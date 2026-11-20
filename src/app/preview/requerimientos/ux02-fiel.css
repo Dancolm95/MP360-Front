@@ -15855,3 +15855,486 @@
   font-weight: 700;
   line-height: 1;
 }
+
+/* ---------- UX-17 · Offboarding: checklist y revisión por áreas (PDF p. 29) ---------- */
+
+.ux16-checklist {
+  width: 1592px;
+  margin-left: -11.5px;
+}
+
+.ux16-checklist__stepper {
+  position: relative;
+  width: 1592px;
+  height: 49px;
+  margin-top: 1px;
+  border-radius: 4px;
+  background: #f7f9fe;
+}
+
+.ux16-checklist__stepper .ux16-datos__stepper {
+  margin-left: 9.5px;
+  background: transparent;
+}
+
+.ux16-checklist .ux16-datos__progreso {
+  left: 344px;
+  width: 575px;
+}
+
+.ux16-datos__paso--completado .ux16-datos__numero {
+  background: var(--azul-acento);
+}
+
+.ux16-datos__paso--completado .ux16-datos__etiqueta {
+  color: var(--azul);
+}
+
+.ux16-checklist__ficha {
+  position: relative;
+  height: 88px;
+  margin-top: 8px;
+  padding: 19px 0 0 29px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux16-checklist__persona {
+  width: 306px;
+  flex: 0 0 306px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux16-checklist__avatar {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  margin-top: 4px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.ux16-checklist__avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux16-checklist__persona-texto {
+  margin-left: 13px;
+  padding-top: 6px;
+}
+
+.ux16-checklist__nombre {
+  margin: 0 0 5px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #000;
+}
+
+.ux16-checklist__meta {
+  margin: 0 0 1px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #969696;
+}
+
+.ux16-checklist__dato {
+  height: 41px;
+  padding-left: 34px;
+  border-left: 1px solid #e3e3e3;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux16-checklist__dato--1 { width: 283px; flex: 0 0 283px; padding-left: 75px; }
+.ux16-checklist__dato--2 { width: 409px; flex: 0 0 409px; padding-left: 138px; }
+.ux16-checklist__dato--3 { width: 277px; flex: 0 0 277px; padding-left: 57px; }
+.ux16-checklist__dato--4 { flex: 1 1 auto; }
+
+.ux16-checklist__dato-etiqueta {
+  padding-top: 3px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #969696;
+  white-space: nowrap;
+}
+
+.ux16-checklist__dato-valor {
+  margin-top: 5px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 15px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.ux16-checklist__dato--1 .ux16-checklist__dato-valor {
+  width: 92px;
+  white-space: normal;
+}
+
+.ux16-checklist__card {
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux16-checklist__card--tareas {
+  height: 239px;
+  margin-top: 12px;
+  padding: 20px 28px 0 30px;
+}
+
+.ux16-checklist__card--areas {
+  height: 255px;
+  margin-top: 13px;
+  padding: 17px 26px 0 30px;
+}
+
+.ux16-checklist__cabecera {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  height: 16px;
+  padding-left: 3px;
+}
+
+.ux16-checklist__marca {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  border-radius: 1px;
+  background: var(--azul);
+}
+
+.ux16-checklist__titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: #2d2d2d;
+  white-space: nowrap;
+}
+
+.ux16-checklist__marcar {
+  margin-left: auto;
+  margin-top: -4px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  color: #2d2d2d;
+  white-space: nowrap;
+}
+
+.ux16-checklist__casilla {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  border: 1px solid #ededed;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux16-checklist__marcar .ux16-checklist__casilla {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+}
+
+.ux16-checklist__columnas {
+  display: grid;
+  grid-template-columns: 759px 757px;
+  column-gap: 16px;
+  margin-top: 8px;
+}
+
+.ux16-checklist__grupo {
+  border: 1px solid #ededed;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ux16-checklist__tarea {
+  position: relative;
+  height: 50px;
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.ux16-checklist__tarea:nth-child(2) { height: 46px; }
+.ux16-checklist__tarea:nth-child(3) { height: 42px; }
+.ux16-checklist__tarea:nth-child(4) { height: 41px; }
+
+.ux16-checklist__tarea + .ux16-checklist__tarea {
+  border-top: 1px solid #e3e3e3;
+}
+
+.ux16-checklist__tarea .ux16-checklist__casilla {
+  margin-right: 24px;
+}
+
+.ux16-checklist__tarea-texto {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ux16-checklist__tarea-titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #1c1c1c;
+}
+
+.ux16-checklist__tarea-descripcion {
+  margin: 1px 0 0;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+  color: #969696;
+}
+
+.ux16-checklist__menu {
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  margin-right: 12px;
+  flex: 0 0 20px;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: #4a4a4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.ux16-checklist__menu .ux02-i {
+  font-size: 34px;
+}
+
+.ux16-checklist__card--areas .ux16-checklist__cabecera {
+  height: 20px;
+}
+
+.ux16-checklist__tabla {
+  width: 1535px;
+  margin-top: 24px;
+  border: 1px solid #e4e4e4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ux16-checklist__fila {
+  display: grid;
+  grid-template-columns: 186px 162px 437px 174px 223px 279px 23px;
+  align-items: center;
+  height: 38px;
+  padding-left: 49px;
+}
+
+.ux16-checklist__fila--cabecera {
+  height: 32px;
+  background: #eef3fc;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #000;
+}
+
+.ux16-checklist__fila--cabecera > span:nth-child(4) {
+  padding-left: 24px;
+}
+
+.ux16-checklist__fila:nth-child(2) { height: 38px; }
+.ux16-checklist__fila:nth-child(3) { height: 39px; }
+.ux16-checklist__fila:nth-child(4) { height: 36px; }
+.ux16-checklist__fila:nth-child(5) { height: 35px; }
+
+.ux16-checklist__fila:nth-child(n + 3) {
+  border-top: 1px solid #e8e8e8;
+}
+
+.ux16-checklist__fila:not(.ux16-checklist__fila--cabecera) {
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #737373;
+}
+
+.ux16-checklist__celda--fuerte {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: #1c1c1c;
+}
+
+.ux16-checklist__badge {
+  height: 23px;
+  padding: 0 4px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.ux16-checklist__badge--confirmado {
+  background: #c1fdc0;
+  color: #528d53;
+}
+
+.ux16-checklist__badge--revision {
+  background: #eaedfd;
+  color: var(--azul);
+}
+
+.ux16-checklist__badge--no-aplica {
+  background: #efefef;
+  color: #626262;
+}
+
+.ux16-checklist__acciones-celda .ux16-checklist__menu {
+  width: 23px;
+  margin-top: -2px;
+  margin-left: -10px;
+}
+
+.ux16-checklist__pie {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 14px;
+}
+
+.ux16-checklist__nota {
+  width: 787px;
+  height: 55px;
+  margin: 0 0 0 3px;
+  padding-left: 22px;
+  border-radius: 4px;
+  background: #eef3fc;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 17px;
+  color: #808080;
+}
+
+.ux16-checklist__aviso {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  color: var(--azul);
+}
+
+.ux16-checklist__nota > span {
+  width: 640px;
+}
+
+.ux16-checklist__acciones {
+  width: 772px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: 3px;
+  padding: 21px 36px 0 33px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux16-checklist__anterior {
+  width: 177px;
+  height: 35px;
+  border: 0;
+  border-radius: 4px;
+  background: #1c1c1c;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux16-checklist__acciones-grupo {
+  margin-left: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+}
+
+.ux16-checklist__guardar {
+  width: 184px;
+  height: 38px;
+  border: 1px solid var(--azul);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux16-checklist__guardar .ux02-i {
+  font-size: 17px;
+}
+
+.ux16-checklist__continuar {
+  width: 178px;
+  height: 38px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux16-checklist__chevron {
+  margin-left: 3px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}

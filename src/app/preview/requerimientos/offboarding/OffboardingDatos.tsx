@@ -47,12 +47,21 @@ function NumeroPaso({ numero, activo }: { numero: number; activo: boolean }) {
   )
 }
 
-export function StepperOffboarding({ activo }: { activo: number }) {
+export function StepperOffboarding({
+  activo,
+  activos,
+}: {
+  activo: number
+  activos?: readonly number[]
+}) {
+  const incluidos = activos ?? [activo]
+
   return (
     <div className="ux16-datos__stepper" role="list" aria-label="Etapas del offboarding">
       {PASOS_OFFBOARDING.map((paso, indice) => {
         const numero = indice + 1
         const esActivo = numero === activo
+        const esIncluido = incluidos.includes(numero)
         return (
           <div
             key={paso}
@@ -60,9 +69,9 @@ export function StepperOffboarding({ activo }: { activo: number }) {
             aria-current={esActivo ? 'step' : undefined}
             className={`ux16-datos__paso ux16-datos__paso--${numero}${
               esActivo ? ' ux16-datos__paso--activo' : ''
-            }`}
+            }${esIncluido && !esActivo ? ' ux16-datos__paso--completado' : ''}`}
           >
-            <NumeroPaso numero={numero} activo={esActivo} />
+            <NumeroPaso numero={numero} activo={esIncluido} />
             <span className="ux16-datos__etiqueta">{paso}</span>
           </div>
         )

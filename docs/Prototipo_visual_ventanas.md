@@ -74,6 +74,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `licencia-detalle` | Detalle y subsanación de licencia | PDF p. 26 (UX-15) | 1920 × 1176 | `?ux=licencia-detalle` |
 | `offboarding` | Bandeja de offboarding | PDF p. 27 (UX-16) | 1920 × 1176 | `?ux=offboarding` |
 | `offboarding-datos` | Offboarding · datos y causal | PDF p. 28 (UX-17) | 1920 × 1176 | `?ux=offboarding-datos` |
+| `offboarding-checklist` | Offboarding · checklist y revisión por áreas | PDF p. 29 (UX-17) | 1920 × 1176 | `?ux=offboarding-checklist` |
 | `dotacion` | Organización y dotación · resumen | PDF p. 32 (UX-18) | 1920 × 1176 | `?ux=dotacion` |
 | `dotacion-estructura` | Dotación por cliente · estructura de puestos | PDF p. 33 (UX-19) | 1920 × 1176 | `?ux=dotacion-estructura` |
 | `dotacion-asignados` | Dotación por cliente · colaboradores asignados | PDF p. 34 (UX-19) | 1920 × 1176 | `?ux=dotacion-asignados` |
@@ -182,7 +183,8 @@ y acciones— con tres filas de muestra idénticas (Luis Torres Caycho) y badges
 replican las erratas y artefactos literales: «Casual de cese», el identificador
 «offL-00125», la fila y el documento repetidos, y «Mostrando 10 de 246» frente a las tres
 filas dibujadas. El paginador activo mide `#294bee`. Medidas de la fuente en
-`.cache/pdfp-27.png` (no versionado). Las etapas 28–31 (UX-17) quedan en tareas posteriores;
+`.cache/pdfp-27.png` (no versionado). La p. 28 se replica en `offboarding-datos` y las etapas 2–3 de la p. 29 en
+`offboarding-checklist`; las pp. 30–31 quedan en tareas posteriores y
 `MarcoOffboarding` reserva el slot de contenido para su stepper.
 
 **Nota sobre la p. 28:** primera etapa del proceso de offboarding (UX-17), lienzo de
@@ -206,9 +208,27 @@ resumen —frente a «Liquidación» en el stepper—, «Nac: Peruano» sin punt
 nombre, DNI....» con cuatro puntos y «Cese Programado : 20/10/2026» con espacios. La
 maqueta solo dibuja esta etapa: no hay validaciones, cálculos ni opciones de
 desplegable; el contador «32/200» y los valores de los selects son estáticos. Medidas
-de la fuente en `.cache/p28-render.png` (no versionado). Las etapas 29–31 quedan en
-tareas posteriores; `StepperOffboarding` y el componente de la etapa quedan
-preparados para reutilizarse.
+de la fuente en `.cache/p28-render.png` (no versionado). La p. 29 se replica en
+`offboarding-checklist`; las etapas 30–31 quedan en tareas posteriores y
+`StepperOffboarding` se reutiliza en ambas.
+
+**Nota sobre la p. 29:** segunda pantalla del proceso (UX-17), lienzo de 1920 × 1176.
+Reutiliza el cromo, el azul `#2b48e9` y el rail de la p. 28; el círculo activo del
+stepper mide `#294bee`. La página cubre dos etapas: «Checklist de salida» (paso 2) y
+«Revisiones por áreas» (paso 3); el stepper dibuja los pasos 1–3 en azul, los pasos
+4–5 en gris y una barra de progreso de 575 × 5 bajo los pasos 2–3. Bajo el stepper,
+una ficha de 88 px resume al colaborador y el proceso (avatar, «Casual de cese»,
+fechas y responsable). Debajo, la tarjeta «Checklist de Salida» dibuja ocho tareas en
+dos columnas con casillas vacías y su menú, más «Marcar todas las casillas»; y la
+tarjeta «Revisión por áreas» dibuja una tabla de seis columnas —Área, Responsable,
+Revisión / Alcance, Estado, Fecha de validación y Observaciones— con cuatro filas y
+badges «Confirmado» (verde), «En revisión» (azul) y dos «No aplica» (gris). Al pie,
+una nota informativa y la barra Anterior / Guardar Borrador / Continuar. Se replican
+literales las erratas «Casual de cese», «SSTS», «CCalculo», «Checklist de Salida»
+(mayúscula frente a «Checklist de salida» del stepper), la nota «…los cuadros a
+marcar… que este en proceso…» y el nombre «Jesus Vargas» sin tilde; las casillas,
+estados y fechas son presentacionales, sin lógica ni cálculos. Medidas de la fuente
+en `.cache/p29-render.png` (no versionado). Las etapas 30–31 quedan pendientes.
 
 **Nota sobre la p. 32:** primera pantalla del bloque Organización y dotación (UX-18/19),
 lienzo de 1920 × 1176. La pestaña activa es «Organización y Dotación» —en dos líneas y sin
@@ -322,7 +342,7 @@ src/app/preview/requerimientos/
 ├── onboarding/              # bandeja de onboarding (PDF pp. 20-21, UX-09/10)
 ├── epp/                     # asignaciones de EPP y equipos (PDF p. 22, UX-11)
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
-├── offboarding/             # bandeja y datos/causal de offboarding (PDF pp. 27-28, UX-16/17)
+├── offboarding/             # bandeja y etapas de offboarding (PDF pp. 27-29, UX-16/17)
 ├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-35, UX-18/19)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
@@ -373,6 +393,7 @@ public/preview/mp360/
 | Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,5 / 255 |
 | Offboarding · bandeja (PDF p. 27) | Pendiente de revisión visual | 6,4 / 255 |
 | Offboarding · datos (PDF p. 28) | Pendiente de revisión visual | 7,5 / 255 |
+| Offboarding · checklist (PDF p. 29) | Pendiente de revisión visual | 8,8 / 255 |
 | Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,5 / 255 |
 | Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,6 / 255 |
 | Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,9 / 255 |
@@ -594,8 +615,8 @@ resuelven en la implementación funcional, no aquí:
     barra de orden, tabla de tres filas y paginador; no se añaden filtros aplicados, acciones
     ni estados. Se conservan como literales las erratas «Casual de cese», el identificador
     «offL-00125», la fila y el documento repetidos y «Mostrando 10 de 246» frente a las tres
-    filas. `MarcoOffboarding` deja preparado el contenido para el stepper de las etapas 28–31
-    (UX-17).
+    filas. `MarcoOffboarding` deja preparado el contenido para el stepper; la p. 29 se replica
+    aparte en `offboarding-checklist`.
 29. **Offboarding · datos y causal (PDF p. 28)**: primera etapa del proceso (UX-17). Reutiliza
     el cromo, el azul `#2b48e9` y el rail de la p. 27; la banda del stepper y el subrayado
     activo miden `#2b48e9`, y el círculo activo `#294bee`. Se replica solo lo dibujado:
@@ -604,8 +625,21 @@ resuelven en la implementación funcional, no aquí:
     desplegable ni transiciones: los controles y el contador son presentacionales. Se
     conservan como literales «Selec. Colaborador», «Procesos de offboarding», «Liquidicación»
     (frente a «Liquidación» del stepper), «Nac: Peruano», «999 999 99» y «Cese Programado :
-    20/10/2026». Las etapas 29–31 quedan pendientes; `StepperOffboarding` y el componente de
-    la etapa se dejan preparados para reutilizarse.
+    20/10/2026». La p. 29 se replica en `offboarding-checklist` y comparte `StepperOffboarding`;
+    las etapas 30–31 quedan pendientes.
+
+30. **Offboarding · checklist y revisión por áreas (PDF p. 29)**: segunda pantalla del
+    proceso y la única que cubre dos etapas a la vez. El stepper dibuja «Datos y Causal»,
+    «Checklist de salida» y «Revisiones por áreas» en azul, con la barra de progreso bajo
+    las etapas 2 y 3; se replica tal cual, sin marcar una etapa como única. Reutiliza el
+    cromo, el azul `#2b48e9`, el círculo activo `#294bee` y el rail de la p. 28. Se replica
+    solo lo dibujado: ficha del proceso, ocho tareas de checklist con sus casillas y menús,
+    «Marcar todas las casillas», tabla de revisión por áreas con cuatro filas y badges, nota
+    al pie y la barra Anterior / Guardar Borrador / Continuar. Las casillas, los estados y
+    las fechas son presentacionales: no hay lógica de marcado, cálculo ni transición. Se
+    conservan como literales «Casual de cese», «SSTS», «CCalculo», «Checklist de Salida», el
+    nombre «Jesus Vargas» sin tilde y la nota «…los cuadros a marcar… que este en proceso…».
+    Las etapas 30–31 (liquidación y cierre) quedan pendientes.
 
 ## 9. Cierre y siguiente paso
 
@@ -621,8 +655,9 @@ resuelven en la implementación funcional, no aquí:
   **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**
   (UX-15), las tres con el mismo cromo y el azul `#2249f2`.
 - Con `offboarding` queda replicada la **bandeja de offboarding** (PDF p. 27, UX-16) y su
-  modo con render de referencia; con `offboarding-datos` queda replicada su **primera etapa**
-  (PDF p. 28, UX-17). Las etapas 29–31 quedan pendientes en tareas posteriores.
+  modo con render de referencia; con `offboarding-datos`, su **primera etapa** (PDF p. 28,
+  UX-17); y con `offboarding-checklist`, las **etapas 2 y 3** —checklist y revisión por
+  áreas— (PDF p. 29, UX-17). Las etapas 30–31 quedan pendientes en tareas posteriores.
 - Con `dotacion`, `dotacion-estructura`, `dotacion-asignados` y `dotacion-historial` queda
   replicado el **bloque completo de Organización y dotación** (PDF pp. 32-35, UX-18/19):
   el resumen (p. 32), la estructura organizacional (p. 33), los colaboradores asignados

@@ -127,3 +127,102 @@ export const CAUSAL_OFFBOARDING = 'Renuncia voluntaria'
 export const FECHA_CESE_OFFBOARDING = '20/10/2026'
 export const MOTIVO_OFFBOARDING = 'Renuncia por motivos personales'
 export const CONTADOR_MOTIVO_OFFBOARDING = '32/200'
+
+export const COLABORADOR_CHECKLIST_OFFBOARDING: ColaboradorOffboarding = {
+  nombre: 'Luis Torres',
+  nacionalidad: 'Nac: Peruano',
+  documento: 'DNI: 7142123456',
+  telefono: '999 999 999',
+  correo: 'correodeluisito@gmail.com',
+}
+
+export const PUESTO_CHECKLIST_OFFBOARDING = 'Operario de Almacén'
+
+export interface DatoChecklistOffboarding {
+  readonly etiqueta: string
+  readonly valor: string
+}
+
+export const FICHA_CHECKLIST_OFFBOARDING: readonly DatoChecklistOffboarding[] = [
+  { etiqueta: 'Casual de cese', valor: 'Renuncia voluntaria' },
+  { etiqueta: 'Fecha de último día', valor: '20/10/2026' },
+  { etiqueta: 'Fecha de Registro', valor: '15/10/2026' },
+  { etiqueta: 'Responsable de revisión', valor: 'Ricardo Cisterna' },
+]
+
+export interface TareaChecklistOffboarding {
+  readonly titulo: string
+  readonly descripcion: string
+}
+
+export const CHECKLIST_SALIDA_OFFBOARDING: readonly TareaChecklistOffboarding[] = [
+  {
+    titulo: 'EPP y equipos',
+    descripcion: 'Devolución de EPP, herramientas y archivos asignados',
+  },
+  { titulo: 'SSTS', descripcion: 'Cierre de compromisos y exámenes (si aplica)' },
+  {
+    titulo: 'Descuentos',
+    descripcion: 'Validación de descuentos por EPP, equipos o adelantos.',
+  },
+  { titulo: 'Cita de liquidación', descripcion: 'Programación de fecha y hora para firma' },
+  { titulo: 'Firma de liquidación', descripcion: 'Registro de firma de colaborador' },
+  {
+    titulo: 'Vacaciones',
+    descripcion: 'CCalculo y regularización de vacaciones pendientes',
+  },
+  {
+    titulo: 'Licencias y permisos',
+    descripcion: 'Cierre de licencias, permisos y ausencias.',
+  },
+  { titulo: 'Baja de accesos', descripcion: 'Desactivación de usuario y credenciales.' },
+]
+
+export type EstadoRevisionArea = 'Confirmado' | 'En revisión' | 'No aplica'
+
+export interface RevisionAreaOffboarding {
+  readonly area: string
+  readonly responsable: string
+  readonly alcance: string
+  readonly estado: EstadoRevisionArea
+  readonly fecha: string
+  readonly observaciones: string
+}
+
+export const REVISIONES_AREAS_OFFBOARDING: readonly RevisionAreaOffboarding[] = [
+  {
+    area: 'Operaciones',
+    responsable: 'Ricardo Cisterna',
+    alcance: 'Devolución de herramientas, activos y cierre operativo.',
+    estado: 'Confirmado',
+    fecha: '20/10/2026 - 10:24',
+    observaciones: 'Sin observaciones',
+  },
+  {
+    area: 'RR.HH.',
+    responsable: 'Jesus Vargas',
+    alcance: 'Validación de documentos, beneficio y estado de cese.',
+    estado: 'En revisión',
+    fecha: '20/10/2026 - 10:24',
+    observaciones: 'Revisando documentación.',
+  },
+  {
+    area: 'Administración',
+    responsable: 'Karem Vidal',
+    alcance: 'Cierre de accesos, activos y servicios administrativos.',
+    estado: 'No aplica',
+    fecha: '',
+    observaciones: '',
+  },
+  {
+    area: 'SST',
+    responsable: 'Raquel Ávila',
+    alcance: 'Cierre de compromisos SST y exámenes (si aplica).',
+    estado: 'No aplica',
+    fecha: '',
+    observaciones: '',
+  },
+]
+
+export const NOTA_CHECKLIST_OFFBOARDING =
+  'Se encontrarán habilitadas los cuadros a marcar según el tipo de personal que este en proceso de offboarding.'

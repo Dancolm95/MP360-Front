@@ -28,6 +28,7 @@ import { AsignacionesEpp } from './epp/AsignacionesEpp'
 import { DevolucionEpp } from './epp/DevolucionEpp'
 import { BandejaOffboarding } from './offboarding/BandejaOffboarding'
 import { OffboardingDatos } from './offboarding/OffboardingDatos'
+import { OffboardingChecklist } from './offboarding/OffboardingChecklist'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -59,6 +60,7 @@ type Diseno =
   | 'licencia-detalle'
   | 'offboarding'
   | 'offboarding-datos'
+  | 'offboarding-checklist'
   | 'dotacion'
   | 'dotacion-estructura'
   | 'dotacion-asignados'
@@ -302,6 +304,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <OffboardingDatos />,
+  },
+  {
+    id: 'offboarding-checklist',
+    etiqueta: 'Offboarding · checklist',
+    referencia: '/preview/mp360/img/referencia-offboarding-checklist.jpg',
+    descripcion: 'Offboarding: checklist y revisión por áreas',
+    ancho: 1920,
+    alto: 1176,
+    componente: <OffboardingChecklist />,
   },
   {
     id: 'dotacion',
