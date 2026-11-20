@@ -22,6 +22,7 @@ import { BandejaOnboarding } from './onboarding/BandejaOnboarding'
 import { BandejaLicencias } from './licencias/BandejaLicencias'
 import { RegistroLicencia } from './licencias/RegistroLicencia'
 import { DetalleLicencia } from './licencias/DetalleLicencia'
+import { ResumenDotacion } from './dotacion/ResumenDotacion'
 import { AsignacionesEpp } from './epp/AsignacionesEpp'
 import { DevolucionEpp } from './epp/DevolucionEpp'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
@@ -53,6 +54,7 @@ type Diseno =
   | 'licencias'
   | 'licencia-registro'
   | 'licencia-detalle'
+  | 'dotacion'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -274,6 +276,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <DetalleLicencia />,
+  },
+  {
+    id: 'dotacion',
+    etiqueta: 'Dotación',
+    referencia: '/preview/mp360/img/referencia-dotacion.jpg',
+    descripcion: 'Organización y dotación · resumen',
+    ancho: 1920,
+    alto: 1176,
+    componente: <ResumenDotacion />,
   },
   {
     id: 'login',

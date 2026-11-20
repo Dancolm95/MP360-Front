@@ -1,6 +1,6 @@
 # Prototipo visual de ventanas — rama `codex/rh-vis`
 
-**Última actualización:** 19 de noviembre de 2026.
+**Última actualización:** 20 de noviembre de 2026.
 **Carácter:** documento de rama. Describe el alcance y el estado del prototipo visual que
 vive en `codex/rh-vis`. **No es una spec, no añade requisitos y no sustituye** a
 `docs/constitution.md`, a `docs/specs/` ni a `memory.md`.
@@ -72,6 +72,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `licencias` | Bandeja de licencias y ausencias | PDF p. 24 (UX-13) | 1920 × 1176 | `?ux=licencias` |
 | `licencia-registro` | Registro de licencia/ausencia | PDF p. 25 (UX-14) | 1920 × 1176 | `?ux=licencia-registro` |
 | `licencia-detalle` | Detalle y subsanación de licencia | PDF p. 26 (UX-15) | 1920 × 1176 | `?ux=licencia-detalle` |
+| `dotacion` | Organización y dotación · resumen | PDF p. 32 (UX-18) | 1920 × 1176 | `?ux=dotacion` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -160,6 +161,26 @@ aprobado» como tipo de permiso, «7 DÍAS» frente a los 3 días del resto de l
 «calendaria», «RR.HH» sin punto final y «Adjunto . PDF» en ambos archivos. Medidas de la
 fuente en `.cache/licencias-p26-medidas.md` (no versionado).
 
+**Nota sobre la p. 32:** primera pantalla del bloque Organización y dotación (UX-18/19),
+lienzo de 1920 × 1176. La pestaña activa es «Organización y Dotación» —en dos líneas y sin
+submenú—; el breadcrumb dibuja «R.R.H.H / Organización y Dotación» y el hero, el título
+«Organización y Dotación» con el subtítulo «Consulta la dotación requerida, cubierta y
+pendiente por cliente y gestiona los cupos de colaboradores.» y el botón «Agregar Operación».
+El azul medido es `#2b48e9`, igual que en las páginas 10–19. Bajo el hero (93 px) se dibujan
+una tarjeta de resumen de 82 px con tres indicadores (`1,116 /1,240 Cubiertos`, `124
+pendientes` y `7 Operaciones activas`, separados por líneas de 48 px), una tarjeta de filtros
+de 131 px con «Empresa», «Cliente», «Área / Subárea», «Periodo», «Contratos por vencer»,
+«Personal» y «Nacionalidad», «Más Filtros», «Aplicar Filtros» y «Limpiar», y una rejilla de
+seis tarjetas de cliente (Honda, Honda Recall, Zara, JBL, Integra Retail y DSV) de 516 × 218
+con cabecera `#333`, badge «Cobertura al 90 %», dos cifras `46/50 Cubiertos` y `4/50
+Pendientes`, tres pares a la izquierda y dos a la derecha y el botón «Ver Detalle». El paginador queda
+sobre el fondo. El rail dibuja un icono de cierre en «Nuevo Reclutamiento», la lista de
+acciones con «Contratos por Vencer» duplicado y «Ver más +». Se replican las erratas y
+artefactos literales: «pendientes» en minúscula, el espacio de «Cobertura al 90 %» y el mismo
+dato de muestra en las seis tarjetas. Las páginas 33–35 (dotación por cliente, UX-19) no se
+implementan aquí: quedan para tareas posteriores. Medidas de la fuente en
+`.cache/p32-render.png` (no versionado).
+
 ## 4. Cómo ejecutarlo
 
 ```bash
@@ -193,6 +214,7 @@ src/app/preview/requerimientos/
 ├── onboarding/              # bandeja de onboarding (PDF pp. 20-21, UX-09/10)
 ├── epp/                     # asignaciones de EPP y equipos (PDF p. 22, UX-11)
 ├── licencias/               # bandeja, registro y detalle de licencias (PDF pp. 24-26)
+├── dotacion/                # resumen de organización y dotación (PDF p. 32, UX-18)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -240,6 +262,7 @@ public/preview/mp360/
 | Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
 | Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,6 / 255 |
 | Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,5 / 255 |
+| Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,5 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -409,6 +432,17 @@ resuelven en la implementación funcional, no aquí:
     Responsabless», el buscador de candidatos— y no se añaden tablas, acciones ni estados que la
     página no dibuje. Los datos de muestra (COL-00125, Luis Torres, 12 / 09 / 2026) no son
     reglas. El azul medido es `#2249f2`; el paginador activo, `#1c4cf7`.
+24. **Resumen de organización y dotación (PDF p. 32)**: primera pantalla del bloque de
+    dotación. El cromo no es idéntico al compartido: el dibujo rotula la pestaña «Licencias»
+    —no «Asistencia»—, omite «Gestión Documental» y usa anchos de pestaña más estrechos, de
+    modo que la píldora activa queda en 1401–1567. Para no alterar el resto de ventanas,
+    `ux02/Cromo.tsx` acepta una lista `tabs` opcional y solo este bloque pasa la suya. El azul
+    medido es `#2b48e9` (como las páginas 10–19), aplicado solo dentro de `.ux18-lienzo`. Se
+    replica solo lo dibujado: las tres cifras del resumen, los siete filtros, las seis
+    tarjetas con su badge y sus pares de muestra, el paginador y el rail; no se añaden estados,
+    filtros aplicados ni acciones. Se conservan como literales «pendientes», «Cobertura al
+    90 %», el duplicado «Contratos por Vencer» y el icono de cierre de «Nuevo Reclutamiento».
+    Las páginas 33–35 (UX-19) quedan pendientes.
 
 ## 9. Cierre y siguiente paso
 
@@ -423,6 +457,9 @@ resuelven en la implementación funcional, no aquí:
   completo de Licencias** (PDF pp. 24-26): la **bandeja de licencias y ausencias** (UX-13), el
   **registro de licencia/ausencia** (UX-14) y el **detalle y subsanación de licencia**
   (UX-15), las tres con el mismo cromo y el azul `#2249f2`.
+- Con `dotacion` queda replicado el **resumen de Organización y dotación** (PDF p. 32, UX-18).
+  El bloque sigue abierto: las tres pestañas de dotación por cliente (PDF pp. 33–35, UX-19)
+  quedan para tareas posteriores y reutilizarán `MarcoDotacion` y la navegación del bloque.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

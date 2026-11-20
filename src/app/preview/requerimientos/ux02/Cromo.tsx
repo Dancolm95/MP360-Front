@@ -60,6 +60,13 @@ export function Cabecera() {
   )
 }
 
+export interface TabNavegacion {
+  readonly etiqueta: string
+  readonly icono: string
+  readonly dosLineas: boolean
+  readonly ancho: number
+}
+
 export function Navegacion({
   submenu = true,
   activo = 'Requerimientos',
@@ -67,6 +74,7 @@ export function Navegacion({
   onModulo,
   submenuContenido,
   chevronActivo = true,
+  tabs = NAVEGACION,
 }: {
   submenu?: boolean
   activo?: string
@@ -74,6 +82,7 @@ export function Navegacion({
   onModulo?: () => void
   submenuContenido?: ReactNode
   chevronActivo?: boolean
+  tabs?: readonly TabNavegacion[]
 }) {
   return (
     <nav className="ux02-nav" aria-label="Secciones de RR. HH.">
@@ -89,7 +98,7 @@ export function Navegacion({
       </button>
 
       <ul className="ux02-nav__tabs">
-        {NAVEGACION.map((item) => {
+        {tabs.map((item) => {
           const esActivo = item.etiqueta === activo
           return (
           <li
@@ -135,10 +144,12 @@ export function PanelLateral({
   iconoAcciones = 'add',
   iconoAccesos = 'chevron_right',
   iconoEventos = 'calendar_month',
+  iconoAccionPrincipal,
 }: {
   iconoAcciones?: string
   iconoAccesos?: string | null
   iconoEventos?: string
+  iconoAccionPrincipal?: string
 } = {}) {
   return (
     <aside className="ux02-rail" aria-label="Panel contextual">
@@ -150,6 +161,9 @@ export function PanelLateral({
         {ACCIONES_RAPIDAS.map((accion, indice) => (
           <button key={`${accion}-${indice}`} type="button" className="ux02-rail__boton">
             {accion}
+            {indice === 0 && iconoAccionPrincipal ? (
+              <Icono nombre={iconoAccionPrincipal} />
+            ) : null}
           </button>
         ))}
       </div>

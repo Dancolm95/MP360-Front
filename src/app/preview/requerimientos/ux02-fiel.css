@@ -12082,3 +12082,627 @@
 .ux09-sin .ux09-barra {
   margin-top: -7px;
 }
+
+/* ---------- UX-18/19 · Organización y dotación (PDF p. 32–35) ---------- */
+
+.ux18-lienzo {
+  --azul: #2b48e9;
+  --azul-acento: #2b48e9;
+  --azul-suave: #e1e7f8;
+  background:
+    radial-gradient(1300px 900px at 100% 66%, rgba(178, 196, 240, 0.55), rgba(198, 211, 242, 0) 70%),
+    linear-gradient(112deg, #f6f5f3 0%, #f6f5f3 30%, #eaedf5 62%, #dde3f4 100%);
+}
+
+.ux18-lienzo .ux02-nav {
+  flex: 0 0 82px;
+}
+
+/* La píldora activa de dos líneas ocupa el ancho completo de su pestaña. */
+.ux18-lienzo .ux02-nav__tab--dos-lineas > button {
+  width: 100%;
+}
+
+.ux18-lienzo .ux02-rail {
+  padding-top: 47px;
+}
+
+.ux18-lienzo .ux02-rail__accesos-lista {
+  margin-top: 15px;
+  gap: 11px;
+}
+
+.ux18-lienzo .ux02-rail__eventos {
+  margin-top: 43px;
+}
+
+.ux18-lienzo .ux02-rail__tarjeta--eventos {
+  height: 133px;
+  margin-top: 11px;
+}
+
+.ux18-lienzo .ux02-rail__boton:first-child {
+  position: relative;
+  padding-right: 26px;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.ux18-lienzo .ux02-rail__boton:first-child .ux02-i {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #666;
+}
+
+.ux18-lienzo .ux02-rail__ver-mas::after {
+  content: ' +';
+}
+
+.ux18-contenido {
+  width: 1571.5px;
+  margin-left: 4.5px;
+}
+
+.ux18-encabezado {
+  position: relative;
+  height: 93px;
+  padding-top: 27px;
+}
+
+.ux18-breadcrumb {
+  font-size: 13px;
+}
+
+.ux18-breadcrumb__fin {
+  color: #666;
+}
+
+.ux18-titulo-fila {
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+  margin-top: 21px;
+}
+
+.ux18-titulo {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ux18-subtitulo {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1;
+  color: #666;
+}
+
+.ux18-btn-operacion {
+  position: absolute;
+  top: 30px;
+  right: 2px;
+  width: 229px;
+  height: 49px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux18-resumen {
+  display: flex;
+  align-items: center;
+  height: 82px;
+  margin-top: 9px;
+  padding-left: 51px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.ux18-resumen__bloque {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.ux18-indicador {
+  display: flex;
+  align-items: flex-start;
+  height: 100%;
+  padding-top: 30px;
+}
+
+.ux18-icono {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.ux18-icono svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux18-icono--persona {
+  width: 23px;
+  height: 27px;
+  margin-right: 14px;
+}
+
+.ux18-indicador--ambar .ux18-icono--persona {
+  margin-top: 2px;
+}
+
+.ux18-icono--operaciones {
+  width: 15px;
+  height: 14px;
+  margin: 14px 13px 0 4px;
+}
+
+.ux18-indicador--verde {
+  width: 248px;
+}
+
+.ux18-indicador--ambar {
+  width: 287px;
+  padding-left: 30px;
+}
+
+.ux18-indicador--azul {
+  width: 300px;
+  padding-left: 24px;
+}
+
+.ux18-indicador--verde .ux18-icono {
+  color: #52a670;
+}
+
+.ux18-indicador--ambar .ux18-icono {
+  color: #edb053;
+}
+
+.ux18-indicador--azul .ux18-icono {
+  color: var(--azul);
+}
+
+.ux18-indicador__valor {
+  margin-top: 1px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 39px;
+  font-weight: 700;
+  line-height: 30px;
+  letter-spacing: -0.5px;
+  color: #1a1a1a;
+}
+
+.ux18-indicador__detalle {
+  display: flex;
+  flex-direction: column;
+  margin-left: 6px;
+}
+
+.ux18-indicador__fraccion {
+  padding-left: 6px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #666;
+}
+
+.ux18-indicador__etiqueta {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 17px;
+  color: #1a1a1a;
+}
+
+.ux18-indicador--ambar .ux18-indicador__detalle {
+  margin-left: 4px;
+  padding-top: 18px;
+}
+
+.ux18-indicador--azul .ux18-indicador__detalle {
+  margin-left: 4px;
+  padding-top: 20px;
+}
+
+.ux18-separador {
+  flex: 0 0 2px;
+  width: 2px;
+  height: 48px;
+  background: #e5e5e5;
+}
+
+.ux18-filtros {
+  display: flex;
+  flex-direction: column;
+  height: 131px;
+  margin-top: 8px;
+  padding: 17px 26px 11px 21px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ux18-filtros__fila {
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux18-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 201.3px;
+  margin-right: 25px;
+  min-width: 0;
+}
+
+.ux18-campo:nth-child(n + 4) {
+  margin-right: 11px;
+}
+
+.ux18-campo:last-child {
+  margin-right: 0;
+}
+
+.ux18-campo__etiqueta {
+  height: 19px;
+  display: flex;
+  align-items: flex-end;
+  padding-left: 7px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ux18-select {
+  height: 40px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 16px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.ux18-select .ux02-i {
+  font-size: 18px;
+  color: #666;
+}
+
+.ux18-filtros__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 26px;
+  margin-top: auto;
+}
+
+.ux18-enlace {
+  margin-left: 5px;
+  margin-top: 5px;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--azul);
+  cursor: pointer;
+}
+
+.ux18-enlace .ux02-i {
+  font-size: 17px;
+}
+
+.ux18-filtros__acciones {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ux18-btn-aplicar {
+  height: 26px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux18-btn-aplicar .ux02-i {
+  font-size: 16px;
+}
+
+.ux18-btn-limpiar {
+  height: 26px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: #b0b0b0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 9px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.ux18-btn-limpiar .ux02-i {
+  font-size: 16px;
+}
+
+.ux18-rejilla {
+  display: grid;
+  grid-template-columns: repeat(3, 516px);
+  column-gap: 12px;
+  row-gap: 12px;
+  margin-top: 13px;
+}
+
+.ux18-cliente {
+  height: 218px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--borde);
+  overflow: hidden;
+}
+
+.ux18-cliente__cabecera {
+  height: 47px;
+  display: flex;
+  align-items: center;
+  padding: 0 26px 0 21px;
+  background: #333;
+  box-shadow: inset 0 -1px 0 #efefef;
+}
+
+.ux18-casilla {
+  flex: 0 0 15px;
+  width: 15px;
+  height: 15px;
+  border-radius: 1px;
+  background: #fff;
+}
+
+.ux18-cliente__nombre {
+  margin: 0 0 0 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.ux18-cobertura {
+  margin-left: auto;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 15px;
+  background: #c1fdbf;
+  color: #5d985e;
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ux18-cliente__cuerpo {
+  position: relative;
+  height: 171px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 1px;
+}
+
+.ux18-cifras {
+  flex: 0 0 64px;
+  height: 64px;
+  display: flex;
+  padding: 16px 0 0 46px;
+}
+
+.ux18-cifra {
+  width: 212px;
+  display: flex;
+  align-items: flex-start;
+  height: 30px;
+}
+
+.ux18-cifra .ux18-icono--persona {
+  margin-right: 10px;
+}
+
+.ux18-cifra--verde .ux18-icono {
+  color: #52a670;
+}
+
+.ux18-cifra--ambar .ux18-icono {
+  color: #edb053;
+}
+
+.ux18-cifra__valor {
+  margin-top: 2px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 30px;
+  letter-spacing: -0.5px;
+  color: #1a1a1a;
+}
+
+.ux18-cifra__detalle {
+  display: flex;
+  flex-direction: column;
+  margin: 2px 0 0 -4px;
+}
+
+.ux18-cifra + .ux18-cifra .ux18-cifra__detalle {
+  margin-left: 6px;
+}
+
+.ux18-cifra__cupo {
+  font-size: 15px;
+  line-height: 16px;
+  color: #666;
+}
+
+.ux18-cifra__etiqueta {
+  padding-left: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 16px;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.ux18-cliente__linea {
+  flex: 0 0 1px;
+  height: 1px;
+  margin: 0 24px 0 46px;
+  background: #ededed;
+}
+
+.ux18-cliente__datos {
+  display: flex;
+  padding: 9px 0 0 51px;
+}
+
+.ux18-datos {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ux18-datos:first-child {
+  flex: 0 0 253px;
+  width: 253px;
+}
+
+.ux18-datos:last-child {
+  flex: 0 0 200px;
+  width: 200px;
+}
+
+.ux18-datos__par {
+  display: flex;
+  align-items: baseline;
+}
+
+.ux18-datos__par dt {
+  flex: 0 0 128px;
+  width: 128px;
+  font-size: 13px;
+  line-height: 21px;
+  color: #666;
+}
+
+.ux18-datos__par dd {
+  margin: 0;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #333;
+}
+
+.ux18-datos:last-child .ux18-datos__par dt {
+  flex-basis: 129px;
+  width: 129px;
+}
+
+.ux18-btn-detalle {
+  position: absolute;
+  right: 24px;
+  bottom: 11px;
+  width: 140px;
+  height: 28px;
+  border: 1px solid var(--azul);
+  border-radius: 3px;
+  background: #fff;
+  color: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ux18-btn-detalle .ux02-i {
+  font-size: 17px;
+}
+
+.ux18-paginacion {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 11px;
+  padding-right: 6.5px;
+}
+
+.ux18-pagina {
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: #666;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.ux18-pagina--activa {
+  border-color: var(--azul);
+  background: var(--azul);
+  color: #fff;
+  font-weight: 700;
+}
+
+.ux18-flecha {
+  width: 8px;
+  height: 14px;
+}
