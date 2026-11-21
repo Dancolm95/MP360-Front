@@ -18790,9 +18790,9 @@
 .ux24-info__pliegue-valor {
   margin: 2px 0 0;
   font-family: 'Montserrat', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  line-height: 17px;
+  line-height: 16px;
   color: #333;
 }
 
@@ -19549,4 +19549,347 @@
 .ux24-contenido__chevron {
   font-size: 13px;
   line-height: 1;
+}
+
+/* ---------- UX-24 · Confirmación de generación (PDF p. 41) ---------- */
+
+/* La p. 41 pinta los cuatro pasos y el subrayado con un azul propio (#294bee),
+   algo más oscuro que el acento de las pp. 39–40. */
+.ux24-confirmacion {
+  --azul: #2249f2;
+  --azul-acento: #1c4cf7;
+  --azul-paso: #294bee;
+}
+
+.ux24-confirmacion .ux24-tipo__stepper {
+  width: 1592px;
+  margin-top: 2px;
+  margin-left: -8.5px;
+}
+
+.ux24-confirmacion .ux24-tipo__progreso {
+  left: 1098px;
+  width: 240px;
+  background: var(--azul-paso);
+}
+
+.ux24-confirmacion .ux24-tipo__paso--activo .ux24-tipo__numero,
+.ux24-confirmacion .ux24-tipo__paso--completado .ux24-tipo__numero {
+  background: var(--azul-paso);
+}
+
+.ux24-confirmacion .ux24-tipo__paso--activo .ux24-tipo__etiqueta-paso,
+.ux24-confirmacion .ux24-tipo__paso--completado .ux24-tipo__etiqueta-paso {
+  color: var(--azul-paso);
+}
+
+.ux24-confirmacion__cuerpo {
+  position: relative;
+  box-sizing: border-box;
+  width: 1570px;
+  height: 701px;
+  margin: 12px 0 0 1.5px;
+  border: 1px solid #efefef;
+  border-radius: 4px;
+  background: #fff;
+}
+
+/* El bloque de éxito está centrado 26 px a la derecha del centro de la tarjeta:
+   la maqueta lo centra en el ancho completo, no en el panel blanco. */
+.ux24-confirmacion__exito {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 51px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.ux24-confirmacion__halo {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: #eaf8eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux24-confirmacion__circulo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #5d985e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ux24-confirmacion__circulo svg {
+  width: 56px;
+  height: 56px;
+  display: block;
+}
+
+.ux24-confirmacion__confeti {
+  position: absolute;
+  width: 7px;
+  height: 19px;
+  border-radius: 4px;
+}
+
+.ux24-confirmacion__confeti--azul { background: #2a6cb2; }
+.ux24-confirmacion__confeti--naranja { background: #eeb35b; }
+.ux24-confirmacion__confeti--rojo { background: #e92d1d; }
+.ux24-confirmacion__confeti--verde { background: #48aa6e; }
+
+.ux24-confirmacion__confeti--1 { left: -84px; top: 31px; transform: rotate(34deg); }
+.ux24-confirmacion__confeti--2 { left: -56px; top: 28px; transform: rotate(-52deg); }
+.ux24-confirmacion__confeti--3 { left: -67px; top: 55px; transform: rotate(24deg); }
+.ux24-confirmacion__confeti--4 { right: -72px; top: 30px; transform: rotate(26deg); }
+.ux24-confirmacion__confeti--5 { right: -92px; top: 42px; transform: rotate(56deg); }
+.ux24-confirmacion__confeti--6 { right: -76px; top: 56px; transform: rotate(-30deg); }
+
+.ux24-confirmacion__titulo {
+  margin: 12px 0 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 22px;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.ux24-confirmacion__subtitulo {
+  margin: 8px 0 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #b0b0b0;
+  white-space: nowrap;
+}
+
+.ux24-confirmacion__resumen {
+  position: absolute;
+  top: 196px;
+  left: 31px;
+  box-sizing: border-box;
+  width: 1491px;
+  height: 291px;
+  border: 1px solid #efefef;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.ux24-confirmacion__resumen-cabecera {
+  position: relative;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 0 27px 0 20px;
+  background: #eef3fc;
+  display: flex;
+  align-items: center;
+}
+
+.ux24-confirmacion__avatar {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  border-radius: 50%;
+  background: #1e4bf2;
+  overflow: hidden;
+}
+
+.ux24-confirmacion__avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux24-confirmacion__resumen-titulo {
+  margin: 0 0 0 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #1a1a1a;
+}
+
+.ux24-confirmacion__estado {
+  margin-left: auto;
+  width: 142px;
+  height: 30px;
+  border-radius: 15px;
+  background: #5d985e;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ux24-confirmacion__estado-icono,
+.ux24-confirmacion__envio-icono {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: block;
+}
+
+.ux24-confirmacion__estado-icono svg,
+.ux24-confirmacion__envio-icono svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux24-confirmacion__archivo {
+  position: absolute;
+  top: 128px;
+  left: 61px;
+  display: flex;
+  gap: 21px;
+}
+
+.ux24-confirmacion__icono-documento {
+  width: 46px;
+  height: 62px;
+  flex: 0 0 46px;
+}
+
+.ux24-confirmacion__archivo-datos {
+  width: 300px;
+}
+
+.ux24-confirmacion__archivo-nombre {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 23px;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.ux24-confirmacion__archivo-version {
+  margin: 2px 0 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #808080;
+  white-space: nowrap;
+}
+
+.ux24-confirmacion__envio {
+  margin-top: 16px;
+  width: 200px;
+  height: 29px;
+  border-radius: 15px;
+  background: #5d985e;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.ux24-confirmacion__divisoria {
+  position: absolute;
+  top: 87px;
+  width: 1.5px;
+  height: 133px;
+  background: #e5e5e5;
+}
+
+.ux24-confirmacion__divisoria--1 { left: 532px; }
+.ux24-confirmacion__divisoria--2 { left: 965px; }
+
+.ux24-confirmacion__datos {
+  position: absolute;
+  top: 98px;
+  margin: 0;
+}
+
+.ux24-confirmacion__datos--1 { left: 581px; }
+.ux24-confirmacion__datos--2 { left: 1015px; }
+
+.ux24-confirmacion__fila {
+  height: 45px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.ux24-confirmacion__etiqueta {
+  width: 208px;
+  font-family: 'Gontserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #666;
+}
+
+.ux24-confirmacion__datos--2 .ux24-confirmacion__etiqueta {
+  width: 207px;
+}
+
+.ux24-confirmacion__valor {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 16px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.ux24-confirmacion__acciones {
+  position: absolute;
+  top: 511px;
+  left: 163px;
+  width: 1241px;
+  height: 40px;
+  display: grid;
+  grid-template-columns: 405px 404px 402px;
+  column-gap: 15px;
+}
+
+.ux24-confirmacion__accion {
+  height: 40px;
+  padding: 0;
+  border: 1.5px solid #2b48e9;
+  border-radius: 4px;
+  background: #fff;
+  color: #2b48e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ux24-confirmacion__accion .ux02-i {
+  font-size: 18px;
+}
+
+.ux24-confirmacion__accion--solida {
+  border-color: #2b48e9;
+  background: #2b48e9;
+  color: #fff;
 }

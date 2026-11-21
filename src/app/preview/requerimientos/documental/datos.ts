@@ -284,6 +284,44 @@ export const VARIABLES_CONTENIDO: readonly VariableContenido[] = [
   { nombre: 'Tipo de Contrato', valor: 'Plazo indeterminado' },
 ]
 
+export interface DatoConfirmacion {
+  readonly etiqueta: string
+  readonly valor: string
+}
+
+export interface ConfirmacionGeneracionDocumental {
+  readonly titulo: string
+  readonly subtitulo: string
+  readonly archivo: string
+  readonly version: string
+  readonly envio: string
+  readonly estado: string
+  readonly colaborador: readonly DatoConfirmacion[]
+  readonly documento: readonly DatoConfirmacion[]
+}
+
+// La p. 41 copia el cromo de Alta (breadcrumb «Colaborades» y hero «Alta de Colaborador»)
+// y dibuja «accesión» en el subtítulo; se replican los artefactos literales.
+export const CONFIRMACION_GENERACION_DOCUMENTAL: ConfirmacionGeneracionDocumental = {
+  titulo: 'Documento generado exitosamente',
+  subtitulo:
+    'El documento ha sido creado y se ha ejecutado la accesión seleccionada.',
+  archivo: 'Contrato de Trabajo.pdf',
+  version: 'Contrato de trabajo (v2.0)',
+  envio: 'Enviado a firmas',
+  estado: 'Finalizado',
+  colaborador: [
+    { etiqueta: 'Colaborador', valor: 'Luis Torres Caycho' },
+    { etiqueta: 'Puesto', valor: 'Operario de Almacén' },
+    { etiqueta: 'Área / Subárea', valor: 'Operaciones / Almacén' },
+  ],
+  documento: [
+    { etiqueta: 'Fecha de generación', valor: '15/10/2026' },
+    { etiqueta: 'Código de Documento', valor: 'DOC-CTR-0000458' },
+    { etiqueta: 'Versión', valor: 'V2.0' },
+  ],
+}
+
 // Saltos y texto literales de la hoja dibujada en la p. 40, incluido «cons ectetuer» partido.
 export const LINEAS_HOJA_CONTENIDO: readonly string[] = [
   'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore',

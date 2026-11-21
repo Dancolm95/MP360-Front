@@ -36,6 +36,7 @@ import { BandejaDocumental } from './documental/BandejaDocumental'
 import { GeneracionTipo } from './documental/GeneracionTipo'
 import { GeneracionInfo } from './documental/GeneracionInfo'
 import { GeneracionContenido } from './documental/GeneracionContenido'
+import { GeneracionConfirmacion } from './documental/GeneracionConfirmacion'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -79,6 +80,7 @@ type Diseno =
   | 'documental-tipo'
   | 'documental-info'
   | 'documental-contenido'
+  | 'documental-confirmacion'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -426,6 +428,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <GeneracionContenido />,
+  },
+  {
+    id: 'documental-confirmacion',
+    etiqueta: 'Documental · confirmación',
+    referencia: '/preview/mp360/img/referencia-documental-confirmacion.jpg',
+    descripcion: 'Generación: confirmación',
+    ancho: 1920,
+    alto: 1176,
+    componente: <GeneracionConfirmacion />,
   },
   {
     id: 'login',
