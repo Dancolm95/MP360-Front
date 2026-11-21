@@ -85,6 +85,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `documental` | Bandeja global de gestión documental | PDF p. 37 (UX-23) | 1920 × 1176 | `?ux=documental` |
 | `documental-tipo` | Generación documental: tipo y colaborador | PDF p. 38 (UX-24) | 1920 × 1176 | `?ux=documental-tipo` |
 | `documental-info` | Generación documental: información del documento | PDF p. 39 (UX-24) | 1920 × 1176 | `?ux=documental-info` |
+| `documental-contenido` | Generación: contenido y vista previa | PDF p. 40 (UX-24) | 1920 × 1176 | `?ux=documental-contenido` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -448,7 +449,28 @@ acciones de 776 × 81 con «Anterior» (negro), «Guardar Borrador» (contorno a
 «Continuar» (azul). Se replica literal el artefacto del dibujo que muestra «Plazo
 indeterminado» en «Remuneración Mensual»; los controles son presentacionales: no hay
 validaciones, cálculos ni transición entre pasos. Medidas de la fuente en
-`.cache/p39-1920.png` (no versionado). Los pasos 3 y 4 (pp. 40–41) quedan pendientes.
+`.cache/p39-1920.png` (no versionado). El paso 3 se replica en `documental-contenido`; el
+paso 4 (p. 41) queda pendiente.
+
+**Nota sobre la p. 40:** tercer paso del flujo de generación documental (UX-24), lienzo de
+1920 × 1176. Reutiliza el cromo de la p. 37 y el azul medido `#2249f2`, con el acento
+`#1c4cf7` en el círculo y la etiqueta del paso activo. El breadcrumb y el hero repiten los
+de la p. 39 y tampoco dibujan el botón «Volver a Gestión Documental». El stepper de cuatro
+pasos marca **«Contenido y Variables»** como activo —los pasos 1 y 2 quedan completados en
+azul y «Confirmación» en gris— con el subrayado de 212 × 5 desplazado bajo el paso 3
+(x ≈ 788). Bajo él, la tarjeta de resumen mide 100 px y repite identidad, tipo de documento,
+ingreso, fecha de registro y responsable. El cuerpo se reparte en una tarjeta blanca de
+1594 × 511: a la izquierda, «Contenido y Variables» con siete variables marcadas
+(«Nombre Completo», «Dni», «Puesto», «Área», «Fecha_Inicio», «Remuneración» y «Tipo de
+Contrato»), sus valores y «Marcar todas las casillas»; a la derecha, las pestañas «Vista
+Previa» (activa, con subrayado azul) y «Editar documento» (inactiva), y la hoja de vista
+previa con el título «CONTRATO DE TRABAJO», el texto de muestra literal y los controles
+`<` / «1 de 3» / `>` / «100 %» / pantalla completa. Al pie, la barra informativa y el panel
+con «Anterior», «Guardar Borrador» y «Confirmar >». Se replican literales el texto de la
+hoja —incluido «cons ectetuer» partido en la última línea— y el valor «s/1,500.00»; el
+editor de contenido no se dibuja como pantalla activa y no se añaden variables, párrafos,
+validaciones ni transición entre pasos. Medidas de la fuente en `.cache/p40-1920.png` (no
+versionado). El paso 4 (p. 41) queda pendiente.
 
 ## 4. Cómo ejecutarlo
 
@@ -486,7 +508,7 @@ src/app/preview/requerimientos/
 ├── offboarding/             # bandeja y etapas de offboarding (PDF pp. 27-31, UX-16/17)
 ├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-35, UX-18/19)
 ├── calendario/              # calendario de asistencia (PDF p. 36, UX-22)
-├── documental/              # bandeja y generación documental (PDF pp. 37-39, UX-23/24)
+├── documental/              # bandeja y generación documental (PDF pp. 37-40, UX-23/24)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -547,6 +569,7 @@ public/preview/mp360/
 | Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,5 / 255 |
 | Gestión documental · tipo (PDF p. 38) | Pendiente de revisión visual | 7,4 / 255 |
 | Gestión documental · información (PDF p. 39) | Pendiente de revisión visual | 7,0 / 255 |
+| Gestión documental · contenido (PDF p. 40) | Pendiente de revisión visual | 8,0 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -557,8 +580,8 @@ El bloque Offboarding queda completo con cinco pantallas replicadas: bandeja (p.
 datos y causal (p. 28), checklist y revisión por áreas (p. 29), liquidación (p. 30) y
 cierre (p. 31). El bloque Calendario de asistencia queda completo con su única pantalla
 (p. 36, UX-22). El bloque Gestión documental suma la bandeja (p. 37), el tipo de documento
-(p. 38) y la información del documento (p. 39); quedan «Contenido y Variables» y
-«Confirmación» (pp. 40–41). El MAE es una medida de calibración contra el render del
+(p. 38), la información del documento (p. 39) y el contenido con vista previa (p. 40); queda
+«Confirmación» (p. 41). El MAE es una medida de calibración contra el render del
 diseño, no un criterio de aceptación: la validación es visual y la hace el usuario o el
 responsable funcional.
 
@@ -850,7 +873,18 @@ resuelven en la implementación funcional, no aquí:
     acciones; no se añaden validaciones, cálculos ni transiciones. Se conserva literal el
     valor «Plazo indeterminado» en «Remuneración Mensual», aunque no corresponda con su
     etiqueta. Los controles son presentacionales y los datos de muestra no son reglas.
-    Las pp. 40–41 quedan pendientes.
+    Las pp. 40–41 quedaban pendientes.
+
+36. **Generación documental · contenido y vista previa (PDF p. 40)**: tercer paso del flujo
+    (UX-24). Reutiliza el cromo, el stepper y el azul `#2249f2` de las pp. 38–39, con el
+    acento `#1c4cf7` en el círculo y la etiqueta del paso activo. El subrayado de 212 × 5
+    queda bajo «Contenido y Variables» y el hero no dibuja el botón de regreso. Se replica
+    solo lo dibujado: el resumen de la generación, las siete variables con sus casillas y
+    valores, «Marcar todas las casillas», las pestañas «Vista Previa» / «Editar documento»,
+    la hoja con su texto de muestra y los controles de paginación, zoom y pantalla completa,
+    más la barra informativa y las tres acciones. No se añaden variables, párrafos, un editor
+    activo, validaciones ni transiciones. Se conservan literales «cons ectetuer» partido en
+    la hoja, «s/1,500.00» y «Confirmar >». Los datos de muestra no son reglas.
 
 ## 9. Cierre y siguiente paso
 
@@ -880,9 +914,10 @@ resuelven en la implementación funcional, no aquí:
 - Con `documental` queda replicada la **bandeja global de gestión documental** (PDF p. 37,
   UX-23), primera pantalla del bloque Gestión documental. Con `documental-tipo` queda
   replicado el **primer paso de la generación** —tipo de documento y colaborador— (PDF p. 38,
-  UX-24) y con `documental-info` el **segundo paso** —información del documento— (PDF p. 39,
-  UX-24); `MarcoDocumental` y `StepperGeneracionDocumental` dejan preparado el marco para los
-  pasos de las pp. 40–41, todavía pendientes.
+  UX-24), con `documental-info` el **segundo paso** —información del documento— (PDF p. 39,
+  UX-24) y con `documental-contenido` el **tercer paso** —contenido y vista previa— (PDF
+  p. 40, UX-24); `MarcoDocumental` y `StepperGeneracionDocumental` dejan preparado el marco
+  para el paso de la p. 41, todavía pendiente.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

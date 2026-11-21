@@ -267,3 +267,29 @@ export const OBSERVACIONES_INFORMACION =
 
 export const AVISO_INFORMACION =
   'Esta información se usará para completar automáticamente las variables de la plantilla'
+
+export interface VariableContenido {
+  readonly nombre: string
+  readonly valor: string
+}
+
+export const VARIABLES_CONTENIDO: readonly VariableContenido[] = [
+  { nombre: 'Nombre Completo', valor: 'Luis Torres' },
+  // La maqueta dibuja el DNI de la variable con un dígito menos que el del resumen.
+  { nombre: 'Dni', valor: '712123456' },
+  { nombre: 'Puesto', valor: 'Operario de Almacén' },
+  { nombre: 'Área', valor: 'Operaciones / Almacén' },
+  { nombre: 'Fecha_Inicio', valor: '20/11/2026' },
+  { nombre: 'Remuneración', valor: 's/1,500.00' },
+  { nombre: 'Tipo de Contrato', valor: 'Plazo indeterminado' },
+]
+
+// Saltos y texto literales de la hoja dibujada en la p. 40, incluido «cons ectetuer» partido.
+export const LINEAS_HOJA_CONTENIDO: readonly string[] = [
+  'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore',
+  'magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut',
+  'aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat,',
+  'vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril',
+  'delenit augue duis dolore te feugait nulla facilisi.',
+  'Lorem ipsum dolor sit amet, cons ectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore',
+]

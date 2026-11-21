@@ -35,6 +35,7 @@ import { CalendarioAsistencia } from './calendario/CalendarioAsistencia'
 import { BandejaDocumental } from './documental/BandejaDocumental'
 import { GeneracionTipo } from './documental/GeneracionTipo'
 import { GeneracionInfo } from './documental/GeneracionInfo'
+import { GeneracionContenido } from './documental/GeneracionContenido'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -77,6 +78,7 @@ type Diseno =
   | 'documental'
   | 'documental-tipo'
   | 'documental-info'
+  | 'documental-contenido'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -415,6 +417,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <GeneracionInfo />,
+  },
+  {
+    id: 'documental-contenido',
+    etiqueta: 'Documental · contenido',
+    referencia: '/preview/mp360/img/referencia-documental-contenido.jpg',
+    descripcion: 'Generación: contenido y vista previa',
+    ancho: 1920,
+    alto: 1176,
+    componente: <GeneracionContenido />,
   },
   {
     id: 'login',
