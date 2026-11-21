@@ -122,3 +122,82 @@ export const FILAS_DOCUMENTAL: readonly FilaDocumental[] = [
 ]
 
 export const PAGINAS_DOCUMENTAL = [1, 2, 3, 4, 5, 6] as const
+
+export const PASOS_GENERACION_DOCUMENTAL = [
+  'Tipo de Documento',
+  'Información del Documento',
+  'Contenido y Variables',
+  'Confirmación',
+] as const
+
+export interface PestanaTipoDocumento {
+  readonly etiqueta: string
+  readonly ancho: number
+}
+
+export const PESTANAS_TIPO_DOCUMENTO: readonly PestanaTipoDocumento[] = [
+  { etiqueta: 'Contratos', ancho: 182 },
+  { etiqueta: 'Constancias', ancho: 236 },
+  { etiqueta: 'Formatos', ancho: 182 },
+  { etiqueta: 'Otros', ancho: 182 },
+]
+
+export interface PlantillaDocumento {
+  readonly nombre: string
+  readonly descripcion: string
+  readonly seleccionada?: boolean
+}
+
+export const PLANTILLAS_CONTRATOS: readonly PlantillaDocumento[] = [
+  {
+    nombre: 'Contrato de trabajo',
+    descripcion: 'Contrato laboral para\ncolaboradores activos.',
+    seleccionada: true,
+  },
+  {
+    nombre: 'Anexo de contrato',
+    // La maqueta dibuja «Modifiacón» sin la segunda «c».
+    descripcion: 'Modifiacón o actualización\nde condiciones.',
+  },
+  {
+    nombre: 'Renovación de contrato',
+    descripcion: 'Renovación por periodo\ndeterminado.',
+  },
+  {
+    nombre: 'Contrato de incremento',
+    descripcion: 'Actualización por cambio de\npuesto o remuneración.',
+  },
+  {
+    nombre: 'Contrato de teletrabajo',
+    descripcion: 'Condiciones para modalidad\nremota o híbrida.',
+  },
+  {
+    nombre: 'Otro contrato',
+    descripcion: 'Genera un contrato personalizado\ndesde una plantilla',
+  },
+]
+
+export interface ColaboradorDocumental {
+  readonly nombre: string
+  readonly nacionalidad: string
+  readonly documento: string
+  readonly cargo: string
+  readonly correo: string
+  readonly telefono: string
+}
+
+export const COLABORADOR_DOCUMENTAL: ColaboradorDocumental = {
+  nombre: 'Luis Torres',
+  nacionalidad: 'Nac: Peruano',
+  documento: 'DNI: 7142123456',
+  cargo: 'Operario de Almacén',
+  correo: 'correodeluisito@gmail.com',
+  telefono: '999 999 999',
+}
+
+export const COLABORADORES_DOCUMENTAL: readonly ColaboradorDocumental[] = [
+  COLABORADOR_DOCUMENTAL,
+  { ...COLABORADOR_DOCUMENTAL },
+  { ...COLABORADOR_DOCUMENTAL },
+  { ...COLABORADOR_DOCUMENTAL },
+]

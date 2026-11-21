@@ -33,6 +33,7 @@ import { OffboardingLiquidacion } from './offboarding/OffboardingLiquidacion'
 import { OffboardingCierre } from './offboarding/OffboardingCierre'
 import { CalendarioAsistencia } from './calendario/CalendarioAsistencia'
 import { BandejaDocumental } from './documental/BandejaDocumental'
+import { GeneracionTipo } from './documental/GeneracionTipo'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -73,6 +74,7 @@ type Diseno =
   | 'dotacion-historial'
   | 'calendario'
   | 'documental'
+  | 'documental-tipo'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -393,6 +395,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <BandejaDocumental />,
+  },
+  {
+    id: 'documental-tipo',
+    etiqueta: 'Documental · tipo',
+    referencia: '/preview/mp360/img/referencia-documental-tipo.jpg',
+    descripcion: 'Generación documental: tipo y colaborador',
+    ancho: 1920,
+    alto: 1176,
+    componente: <GeneracionTipo />,
   },
   {
     id: 'login',

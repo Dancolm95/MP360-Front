@@ -4,6 +4,7 @@ import { Cabecera, Icono, Navegacion, PanelLateral, Pie } from '../ux02/Cromo'
 export function MarcoDocumental({
   children,
   stepper,
+  breadcrumbMedio,
   breadcrumbFin = 'Gestión Documental',
   titulo = 'Gestión Documental',
   subtitulo = 'Centraliza la revisión, consulta archivos y seguimientos de documentos de colaboradores.',
@@ -13,6 +14,7 @@ export function MarcoDocumental({
 }: {
   children: ReactNode
   stepper?: ReactNode
+  breadcrumbMedio?: string
   breadcrumbFin?: string
   titulo?: string
   subtitulo?: string
@@ -30,6 +32,12 @@ export function MarcoDocumental({
             <p className="ux02-breadcrumb ux13-breadcrumb">
               <span className="ux02-breadcrumb__activo">R.R.H.H</span>
               <span className="ux02-breadcrumb__sep">/</span>
+              {breadcrumbMedio ? (
+                <>
+                  <span>{breadcrumbMedio}</span>
+                  <span className="ux02-breadcrumb__sep">/</span>
+                </>
+              ) : null}
               <span>{breadcrumbFin}</span>
             </p>
 

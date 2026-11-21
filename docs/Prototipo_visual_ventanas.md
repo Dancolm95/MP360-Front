@@ -83,6 +83,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `dotacion-historial` | Dotación por cliente · historial de cambios | PDF p. 35 (UX-19) | 1920 × 1176 | `?ux=dotacion-historial` |
 | `calendario` | Calendario de asistencia | PDF p. 36 (UX-22) | 1920 × 1176 | `?ux=calendario` |
 | `documental` | Bandeja global de gestión documental | PDF p. 37 (UX-23) | 1920 × 1176 | `?ux=documental` |
+| `documental-tipo` | Generación documental: tipo y colaborador | PDF p. 38 (UX-24) | 1920 × 1176 | `?ux=documental-tipo` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -400,6 +401,30 @@ acciones ni formularios. `MarcoDocumental` reserva el slot `stepper` para las et
 generación (pp. 38–41, UX-24), que quedan en tareas posteriores. Medidas de la fuente en
 `.cache/p37-1920.png` (no versionado).
 
+**Nota sobre la p. 38:** primer paso del flujo de generación documental (UX-24), lienzo de
+1920 × 1176. Reutiliza el cromo de la p. 37 —pestaña «Gestión Documental» activa, sin
+submenú—, pero el azul medido vuelve al token base `#2249f2` y la píldora activa usa
+`#dfe7f9`; el círculo activo del stepper mide `#1c4cf7`. El breadcrumb tiene tres niveles
+(«R.R.H.H / Gestión Documental / Generación de documento») y el hero titula «Generación de
+Documento» con el subtítulo «Crea un nuevo documento para uno o más colaboradores activos.»
+y el botón «Volver a Gestión Documental» (283 × 49). Bajo el hero se dibuja un stepper de
+cuatro pasos —«Tipo de Documento» activo, «Información del Documento», «Contenido y
+Variables» y «Confirmación»— sobre una banda `#f6f9fe` de 1592 × 49, con conectores de 145 px
+y un subrayado azul de 239 × 5 bajo el primer paso. El contenido se reparte en dos tarjetas:
+a la izquierda, «Selec. Colaborador» (516 × 694) con «Detalle», «Tipo de Personal», la ficha
+verde «Postulante encontrado», «Correo», «Número», la lista de cuatro colaboradores con
+badge «Seleccionado» y barra de desplazamiento; a la derecha, «Tipo de Solicitud»
+(1054 × 601) con cuatro pestañas —«Contratos» activa—, seis tarjetas de plantilla en dos
+filas, el aviso informativo y una barra aparte con Cancelar / Guardar Borrador / Continuar.
+Se replican literales las erratas y artefactos del dibujo: «Selec. Colaborador», el buscador
+«Buscar por nombre, DNI....» con cuatro puntos, «Nac: Peruano», «Modifiacón» —sin la segunda
+«c»—, la descripción de «Otro contrato» sin punto final, el doble espacio y el recorte
+«…configuradas en la pantall» del aviso, y las tarjetas con sus saltos de línea dibujados.
+La maqueta no añade validaciones, filtros aplicados ni navegación: los controles son
+presentacionales. `GeneracionTipo` y `StepperGeneracionDocumental` quedan preparados para
+reutilizar el marco en los pasos de las pp. 39–41. Medidas de la fuente en
+`.cache/p38-1920.png` (no versionado).
+
 ## 4. Cómo ejecutarlo
 
 ```bash
@@ -436,7 +461,7 @@ src/app/preview/requerimientos/
 ├── offboarding/             # bandeja y etapas de offboarding (PDF pp. 27-31, UX-16/17)
 ├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-35, UX-18/19)
 ├── calendario/              # calendario de asistencia (PDF p. 36, UX-22)
-├── documental/              # bandeja de gestión documental (PDF p. 37, UX-23)
+├── documental/              # bandeja y generación documental (PDF pp. 37-38, UX-23/24)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -495,6 +520,7 @@ public/preview/mp360/
 | Organización y dotación · historial (PDF p. 35) | Pendiente de revisión visual | 7,4 / 255 |
 | Calendario de asistencia (PDF p. 36) | Pendiente de revisión visual | 6,5 / 255 |
 | Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,5 / 255 |
+| Gestión documental · tipo (PDF p. 38) | Pendiente de revisión visual | 7,4 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -813,8 +839,10 @@ resuelven en la implementación funcional, no aquí:
   UX-22): una sola pantalla con la rejilla mensual, la leyenda y la agenda del día.
   El bloque queda completo.
 - Con `documental` queda replicada la **bandeja global de gestión documental** (PDF p. 37,
-  UX-23), primera pantalla del bloque Gestión documental. Las cuatro etapas de generación
-  (pp. 38–41, UX-24) están pendientes; `MarcoDocumental` deja preparado el slot `stepper`.
+  UX-23), primera pantalla del bloque Gestión documental. Con `documental-tipo` queda
+  replicado el **primer paso de la generación** —tipo de documento y colaborador— (PDF p. 38,
+  UX-24); `MarcoDocumental` y `StepperGeneracionDocumental` dejan preparado el marco para los
+  pasos de las pp. 39–41, todavía pendientes.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.
