@@ -10,6 +10,7 @@ export function MarcoDocumental({
   subtitulo = 'Centraliza la revisión, consulta archivos y seguimientos de documentos de colaboradores.',
   accionEtiqueta = 'Generar Documento',
   accionIcono = 'description',
+  mostrarAccion = true,
   clase,
 }: {
   children: ReactNode
@@ -20,6 +21,7 @@ export function MarcoDocumental({
   subtitulo?: string
   accionEtiqueta?: string
   accionIcono?: string
+  mostrarAccion?: boolean
   clase?: string
 }) {
   return (
@@ -46,10 +48,12 @@ export function MarcoDocumental({
               <p className="ux13-subtitulo">{subtitulo}</p>
             </div>
 
-            <button type="button" className="ux13-btn-registrar ux23-btn-generar">
-              <Icono nombre={accionIcono} />
-              {accionEtiqueta}
-            </button>
+            {mostrarAccion ? (
+              <button type="button" className="ux13-btn-registrar ux23-btn-generar">
+                <Icono nombre={accionIcono} />
+                {accionEtiqueta}
+              </button>
+            ) : null}
           </section>
 
           {stepper}

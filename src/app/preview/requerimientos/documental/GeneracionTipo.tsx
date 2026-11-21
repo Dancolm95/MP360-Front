@@ -31,7 +31,7 @@ function Avatar({ clase }: { clase: string }) {
   )
 }
 
-export function StepperGeneracionDocumental() {
+export function StepperGeneracionDocumental({ activo = 0 }: { activo?: number }) {
   return (
     <div
       className="ux24-tipo__stepper"
@@ -39,14 +39,15 @@ export function StepperGeneracionDocumental() {
       aria-label="Pasos de la generación documental"
     >
       {PASOS_GENERACION_DOCUMENTAL.map((paso, indice) => {
-        const activo = indice === 0
+        const esActivo = indice === activo
+        const estado = esActivo ? 'activo' : indice < activo ? 'completado' : ''
         return (
           <div
             key={paso}
             role="listitem"
-            aria-current={activo ? 'step' : undefined}
+            aria-current={esActivo ? 'step' : undefined}
             className={`ux24-tipo__paso ux24-tipo__paso--${indice + 1}${
-              activo ? ' ux24-tipo__paso--activo' : ''
+              estado ? ` ux24-tipo__paso--${estado}` : ''
             }`}
           >
             <span className="ux24-tipo__numero">{indice + 1}</span>

@@ -34,6 +34,7 @@ import { OffboardingCierre } from './offboarding/OffboardingCierre'
 import { CalendarioAsistencia } from './calendario/CalendarioAsistencia'
 import { BandejaDocumental } from './documental/BandejaDocumental'
 import { GeneracionTipo } from './documental/GeneracionTipo'
+import { GeneracionInfo } from './documental/GeneracionInfo'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -75,6 +76,7 @@ type Diseno =
   | 'calendario'
   | 'documental'
   | 'documental-tipo'
+  | 'documental-info'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -404,6 +406,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <GeneracionTipo />,
+  },
+  {
+    id: 'documental-info',
+    etiqueta: 'Documental · información',
+    referencia: '/preview/mp360/img/referencia-documental-info.jpg',
+    descripcion: 'Generación: información del documento',
+    ancho: 1920,
+    alto: 1176,
+    componente: <GeneracionInfo />,
   },
   {
     id: 'login',

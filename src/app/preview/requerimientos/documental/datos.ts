@@ -201,3 +201,69 @@ export const COLABORADORES_DOCUMENTAL: readonly ColaboradorDocumental[] = [
   { ...COLABORADOR_DOCUMENTAL },
   { ...COLABORADOR_DOCUMENTAL },
 ]
+
+export interface ResumenGeneracionDocumental {
+  readonly nombre: string
+  readonly documento: string
+  readonly cargo: string
+  readonly tipoDocumento: string
+  readonly ingreso: string
+  readonly fechaRegistro: string
+  readonly responsable: string
+}
+
+export const RESUMEN_GENERACION_DOCUMENTAL: ResumenGeneracionDocumental = {
+  nombre: 'Luis Torres',
+  documento: 'DNI: 7142123456',
+  cargo: 'Operario de Almacén',
+  tipoDocumento: 'Contrato de\nTrabajo',
+  ingreso: '08/08/2026',
+  fechaRegistro: '15/10/2026',
+  responsable: 'Ricardo Cisterna',
+}
+
+export interface DatoPlantilla {
+  readonly etiqueta: string
+  readonly valor: string
+}
+
+export const DATOS_PLANTILLA: readonly DatoPlantilla[] = [
+  { etiqueta: 'Plantilla seleccionada', valor: 'Contrato de trabajo' },
+  { etiqueta: 'Categoría', valor: 'Contratos' },
+  { etiqueta: 'Versión de plantilla', valor: 'V2.0' },
+]
+
+export type TipoCampoInformacion = 'texto' | 'select' | 'fecha'
+
+export interface CampoInformacion {
+  readonly etiqueta: string
+  readonly valor: string
+  readonly tipo: TipoCampoInformacion
+}
+
+export const CAMPOS_INFORMACION_IZQUIERDA: readonly CampoInformacion[] = [
+  {
+    etiqueta: 'Título del documento',
+    valor: 'Contrato de Trabajo - Luis Torres',
+    tipo: 'texto',
+  },
+  { etiqueta: 'Tipo de contrato', valor: 'Plazo indeterminado', tipo: 'select' },
+  { etiqueta: 'Fecha de inicio', valor: '20/11/2026', tipo: 'fecha' },
+  { etiqueta: 'Área / Subárea', valor: 'Operaciones / Almacén', tipo: 'select' },
+  { etiqueta: 'Puesto', valor: 'Operario de Almacén', tipo: 'select' },
+  { etiqueta: 'Modalidad de trabajo', valor: 'Presencial', tipo: 'select' },
+  { etiqueta: 'Jornada Laboral', valor: 'Completa (48h / semana)', tipo: 'select' },
+]
+
+export const CAMPOS_INFORMACION_DERECHA: readonly CampoInformacion[] = [
+  // El dibujo repite «Plazo indeterminado» en Remuneración Mensual.
+  { etiqueta: 'Remuneración Mensual', valor: 'Plazo indeterminado', tipo: 'select' },
+  { etiqueta: 'Periodo de prueba', valor: '20/11/2026', tipo: 'fecha' },
+  { etiqueta: 'Moneda', valor: 'Soles (PEN)', tipo: 'select' },
+]
+
+export const OBSERVACIONES_INFORMACION =
+  'Agregar información relevante para el documento...'
+
+export const AVISO_INFORMACION =
+  'Esta información se usará para completar automáticamente las variables de la plantilla'
