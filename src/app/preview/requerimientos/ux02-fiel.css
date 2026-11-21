@@ -17458,3 +17458,414 @@
   font-weight: 700;
   color: #333;
 }
+
+/* ---------- UX-23/24 · Gestión documental (PDF p. 37–41) ---------- */
+
+.ux23-lienzo {
+  --azul: #2b48e9;
+  --azul-acento: #294bee;
+  --azul-suave: #e1e7f8;
+}
+
+/* La pestaña activa del dibujo ocupa 182 px y arranca 10 px antes que su celda. */
+.ux23-lienzo .ux02-nav__tab--activo > button {
+  width: 182px;
+  margin-left: -10px;
+  justify-content: flex-start;
+  gap: 6px;
+  padding-left: 25px;
+}
+
+.ux23-lienzo .ux02-nav__tab--activo > button > .ux02-i {
+  width: auto;
+  height: auto;
+  font-size: 19px;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+}
+
+.ux23-lienzo .ux02-nav__tab--dos-lineas > button > span:not(.ux02-i) {
+  display: block;
+  width: 100px;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.ux23-lienzo .ux13-titulo-fila {
+  gap: 14px;
+  margin-top: 21px;
+}
+
+.ux23-lienzo .ux13-titulo {
+  margin-left: -2px;
+}
+
+.ux23-lienzo .ux02-rail__tarjeta--acciones {
+  height: 338px;
+  margin-top: 16px;
+}
+
+.ux23-lienzo .ux02-rail__eventos {
+  margin-top: 43px;
+}
+
+.ux23-lienzo .ux02-rail {
+  padding-top: 47px;
+}
+
+.ux23-btn-generar {
+  top: 30px;
+  width: 230px;
+  height: 47px;
+  font-size: 15px;
+}
+
+.ux23-btn-generar .ux02-i {
+  font-size: 17px;
+}
+
+.ux23-tabs {
+  gap: 0;
+  height: 51px;
+}
+
+.ux23-tab {
+  gap: 8px;
+  font-size: 13px;
+}
+
+.ux23-tab .ux02-i {
+  font-size: 16px;
+}
+
+.ux23-tab:first-child {
+  padding-right: 21px;
+}
+
+.ux23-icono-pestana {
+  width: 15px;
+  height: 15px;
+  display: block;
+  flex: 0 0 15px;
+}
+
+.ux23-filtros {
+  height: 137px;
+  margin-top: 17px;
+  padding: 17px 30px 0 25px;
+}
+
+.ux23-lienzo .ux13-breadcrumb {
+  font-size: 13px;
+}
+
+.ux23-lienzo .ux13-titulo-filtro {
+  margin-left: 11px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.ux23-lienzo .ux13-campo {
+  gap: 7px;
+}
+
+.ux23-lienzo .ux13-campo--busqueda {
+  gap: 7px;
+}
+
+.ux23-lienzo .ux13-campo__etiqueta {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.ux23-lienzo .ux13-select {
+  padding-left: 16px;
+}
+
+.ux23-lienzo .ux13-filtros__pie {
+  padding-top: 19px;
+}
+
+.ux23-btn-limpiar {
+  width: 122px;
+  height: 26px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--gris-claro);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ux23-btn-aplicar {
+  width: 130px;
+  height: 26px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--azul);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ux23-btn-aplicar .ux02-i {
+  font-size: 16px;
+}
+
+.ux23-panel {
+  margin-top: 14px;
+  padding-top: 22px;
+  padding-bottom: 90px;
+}
+
+.ux23-lienzo .ux13-barra {
+  padding: 0 17px 0 32px;
+}
+
+.ux23-lienzo .ux13-ordenar {
+  margin-right: 0;
+}
+
+.ux23-lienzo .ux13-barra__derecha {
+  gap: 6px;
+}
+
+.ux23-lienzo .ux13-boton-icono {
+  width: 31px;
+  height: 34px;
+}
+
+.ux23-lienzo .ux13-boton-icono--texto {
+  width: 134px;
+}
+
+.ux23-tabla {
+  margin-top: 12px;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-tabla__fila {
+  grid-template-columns:
+    261px 214px 109px 88px 202px 116px 168px 164px 183px 65px;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-tabla__fila > * {
+  border-left-color: #f3f3f3;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-tabla__cabecera {
+  height: 55px;
+  font-size: 15px;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-th__rotulo--dos-lineas {
+  line-height: 0.8;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-tabla__cabecera > * {
+  border-left-color: #fff;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-fila:nth-child(1) {
+  height: 58px;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-fila:nth-child(2) {
+  height: 51px;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-fila:nth-child(3) {
+  height: 53px;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-fila:nth-child(4) {
+  height: 56px;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-fila:nth-child(5) {
+  height: 51px;
+}
+
+.ux23-lienzo .ux23-tabla .ux13-fila::after {
+  background: #f3f3f3;
+}
+
+.ux23-flecha {
+  width: 7px;
+  height: 13px;
+  display: block;
+}
+
+.ux23-lienzo .ux23-paginacion {
+  margin-right: -7px;
+}
+
+.ux23-lienzo .ux13-paginacion__texto {
+  margin-right: 14px;
+}
+
+.ux23-lienzo .ux02-rail > .ux02-rail__titulo:first-child {
+  justify-content: flex-start;
+  gap: 7px;
+  color: #000;
+}
+
+.ux23-lienzo .ux02-rail__boton {
+  color: #565656;
+}
+
+.ux23-lienzo .ux23-celda--izquierda {
+  justify-content: flex-start;
+  padding-left: 17px;
+}
+
+.ux23-lienzo .ux13-th--colaborador {
+  padding-left: 37px;
+  gap: 26px;
+}
+
+.ux23-lienzo .ux23-th--persona {
+  justify-content: flex-start;
+  padding-left: 28px;
+}
+
+.ux23-orden {
+  width: 8px;
+  height: 13px;
+  flex: 0 0 8px;
+  display: block;
+  color: #1c1c1c;
+}
+
+.ux23-casilla {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 1px solid var(--borde);
+  border-radius: 2px;
+  background: #fff;
+}
+
+.ux23-celda-archivo {
+  justify-content: flex-start;
+  padding-left: 37px;
+}
+
+.ux23-celda-archivo .ux23-casilla {
+  margin-right: 11px;
+}
+
+.ux23-archivo {
+  width: 13px;
+  height: 18px;
+  flex: 0 0 13px;
+  margin-right: 5px;
+  color: var(--azul);
+}
+
+.ux23-archivo--pdf {
+  color: #e6322f;
+}
+
+.ux23-archivo__nombre {
+  font-size: 12.5px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.ux23-lienzo .ux13-nombre {
+  font-size: 14.5px;
+}
+
+.ux23-celda-persona {
+  justify-content: flex-start;
+  gap: 14px;
+  padding-left: 19px;
+}
+
+.ux23-avatar {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.ux23-avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ux23-lienzo .ux23-estado {
+  width: 168px;
+  height: 29px;
+  border-radius: 14.5px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ux23-estado--revision {
+  background: #b9cffb;
+  color: var(--azul);
+}
+
+.ux23-estado--firma {
+  background: #fcf2c4;
+  color: #f5c36b;
+}
+
+.ux23-estado--vigente {
+  background: #c1fdbf;
+  color: #4f9552;
+}
+
+.ux23-estado--archivado {
+  background: #efeff0;
+  color: #666;
+}
+
+.ux23-estado--papelera {
+  background: #f5bab9;
+  color: #e71400;
+}
+
+.ux23-celda-ubicacion {
+  justify-content: flex-start;
+  padding-left: 32px;
+}
+
+.ux23-ubicacion {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--azul);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ux23-ubicacion .ux02-i {
+  font-size: 21px;
+}
+
+.ux23-ubicacion--papelera {
+  color: #e71400;
+}
+
+.ux23-lienzo .ux02-rail__ver-mas::after {
+  content: ' +';
+}

@@ -82,6 +82,7 @@ Atajo por URL: `?ux=<modo>`; comparación: `?modo=comparar&ux=<modo>`.
 | `dotacion-asignados` | Dotación por cliente · colaboradores asignados | PDF p. 34 (UX-19) | 1920 × 1176 | `?ux=dotacion-asignados` |
 | `dotacion-historial` | Dotación por cliente · historial de cambios | PDF p. 35 (UX-19) | 1920 × 1176 | `?ux=dotacion-historial` |
 | `calendario` | Calendario de asistencia | PDF p. 36 (UX-22) | 1920 × 1176 | `?ux=calendario` |
+| `documental` | Bandeja global de gestión documental | PDF p. 37 (UX-23) | 1920 × 1176 | `?ux=documental` |
 | `login` | Acceso a MP 360 | `a-01` | 1920 × 1080 | `?ux=login` |
 | `perfiles` | Selección de perfil | `a-02` | 1920 × 1080 | `?ux=perfiles` |
 | `modulos` | Selección de módulo | `a-03` | 1920 × 1080 | `?ux=modulos` |
@@ -374,6 +375,31 @@ conservan como literales «Calendaria», los iconos de casa, libro, maletín y p
 pestañas, la tilde de «Mié» y los espacios del periodo. Medidas de la fuente en
 `.cache/p36-render.png` (no versionado).
 
+**Nota sobre la p. 37:** primera pantalla del bloque Gestión documental (UX-23), lienzo de
+1920 × 1176. Reutiliza el cromo de la p. 24 —pestaña «Asistencia» inactiva, sin submenú— con
+la pestaña **«Gestión Documental»** activa: su píldora mide 182 px y arranca 10 px antes de su
+celda; el azul medido en toda la ventana es `#2b48e9`, igual que las pp. 10–19 y 32–35. El
+breadcrumb dibuja «R.R.H.H / Gestión Documental» y el hero, el título «Gestión Documental» con
+el subtítulo «Centraliza la revisión, consulta archivos y seguimientos de documentos de
+colaboradores.» y el botón «Generar Documento» (230 × 47). Bajo él, seis pestañas —«Todos los
+documentos» activa, «Firmas pendientes», «Revisiones Pendientes», «Todos los pendientes»,
+«Archivado» y «Papelera»— de 51 px; una tarjeta de filtros de 137 px con «Búsqueda», «Empresa»,
+«Área / Subárea», «Tipo Documento» y «Estado», más «Más Filtros», «Limpiar Filtros» y «Aplicar
+Filtros»; y un panel blanco de 486 px con la barra «Ordenar por: Últimos registrados», los
+cuatro controles de la derecha («últimos 30 días») y una tabla de diez columnas —casilla,
+Colaborador, Colaborador, Tipo, Versión, Estado, Área, Fecha de Creación, última actualización
+y Ubicación lógica, más acciones—. Se dibujan cinco filas con el mismo colaborador y badges
+«Pendiente de revisión» (`#b9cffb`), «Pendiente de firma» (`#fcf2c4`), «Vigente» (`#c1fdbf`),
+«Archivado» (`#efeff0`) y «En papelera» (`#f5bab9`); el paginador queda sobre el fondo. Se
+replican las erratas y artefactos literales: el encabezado «Colaborador» duplicado, «última
+actualización» en minúscula frente a «Fecha de Creación», la pestaña «Revisiones Pendientes»
+sin tilde, «Jefe de Área» como Área, un `.docx` rotulado «Anexo» en la carpeta «Constancias»,
+«Contratos por Vencer» duplicado en Acciones rápidas y «Mostrando 10 de 246» frente a las
+cinco filas. El dibujo no muestra el resto del flujo documental: no se añaden estados,
+acciones ni formularios. `MarcoDocumental` reserva el slot `stepper` para las etapas de
+generación (pp. 38–41, UX-24), que quedan en tareas posteriores. Medidas de la fuente en
+`.cache/p37-1920.png` (no versionado).
+
 ## 4. Cómo ejecutarlo
 
 ```bash
@@ -410,6 +436,7 @@ src/app/preview/requerimientos/
 ├── offboarding/             # bandeja y etapas de offboarding (PDF pp. 27-31, UX-16/17)
 ├── dotacion/                # resumen y detalle por cliente (PDF pp. 32-35, UX-18/19)
 ├── calendario/              # calendario de asistencia (PDF p. 36, UX-22)
+├── documental/              # bandeja de gestión documental (PDF p. 37, UX-23)
 └── acceso/                  # login, perfiles y módulos (a-01 a a-03)
 
 public/preview/mp360/
@@ -467,6 +494,7 @@ public/preview/mp360/
 | Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,9 / 255 |
 | Organización y dotación · historial (PDF p. 35) | Pendiente de revisión visual | 7,4 / 255 |
 | Calendario de asistencia (PDF p. 36) | Pendiente de revisión visual | 6,5 / 255 |
+| Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,5 / 255 |
 | Inicio | Pendiente de revisión visual | 10,6 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
 | Login | Pendiente de revisión visual | 7,2 / 255 |
@@ -749,6 +777,15 @@ resuelven en la implementación funcional, no aquí:
     de vacaciones y el libro de licencia se dibujan como SVG porque el subconjunto de
     Material Symbols no reproduce el parasol y el libro cerrado del diseño; el resto usa
     los glifos del subconjunto (maletín «work» y documento con lápiz «edit_document»).
+34. **Bandeja global de gestión documental (PDF p. 37)**: primera pantalla del bloque
+    Gestión documental (UX-23), con la pestaña «Gestión Documental» activa y el azul medido
+    `#2b48e9`. El inventario advierte que la gestión documental completa exige más estados
+    de los dibujados: se replica solo esta bandeja —filtros, pestañas, barra de orden, tabla
+    de cinco filas, badges, paginador y rail—, sin completar el flujo. Se conservan los
+    artefactos literales «Colaborador» duplicado, «última actualización» en minúscula,
+    «Revisiones Pendientes», «Jefe de Área» como área, el `.docx` rotulado «Anexo» en
+    «Constancias» y la repetición de «Contratos por Vencer». Las etapas de generación
+    (pp. 38–41) quedan fuera; `MarcoDocumental` reserva el slot `stepper`.
 
 ## 9. Cierre y siguiente paso
 
@@ -775,6 +812,9 @@ resuelven en la implementación funcional, no aquí:
 - Con `calendario` queda replicado el **bloque Calendario de asistencia** (PDF p. 36,
   UX-22): una sola pantalla con la rejilla mensual, la leyenda y la agenda del día.
   El bloque queda completo.
+- Con `documental` queda replicada la **bandeja global de gestión documental** (PDF p. 37,
+  UX-23), primera pantalla del bloque Gestión documental. Las cuatro etapas de generación
+  (pp. 38–41, UX-24) están pendientes; `MarcoDocumental` deja preparado el slot `stepper`.
 - El merge de esta rama a `main` es **lineal** y lo hace el usuario tras validar las ventanas.
 - `memory.md` se actualiza en `main` cuando el usuario cierre la fase; este documento no
   duplica la bitácora.

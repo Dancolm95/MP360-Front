@@ -32,6 +32,7 @@ import { OffboardingChecklist } from './offboarding/OffboardingChecklist'
 import { OffboardingLiquidacion } from './offboarding/OffboardingLiquidacion'
 import { OffboardingCierre } from './offboarding/OffboardingCierre'
 import { CalendarioAsistencia } from './calendario/CalendarioAsistencia'
+import { BandejaDocumental } from './documental/BandejaDocumental'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
 import styles from './preview.module.css'
@@ -71,6 +72,7 @@ type Diseno =
   | 'dotacion-asignados'
   | 'dotacion-historial'
   | 'calendario'
+  | 'documental'
   | 'login'
   | 'perfiles'
   | 'modulos'
@@ -382,6 +384,15 @@ const DISENOS: readonly OpcionDiseno[] = [
     ancho: 1920,
     alto: 1176,
     componente: <CalendarioAsistencia />,
+  },
+  {
+    id: 'documental',
+    etiqueta: 'Documental',
+    referencia: '/preview/mp360/img/referencia-documental.jpg',
+    descripcion: 'Bandeja global de gestión documental',
+    ancho: 1920,
+    alto: 1176,
+    componente: <BandejaDocumental />,
   },
   {
     id: 'login',
