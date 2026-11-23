@@ -358,7 +358,8 @@ reasignación» y «Valor nuevo» en minúscula. Medidas de la fuente en
 lienzo de 1920 × 1176. Reutiliza el cromo de la p. 24 —pestaña «Asistencia» activa,
 **sin submenú**— y el azul medido `#2249f2`, aplicado a las pestañas, el calendario y el
 panel de resumen. El breadcrumb dibuja «R.R.H.H / Licencia y Ausencias / Calendario de
-Asistencia» y el hero titula «Calendaria de Asistencia» —errata literal— con el subtítulo
+Asistencia» y el hero titula «Calendario de Asistencia» —se corrige la errata del dibujo por
+decisión del revisor, ver lote 2C— con el subtítulo
 «Consulta y administra las licencias y ausencias de cada colaborador.» y el botón
 «Registrar Solicitud». Bajo él, una fila de cuatro pestañas —«Vacaciones», «Licencias y
 Ausencias», «Permisos» y «Calendario» activa— de 304/394/304/304 px y una tarjeta de filtros
@@ -375,7 +376,7 @@ inventan eventos. A la derecha, «Viernes, 20 de noviembre» con la tarjeta de v
 (banda `#c9e3fe`, píldora verde «En goce», «Luis Torres», el periodo
 «20/11/2026 - 25/11 / 2026 ( 5 días)» y «Ver Detalle»), la barra de desplazamiento y el
 «Resumen del periodo» con Vacaciones 12, Licencia 6, Permisos 8 y Ausencias sin cifra. Se
-conservan como literales «Calendaria», los iconos de casa, libro, maletín y persona de las
+conservan los iconos de casa, libro, maletín y persona de las
 pestañas, la tilde de «Mié» y los espacios del periodo. Medidas de la fuente en
 `.cache/p36-render.png` (no versionado).
 
@@ -572,6 +573,12 @@ acceso: login 2,9 → 2,8 (2,861 → 2,789), perfiles 2,6 → 2,6 (2,632 → 2,6
 2,9 → 2,2 (2,886 → 2,179). Ninguna empeora; la mejora máxima es 0,707 y corresponde a módulos.
 Capturas y muestreo en `.cache/lote2b/` (no versionado).
 
+El **lote 2C** (23-nov-2026) corrige tres detalles sueltos: el centrado del botón «Enviar
+requerimiento» en el formulario (7,446 → 7,433), el rótulo del calendario (6,530 → 6,530,
+Δ −0,00003) y los badges de estado de la bandeja documental (6,483 → 6,412). Ninguna
+empeora y la mejora máxima es 0,071, en documental. Capturas y medidas en `.cache/lote2c/`
+(no versionado).
+
 | Ventana | Estado | MAE vs. render (1920 de ancho) |
 |---|---|---|
 | UX-02 Bandeja | Validada por el usuario | 10,2 / 255 |
@@ -605,7 +612,7 @@ Capturas y muestreo en `.cache/lote2b/` (no versionado).
 | Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,6 / 255 |
 | Organización y dotación · historial (PDF p. 35) | Pendiente de revisión visual | 7,2 / 255 |
 | Calendario de asistencia (PDF p. 36) | Pendiente de revisión visual | 6,5 / 255 |
-| Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,5 / 255 |
+| Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,4 / 255 |
 | Gestión documental · tipo (PDF p. 38) | Pendiente de revisión visual | 7,1 / 255 |
 | Gestión documental · información (PDF p. 39) | Pendiente de revisión visual | 6,8 / 255 |
 | Gestión documental · contenido (PDF p. 40) | Pendiente de revisión visual | 7,7 / 255 |
@@ -678,6 +685,26 @@ sobre el PDF (p. 20 y p. 37 a 1920) y sobre `a-04`:
   glifos da una mediana RGB(36, 76, 239), a 2/3/3 del token `--azul` `#2249f2` y más lejos de
   `#1c4cf7`; se aplica `var(--azul)` sin interletraje, versalitas ni cambio de peso. El resto de la
   ventana no cambia.
+
+**Criterio del lote 2C (23-nov-2026).** Tres correcciones sueltas del revisor:
+
+- **Botón «Enviar requerimiento» (`?ux=ux03-formulario`).** La referencia mide 172 × 50 px en
+  `x = 1033–1204` con el bloque icono+texto centrado (≈8 px de margen a cada lado y texto de
+  13 px). El padding nativo del botón (`1px 6px`) dejaba 158 px útiles, así que el contenido
+  (173 px) desbordaba 7,5 px por lado: el icono se recortaba y el texto tocaba los bordes. Se
+  anula el padding, el botón pasa a 172 px, el texto a 13 px y la separación icono-texto a
+  4 px; el pie se ajusta a `right: 27px` para que el botón caiga en las coordenadas medidas.
+  «Guardar borrador» y el pie de la confirmación ya cabían y no cambian.
+- **Rótulo del calendario (`?ux=calendario`).** El dibujo titula «Calendaria de Asistencia»;
+  el revisor pide «Calendario de Asistencia». Es una corrección sobre el dibujo, registrada
+  como desviación consciente, y no una errata de réplica: se mantiene el resto de literales
+  del dibujo. El breadcrumb ya decía «Calendario».
+- **Badges de Estado de la bandeja documental (`?ux=documental`).** La píldora no tenía
+  `inline-flex` ni centrado, y el texto quedaba a 1 px del borde superior. La referencia mide
+  169 × 30 px con texto de 13,5 px y 11-12 px a los lados; se añade `inline-flex` con
+  `align-items`/`justify-content: center` y se ajustan las medidas. El defecto es local: los
+  badges de candidato (`ux06`), offboarding (`ux16`), colaboradores (`ux08`) y licencias
+  (`ux13`) ya centraban su texto y no se tocan.
 
 1. **Erratas del diseño** replicadas literalmente: «fomulario», «Selecionar»,
    «Responsable de Aprobración».
@@ -937,8 +964,9 @@ sobre el PDF (p. 20 y p. 37 a 1920) y sobre `a-04`:
     filtros, la barra de mes, el conmutador Mes / Semana / Día, la rejilla de cinco semanas
     con sus marcas y la agenda del día con su resumen. Los eventos, el contador `+5`, el día
     seleccionado y las cifras del resumen son los del dibujo: no se calculan festivos ni se
-    generan eventos. Se conservan como literales la errata «Calendaria de Asistencia» del
-    título, «Área / Subárea», «Tipo de Evento», «Mié», el periodo
+    generan eventos. El título dice «Calendario de Asistencia» por decisión del revisor
+    (ver lote 2C), no «Calendaria» como el dibujo. Se conservan como literales
+    «Área / Subárea», «Tipo de Evento», «Mié», el periodo
     «20/11/2026 - 25/11 / 2026 ( 5 días)» y la ausencia de cifra en «Ausencias». El icono
     de vacaciones y el libro de licencia se dibujan como SVG porque el subconjunto de
     Material Symbols no reproduce el parasol y el libro cerrado del diseño; el resto usa

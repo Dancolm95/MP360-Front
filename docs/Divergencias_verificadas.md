@@ -58,7 +58,7 @@ Las cuatro fichas parciales van primero, para que se vean antes que el resto.
 | 15 | 33 | Pestaña «Dotación por área y cargo» (no «estructura de puestos»); tarjeta «Estructura organizacional»; azul #2249f2 | **CONFIRMADO** | «Dotación por área y cargo» activa (664,328); «Estructura organizacional» (535,535). Fuente del azul: **#2249f2** (9 usos `rg`); render #2c48e9 |
 | 16 | 34 | Pestaña «Colaboradores asignados» (no «activos»); filas duplicadas; «Mostrando 10 de 246» con 5 filas | **CONFIRMADO** | «Colaboradores asignados» (893,328); los KPI separan «Colaboradores Asignados» (574,395) y «Colaboradores Activos» (837,395). Filas: Luis Torres, Jaime Castillo, Emilia Castellano, Diego Fiestas y Luis Torres otra vez (y ≈ 600–910). «Mostrando 10 de 246» (993,988) |
 | 17 | 35 | ¿Tabla o línea de tiempo? «Valor nuevo» en minúscula; reasignación con valores vacíos | **CONFIRMADO** | Es una tabla con cabecera: Fecha, Candidato, Estado, Detalle del cambio, **Valor Anterior**, **Valor nuevo**, Observación. La fila «Reasignación» de Emilia Castellano deja vacías ambas celdas de valor |
-| 18 | 36 | «Calendaria de Asistencia»; «Mié»; leyenda de cuatro categorías | **CONFIRMADO** | Título «Calendaria de Asistencia» (39,253); «Mié» (443,607); bajo «Leyenda» (94,994): «Vacaciones» (217,994), «Licencia» (393,991), «Permisos» (552,994) y «Ausencias» (717,994) |
+| 18 | 36 | «Calendaria de Asistencia»; «Mié»; leyenda de cuatro categorías | **CONFIRMADO** | Título «Calendaria de Asistencia» (39,253); «Mié» (443,607); bajo «Leyenda» (94,994): «Vacaciones» (217,994), «Licencia» (393,991), «Permisos» (552,994) y «Ausencias» (717,994). El prototipo lo rotula «Calendario de Asistencia» por decisión del revisor (lote 2C) |
 | 19 | 37 | Dos columnas «Colaborador»; «última actualización» en minúscula; «Jefe de Área» como Área; `.docx` rotulado «Anexo» | **CONFIRMADO** | Cabecera (122,593) y (332,593); «Fecha de Creación» con mayúscula frente a **«última actualización»** (minúsculas). En Área, valor «Jefe de Área» (932,701). «Contrato de trabajo.docx» con Tipo **«Anexo»** (535,755) y Ubicación «Constancias» (1395,755) |
 | 21 | 39 | «Remuneración Mensual» con «Plazo indeterminado»; sin «Volver a Gestión Documental» | **CONFIRMADO** | Etiqueta «Remuneración Mensual» (884,618) y valor «Plazo indeterminado» (884,652). El hero (y 210–280) no dibuja el botón de regreso de la p. 38 |
 | 22 | 40 | «Vista Previa» activa y «Editar documento» inactiva; siete variables con casilla; «Confirmar», no «Continuar»; DNI distinto entre variable y resumen | **CONFIRMADO** | «Vista Previa» azul con subrayado (823,484); «Editar documento» gris (1294,482). Siete variables marcadas (Nombre Completo, Dni, Puesto, Área, Fecha_Inicio, Remuneración, Tipo de Contrato). «Confirmar >» (1445,992). DNI de la variable **712123456** (387,649) frente a **7142123456** del resumen (103,387) |
@@ -243,6 +243,10 @@ colaborador».
 **Veredicto: CONFIRMADO.** El hero titula **«Calendaria de Asistencia»** (39,253). La rejilla
 usa **«Mié»** con tilde (443,607). Bajo «Leyenda» (94,994) hay cuatro categorías:
 «Vacaciones» (217,994), «Licencia» (393,991), «Permisos» (552,994) y «Ausencias» (717,994).
+
+**Desviación consciente (23-nov-2026).** Por decisión del revisor, el prototipo rotula
+**«Calendario de Asistencia»** en lugar de replicar la errata del dibujo. Es una corrección
+sobre la fuente, no una errata de réplica; el resto de literales de la ventana se mantiene.
 
 ### 19. p. 37 — Columnas, «última actualización», «Jefe de Área» y «Anexo»
 

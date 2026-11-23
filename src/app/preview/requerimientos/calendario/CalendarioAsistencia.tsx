@@ -87,7 +87,7 @@ function Encabezado() {
       </p>
 
       <div className="ux13-titulo-fila">
-        <h1 className="ux13-titulo">Calendaria de Asistencia</h1>
+        <h1 className="ux13-titulo">Calendario de Asistencia</h1>
         <p className="ux13-subtitulo">
           Consulta y administra las licencias y ausencias de cada colaborador.
         </p>

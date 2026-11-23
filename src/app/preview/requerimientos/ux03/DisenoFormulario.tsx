@@ -122,7 +122,7 @@ export function DisenoFormulario() {
             <Icono nombre="bookmark" />
             Guardar borrador
           </button>
-          <button type="button" className="ux03-btn ux03-btn--enviar">
+          <button type="button" className="ux03-btn ux03-btn--enviar ux03-btn--enviar-formulario">
             <Icono nombre="send" />
             Enviar requerimiento
           </button>

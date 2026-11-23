@@ -1412,7 +1412,7 @@
 
 .ux03-modal__pie {
   position: absolute;
-  right: 30px;
+  right: 27px;
   bottom: 20px;
   display: flex;
   gap: 11px;
@@ -1424,6 +1424,8 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
+  /* El padding nativo (1px 6px) recortaba el contenido cuando no cabía. */
+  padding: 0;
   border: 0;
   border-radius: 4px;
   font: inherit;
@@ -1448,6 +1450,13 @@
   width: 170px;
   background: var(--azul);
   color: #fff;
+}
+
+/* La referencia mide 172 x 50, con el texto a 13 px y 4 px de separación. */
+.ux03-btn--enviar-formulario {
+  width: 172px;
+  gap: 4px;
+  font-size: 13px;
 }
 
 .ux03-modal--confirmacion {
@@ -17860,10 +17869,13 @@
 }
 
 .ux23-lienzo .ux23-estado {
-  width: 168px;
-  height: 29px;
-  border-radius: 14.5px;
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 169px;
+  height: 30px;
+  border-radius: 15px;
+  font-size: 13.5px;
   font-weight: 600;
   line-height: 1;
 }
