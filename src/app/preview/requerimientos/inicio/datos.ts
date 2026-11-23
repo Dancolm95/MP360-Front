@@ -5,7 +5,7 @@ export interface ModuloInicio {
 }
 
 export const MODULOS_INICIO: readonly ModuloInicio[] = [
-  { nombre: 'Recursos Humanos', color: '#2b48e9', icono: 'forum' },
+  { nombre: 'Recursos Humanos', color: '#2249f2', icono: 'forum' },
   { nombre: 'Operaciones', color: '#f0963e', icono: 'settings' },
   { nombre: 'Contabilidad', color: '#5d985e', icono: 'pie_chart_filled' },
   { nombre: 'Finanzas', color: '#4911ef', icono: 'bar_chart' },

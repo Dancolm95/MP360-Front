@@ -213,7 +213,7 @@ export function Pie() {
   return (
     <footer className="ux02-pie">
       <span className="ux02-pie__marca">
-        <img src="/preview/mp360/img/logo-mp-white.png" alt="MP 360" />
+        <img src="/preview/mp360/img/logo-mp-dark.png" alt="MP 360" />
       </span>
       <p className="ux02-pie__eslogan">
         Un nuevo sistema que unifica, planifica y ejecuta.

@@ -19,7 +19,7 @@ function Avatar() {
   return (
     <span className="ux16-cierre__avatar" aria-hidden="true">
       <svg viewBox="0 0 38 38" focusable="false">
-        <circle cx="19" cy="19" r="19" fill="#1e4bf2" />
+        <circle cx="19" cy="19" r="19" fill="#2249f2" />
         <circle cx="19" cy="14" r="6.4" fill="#fff" />
         <path d="M6.6 32.6c.6-6.9 5.8-11 12.4-11s11.8 4.1 12.4 11z" fill="#fff" />
       </svg>

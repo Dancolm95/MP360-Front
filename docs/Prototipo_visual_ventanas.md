@@ -559,49 +559,55 @@ public/preview/mp360/
 
 ## 7. Estado de validación
 
+Barrido de MAE del 23-nov-2026 (lote 1: pie y azul), con capturas headless a 1920 px de ancho y
+la barra del preview oculta: **37 ventanas mejoran**, **3 no cambian** (login, perfiles y módulos,
+sin pie compartido) y **1 empeora +0,005** (candidato), siempre por debajo de 11. Ninguna supera el
+umbral de 0,5. La mejora máxima es de 0,108 (documental-info); el detalle completo está en
+`.cache/mae-lote1.md` (no versionado).
+
 | Ventana | Estado | MAE vs. render (1920 de ancho) |
 |---|---|---|
-| UX-02 Bandeja | Validada por el usuario | 10,9 / 255 |
-| UX-03a Formulario | Sin cambios solicitados | 8,2 / 255 |
-| UX-03b Confirmación | Sin cambios solicitados | 7,9 / 255 |
-| UX-04 Detalle | Sin cambios solicitados | 10,0 / 255 |
+| UX-02 Bandeja | Validada por el usuario | 10,5 / 255 |
+| UX-03a Formulario | Sin cambios solicitados | 7,7 / 255 |
+| UX-03b Confirmación | Sin cambios solicitados | 7,3 / 255 |
+| UX-04 Detalle | Sin cambios solicitados | 9,5 / 255 |
 | Candidatos (PDF p. 10) | Pendiente de revisión visual | 8,9 / 255 |
-| Candidato (PDF p. 11) | Calibrada; pendiente de revisión visual | 6,3 / 255 |
+| Candidato (PDF p. 11) | Calibrada; pendiente de revisión visual | 6,5 / 255 |
 | Colaboradores (PDF p. 12) | Pendiente de revisión visual | 8,9 / 255 |
-| Colaborador (PDF p. 17) | Pendiente de revisión visual | 7,1 / 255 |
-| Colaborador boletas (PDF p. 18) | Pendiente de revisión visual | 7,3 / 255 |
+| Colaborador (PDF p. 17) | Pendiente de revisión visual | 7,0 / 255 |
+| Colaborador boletas (PDF p. 18) | Pendiente de revisión visual | 7,2 / 255 |
 | Colaborador boletas · proceso (PDF p. 19) | Pendiente de revisión visual | 7,1 / 255 |
 | Alta · selección (PDF p. 13) | Pendiente de revisión visual | 8,1 / 255 |
 | Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,9 / 255 |
-| Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 8,0 / 255 |
-| Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,3 / 255 |
-| Onboarding · En curso (PDF p. 20) | Pendiente de revisión visual | 5,6 / 255 |
-| Onboarding · Sin onboarding (PDF p. 21) | Pendiente de revisión visual | 6,2 / 255 |
-| EPP (PDF p. 22) | Pendiente de revisión visual | 7,5 / 255 |
-| EPP · devolución (PDF p. 23) | Pendiente de revisión visual | 7,9 / 255 |
-| Licencias (PDF p. 24) | Pendiente de revisión visual | 7,7 / 255 |
-| Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,6 / 255 |
-| Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,5 / 255 |
+| Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 7,9 / 255 |
+| Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,2 / 255 |
+| Onboarding · En curso (PDF p. 20) | Pendiente de revisión visual | 5,8 / 255 |
+| Onboarding · Sin onboarding (PDF p. 21) | Pendiente de revisión visual | 6,1 / 255 |
+| EPP (PDF p. 22) | Pendiente de revisión visual | 7,4 / 255 |
+| EPP · devolución (PDF p. 23) | Pendiente de revisión visual | 7,8 / 255 |
+| Licencias (PDF p. 24) | Pendiente de revisión visual | 7,6 / 255 |
+| Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,7 / 255 |
+| Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,4 / 255 |
 | Offboarding · bandeja (PDF p. 27) | Pendiente de revisión visual | 6,4 / 255 |
 | Offboarding · datos (PDF p. 28) | Pendiente de revisión visual | 7,5 / 255 |
-| Offboarding · checklist (PDF p. 29) | Pendiente de revisión visual | 8,8 / 255 |
-| Offboarding · liquidación (PDF p. 30) | Pendiente de revisión visual | 6,6 / 255 |
-| Offboarding · cierre (PDF p. 31) | Pendiente de revisión visual | 5,9 / 255 |
-| Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,5 / 255 |
-| Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,6 / 255 |
-| Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,9 / 255 |
+| Offboarding · checklist (PDF p. 29) | Pendiente de revisión visual | 8,9 / 255 |
+| Offboarding · liquidación (PDF p. 30) | Pendiente de revisión visual | 6,5 / 255 |
+| Offboarding · cierre (PDF p. 31) | Pendiente de revisión visual | 6,0 / 255 |
+| Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,3 / 255 |
+| Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,8 / 255 |
+| Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,8 / 255 |
 | Organización y dotación · historial (PDF p. 35) | Pendiente de revisión visual | 7,4 / 255 |
-| Calendario de asistencia (PDF p. 36) | Pendiente de revisión visual | 6,5 / 255 |
-| Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,5 / 255 |
-| Gestión documental · tipo (PDF p. 38) | Pendiente de revisión visual | 7,4 / 255 |
+| Calendario de asistencia (PDF p. 36) | Pendiente de revisión visual | 6,7 / 255 |
+| Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,7 / 255 |
+| Gestión documental · tipo (PDF p. 38) | Pendiente de revisión visual | 7,3 / 255 |
 | Gestión documental · información (PDF p. 39) | Pendiente de revisión visual | 7,0 / 255 |
-| Gestión documental · contenido (PDF p. 40) | Pendiente de revisión visual | 8,0 / 255 |
-| Gestión documental · confirmación (PDF p. 41) | Pendiente de revisión visual | 5,1 / 255 |
-| Inicio | Pendiente de revisión visual | 10,6 / 255 |
-| Inicio módulo | Pendiente de revisión visual | 7,2 / 255 |
-| Login | Pendiente de revisión visual | 7,2 / 255 |
-| Perfiles | Pendiente de revisión visual | 6,9 / 255 |
-| Módulos | Pendiente de revisión visual | 8,7 / 255 |
+| Gestión documental · contenido (PDF p. 40) | Pendiente de revisión visual | 7,9 / 255 |
+| Gestión documental · confirmación (PDF p. 41) | Pendiente de revisión visual | 5,2 / 255 |
+| Inicio | Pendiente de revisión visual | 10,1 / 255 |
+| Inicio módulo | Pendiente de revisión visual | 6,6 / 255 |
+| Login | Pendiente de revisión visual | 2,9 / 255 |
+| Perfiles | Pendiente de revisión visual | 2,6 / 255 |
+| Módulos | Pendiente de revisión visual | 2,9 / 255 |
 
 El bloque Offboarding queda completo con cinco pantallas replicadas: bandeja (p. 27),
 datos y causal (p. 28), checklist y revisión por áreas (p. 29), liquidación (p. 30) y
@@ -617,6 +623,13 @@ usuario o el responsable funcional.
 
 El prototipo replica el diseño **tal como está dibujado**; estas diferencias con la spec se
 resuelven en la implementación funcional, no aquí:
+
+**Nota de vigencia (23-nov-2026).** Las fichas de este apartado describen la réplica inicial y
+conservan menciones históricas a `#2b48e9` y `#294bee` tomadas de los JPG de referencia. Por
+decisión de fuente, el prototipo usa ya un único par de azules en todas las ventanas: primario
+`#2249f2` y acento `#1c4cf7`; los literales `#2b48e9`, `#2c48e9`, `#294bee` y `#1e4bf2` se
+retiraron del CSS. El «MP» del pie también quedó corregido: se apoya directamente sobre la barra
+`#1c1c1c`, sin recuadro ni fondo propio, a 68 × 30 px (3,54 % del ancho), como el PDF y `a-04`.
 
 1. **Erratas del diseño** replicadas literalmente: «fomulario», «Selecionar»,
    «Responsable de Aprobración».

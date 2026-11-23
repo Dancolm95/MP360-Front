@@ -30,6 +30,10 @@ documento de rama. Además, el inventario de `main` queda **desmentido** en la p
 («Ficha: asistencia»), como ya adelantaba §8.12 del documento de rama; y en las pp. 33–35 sus
 rótulos de pestaña tampoco coinciden con lo dibujado, también según §8.
 
+**Resueltos en la implementación (23-nov-2026, commit de este lote):** el ítem 14 (azul único
+`#2249f2`/`#1c4cf7`) y el ítem 25 (monograma «MP» del pie sin recuadro) ya no son divergencias
+abiertas.
+
 ## Tabla resumen
 
 Las cuatro fichas parciales van primero, para que se vean antes que el resto.
@@ -38,7 +42,7 @@ Las cuatro fichas parciales van primero, para que se vean antes que el resto.
 |---|---|---|---|---|
 | 7 | 24 | «Licencia y Ausencias» singular; «Ultimos 30 dias»; «Aprobradas / Registrada»; «Dpt. Adminstración»; azul #2249f2 | **PARCIAL** | Singular, «Aprobradas / Registrada», «Dpt. Adminstración» y #2249f2 confirmados. El literal es **«Últimos 30 días»**, con tildes (dos veces), no «Ultimos 30 dias» |
 | 10 | 28 | Stepper de 5 pasos; «Liquidicación» vs «Liquidación»; «Nac: Peruano»; DNI distinto entre ficha y lista | **PARCIAL** | Pasos, «Liquidicación» y «Nac: Peruano» confirmados. El DNI es **7142123456 en ficha y en las cuatro filas**; no hay diferencia. La diferencia real está en el teléfono (999 999 999 vs 999 999 99) |
-| 14 | 32 | Pestaña en dos líneas; «Licencias»; sin «Gestión Documental»; azul #2b48e9 | **PARCIAL** | Lo textual, confirmado. El PDF declara **#2249f2**, el mismo de la p. 24; el render da #2c48e9, no #2b48e9. No hay dos azules por página |
+| 14 | 32 | Pestaña en dos líneas; «Licencias»; sin «Gestión Documental»; azul #2b48e9 | **RESUELTO** (era PARCIAL) | Lo textual, confirmado. El PDF declara **#2249f2**, el mismo de la p. 24; el render da #2c48e9, no #2b48e9. No hay dos azules por página. Unificado a `#2249f2`/`#1c4cf7` el 23-nov-2026 (commit de este lote) |
 | 20 | 38 | «Selec. Colaborador»; «Nac: Peruano»; «Modifiacón» sin la segunda «c»; recorte «…en la pantall» | **PARCIAL** | «Selec. Colaborador», «Nac: Peruano» y «…pantall», confirmados. El literal es **«Modifiación»**, al que le falta la primera «c» (tras «Modifi»), no la segunda |
 | 1 | 19 | ¿Pestaña de Asistencia o «Boletas de Pago» al final de su tabla, con «Proceso» y «Acciones»? | **CONFIRMADO** | Píldora de nav en «Colaboradores» (182 × 51, 637,127) y píldora de subpestaña en **«Boletas de Pago»** (173 × 51, 652,313). Columnas: Mes, Horas Extras, Recargos, Horas no Trabajadas, Días no Trabajados, Proceso, Acciones. El inventario de `main` («Ficha: asistencia») queda desmentido |
 | 2 | 20–21 | Pestaña resaltada «Offboarding», no «Onboarding»; sin submenú | **CONFIRMADO** | Píldora «Offboarding» 182 × 51 en (1311,127); «Onboarding» gris en (831,140). Breadcrumb en y = 220/216 sin fila de submenú intermedia |
@@ -60,7 +64,7 @@ Las cuatro fichas parciales van primero, para que se vean antes que el resto.
 | 22 | 40 | «Vista Previa» activa y «Editar documento» inactiva; siete variables con casilla; «Confirmar», no «Continuar»; DNI distinto entre variable y resumen | **CONFIRMADO** | «Vista Previa» azul con subrayado (823,484); «Editar documento» gris (1294,482). Siete variables marcadas (Nombre Completo, Dni, Puesto, Área, Fecha_Inicio, Remuneración, Tipo de Contrato). «Confirmar >» (1445,992). DNI de la variable **712123456** (387,649) frente a **7142123456** del resumen (103,387) |
 | 23 | 41 | Cromo de Alta en la confirmación documental; «accesión»; convivencia de #2b48e9, #294bee y #1e4bf2 | **CONFIRMADO** | Breadcrumb «R.R.H.H / Colaborades» (41,219); hero «Alta de Colaborador» (41,256). «…la accesión seleccionada» (583,489). Tres azules en el render: #2c48e9 (17 266 px; fuente #2249f2), #294bee (1 841 px; fuente #1c4cf7, círculos del stepper) y #1e4bf1 (511 px, avatar en 95,559; Δ1 de #1e4bf2) |
 | 24 | `a-05` | Selector de módulo abierto (popover oscuro con cuatro teselas y scrim), no el filtro de Área/Subárea | **CONFIRMADO** | Popover #1c1c1c de 205 × 205 en (20,146), con teselas RH #2b48e9, Operaciones #f0963e, Contabilidad #5d985e y Finanzas #4911ef. Scrim bajo la cabecera: (1000,700) pasa de #ffffff en `a-04` a #8e9799 en `a-05`; la cabecera (700,40) sigue blanca |
-| 25 | pie | ¿«MP» sobre la barra sin recuadro propio o dentro de un cuadrado? | **CONFIRMADO** | Sin recuadro en ambas fuentes: monograma blanco directamente sobre #1c1c1c. PDF 68 × 30 en (74,1113) de 1920; `a-04` 48 × 21 en (51,778) de 1344. Misma proporción (3,5 % del ancho y 2,55 % del alto). Solo hay una línea divisoria fina debajo |
+| 25 | pie | ¿«MP» sobre la barra sin recuadro propio o dentro de un cuadrado? | **RESUELTO** (era CONFIRMADO) | Sin recuadro en ambas fuentes: monograma blanco directamente sobre #1c1c1c. PDF 68 × 30 en (74,1113) de 1920; `a-04` 48 × 21 en (51,778) de 1344. Misma proporción (3,5 % del ancho y 2,55 % del alto). Solo hay una línea divisoria fina debajo. Pie corregido el 23-nov-2026 (commit de este lote) |
 
 ## Fichas
 
@@ -208,6 +212,9 @@ token que la p. 24, y PDFKit lo muestra como **#2c48e9**. No hay un azul distint
 el PDF; la diferencia que cita el documento proviene de las referencias JPG, que alternan
 #2349f2 y #2b49e9.
 
+**Estado: RESUELTO el 23-nov-2026.** El CSS usa el azul primario `#2249f2` y el acento
+`#1c4cf7` en todas las ventanas; el commit de este lote retira los valores derivados de los JPG.
+
 ### 15. p. 33 — Pestaña dibujada y tarjeta
 
 **Veredicto: CONFIRMADO.** La pestaña activa es **«Dotación por área y cargo»** (664,328), no
@@ -309,3 +316,8 @@ directamente sobre la barra oscura del pie, sin fondo propio, sin borde y sin ca
 
 La corrección pendiente del revisor, por tanto, no debe añadir un cuadrado: la fuente dibuja
 el monograma suelto sobre la barra.
+
+**Estado: RESUELTO el 23-nov-2026.** El pie compartido usa ahora el monograma de 68 × 30 px en
+(74, 1113), sin recuadro ni fondo propio; el entorno medido es `#1c1c1c` continuo en `inicio`,
+`candidatos` y `documental`. El commit de este lote sustituye el PNG con velo por el glifo
+transparente invertido a blanco.
