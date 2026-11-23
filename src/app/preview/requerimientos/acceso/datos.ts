@@ -23,7 +23,7 @@ export const PERFILES: readonly Perfil[] = [
 export const USUARIO = {
   nombre: 'Rodrigo Ayala',
   rol: 'Administrador',
-  foto: '/preview/mp360/img/acceso-avatar-a03.jpg',
+  foto: '/preview/mp360/img/acceso-avatar-rodrigo.jpg',
 } as const
 
 export interface Modulo {

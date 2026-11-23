@@ -567,6 +567,11 @@ como registro histórico: 37 ventanas mejoraron, 3 no cambiaron y candidato empe
 detalle de ambos lotes está en `.cache/mae-lote1.md` y `.cache/lote2a/mae-final.tsv` (no
 versionados).
 
+El **lote 2B** (23-nov-2026), con las mismas capturas headless, corrige las tres ventanas de
+acceso: login 2,9 → 2,8 (2,861 → 2,789), perfiles 2,6 → 2,6 (2,632 → 2,631) y módulos
+2,9 → 2,2 (2,886 → 2,179). Ninguna empeora; la mejora máxima es 0,707 y corresponde a módulos.
+Capturas y muestreo en `.cache/lote2b/` (no versionado).
+
 | Ventana | Estado | MAE vs. render (1920 de ancho) |
 |---|---|---|
 | UX-02 Bandeja | Validada por el usuario | 10,2 / 255 |
@@ -607,9 +612,9 @@ versionados).
 | Gestión documental · confirmación (PDF p. 41) | Pendiente de revisión visual | 5,0 / 255 |
 | Inicio | Pendiente de revisión visual | 10,0 / 255 |
 | Inicio módulo | Pendiente de revisión visual | 6,4 / 255 |
-| Login | Pendiente de revisión visual | 2,9 / 255 |
+| Login | Pendiente de revisión visual | 2,8 / 255 |
 | Perfiles | Pendiente de revisión visual | 2,6 / 255 |
-| Módulos | Pendiente de revisión visual | 2,9 / 255 |
+| Módulos | Pendiente de revisión visual | 2,2 / 255 |
 
 El bloque Offboarding queda completo con cinco pantallas replicadas: bandeja (p. 27),
 datos y causal (p. 28), checklist y revisión por áreas (p. 29), liquidación (p. 30) y
@@ -651,6 +656,28 @@ sobre el PDF (p. 20 y p. 37 a 1920) y sobre `a-04`:
   «unifica, planifica y ejecuta.» va en azul `#5ccafa` (el resto del eslogan y el «© 2026 Manpower
   SAC. Derechos Reservados» en gris `#969696`). El texto arranca en `x = 156`, 13 px después del
   monograma.
+
+**Criterio del lote 2B (23-nov-2026).** Dos correcciones medidas sobre los renders de acceso:
+
+- **Avatar y tarjeta en `?ux=modulos`.** La referencia dibuja una tarjeta `#efefef` de 792 × 114 px
+  en `x = 166`, `y = 431`, con radio de esquina de ≈20 px (la curva alcanza el borde izquierdo en
+  `y = 448`); se aplican 22 px en CSS porque el rasterizado recorta ≈1,5 px la curva. El avatar de
+  90 px se apoya en `x = 193`, `y = 445` (27 px de sangría izquierda y
+  14 px desde el borde superior) y su anillo cian ya viene incluido en el recorte correcto. Se
+  reutiliza `acceso-avatar-rodrigo.jpg`, el mismo recorte centrado de perfiles: el antiguo
+  `acceso-avatar-a03.jpg` tenía el anillo desplazado (bbox cian 27–89 de 90 px) y una esquina gris
+  del fondo, un defecto que ningún `object-position` podía recuperar porque el círculo salía del
+  propio recorte. El nombre va a 23 px (no 22) y el bloque de texto arranca en `x = 304`,
+  `y = 466`, con 3 px entre nombre y rol. La superficie `#efefef` con radio 20 px se define una
+  sola vez en `.ux-acceso__tarjeta` y la usan módulos y la fila activa de perfiles; login no dibuja
+  avatar y el cromo compartido no interviene. El recorte queda centrado como la referencia: la
+  mancha de pelo y ojos cae en x 24–60 de la caja de 90 px (24 px a la izquierda y 29 a la
+  derecha) y a 7 px del borde superior, con una diferencia máxima de 1 px respecto al render.
+- **«MP 360°» en azul dentro del login.** La frase completa conserva `#333` y el peso 700; solo el
+  literal «MP 360°» —incluido el símbolo de grado— va en azul. El muestreo del interior de los
+  glifos da una mediana RGB(36, 76, 239), a 2/3/3 del token `--azul` `#2249f2` y más lejos de
+  `#1c4cf7`; se aplica `var(--azul)` sin interletraje, versalitas ni cambio de peso. El resto de la
+  ventana no cambia.
 
 1. **Erratas del diseño** replicadas literalmente: «fomulario», «Selecionar»,
    «Responsable de Aprobración».

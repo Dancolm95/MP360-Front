@@ -30,7 +30,7 @@ export function DisenoLogin() {
         <Logo />
 
         <h1 className="ux-acceso__titulo ux-acceso__titulo--hero">
-          Bienvenido a MP 360°
+          Bienvenido a <span className="ux-acceso__marca">MP 360°</span>
         </h1>
         <p className="ux-acceso__subtitulo">
           Un nuevo sistema que unifica, planifica y ejecuta.
@@ -86,7 +86,7 @@ export function DisenoPerfiles() {
           {PERFILES.map((perfil) => (
             <li
               key={perfil.nombre}
-              className={perfil.activo ? 'ux-perfiles__fila ux-perfiles__fila--activa' : 'ux-perfiles__fila'}
+              className={perfil.activo ? 'ux-perfiles__fila ux-perfiles__fila--activa ux-acceso__tarjeta' : 'ux-perfiles__fila'}
             >
               <button type="button" className="ux-perfiles__boton">
                 <img className="ux-perfiles__foto" src={perfil.foto} alt="" />
@@ -116,7 +116,7 @@ export function DisenoModulos() {
           Tu rol de administrador te permite ingresar a diversos módulos
         </p>
 
-        <div className="ux-modulos__usuario">
+        <div className="ux-modulos__usuario ux-acceso__tarjeta">
           <img className="ux-modulos__foto" src={USUARIO.foto} alt="" />
           <span className="ux-perfiles__datos">
             <span className="ux-perfiles__nombre">{USUARIO.nombre}</span>

@@ -2779,6 +2779,15 @@
   top: 316px;
 }
 
+.ux-acceso__marca {
+  color: var(--azul);
+}
+
+.ux-acceso__tarjeta {
+  background: #efefef;
+  border-radius: 22px;
+}
+
 .ux-acceso__subtitulo {
   position: absolute;
   left: 170px;
@@ -2888,11 +2897,6 @@
   list-style: none;
 }
 
-.ux-perfiles__fila--activa {
-  border-radius: 8px;
-  background: #efefef;
-}
-
 .ux-perfiles__boton {
   width: 100%;
   height: 114px;
@@ -2951,17 +2955,22 @@
 .ux-modulos__usuario {
   position: absolute;
   left: 166px;
-  top: 432px;
-  display: flex;
-  align-items: center;
-  gap: 45px;
+  top: 431px;
+  width: 792px;
+  height: 114px;
 }
 
 .ux-modulos__usuario .ux-perfiles__datos {
-  padding-top: 20px;
+  position: absolute;
+  left: 138px;
+  top: 35px;
+  gap: 3px;
 }
 
 .ux-modulos__foto {
+  position: absolute;
+  left: 27px;
+  top: 14px;
   width: 90px;
   height: 90px;
   border-radius: 50%;
@@ -2969,7 +2978,7 @@
 }
 
 .ux-modulos__usuario .ux-perfiles__nombre {
-  font-size: 22px;
+  font-size: 23px;
 }
 
 .ux-modulos__salir {
