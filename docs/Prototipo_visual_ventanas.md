@@ -1,6 +1,6 @@
 # Prototipo visual de ventanas — rama `codex/rh-vis`
 
-**Última actualización:** 21 de noviembre de 2026.
+**Última actualización:** 23 de noviembre de 2026.
 **Carácter:** documento de rama. Describe el alcance y el estado del prototipo visual que
 vive en `codex/rh-vis`. **No es una spec, no añade requisitos y no sustituye** a
 `docs/constitution.md`, a `docs/specs/` ni a `memory.md`.
@@ -559,52 +559,54 @@ public/preview/mp360/
 
 ## 7. Estado de validación
 
-Barrido de MAE del 23-nov-2026 (lote 1: pie y azul), con capturas headless a 1920 px de ancho y
-la barra del preview oculta: **37 ventanas mejoran**, **3 no cambian** (login, perfiles y módulos,
-sin pie compartido) y **1 empeora +0,005** (candidato), siempre por debajo de 11. Ninguna supera el
-umbral de 0,5. La mejora máxima es de 0,108 (documental-info); el detalle completo está en
-`.cache/mae-lote1.md` (no versionado).
+Barrido de MAE del 23-nov-2026 (lote 2A: breadcrumb, bloque de usuario y pie), con capturas
+headless a 1920 px de ancho y la barra del preview oculta: **las 41 ventanas mejoran**. La mejora
+máxima es de 0,258 (licencia-detalle y offboarding-liquidación) y ninguna empeora; la más alta
+queda en ux02 (10,2 / 255), por debajo del umbral de 11. El barrido del lote 1 (pie y azul) queda
+como registro histórico: 37 ventanas mejoraron, 3 no cambiaron y candidato empeoró +0,005. El
+detalle de ambos lotes está en `.cache/mae-lote1.md` y `.cache/lote2a/mae-final.tsv` (no
+versionados).
 
 | Ventana | Estado | MAE vs. render (1920 de ancho) |
 |---|---|---|
-| UX-02 Bandeja | Validada por el usuario | 10,5 / 255 |
-| UX-03a Formulario | Sin cambios solicitados | 7,7 / 255 |
-| UX-03b Confirmación | Sin cambios solicitados | 7,3 / 255 |
-| UX-04 Detalle | Sin cambios solicitados | 9,5 / 255 |
-| Candidatos (PDF p. 10) | Pendiente de revisión visual | 8,9 / 255 |
-| Candidato (PDF p. 11) | Calibrada; pendiente de revisión visual | 6,5 / 255 |
-| Colaboradores (PDF p. 12) | Pendiente de revisión visual | 8,9 / 255 |
-| Colaborador (PDF p. 17) | Pendiente de revisión visual | 7,0 / 255 |
-| Colaborador boletas (PDF p. 18) | Pendiente de revisión visual | 7,2 / 255 |
-| Colaborador boletas · proceso (PDF p. 19) | Pendiente de revisión visual | 7,1 / 255 |
-| Alta · selección (PDF p. 13) | Pendiente de revisión visual | 8,1 / 255 |
-| Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,9 / 255 |
-| Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 7,9 / 255 |
-| Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,2 / 255 |
-| Onboarding · En curso (PDF p. 20) | Pendiente de revisión visual | 5,8 / 255 |
-| Onboarding · Sin onboarding (PDF p. 21) | Pendiente de revisión visual | 6,1 / 255 |
-| EPP (PDF p. 22) | Pendiente de revisión visual | 7,4 / 255 |
-| EPP · devolución (PDF p. 23) | Pendiente de revisión visual | 7,8 / 255 |
-| Licencias (PDF p. 24) | Pendiente de revisión visual | 7,6 / 255 |
-| Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,7 / 255 |
-| Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,4 / 255 |
-| Offboarding · bandeja (PDF p. 27) | Pendiente de revisión visual | 6,4 / 255 |
-| Offboarding · datos (PDF p. 28) | Pendiente de revisión visual | 7,5 / 255 |
-| Offboarding · checklist (PDF p. 29) | Pendiente de revisión visual | 8,9 / 255 |
-| Offboarding · liquidación (PDF p. 30) | Pendiente de revisión visual | 6,5 / 255 |
-| Offboarding · cierre (PDF p. 31) | Pendiente de revisión visual | 6,0 / 255 |
-| Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,3 / 255 |
-| Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,8 / 255 |
-| Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,8 / 255 |
-| Organización y dotación · historial (PDF p. 35) | Pendiente de revisión visual | 7,4 / 255 |
-| Calendario de asistencia (PDF p. 36) | Pendiente de revisión visual | 6,7 / 255 |
-| Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,7 / 255 |
-| Gestión documental · tipo (PDF p. 38) | Pendiente de revisión visual | 7,3 / 255 |
-| Gestión documental · información (PDF p. 39) | Pendiente de revisión visual | 7,0 / 255 |
-| Gestión documental · contenido (PDF p. 40) | Pendiente de revisión visual | 7,9 / 255 |
-| Gestión documental · confirmación (PDF p. 41) | Pendiente de revisión visual | 5,2 / 255 |
-| Inicio | Pendiente de revisión visual | 10,1 / 255 |
-| Inicio módulo | Pendiente de revisión visual | 6,6 / 255 |
+| UX-02 Bandeja | Validada por el usuario | 10,2 / 255 |
+| UX-03a Formulario | Sin cambios solicitados | 7,4 / 255 |
+| UX-03b Confirmación | Sin cambios solicitados | 7,1 / 255 |
+| UX-04 Detalle | Sin cambios solicitados | 9,3 / 255 |
+| Candidatos (PDF p. 10) | Pendiente de revisión visual | 8,7 / 255 |
+| Candidato (PDF p. 11) | Calibrada; pendiente de revisión visual | 6,3 / 255 |
+| Colaboradores (PDF p. 12) | Pendiente de revisión visual | 8,7 / 255 |
+| Colaborador (PDF p. 17) | Pendiente de revisión visual | 6,8 / 255 |
+| Colaborador boletas (PDF p. 18) | Pendiente de revisión visual | 7,0 / 255 |
+| Colaborador boletas · proceso (PDF p. 19) | Pendiente de revisión visual | 6,9 / 255 |
+| Alta · selección (PDF p. 13) | Pendiente de revisión visual | 7,9 / 255 |
+| Alta · datos (PDF p. 14) | Pendiente de revisión visual | 6,7 / 255 |
+| Alta · resumen (PDF p. 15) | Pendiente de revisión visual | 7,7 / 255 |
+| Alta · confirmación (PDF p. 16) | Pendiente de revisión visual | 5,0 / 255 |
+| Onboarding · En curso (PDF p. 20) | Pendiente de revisión visual | 5,5 / 255 |
+| Onboarding · Sin onboarding (PDF p. 21) | Pendiente de revisión visual | 5,8 / 255 |
+| EPP (PDF p. 22) | Pendiente de revisión visual | 7,2 / 255 |
+| EPP · devolución (PDF p. 23) | Pendiente de revisión visual | 7,6 / 255 |
+| Licencias (PDF p. 24) | Pendiente de revisión visual | 7,4 / 255 |
+| Licencia · registro (PDF p. 25) | Pendiente de revisión visual | 7,5 / 255 |
+| Licencia · detalle (PDF p. 26) | Pendiente de revisión visual | 8,2 / 255 |
+| Offboarding · bandeja (PDF p. 27) | Pendiente de revisión visual | 6,2 / 255 |
+| Offboarding · datos (PDF p. 28) | Pendiente de revisión visual | 7,2 / 255 |
+| Offboarding · checklist (PDF p. 29) | Pendiente de revisión visual | 8,7 / 255 |
+| Offboarding · liquidación (PDF p. 30) | Pendiente de revisión visual | 6,3 / 255 |
+| Offboarding · cierre (PDF p. 31) | Pendiente de revisión visual | 5,8 / 255 |
+| Organización y dotación · resumen (PDF p. 32) | Pendiente de revisión visual | 8,1 / 255 |
+| Organización y dotación · estructura (PDF p. 33) | Pendiente de revisión visual | 6,6 / 255 |
+| Organización y dotación · asignados (PDF p. 34) | Pendiente de revisión visual | 7,6 / 255 |
+| Organización y dotación · historial (PDF p. 35) | Pendiente de revisión visual | 7,2 / 255 |
+| Calendario de asistencia (PDF p. 36) | Pendiente de revisión visual | 6,5 / 255 |
+| Gestión documental · bandeja (PDF p. 37) | Pendiente de revisión visual | 6,5 / 255 |
+| Gestión documental · tipo (PDF p. 38) | Pendiente de revisión visual | 7,1 / 255 |
+| Gestión documental · información (PDF p. 39) | Pendiente de revisión visual | 6,8 / 255 |
+| Gestión documental · contenido (PDF p. 40) | Pendiente de revisión visual | 7,7 / 255 |
+| Gestión documental · confirmación (PDF p. 41) | Pendiente de revisión visual | 5,0 / 255 |
+| Inicio | Pendiente de revisión visual | 10,0 / 255 |
+| Inicio módulo | Pendiente de revisión visual | 6,4 / 255 |
 | Login | Pendiente de revisión visual | 2,9 / 255 |
 | Perfiles | Pendiente de revisión visual | 2,6 / 255 |
 | Módulos | Pendiente de revisión visual | 2,9 / 255 |
@@ -630,6 +632,25 @@ decisión de fuente, el prototipo usa ya un único par de azules en todas las ve
 `#2249f2` y acento `#1c4cf7`; los literales `#2b48e9`, `#2c48e9`, `#294bee` y `#1e4bf2` se
 retiraron del CSS. El «MP» del pie también quedó corregido: se apoya directamente sobre la barra
 `#1c1c1c`, sin recuadro ni fondo propio, a 68 × 30 px (3,54 % del ancho), como el PDF y `a-04`.
+
+**Criterio de cromo del lote 2A (23-nov-2026).** Tres correcciones del cromo compartido, medidas
+sobre el PDF (p. 20 y p. 37 a 1920) y sobre `a-04`:
+
+- **Breadcrumb.** En las 41 referencias el único nivel coloreado es el primero, `R.R.H.H`: azul
+  `#2249f2` y subrayado de 1 px; los demás niveles y los separadores van en gris `#969696`. Se
+  replica tal cual, con la misma base de 13 px, y `?ux=ux04` queda alineado con su referencia
+  (activo de 42 a 89 px, subrayado en y = 233-234). Las separaciones entre niveles se ajustan por
+  artboard: 13 px en ux04 y 12 px en el detalle de licencia; el resto conserva 10 px. El
+  subrayado añade 3 px al renglón, por lo que la bandeja UX-02 compensa ese alto con
+  `margin-bottom: -3px` para no desplazar la tabla.
+- **Bloque de usuario y rol.** Caja de 182 × 60 px, a `x = 1704` y `y = 23` en el PDF, con padding
+  `10 px` a la izquierda y `11 px` a la derecha, avatar de 40 px, separación de 7-8 px hasta el
+  texto y nombre de 16 px. El borde nativo del botón se anuló porque consumía 2 px del contenido.
+- **Pie.** Línea divisoria de 1 px `#666` de `x = 52` a `x = 1867` (1816 px) en `y = 1158`, a
+  17 px del borde inferior; el monograma sigue en `x = 74`, `y = 1113`, a 68 × 30 px. La frase
+  «unifica, planifica y ejecuta.» va en azul `#5ccafa` (el resto del eslogan y el «© 2026 Manpower
+  SAC. Derechos Reservados» en gris `#969696`). El texto arranca en `x = 156`, 13 px después del
+  monograma.
 
 1. **Erratas del diseño** replicadas literalmente: «fomulario», «Selecionar»,
    «Responsable de Aprobración».

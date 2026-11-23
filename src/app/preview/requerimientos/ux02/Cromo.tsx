@@ -216,7 +216,7 @@ export function Pie() {
         <img src="/preview/mp360/img/logo-mp-dark.png" alt="MP 360" />
       </span>
       <p className="ux02-pie__eslogan">
-        Un nuevo sistema que unifica, planifica y ejecuta.
+        Un nuevo sistema que <b>unifica, planifica y ejecuta.</b>
       </p>
       <span className="ux02-pie__derechos">
         © 2026 Manpower SAC. Derechos Reservados

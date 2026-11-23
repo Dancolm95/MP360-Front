@@ -19,11 +19,11 @@ function Valor({ celda }: { celda: CeldaResumen }) {
 function Migas() {
   return (
     <p className="ux04-migas">
-      <span>R.R.H.H</span>
+      <span className="ux04-migas__activo">R.R.H.H</span>
       <span className="ux04-migas__sep">/</span>
       <span>Requerimiento</span>
       <span className="ux04-migas__sep">/</span>
-      <span className="ux04-migas__activo">Detalle</span>
+      <span>Detalle</span>
     </p>
   )
 }

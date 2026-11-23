@@ -6,9 +6,9 @@ function Encabezado() {
   return (
     <section className="ux02-encabezado">
       <p className="ux02-breadcrumb">
-        <span>R.R.H.H</span>
+        <span className="ux02-breadcrumb__activo">R.R.H.H</span>
         <span className="ux02-breadcrumb__sep">/</span>
-        <span className="ux02-breadcrumb__activo">Requerimientos</span>
+        <span>Requerimientos</span>
       </p>
 
       <div className="ux02-encabezado__fila">
@@ -193,7 +193,7 @@ export function PaginaBandeja() {
           <hr className="ux02-divisor-seccion" />
           <div className="ux02-subseccion">
             <p className="ux02-breadcrumb ux02-breadcrumb--detalle">
-              <span>R.R.H.H</span>
+              <span className="ux02-breadcrumb__activo">R.R.H.H</span>
               <span className="ux02-breadcrumb__sep">/</span>
               <span>Requerimientos</span>
               <span className="ux02-breadcrumb__sep">/</span>
