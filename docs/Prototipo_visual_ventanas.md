@@ -924,6 +924,10 @@ resuelven en la implementación funcional, no aquí:
     «accesión» en el subtítulo. No hay acciones, navegación ni transición reales; los datos
     de muestra no son reglas.
 
+**Auditoría de las divergencias:** ver `docs/Divergencias_verificadas.md` (23-nov-2026;
+21 confirmadas, 4 parciales y ningún desmentido del documento de rama; el inventario de
+`main` queda desmentido en la p. 19).
+
 ## 9. Cierre y siguiente paso
 
 - Con `alta-seleccion`, `alta-datos`, `alta-resumen` y `alta-confirmacion` quedan
