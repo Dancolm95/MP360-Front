@@ -10,7 +10,7 @@
 > `tasks.md`**; este documento solo describe el procedimiento.
 
 - **Capacidad:** `rh-req-01` (RH-REQ-01 — Requerimientos)
-- **Tarea:** T-RH-27 (pendiente en `tasks.md`)
+- **Tarea:** T-RH-27 (cerrada e integrada en `main` el 24-nov-2026: merge `c68daa1` + tarea `a4b81fb`)
 - **Fuentes:** `tasks.md` §T-RH-27, `plan.md` §6 (R1–R6), `docs/Inventario_y_conciliacion_RRHH.md`, `docs/constitution.md`, `AGENTS.md`
 - **Objetivo:** que la capa visual (ventanas diseñadas en `codex/rh-vis`) compile, pase la suite y conviva con la lógica cerrada de `main` (T-RH-01…22 + T-RH-25), sin perder exports, pruebas ni comportamiento aprobado, y sin cambiar requisitos ni reinterpretar vistas.
 
