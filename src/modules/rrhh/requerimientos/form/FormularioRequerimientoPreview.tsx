@@ -37,6 +37,8 @@ export interface FormularioRequerimientoPreviewProps {
   readonly onGuardarBorrador?: (borrador: BorradorRequerimiento) => void
   readonly onEnviar?: (borrador: BorradorRequerimiento) => void
   readonly onRevisar?: () => void
+  /** 'modal' (por defecto) muestra el velo de pantalla completa; 'embebido' ocupa solo su contenedor. */
+  readonly variante?: 'modal' | 'embebido'
 }
 
 interface EstadoCampos {
@@ -279,6 +281,7 @@ export function FormularioRequerimientoPreview({
   onGuardarBorrador = () => {},
   onEnviar = () => {},
   onRevisar = () => {},
+  variante = 'modal',
 }: FormularioRequerimientoPreviewProps) {
   const idBase = useId()
   const [paso, setPaso] = useState<PasoFormularioPreview>(pasoInicial)
@@ -466,12 +469,18 @@ export function FormularioRequerimientoPreview({
     ? 'Actualiza los datos y solicita su revisión'
     : 'Llena el formulario y solicita su revisión'
 
+  const embebido = variante === 'embebido'
+
   return (
-    <div className={styles['rrhh-form__velo']}>
+    <div
+      className={
+        embebido ? styles['rrhh-form__embebido'] : styles['rrhh-form__velo']
+      }
+    >
       <div
         className={styles['rrhh-form__modal']}
-        role="dialog"
-        aria-modal="true"
+        role={embebido ? 'region' : 'dialog'}
+        aria-modal={embebido ? undefined : true}
         aria-labelledby={idTitulo}
       >
         <header className={styles['rrhh-form__cabecera']}>

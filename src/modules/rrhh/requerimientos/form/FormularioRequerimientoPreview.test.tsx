@@ -1,5 +1,5 @@
 /** @vitest-environment jsdom */
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import type {
   Area,
@@ -132,5 +132,41 @@ describe('FormularioRequerimientoPreview (UX-03, presentacional)', () => {
       screen.getByRole('button', { name: 'Volver a la Bandeja' }),
     ).toBeDefined()
     expect(screen.queryByText(/Enviar por correo/i)).toBeNull()
+  })
+
+  it('por defecto se presenta como diálogo modal', () => {
+    const { rerender } = render(
+      <FormularioRequerimientoPreview catalogos={catalogos()} />,
+    )
+
+    expect(
+      screen.getByRole('dialog', { name: 'Nuevo requerimiento de personal' }),
+    ).toBeDefined()
+    expect(screen.getByRole('dialog').getAttribute('aria-modal')).toBe('true')
+
+    rerender(
+      <FormularioRequerimientoPreview catalogos={catalogos()} variante="modal" />,
+    )
+
+    expect(screen.getByRole('dialog').getAttribute('aria-modal')).toBe('true')
+  })
+
+  it('con variante «embebido» no es un diálogo modal y conserva los campos', () => {
+    const { container } = render(
+      <FormularioRequerimientoPreview
+        catalogos={catalogos()}
+        variante="embebido"
+      />,
+    )
+
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(container.querySelector('[aria-modal]')).toBeNull()
+
+    const region = screen.getByRole('region', {
+      name: 'Nuevo requerimiento de personal',
+    })
+    expect(container.firstElementChild?.contains(region)).toBe(true)
+    expect(within(region).getByRole('combobox', { name: 'Motivo' })).toBeDefined()
+    expect(within(region).getByRole('button', { name: 'Continuar' })).toBeDefined()
   })
 })

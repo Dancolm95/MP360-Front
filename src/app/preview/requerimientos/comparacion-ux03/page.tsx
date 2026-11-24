@@ -60,6 +60,7 @@ export default function ComparacionUx03Page() {
           <FormularioRequerimientoPreview
             catalogos={CATALOGOS}
             colaboradores={COLABORADORES}
+            variante="embebido"
           />
         </section>
       </div>
