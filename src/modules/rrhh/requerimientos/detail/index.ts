@@ -28,3 +28,7 @@ export {
 } from './model'
 export type { MensajeEstadoDetalle, ResultadoDetalleUx04 } from './resultado'
 export { modelarResultadoDetalle } from './resultado'
+export {
+  DetalleRequerimiento,
+  type DetalleRequerimientoProps,
+} from './DetalleRequerimiento'

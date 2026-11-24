@@ -1,0 +1,270 @@
+.rrhh-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  color: #1c1c1c;
+}
+
+.rrhh-detail__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.rrhh-detail__breadcrumb {
+  margin: 0 0 0.25rem;
+  color: #2249f2;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.rrhh-detail__titulo {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.rrhh-detail__subtitulo {
+  margin: 0.25rem 0 0;
+  color: #808080;
+  font-size: 0.9375rem;
+}
+
+.rrhh-detail__estado-linea {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.rrhh-detail__estado {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* El mapeo estado→color de los siete estados canónicos queda pendiente de
+ * decisión (CV-04). Este prototipo visual usa los tres colores dibujados en el
+ * PDF y un gris neutro para los estados no representados. */
+.rrhh-detail__estado--borrador {
+  background: #969696;
+}
+
+.rrhh-detail__estado--pendiente-aprobacion,
+.rrhh-detail__estado--observado,
+.rrhh-detail__estado--en-reclutamiento {
+  background: #f8ad3b;
+}
+
+.rrhh-detail__estado--aprobado,
+.rrhh-detail__estado--cubierto {
+  background: #489a57;
+}
+
+.rrhh-detail__estado--cancelado {
+  background: #be272d;
+}
+
+.rrhh-detail__alerta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.rrhh-detail__alerta--temprana {
+  color: #7a4d00;
+}
+
+.rrhh-detail__alerta--media {
+  color: #b54708;
+}
+
+.rrhh-detail__alerta--critica {
+  color: #be272d;
+}
+
+.rrhh-detail__volver,
+.rrhh-detail__accion-primaria {
+  border: 0;
+  border-radius: 0.375rem;
+  background: #2249f2;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+}
+
+.rrhh-detail__volver:hover,
+.rrhh-detail__accion-primaria:hover {
+  background: #1c4cf7;
+}
+
+.rrhh-detail__tarjeta {
+  border: 1px solid #efefef;
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 1rem 1.25rem;
+}
+
+.rrhh-detail__tarjeta-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.rrhh-detail__tarjeta-titulo {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.rrhh-detail__tarjeta-subtitulo {
+  margin: 0.25rem 0 0;
+  color: #808080;
+  font-size: 0.8125rem;
+}
+
+.rrhh-detail__resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+  border: 1px solid #efefef;
+  border-radius: 0.375rem;
+  padding: 1rem;
+}
+
+.rrhh-detail__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.rrhh-detail__item-etiqueta {
+  color: #808080;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.rrhh-detail__item-valor {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1c1c1c;
+  overflow-wrap: anywhere;
+}
+
+.rrhh-detail__badge-empresa {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.25rem;
+  background: #2249f2;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.rrhh-detail__badge-fecha {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  background: #f8ad3b;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.rrhh-detail__ausente {
+  color: #969696;
+}
+
+.rrhh-detail__aviso {
+  margin: 0;
+  color: #808080;
+  font-size: 0.8125rem;
+}
+
+.rrhh-detail__cobertura,
+.rrhh-detail__plazo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.rrhh-detail__plazo {
+  align-items: start;
+}
+
+.rrhh-detail__plazo .rrhh-detail__aviso {
+  grid-column: 1 / -1;
+}
+
+.rrhh-detail__toggle {
+  border: 1px solid #efefef;
+  border-radius: 0.375rem;
+  background: #fff;
+  color: #2249f2;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.rrhh-detail__vacio {
+  margin: 1rem 0 0;
+  color: #808080;
+}
+
+.rrhh-detail__historial {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rrhh-detail__historial-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #efefef;
+}
+
+.rrhh-detail__historial-accion {
+  font-weight: 600;
+}
+
+.rrhh-detail__historial-meta {
+  color: #808080;
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 900px) {
+  .rrhh-detail__resumen-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .rrhh-detail__resumen-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rrhh-detail__cabecera {
+    flex-direction: column;
+  }
+}
