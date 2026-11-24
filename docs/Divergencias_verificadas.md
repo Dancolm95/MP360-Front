@@ -1,5 +1,9 @@
 # Divergencias verificadas contra el PDF
 
+> **Estado tras T-RH-27 (24-nov-2026):** solo sobreviven las ventanas `ux02`, `ux03`,
+> `ux04`, `inicio` y `acceso`; las doce áreas restantes se podaron y este documento conserva
+> la auditoría del estado anterior. T-RH-06 está cerrada; el siguiente paso es T-RH-23.
+
 **Fecha:** 23 de noviembre de 2026.
 **Carácter:** documento de rama (`codex/rh-vis`). **No es una spec, no añade requisitos** y no
 sustituye a `docs/constitution.md`, a `docs/specs/`, a `memory.md` ni a

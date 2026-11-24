@@ -1,5 +1,9 @@
 # Prototipo visual de ventanas — rama `codex/rh-vis`
 
+> **Estado tras T-RH-27 (24-nov-2026):** solo sobreviven las ventanas `ux02`, `ux03`,
+> `ux04`, `inicio` y `acceso`; las doce áreas restantes se podaron y este documento describe
+> el estado anterior. T-RH-06 está cerrada; el siguiente paso es T-RH-23.
+
 **Última actualización:** 23 de noviembre de 2026.
 **Carácter:** documento de rama. Describe el alcance y el estado del prototipo visual que
 vive en `codex/rh-vis`. **No es una spec, no añade requisitos y no sustituye** a

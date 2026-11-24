@@ -21,6 +21,7 @@ import type {
 } from '../contracts'
 import {
   ALERTA_LABELS,
+  AVISO_DURACION,
   ESTADO_LABELS,
   MOTIVO_LABELS,
   formatearFecha,
@@ -210,8 +211,6 @@ function ValorAusente() {
     </span>
   )
 }
-
-const AVISO_DURACION = 'La fecha objetivo se calcula al aprobar.'
 
 function DuracionCelda({ duracion }: { readonly duracion: DuracionAplicable }) {
   return (

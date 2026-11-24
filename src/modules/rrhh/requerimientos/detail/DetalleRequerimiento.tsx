@@ -12,7 +12,12 @@ import type {
   NivelAlerta,
   PlazoRequerimiento,
 } from '../contracts'
-import { ALERTA_LABELS, ESTADO_LABELS, MOTIVO_LABELS } from '../model/etiquetas'
+import {
+  ALERTA_LABELS,
+  AVISO_DURACION,
+  ESTADO_LABELS,
+  MOTIVO_LABELS,
+} from '../model/etiquetas'
 import { formatearFecha } from '../model/formato'
 import styles from './DetalleRequerimiento.module.css'
 
@@ -43,8 +48,6 @@ const ACCION_LABELS: Readonly<Record<AccionHistorial, string>> = {
   'reversion-cobertura': 'Reversión de cobertura',
   'primer-dia-real': 'Primer día real',
 }
-
-const AVISO_FECHA_OBJETIVO = 'La fecha objetivo se calcula al aprobar.'
 
 function tieneDatosCompletos(
   detalle: DetalleRequerimiento,
@@ -320,7 +323,7 @@ export function DetalleRequerimiento({
             }
           />
           {!plazo?.fechaObjetivo ? (
-            <p className={styles['rrhh-detail__aviso']}>{AVISO_FECHA_OBJETIVO}</p>
+            <p className={styles['rrhh-detail__aviso']}>{AVISO_DURACION}</p>
           ) : null}
         </div>
       </section>

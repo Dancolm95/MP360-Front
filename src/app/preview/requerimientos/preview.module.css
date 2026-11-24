@@ -95,6 +95,8 @@
 }
 
 .barra__opcion {
+  display: inline-flex;
+  align-items: center;
   border: 0;
   border-radius: 999px;
   background: transparent;
@@ -104,6 +106,7 @@
   padding: 8px 16px;
   cursor: pointer;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .barra__opcion[aria-pressed='true'] {
@@ -158,4 +161,36 @@
   height: 20px;
   margin: 0 2px;
   background: rgba(255, 255, 255, 0.18);
+}
+
+/* ---------- Comparación lado a lado de UX-03 ---------- */
+
+.comparacionUx03 {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: #eef0f6;
+  min-height: 100vh;
+}
+
+.comparacionUx03__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.comparacionUx03__volver {
+  color: #1f6feb;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.comparacionUx03__rejilla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
 }

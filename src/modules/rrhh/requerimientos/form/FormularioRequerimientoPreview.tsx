@@ -39,7 +39,6 @@ export interface FormularioRequerimientoPreviewProps {
   readonly onRevisar?: () => void
 }
 
-
 interface EstadoCampos {
   motivo: string
   empresaId: string

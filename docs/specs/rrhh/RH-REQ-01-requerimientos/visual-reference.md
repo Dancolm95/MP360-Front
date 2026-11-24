@@ -1,5 +1,9 @@
 # Referencia visual documental — UX-02, UX-03 y UX-04 (RH-REQ-01)
 
+> **Estado tras T-RH-27 (24-nov-2026):** solo sobreviven las ventanas `ux02`, `ux03`,
+> `ux04`, `inicio` y `acceso`; esta referencia cubre las tres primeras y las doce áreas
+> restantes se podaron. T-RH-06 está cerrada; el siguiente paso es T-RH-23.
+
 **Fecha:** 13 de noviembre de 2026.
 **Carácter:** experimental. Este archivo es una **referencia visual documental**: describe cómo se ven
 UX-02, UX-03 y UX-04 según las fuentes aprobadas. **No es una spec ni un requisito nuevo**: no añade
