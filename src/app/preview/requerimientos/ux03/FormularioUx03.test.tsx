@@ -30,13 +30,10 @@ import type {
   SubareaId,
   Usuario,
   UsuarioId,
-} from '../contracts'
-import type { FormularioRequerimientoInput } from '../model'
-import { borradorDesdeFormulario } from '../review'
-import {
-  FormularioRequerimientoPreview,
-  crearPuertoPreview,
-} from './FormularioRequerimientoPreview'
+} from '../../../../modules/rrhh/requerimientos/contracts'
+import type { FormularioRequerimientoInput } from '../../../../modules/rrhh/requerimientos/model'
+import { borradorDesdeFormulario } from '../../../../modules/rrhh/requerimientos/review'
+import { FormularioUx03, crearPuertoPreview } from './FormularioUx03'
 
 afterEach(cleanup)
 
@@ -128,21 +125,29 @@ const FORMULARIO_ADMINISTRATIVO: FormularioRequerimientoInput = {
   comentario: 'Cobertura del puesto administrativo de Logística.',
 }
 
+const FORMULARIO_REEMPLAZO: FormularioRequerimientoInput = {
+  ...FORMULARIO_ADMINISTRATIVO,
+  motivo: 'reemplazo',
+  colaboradorAReemplazarId: colaborador.id,
+}
+
 const PLAZO_ADMINISTRATIVO = 20
 
 function renderPreview(
-  props: Partial<ComponentProps<typeof FormularioRequerimientoPreview>> = {},
+  props: Partial<ComponentProps<typeof FormularioUx03>> = {},
 ) {
+  const valores = catalogos()
   return render(
-    <FormularioRequerimientoPreview
-      catalogos={catalogos()}
+    <FormularioUx03
+      catalogos={valores}
       colaboradores={[colaborador]}
+      puerto={crearPuertoPreview(valores)}
       {...props}
     />,
   )
 }
 
-describe('FormularioRequerimientoPreview: datos, revisión y confirmación', () => {
+describe('FormularioUx03: datos, revisión y confirmación', () => {
   it('bloquea «Continuar» con datos inválidos y muestra los errores del modelo', async () => {
     const user = userEvent.setup()
     renderPreview()
@@ -179,6 +184,17 @@ describe('FormularioRequerimientoPreview: datos, revisión y confirmación', () 
     ).toBeDefined()
     expect(screen.getByRole('button', { name: 'Enviar' })).toBeDefined()
     expect(screen.getByRole('button', { name: 'Volver a editar' })).toBeDefined()
+  })
+
+  it('muestra el nombre del colaborador a reemplazar y no su identificador', async () => {
+    const user = userEvent.setup()
+    renderPreview({ valorInicial: FORMULARIO_REEMPLAZO })
+
+    await user.click(screen.getByRole('button', { name: 'Continuar' }))
+
+    const resumen = screen.getByRole('region', { name: 'Revisión y envío' })
+    expect(within(resumen).getByText('Colaborador A')).toBeDefined()
+    expect(within(resumen).queryByText('colaborador-a')).toBeNull()
   })
 
   it('«Volver a editar» conserva los valores introducidos', async () => {
@@ -327,10 +343,24 @@ describe('FormularioRequerimientoPreview: datos, revisión y confirmación', () 
     ).toBeDefined()
     expect(screen.getByText('Usuario A')).toBeDefined()
     expect(screen.getByText('Pendiente de aprobación')).toBeDefined()
+    expect(
+      screen.getByRole('button', { name: 'Volver a la Bandeja' }),
+    ).toBeDefined()
+    expect(screen.queryByText(/Enviar por correo/i)).toBeNull()
   })
 })
 
-describe('FormularioRequerimientoPreview: presentación', () => {
+describe('FormularioUx03: presentación', () => {
+  it('muestra «Cancelar» en el paso de datos y lo notifica al pulsarlo', async () => {
+    const user = userEvent.setup()
+    let cancelados = 0
+    renderPreview({ onCancelar: () => (cancelados += 1) })
+
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }))
+
+    expect(cancelados).toBe(1)
+  })
+
   it('por defecto se presenta como diálogo modal', () => {
     renderPreview()
 

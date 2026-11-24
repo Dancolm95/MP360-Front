@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { DetalleRequerimiento } from '../../../modules/rrhh/requerimientos/detail'
-import { FormularioRequerimientoPreview } from '../../../modules/rrhh/requerimientos/form'
 import {
   CATALOGOS,
   COLABORADORES,
@@ -18,7 +17,10 @@ import { DisenoInicio } from './inicio/DisenoInicio'
 import { DisenoDetalle } from './ux04/DisenoDetalle'
 import { DisenoPagina6 } from './ux02/DisenoPagina6'
 import { VistaEscalada } from './ux02/VistaEscalada'
+import { FormularioUx03, crearPuertoPreview } from './ux03/FormularioUx03'
 import styles from './preview.module.css'
+
+const PUERTO_PREVIEW = crearPuertoPreview(CATALOGOS)
 
 type Modo = 'diseno' | 'comparar' | 'crear' | 'detalle'
 type Diseno =
@@ -194,11 +196,12 @@ export default function PreviewRequerimientos() {
       ) : null}
 
       {modo === 'crear' ? (
-        <FormularioRequerimientoPreview
+        <FormularioUx03
           catalogos={CATALOGOS}
           colaboradores={COLABORADORES}
           valorInicial={FORMULARIO_ADMINISTRATIVO}
           plazoAdministrativoDias={PLAZO_ADMINISTRATIVO_DIAS}
+          puerto={PUERTO_PREVIEW}
           onCancelar={() => setModo('diseno')}
         />
       ) : null}

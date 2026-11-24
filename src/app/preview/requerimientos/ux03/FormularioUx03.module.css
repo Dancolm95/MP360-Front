@@ -150,110 +150,10 @@
   padding: 1.25rem 1.5rem 0;
 }
 
-.rrhh-form__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.rrhh-form__campo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  min-width: 0;
-  min-inline-size: 0;
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
-
-.rrhh-form__campo--ancho-completo {
-  grid-column: 1 / -1;
-}
-
-.rrhh-form__etiqueta,
-.rrhh-form__leyenda {
-  color: #1c1c1c;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  padding: 0;
-}
-
-.rrhh-form__leyenda {
-  display: block;
-  float: none;
-  width: 100%;
-  margin-bottom: 0.3rem;
-}
-
-.rrhh-form__asterisco {
-  color: #ff0000;
-  margin-left: 0.15rem;
-}
-
-.rrhh-form__control {
-  width: 100%;
-  border: 1px solid #efefef;
-  border-radius: 0.375rem;
-  background: #fff;
-  color: #1c1c1c;
-  font: inherit;
-  font-size: 0.9375rem;
-  padding: 0.5rem 0.625rem;
-}
-
-.rrhh-form__control:focus {
-  outline: 2px solid #2249f2;
-  outline-offset: 1px;
-}
-
-.rrhh-form__control:disabled {
-  background: #f8f7f9;
-  color: #b0b0b0;
-  cursor: not-allowed;
-}
-
-.rrhh-form__control::placeholder {
-  color: #969696;
-}
-
-.rrhh-form__grupo,
-.rrhh-form__ubicacion {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.rrhh-form__grupo {
-  flex-direction: column;
-}
-
-.rrhh-form__ubicacion {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-}
-
-.rrhh-form__subcampo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  min-width: 0;
-}
-
-.rrhh-form__duracion {
-  margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
 .rrhh-form__aviso {
   margin: 0.25rem 0 0;
   color: #808080;
   font-size: 0.8125rem;
-}
-
-.rrhh-form__ausente {
-  color: #969696;
 }
 
 .rrhh-form__resumen {
@@ -454,13 +354,8 @@
 }
 
 @media (max-width: 560px) {
-  .rrhh-form__grid,
   .rrhh-form__resumen-grid,
   .rrhh-form__resumen-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .rrhh-form__ubicacion {
     grid-template-columns: 1fr;
   }
 }

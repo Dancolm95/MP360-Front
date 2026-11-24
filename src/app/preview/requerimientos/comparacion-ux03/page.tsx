@@ -1,16 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  FormularioRequerimiento,
-  FormularioRequerimientoPreview,
-} from '../../../../modules/rrhh/requerimientos/form'
+import { FormularioRequerimiento } from '../../../../modules/rrhh/requerimientos/form'
 import {
   crearFormularioVacio,
   type FormularioRequerimientoInput,
 } from '../../../../modules/rrhh/requerimientos/model'
 import { CATALOGOS, COLABORADORES } from '../data'
+import { FormularioUx03, crearPuertoPreview } from '../ux03/FormularioUx03'
 import styles from '../preview.module.css'
+
+const PUERTO_PREVIEW = crearPuertoPreview(CATALOGOS)
 
 export default function ComparacionUx03Page() {
   const [valor, setValor] = useState<FormularioRequerimientoInput>(() =>
@@ -57,9 +57,10 @@ export default function ComparacionUx03Page() {
           <p className={styles['comparacion__etiqueta']} id="comparacion-ux03-preview">
             Preview · rama codex/rh-vis
           </p>
-          <FormularioRequerimientoPreview
+          <FormularioUx03
             catalogos={CATALOGOS}
             colaboradores={COLABORADORES}
+            puerto={PUERTO_PREVIEW}
             variante="embebido"
           />
         </section>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useMemo, useState } from 'react'
+import { useId, useState } from 'react'
 import type { ReactNode } from 'react'
 import type {
   CatalogosRequerimientos,
@@ -9,33 +9,27 @@ import type {
   ConfirmacionEnvio,
   InstanteISO,
   RequerimientoId,
-} from '../contracts'
-import type { FormularioRequerimientoInput } from '../model'
-import {
-  contextoDesdeCatalogos,
-  crearFormularioVacio,
-  validarParaEnvio,
-} from '../model'
+} from '../../../../modules/rrhh/requerimientos/contracts'
+import type { FormularioRequerimientoInput } from '../../../../modules/rrhh/requerimientos/model'
+import { crearFormularioVacio } from '../../../../modules/rrhh/requerimientos/model'
 import type {
-  EstadoEdicion,
   EstadoEdicionRevision,
   EstadoOperacion,
   ErrorRevision,
   PasoEdicionRevision,
   ResultadoOperacion,
   SolicitudVersionada,
-} from '../review'
+} from '../../../../modules/rrhh/requerimientos/review'
 import {
   crearEstadoEdicion,
   enviarAprobacion,
-  erroresRevision,
   revisar,
   volverAEditar,
-} from '../review'
-import { FormularioRequerimiento } from './FormularioRequerimiento'
-import styles from './FormularioRequerimiento.module.css'
+} from '../../../../modules/rrhh/requerimientos/review'
+import { FormularioRequerimiento } from '../../../../modules/rrhh/requerimientos/form'
+import styles from './FormularioUx03.module.css'
 
-export interface FormularioRequerimientoPreviewProps {
+export interface FormularioUx03Props {
   readonly catalogos: CatalogosRequerimientos
   /** Colaboradores seleccionables para «Colaborador a reemplazar». */
   readonly colaboradores?: readonly ColaboradorReemplazo[]
@@ -43,8 +37,8 @@ export interface FormularioRequerimientoPreviewProps {
   /** Plazo administrativo ya fijado por RR. HH.; si falta, queda pendiente. */
   readonly plazoAdministrativoDias?: number | null
   readonly onCancelar?: () => void
-  /** Puerto de comandos; por defecto, el mock local de esta vista previa. */
-  readonly puerto?: ComandosRequerimientosPort
+  /** El preview inyecta el mock de envío; el componente no trae uno por defecto. */
+  readonly puerto: ComandosRequerimientosPort
   readonly solicitud?: SolicitudVersionada
   /** 'modal' (por defecto) muestra el velo de pantalla completa; 'embebido' ocupa solo su contenedor. */
   readonly variante?: 'modal' | 'embebido'
@@ -61,10 +55,7 @@ async function noDisponible(): Promise<never> {
   throw new Error('Operación no disponible en la vista previa')
 }
 
-/**
- * Mock local de la vista previa: confirma el envío para poder ejercitar el flujo
- * sin backend. No representa persistencia real ni reemplaza al contrato.
- */
+/** Mock de la vista previa: confirma el envío sin backend ni persistencia real. */
 export function crearPuertoPreview(
   catalogos: CatalogosRequerimientos,
 ): ComandosRequerimientosPort {
@@ -254,7 +245,7 @@ function mensajeOperacion(operacion: EstadoOperacion): string | null {
   }
 }
 
-export function FormularioRequerimientoPreview({
+export function FormularioUx03({
   catalogos,
   colaboradores = [],
   valorInicial,
@@ -263,7 +254,7 @@ export function FormularioRequerimientoPreview({
   puerto,
   solicitud,
   variante = 'modal',
-}: FormularioRequerimientoPreviewProps) {
+}: FormularioUx03Props) {
   const idBase = useId()
   const [estado, setEstado] = useState<EstadoEdicionRevision>(() =>
     crearEstadoEdicion(valorInicial ?? crearFormularioVacio(catalogos)),
@@ -271,13 +262,8 @@ export function FormularioRequerimientoPreview({
   const [erroresValidacion, setErroresValidacion] = useState<
     readonly ErrorRevision[]
   >([])
-  const [errorOperacion, setErrorOperacion] = useState<string | null>(null)
   const [enviando, setEnviando] = useState(false)
 
-  const puertoEnvio = useMemo(
-    () => puerto ?? crearPuertoPreview(catalogos),
-    [puerto, catalogos],
-  )
   const solicitudEnvio = solicitud ?? SOLICITUD_PREVIEW
 
   const idTitulo = `${idBase}-titulo`
@@ -286,56 +272,53 @@ export function FormularioRequerimientoPreview({
 
   const alCambiar = (valor: FormularioRequerimientoInput) => {
     setErroresValidacion([])
-    setErrorOperacion(null)
-    const edicion: EstadoEdicion = {
-      paso: 'edicion',
-      formulario: valor,
-      revision: null,
-      operacion: null,
-    }
-    setEstado(edicion)
+    setEstado(crearEstadoEdicion(valor))
   }
 
   const continuar = () => {
-    const validacion = validarParaEnvio(
-      estado.formulario,
-      contextoDesdeCatalogos(catalogos),
-    )
-    if (!validacion.ok) {
-      setErroresValidacion(erroresRevision(validacion.errors))
-      setErrorOperacion(null)
+    const resultado = revisar(estado, catalogos, {
+      plazoAdministrativoDias,
+      colaboradores,
+    })
+    if (!resultado.ok || resultado.estado.paso !== 'revision') return
+
+    const revision = resultado.estado.revision
+    if (!revision.puedeEnviar) {
+      setErroresValidacion(revision.errores)
       return
     }
 
     setErroresValidacion([])
-    setErrorOperacion(null)
-    const resultado = revisar(estado, catalogos, { plazoAdministrativoDias })
-    if (resultado.ok) setEstado(resultado.estado)
+    setEstado(resultado.estado)
   }
 
   const volver = () => {
     const resultado = volverAEditar(estado)
-    if (!resultado.ok) return
-    setErrorOperacion(null)
-    setEstado(resultado.estado)
+    if (resultado.ok) setEstado(resultado.estado)
   }
 
   const enviar = async () => {
     if (estado.paso !== 'revision' || enviando) return
     setEnviando(true)
-    setErrorOperacion(null)
     try {
       const resultado: ResultadoOperacion = await enviarAprobacion(
         estado,
         solicitudEnvio,
-        puertoEnvio,
+        puerto,
       )
       setEstado(resultado.estado)
-      setErrorOperacion(mensajeOperacion(resultado.operacion))
     } catch {
-      setErrorOperacion(
-        'No se pudo enviar el requerimiento. Revisa tu conexión e inténtalo de nuevo.',
-      )
+      const operacion: EstadoOperacion = {
+        status: 'error',
+        error: {
+          message:
+            'No se pudo enviar el requerimiento. Revisa tu conexión e inténtalo de nuevo.',
+          retryable: true,
+        },
+        entradaConservada: true,
+        reintentable: true,
+      }
+      setEstado({ ...estado, operacion })
     } finally {
       setEnviando(false)
     }
@@ -343,6 +326,10 @@ export function FormularioRequerimientoPreview({
 
   const embebido = variante === 'embebido'
   const paso = estado.paso
+  const mensajeError =
+    estado.paso === 'revision' && estado.operacion && !enviando
+      ? mensajeOperacion(estado.operacion)
+      : null
 
   return (
     <div
@@ -409,9 +396,9 @@ export function FormularioRequerimientoPreview({
             <p className={styles['rrhh-form__resumen-subtitulo']}>
               Revisa los datos antes de enviar el requerimiento.
             </p>
-            {errorOperacion ? (
+            {mensajeError ? (
               <div className={styles['rrhh-form__error-operacion']} role="alert">
-                <p>{errorOperacion}</p>
+                <p>{mensajeError}</p>
                 <p className={styles['rrhh-form__aviso']}>
                   Los datos se conservan; puedes corregirlos o reintentar el envío.
                 </p>
