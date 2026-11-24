@@ -42,6 +42,7 @@ import type {
   Usuario,
   UsuarioId,
 } from '../../../modules/rrhh/requerimientos/contracts'
+import type { FormularioRequerimientoInput } from '../../../modules/rrhh/requerimientos/model'
 import { MOTIVO_LABELS } from '../../../modules/rrhh/requerimientos/model/etiquetas'
 import { MOTIVOS } from '../../../modules/rrhh/requerimientos/state/valores-bandeja'
 
@@ -210,6 +211,26 @@ export const SOLICITANTES: readonly Usuario[] = [
   USUARIO_RIOS,
   USUARIO_PAREDES,
 ]
+
+export const PLAZO_ADMINISTRATIVO_DIAS = 20
+
+/** Caso administrativo evidente para recorrer el flujo de UX-03 en la vista previa. */
+export const FORMULARIO_ADMINISTRATIVO: FormularioRequerimientoInput = {
+  motivo: 'nueva-vacante',
+  empresaId: EMPRESA_HONDA.id,
+  colaboradorAReemplazarId: null,
+  departamentoId: DEPARTAMENTO_OPERACIONES.id,
+  areaId: AREA_LOGISTICA.id,
+  subareaId: SUBAREA_DISTRIBUCION.id,
+  puestoId: PUESTO_SUPERVISOR.id,
+  vacantes: 1,
+  remuneracionMensual: '4500.00',
+  departamentoUbicacionId: DEP_UBICACION_LIMA.id,
+  provinciaId: PROVINCIA_LIMA.id,
+  distritoId: DISTRITO_SAN_MIGUEL.id,
+  usuarioProximaTareaId: USUARIO_RIOS.id,
+  comentario: 'Cobertura del puesto administrativo de Logística.',
+}
 
 const COLABORADOR_LUIS_TORRES: ColaboradorReemplazo = {
   id: 'col-luis-torres' as ColaboradorId,

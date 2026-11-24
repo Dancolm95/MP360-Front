@@ -1,206 +1,137 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type {
-  AreaId,
-  BorradorRequerimiento,
   CatalogosRequerimientos,
-  ColaboradorId,
   ColaboradorReemplazo,
-  DepartamentoId,
-  DepartamentoUbicacionId,
-  DistritoId,
-  EmpresaId,
-  MotivoRequerimiento,
-  ProvinciaId,
-  PuestoId,
-  SubareaId,
-  UsuarioId,
+  ComandosRequerimientosPort,
+  ConfirmacionEnvio,
+  InstanteISO,
+  RequerimientoId,
 } from '../contracts'
-import { AVISO_DURACION, MOTIVO_LABELS } from '../model/etiquetas'
-import { MOTIVOS } from '../state/valores-bandeja'
+import type { FormularioRequerimientoInput } from '../model'
+import {
+  contextoDesdeCatalogos,
+  crearFormularioVacio,
+  validarParaEnvio,
+} from '../model'
+import type {
+  EstadoEdicion,
+  EstadoEdicionRevision,
+  EstadoOperacion,
+  ErrorRevision,
+  PasoEdicionRevision,
+  ResultadoOperacion,
+  SolicitudVersionada,
+} from '../review'
+import {
+  crearEstadoEdicion,
+  enviarAprobacion,
+  erroresRevision,
+  revisar,
+  volverAEditar,
+} from '../review'
+import { FormularioRequerimiento } from './FormularioRequerimiento'
 import styles from './FormularioRequerimiento.module.css'
-
-export type PasoFormularioPreview = 'datos' | 'revision' | 'confirmacion'
 
 export interface FormularioRequerimientoPreviewProps {
   readonly catalogos: CatalogosRequerimientos
   /** Colaboradores seleccionables para «Colaborador a reemplazar». */
   readonly colaboradores?: readonly ColaboradorReemplazo[]
-  readonly borradorInicial?: BorradorRequerimiento
-  /** Código mostrado en la confirmación; lo asigna el backend al confirmar. */
-  readonly codigoConfirmacion?: string
-  /** Paso inicial; permite presentar la confirmación como variante de prop. */
-  readonly pasoInicial?: PasoFormularioPreview
+  readonly valorInicial?: FormularioRequerimientoInput
+  /** Plazo administrativo ya fijado por RR. HH.; si falta, queda pendiente. */
+  readonly plazoAdministrativoDias?: number | null
   readonly onCancelar?: () => void
-  readonly onGuardarBorrador?: (borrador: BorradorRequerimiento) => void
-  readonly onEnviar?: (borrador: BorradorRequerimiento) => void
-  readonly onRevisar?: () => void
+  /** Puerto de comandos; por defecto, el mock local de esta vista previa. */
+  readonly puerto?: ComandosRequerimientosPort
+  readonly solicitud?: SolicitudVersionada
   /** 'modal' (por defecto) muestra el velo de pantalla completa; 'embebido' ocupa solo su contenedor. */
   readonly variante?: 'modal' | 'embebido'
 }
 
-interface EstadoCampos {
-  motivo: string
-  empresaId: string
-  colaboradorAReemplazarId: string
-  departamentoId: string
-  areaId: string
-  subareaId: string
-  puestoId: string
-  vacantes: string
-  remuneracionMensual: string
-  departamentoUbicacionId: string
-  provinciaId: string
-  distritoId: string
-  usuarioProximaTareaId: string
-  comentario: string
+const SOLICITUD_PREVIEW: SolicitudVersionada = {
+  requerimientoId: 'req-preview' as RequerimientoId,
+  version: 1,
 }
 
-const CAMPOS_VACIOS: EstadoCampos = {
-  motivo: '',
-  empresaId: '',
-  colaboradorAReemplazarId: '',
-  departamentoId: '',
-  areaId: '',
-  subareaId: '',
-  puestoId: '',
-  vacantes: '',
-  remuneracionMensual: '',
-  departamentoUbicacionId: '',
-  provinciaId: '',
-  distritoId: '',
-  usuarioProximaTareaId: '',
-  comentario: '',
+const FECHA_PREVIEW = '2026-11-24T00:00:00Z' as InstanteISO
+
+async function noDisponible(): Promise<never> {
+  throw new Error('Operación no disponible en la vista previa')
 }
 
-function inicializarCampos(borrador?: BorradorRequerimiento): EstadoCampos {
-  if (!borrador) return CAMPOS_VACIOS
+/**
+ * Mock local de la vista previa: confirma el envío para poder ejercitar el flujo
+ * sin backend. No representa persistencia real ni reemplaza al contrato.
+ */
+export function crearPuertoPreview(
+  catalogos: CatalogosRequerimientos,
+): ComandosRequerimientosPort {
   return {
-    motivo: borrador.motivo ?? '',
-    empresaId: borrador.empresaId ?? '',
-    colaboradorAReemplazarId: borrador.colaboradorAReemplazarId ?? '',
-    departamentoId: borrador.departamentoId ?? '',
-    areaId: borrador.areaId ?? '',
-    subareaId: borrador.subareaId ?? '',
-    puestoId: borrador.puestoId ?? '',
-    vacantes: borrador.vacantes === null ? '' : String(borrador.vacantes),
-    remuneracionMensual:
-      borrador.remuneracion === null ? '' : String(borrador.remuneracion.monto),
-    departamentoUbicacionId: borrador.ubicacion?.departamentoId ?? '',
-    provinciaId: borrador.ubicacion?.provinciaId ?? '',
-    distritoId: borrador.ubicacion?.distritoId ?? '',
-    usuarioProximaTareaId: borrador.usuarioProximaTareaId ?? '',
-    comentario: borrador.comentario ?? '',
-  }
-}
-
-function parsearNumero(valor: string): number | null {
-  if (valor === '') return null
-  const numero = Number(valor)
-  return Number.isNaN(numero) ? null : numero
-}
-
-function construirBorrador(campos: EstadoCampos): BorradorRequerimiento {
-  const monto = parsearNumero(campos.remuneracionMensual)
-  const vacantes = parsearNumero(campos.vacantes)
-  const ubicacion =
-    campos.departamentoUbicacionId && campos.provinciaId && campos.distritoId
-      ? {
-          departamentoId:
-            campos.departamentoUbicacionId as DepartamentoUbicacionId,
-          provinciaId: campos.provinciaId as ProvinciaId,
-          distritoId: campos.distritoId as DistritoId,
+    crear: noDisponible,
+    guardarBorrador: noDisponible,
+    enviarAprobacion: async (comando) => {
+      const empresa = catalogos.empresas.find(
+        (item) => item.id === comando.contenido.empresaId,
+      )
+      const puesto = catalogos.puestos.find(
+        (item) => item.id === comando.contenido.puestoId,
+      )
+      if (!empresa || !puesto) {
+        return {
+          status: 'error',
+          error: {
+            message: 'No se pudo componer la confirmación de la vista previa.',
+            retryable: false,
+          },
         }
-      : null
+      }
 
-  return {
-    motivo: (campos.motivo || null) as MotivoRequerimiento | null,
-    empresaId: (campos.empresaId || null) as EmpresaId | null,
-    colaboradorAReemplazarId:
-      (campos.colaboradorAReemplazarId || null) as ColaboradorId | null,
-    departamentoId: (campos.departamentoId || null) as DepartamentoId | null,
-    areaId: (campos.areaId || null) as AreaId | null,
-    subareaId: (campos.subareaId || null) as SubareaId | null,
-    puestoId: (campos.puestoId || null) as PuestoId | null,
-    vacantes,
-    remuneracion: monto === null ? null : { monto, moneda: 'PEN' },
-    ubicacion,
-    usuarioProximaTareaId:
-      (campos.usuarioProximaTareaId || null) as UsuarioId | null,
-    comentario: campos.comentario || null,
+      const responsable =
+        catalogos.usuariosProximaTarea.find(
+          (item) => item.id === comando.contenido.usuarioProximaTareaId,
+        ) ?? null
+      const solicitadas = comando.contenido.vacantes ?? 0
+      const id = comando.requerimientoId
+      const version = comando.version + 1
+      const datos: ConfirmacionEnvio = {
+        id,
+        resumen: {
+          id,
+          version,
+          fechaCreacion: FECHA_PREVIEW,
+          estado: 'pendiente-aprobacion',
+          motivo: comando.contenido.motivo ?? 'nueva-vacante',
+          empresa,
+          puesto,
+          solicitadas,
+          cubiertas: 0,
+          pendientes: solicitadas,
+          fechaObjetivo: null,
+          duracionAplicable: null,
+          responsable,
+          alerta: null,
+          autorizacion: {
+            requerimientoId: id,
+            version,
+            capacidades: [],
+            accionesPermitidas: [],
+          },
+        },
+        responsable,
+        estado: 'pendiente-aprobacion',
+      }
+      return { status: 'confirmado', datos }
+    },
+    aprobar: noDisponible,
+    observar: noDisponible,
+    cancelar: noDisponible,
+    fijarPlazoAdministrativo: noDisponible,
+    ajustarPlazoAdministrativo: noDisponible,
+    abrirProcesoSeleccion: noDisponible,
+    solicitarReversionCobertura: noDisponible,
   }
-}
-
-function formatearMonto(monto: string): string {
-  const numero = Number(monto)
-  return `S/ ${numero.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`
-}
-
-function ValorAusente() {
-  return (
-    <span className={styles['rrhh-form__ausente']}>
-      —<span className="sr-only"> Sin dato</span>
-    </span>
-  )
-}
-
-function Valor({ texto }: { readonly texto: string | null | undefined }) {
-  return texto ? <>{texto}</> : <ValorAusente />
-}
-
-function Campo({
-  id,
-  etiqueta,
-  obligatorio,
-  anchoCompleto,
-  children,
-}: {
-  readonly id: string
-  readonly etiqueta: string
-  readonly obligatorio?: boolean
-  readonly anchoCompleto?: boolean
-  readonly children: ReactNode
-}) {
-  const clase = anchoCompleto
-    ? `${styles['rrhh-form__campo']} ${styles['rrhh-form__campo--ancho-completo']}`
-    : styles['rrhh-form__campo']
-  return (
-    <div className={clase}>
-      <label className={styles['rrhh-form__etiqueta']} htmlFor={id}>
-        {etiqueta}
-        {obligatorio ? (
-          <span className={styles['rrhh-form__asterisco']} aria-hidden="true">
-            *
-          </span>
-        ) : null}
-      </label>
-      {children}
-    </div>
-  )
-}
-
-function Leyenda({
-  etiqueta,
-  obligatorio,
-}: {
-  readonly etiqueta: string
-  readonly obligatorio?: boolean
-}) {
-  return (
-    <legend className={styles['rrhh-form__leyenda']}>
-      {etiqueta}
-      {obligatorio ? (
-        <span className={styles['rrhh-form__asterisco']} aria-hidden="true">
-          *
-        </span>
-      ) : null}
-    </legend>
-  )
 }
 
 function ResumenItem({
@@ -220,8 +151,33 @@ function ResumenItem({
   )
 }
 
-function IndicadorPasos({ paso }: { readonly paso: PasoFormularioPreview }) {
-  const completado = paso !== 'datos'
+function ListaErrores({
+  errores,
+  titulo,
+}: {
+  readonly errores: readonly ErrorRevision[]
+  readonly titulo: string
+}) {
+  return (
+    <div
+      className={styles['rrhh-form__errores']}
+      role="alert"
+      aria-live="assertive"
+    >
+      <p className={styles['rrhh-form__errores-titulo']}>{titulo}</p>
+      <ul className={styles['rrhh-form__errores-lista']}>
+        {errores.map((error) => (
+          <li key={`${error.campo}-${error.codigo}`}>
+            <strong>{error.etiqueta}:</strong> {error.mensaje}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function IndicadorPasos({ paso }: { readonly paso: PasoEdicionRevision }) {
+  const completado = paso !== 'edicion'
   return (
     <ol className={styles['rrhh-form__pasos']}>
       <li className={styles['rrhh-form__paso']}>
@@ -237,9 +193,7 @@ function IndicadorPasos({ paso }: { readonly paso: PasoFormularioPreview }) {
         </span>
         <span
           className={`${styles['rrhh-form__paso-etiqueta']} ${
-            paso === 'datos'
-              ? styles['rrhh-form__paso-etiqueta--activo']
-              : ''
+            paso === 'edicion' ? styles['rrhh-form__paso-etiqueta--activo'] : ''
           }`}
         >
           Datos del requerimiento
@@ -271,205 +225,124 @@ function IndicadorPasos({ paso }: { readonly paso: PasoFormularioPreview }) {
   )
 }
 
+function mensajeOperacion(operacion: EstadoOperacion): string | null {
+  switch (operacion.status) {
+    case 'confirmado':
+      return null
+    case 'conflicto-version':
+      return `La versión cambió (esperada ${operacion.conflicto.versionEsperada}, vigente ${operacion.conflicto.versionVigente}). Revisa los datos y vuelve a intentarlo.`
+    case 'validacion':
+      return operacion.errores
+        .map((error) => `${error.etiqueta}: ${error.mensaje}`)
+        .join(' · ')
+    case 'sin-autorizacion':
+      return 'No tienes autorización para enviar este requerimiento.'
+    case 'estado-invalido':
+      return `El requerimiento está en estado ${operacion.estadoActual} y no admite este envío.`
+    case 'error-integracion':
+      return operacion.error.error.message
+    case 'error':
+      return operacion.error.message
+    case 'sesion-finalizada':
+      return 'La sesión terminó. Vuelve a iniciar sesión para continuar.'
+    case 'paso-invalido':
+      return 'La acción no está disponible en el paso actual.'
+    case 'revision-invalida':
+      return 'La revisión tiene errores; corrige los datos antes de enviar.'
+    case 'no-disponible':
+      return 'El envío no está disponible en este entorno.'
+  }
+}
+
 export function FormularioRequerimientoPreview({
   catalogos,
   colaboradores = [],
-  borradorInicial,
-  codigoConfirmacion,
-  pasoInicial = 'datos',
+  valorInicial,
+  plazoAdministrativoDias,
   onCancelar = () => {},
-  onGuardarBorrador = () => {},
-  onEnviar = () => {},
-  onRevisar = () => {},
+  puerto,
+  solicitud,
   variante = 'modal',
 }: FormularioRequerimientoPreviewProps) {
   const idBase = useId()
-  const [paso, setPaso] = useState<PasoFormularioPreview>(pasoInicial)
-  const [campos, setCampos] = useState<EstadoCampos>(() =>
-    inicializarCampos(borradorInicial),
+  const [estado, setEstado] = useState<EstadoEdicionRevision>(() =>
+    crearEstadoEdicion(valorInicial ?? crearFormularioVacio(catalogos)),
   )
+  const [erroresValidacion, setErroresValidacion] = useState<
+    readonly ErrorRevision[]
+  >([])
+  const [errorOperacion, setErrorOperacion] = useState<string | null>(null)
+  const [enviando, setEnviando] = useState(false)
+
+  const puertoEnvio = useMemo(
+    () => puerto ?? crearPuertoPreview(catalogos),
+    [puerto, catalogos],
+  )
+  const solicitudEnvio = solicitud ?? SOLICITUD_PREVIEW
 
   const idTitulo = `${idBase}-titulo`
-  const idMotivo = `${idBase}-motivo`
-  const idEmpresa = `${idBase}-empresa`
-  const idDepartamento = `${idBase}-departamento`
-  const idArea = `${idBase}-area`
-  const idSubarea = `${idBase}-subarea`
-  const idPuesto = `${idBase}-puesto`
-  const idVacantes = `${idBase}-vacantes`
-  const idColaborador = `${idBase}-colaborador`
-  const idRemuneracion = `${idBase}-remuneracion`
-  const idDepUbicacion = `${idBase}-dep-ubicacion`
-  const idProvincia = `${idBase}-provincia`
-  const idDistrito = `${idBase}-distrito`
-  const idResponsable = `${idBase}-responsable`
-  const idComentario = `${idBase}-comentario`
   const idResumen = `${idBase}-resumen`
   const idConfirmacion = `${idBase}-confirmacion`
 
-  const opcionesMotivo =
-    catalogos.motivos.length > 0
-      ? catalogos.motivos
-      : MOTIVOS.map((motivo) => ({
-          motivo,
-          etiqueta: MOTIVO_LABELS[motivo],
-        }))
-
-  const areas = campos.departamentoId
-    ? catalogos.areas.filter(
-        (area) => area.departamentoId === campos.departamentoId,
-      )
-    : []
-  const subareas = campos.areaId
-    ? catalogos.subareas.filter((subarea) => subarea.areaId === campos.areaId)
-    : []
-  const puestos = campos.areaId
-    ? catalogos.puestos.filter(
-        (puesto) =>
-          puesto.areaId === campos.areaId &&
-          (!campos.subareaId || puesto.subareaId === campos.subareaId),
-      )
-    : []
-  const provincias = campos.departamentoUbicacionId
-    ? catalogos.provincias.filter(
-        (provincia) =>
-          provincia.departamentoId === campos.departamentoUbicacionId,
-      )
-    : []
-  const distritos = campos.provinciaId
-    ? catalogos.distritos.filter(
-        (distrito) => distrito.provinciaId === campos.provinciaId,
-      )
-    : []
-
-  const esReemplazo = campos.motivo === 'reemplazo'
-
-  const puestoSeleccionado = catalogos.puestos.find(
-    (puesto) => puesto.id === campos.puestoId,
-  )
-  const duracionTexto = puestoSeleccionado
-    ? puestoSeleccionado.clasificacion === 'operativo'
-      ? '10 días hábiles'
-      : 'Pendiente de definir'
-    : null
-
-  const motivoEtiqueta = opcionesMotivo.find(
-    (item) => item.motivo === campos.motivo,
-  )?.etiqueta
-  const empresaEtiqueta = catalogos.empresas.find(
-    (empresa) => empresa.id === campos.empresaId,
-  )?.nombre
-  const colaboradorEtiqueta = colaboradores.find(
-    (colaborador) => colaborador.id === campos.colaboradorAReemplazarId,
-  )?.nombre
-  const departamentoEtiqueta = catalogos.departamentos.find(
-    (departamento) => departamento.id === campos.departamentoId,
-  )?.nombre
-  const areaEtiqueta = catalogos.areas.find(
-    (area) => area.id === campos.areaId,
-  )?.nombre
-  const subareaEtiqueta = catalogos.subareas.find(
-    (subarea) => subarea.id === campos.subareaId,
-  )?.nombre
-  const puestoEtiqueta = catalogos.puestos.find(
-    (puesto) => puesto.id === campos.puestoId,
-  )?.nombre
-  const depUbicacionEtiqueta = catalogos.departamentosUbicacion.find(
-    (departamento) => departamento.id === campos.departamentoUbicacionId,
-  )?.nombre
-  const provinciaEtiqueta = catalogos.provincias.find(
-    (provincia) => provincia.id === campos.provinciaId,
-  )?.nombre
-  const distritoEtiqueta = catalogos.distritos.find(
-    (distrito) => distrito.id === campos.distritoId,
-  )?.nombre
-  const responsableEtiqueta = catalogos.usuariosProximaTarea.find(
-    (usuario) => usuario.id === campos.usuarioProximaTareaId,
-  )?.nombre
-
-  const textoAreaSubarea = subareaEtiqueta
-    ? `${areaEtiqueta} / ${subareaEtiqueta}`
-    : areaEtiqueta
-  const textoUbicacion =
-    depUbicacionEtiqueta && provinciaEtiqueta && distritoEtiqueta
-      ? `${depUbicacionEtiqueta} / ${provinciaEtiqueta} / ${distritoEtiqueta}`
-      : undefined
-
-  const cambiarCampo = (campo: keyof EstadoCampos, valor: string) => {
-    setCampos((previo) => {
-      const siguiente: EstadoCampos = { ...previo, [campo]: valor }
-
-      if (campo === 'motivo' && valor !== 'reemplazo') {
-        siguiente.colaboradorAReemplazarId = ''
-      }
-
-      if (
-        campo === 'departamentoId' &&
-        !catalogos.areas.some(
-          (area) =>
-            area.id === siguiente.areaId &&
-            area.departamentoId === siguiente.departamentoId,
-        )
-      ) {
-        siguiente.areaId = ''
-      }
-      if (
-        (campo === 'departamentoId' || campo === 'areaId') &&
-        !catalogos.subareas.some(
-          (subarea) =>
-            subarea.id === siguiente.subareaId &&
-            subarea.areaId === siguiente.areaId,
-        )
-      ) {
-        siguiente.subareaId = ''
-      }
-      if (
-        (campo === 'departamentoId' ||
-          campo === 'areaId' ||
-          campo === 'subareaId') &&
-        !catalogos.puestos.some(
-          (puesto) =>
-            puesto.id === siguiente.puestoId &&
-            puesto.areaId === siguiente.areaId &&
-            (!siguiente.subareaId || puesto.subareaId === siguiente.subareaId),
-        )
-      ) {
-        siguiente.puestoId = ''
-      }
-
-      if (
-        campo === 'departamentoUbicacionId' &&
-        !catalogos.provincias.some(
-          (provincia) =>
-            provincia.id === siguiente.provinciaId &&
-            provincia.departamentoId === siguiente.departamentoUbicacionId,
-        )
-      ) {
-        siguiente.provinciaId = ''
-      }
-      if (
-        (campo === 'departamentoUbicacionId' || campo === 'provinciaId') &&
-        !catalogos.distritos.some(
-          (distrito) =>
-            distrito.id === siguiente.distritoId &&
-            distrito.provinciaId === siguiente.provinciaId,
-        )
-      ) {
-        siguiente.distritoId = ''
-      }
-
-      return siguiente
-    })
+  const alCambiar = (valor: FormularioRequerimientoInput) => {
+    setErroresValidacion([])
+    setErrorOperacion(null)
+    const edicion: EstadoEdicion = {
+      paso: 'edicion',
+      formulario: valor,
+      revision: null,
+      operacion: null,
+    }
+    setEstado(edicion)
   }
 
-  const titulo = borradorInicial
-    ? 'Editar requerimiento de personal'
-    : 'Nuevo requerimiento de personal'
-  const subtitulo = borradorInicial
-    ? 'Actualiza los datos y solicita su revisión'
-    : 'Llena el formulario y solicita su revisión'
+  const continuar = () => {
+    const validacion = validarParaEnvio(
+      estado.formulario,
+      contextoDesdeCatalogos(catalogos),
+    )
+    if (!validacion.ok) {
+      setErroresValidacion(erroresRevision(validacion.errors))
+      setErrorOperacion(null)
+      return
+    }
+
+    setErroresValidacion([])
+    setErrorOperacion(null)
+    const resultado = revisar(estado, catalogos, { plazoAdministrativoDias })
+    if (resultado.ok) setEstado(resultado.estado)
+  }
+
+  const volver = () => {
+    const resultado = volverAEditar(estado)
+    if (!resultado.ok) return
+    setErrorOperacion(null)
+    setEstado(resultado.estado)
+  }
+
+  const enviar = async () => {
+    if (estado.paso !== 'revision' || enviando) return
+    setEnviando(true)
+    setErrorOperacion(null)
+    try {
+      const resultado: ResultadoOperacion = await enviarAprobacion(
+        estado,
+        solicitudEnvio,
+        puertoEnvio,
+      )
+      setEstado(resultado.estado)
+      setErrorOperacion(mensajeOperacion(resultado.operacion))
+    } catch {
+      setErrorOperacion(
+        'No se pudo enviar el requerimiento. Revisa tu conexión e inténtalo de nuevo.',
+      )
+    } finally {
+      setEnviando(false)
+    }
+  }
 
   const embebido = variante === 'embebido'
+  const paso = estado.paso
 
   return (
     <div
@@ -489,9 +362,11 @@ export function FormularioRequerimientoPreview({
           </span>
           <div className={styles['rrhh-form__cabecera-textos']}>
             <h1 id={idTitulo} className={styles['rrhh-form__titulo']}>
-              {titulo}
+              Nuevo requerimiento de personal
             </h1>
-            <p className={styles['rrhh-form__subtitulo']}>{subtitulo}</p>
+            <p className={styles['rrhh-form__subtitulo']}>
+              Llena el formulario y solicita su revisión
+            </p>
           </div>
           <button
             type="button"
@@ -505,314 +380,21 @@ export function FormularioRequerimientoPreview({
 
         {paso === 'confirmacion' ? null : <IndicadorPasos paso={paso} />}
 
-        {paso === 'datos' ? (
+        {paso === 'edicion' ? (
           <div className={styles['rrhh-form__cuerpo']}>
-            <div className={styles['rrhh-form__grid']}>
-              <Campo id={idMotivo} etiqueta="Motivo" obligatorio>
-                <select
-                  id={idMotivo}
-                  className={styles['rrhh-form__control']}
-                  value={campos.motivo}
-                  onChange={(evento) => cambiarCampo('motivo', evento.target.value)}
-                >
-                  <option value="">Seleccionar motivo</option>
-                  {opcionesMotivo.map(({ motivo, etiqueta }) => (
-                    <option key={motivo} value={motivo}>
-                      {etiqueta}
-                    </option>
-                  ))}
-                </select>
-              </Campo>
-
-              <Campo id={idEmpresa} etiqueta="Empresa" obligatorio>
-                <select
-                  id={idEmpresa}
-                  className={styles['rrhh-form__control']}
-                  value={campos.empresaId}
-                  onChange={(evento) =>
-                    cambiarCampo('empresaId', evento.target.value)
-                  }
-                >
-                  <option value="">Seleccionar empresa</option>
-                  {catalogos.empresas.map((empresa) => (
-                    <option key={empresa.id} value={empresa.id}>
-                      {empresa.nombre}
-                    </option>
-                  ))}
-                </select>
-              </Campo>
-
-              <Campo id={idDepartamento} etiqueta="Departamento" obligatorio>
-                <select
-                  id={idDepartamento}
-                  className={styles['rrhh-form__control']}
-                  value={campos.departamentoId}
-                  onChange={(evento) =>
-                    cambiarCampo('departamentoId', evento.target.value)
-                  }
-                >
-                  <option value="">Seleccionar departamento</option>
-                  {catalogos.departamentos.map((departamento) => (
-                    <option key={departamento.id} value={departamento.id}>
-                      {departamento.nombre}
-                    </option>
-                  ))}
-                </select>
-              </Campo>
-
-              <fieldset className={styles['rrhh-form__campo']}>
-                <Leyenda etiqueta="Área / Subárea" obligatorio />
-                <div className={styles['rrhh-form__grupo']}>
-                  <div className={styles['rrhh-form__subcampo']}>
-                    <label
-                      className={styles['rrhh-form__etiqueta']}
-                      htmlFor={idArea}
-                    >
-                      Área
-                    </label>
-                    <select
-                      id={idArea}
-                      className={styles['rrhh-form__control']}
-                      value={campos.areaId}
-                      disabled={!campos.departamentoId}
-                      onChange={(evento) =>
-                        cambiarCampo('areaId', evento.target.value)
-                      }
-                    >
-                      <option value="">Seleccionar área</option>
-                      {areas.map((area) => (
-                        <option key={area.id} value={area.id}>
-                          {area.nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={styles['rrhh-form__subcampo']}>
-                    <label
-                      className={styles['rrhh-form__etiqueta']}
-                      htmlFor={idSubarea}
-                    >
-                      Subárea
-                    </label>
-                    <select
-                      id={idSubarea}
-                      className={styles['rrhh-form__control']}
-                      value={campos.subareaId}
-                      disabled={!campos.areaId}
-                      onChange={(evento) =>
-                        cambiarCampo('subareaId', evento.target.value)
-                      }
-                    >
-                      <option value="">Sin subárea</option>
-                      {subareas.map((subarea) => (
-                        <option key={subarea.id} value={subarea.id}>
-                          {subarea.nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </fieldset>
-
-              <Campo id={idPuesto} etiqueta="Puesto solicitado" obligatorio>
-                <select
-                  id={idPuesto}
-                  className={styles['rrhh-form__control']}
-                  value={campos.puestoId}
-                  disabled={!campos.areaId}
-                  onChange={(evento) =>
-                    cambiarCampo('puestoId', evento.target.value)
-                  }
-                >
-                  <option value="">Seleccionar puesto</option>
-                  {puestos.map((puesto) => (
-                    <option key={puesto.id} value={puesto.id}>
-                      {puesto.nombre}
-                    </option>
-                  ))}
-                </select>
-              </Campo>
-
-              <Campo id={idVacantes} etiqueta="Cantidad de vacantes" obligatorio>
-                <input
-                  id={idVacantes}
-                  className={styles['rrhh-form__control']}
-                  type="number"
-                  min={1}
-                  step={1}
-                  inputMode="numeric"
-                  value={campos.vacantes}
-                  onChange={(evento) =>
-                    cambiarCampo('vacantes', evento.target.value)
-                  }
-                />
-              </Campo>
-
-              {esReemplazo ? (
-                <Campo
-                  id={idColaborador}
-                  etiqueta="Colaborador a reemplazar"
-                  obligatorio
-                >
-                  <select
-                    id={idColaborador}
-                    className={styles['rrhh-form__control']}
-                    value={campos.colaboradorAReemplazarId}
-                    onChange={(evento) =>
-                      cambiarCampo('colaboradorAReemplazarId', evento.target.value)
-                    }
-                  >
-                    <option value="">Seleccionar colaborador</option>
-                    {colaboradores.map((colaborador) => (
-                      <option key={colaborador.id} value={colaborador.id}>
-                        {colaborador.nombre}
-                      </option>
-                    ))}
-                  </select>
-                </Campo>
-              ) : null}
-
-              <Campo id={idRemuneracion} etiqueta="Remuneración mensual (S/)" obligatorio>
-                <input
-                  id={idRemuneracion}
-                  className={styles['rrhh-form__control']}
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  inputMode="decimal"
-                  placeholder="0.00"
-                  value={campos.remuneracionMensual}
-                  onChange={(evento) =>
-                    cambiarCampo('remuneracionMensual', evento.target.value)
-                  }
-                />
-              </Campo>
-
-              <div className={styles['rrhh-form__campo']}>
-                <span className={styles['rrhh-form__etiqueta']}>
-                  Duración del plazo
-                </span>
-                <p className={styles['rrhh-form__duracion']}>
-                  {duracionTexto ? duracionTexto : <ValorAusente />}
-                </p>
-                <p className={styles['rrhh-form__aviso']}>{AVISO_DURACION}</p>
-              </div>
-
-              <Campo id={idResponsable} etiqueta="Responsable de aprobación" obligatorio>
-                <select
-                  id={idResponsable}
-                  className={styles['rrhh-form__control']}
-                  value={campos.usuarioProximaTareaId}
-                  onChange={(evento) =>
-                    cambiarCampo('usuarioProximaTareaId', evento.target.value)
-                  }
-                >
-                  <option value="">Selecciona a un responsable</option>
-                  {catalogos.usuariosProximaTarea.map((usuario) => (
-                    <option key={usuario.id} value={usuario.id}>
-                      {usuario.nombre}
-                    </option>
-                  ))}
-                </select>
-              </Campo>
-
-              <fieldset
-                className={`${styles['rrhh-form__campo']} ${styles['rrhh-form__campo--ancho-completo']}`}
-              >
-                <Leyenda etiqueta="Ubicación" obligatorio />
-                <div className={styles['rrhh-form__ubicacion']}>
-                  <div className={styles['rrhh-form__subcampo']}>
-                    <label
-                      className={styles['rrhh-form__etiqueta']}
-                      htmlFor={idDepUbicacion}
-                    >
-                      Departamento
-                    </label>
-                    <select
-                      id={idDepUbicacion}
-                      className={styles['rrhh-form__control']}
-                      value={campos.departamentoUbicacionId}
-                      onChange={(evento) =>
-                        cambiarCampo('departamentoUbicacionId', evento.target.value)
-                      }
-                    >
-                      <option value="">Seleccionar departamento</option>
-                      {catalogos.departamentosUbicacion.map((departamento) => (
-                        <option key={departamento.id} value={departamento.id}>
-                          {departamento.nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={styles['rrhh-form__subcampo']}>
-                    <label
-                      className={styles['rrhh-form__etiqueta']}
-                      htmlFor={idProvincia}
-                    >
-                      Provincia
-                    </label>
-                    <select
-                      id={idProvincia}
-                      className={styles['rrhh-form__control']}
-                      value={campos.provinciaId}
-                      disabled={!campos.departamentoUbicacionId}
-                      onChange={(evento) =>
-                        cambiarCampo('provinciaId', evento.target.value)
-                      }
-                    >
-                      <option value="">Seleccionar provincia</option>
-                      {provincias.map((provincia) => (
-                        <option key={provincia.id} value={provincia.id}>
-                          {provincia.nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={styles['rrhh-form__subcampo']}>
-                    <label
-                      className={styles['rrhh-form__etiqueta']}
-                      htmlFor={idDistrito}
-                    >
-                      Distrito
-                    </label>
-                    <select
-                      id={idDistrito}
-                      className={styles['rrhh-form__control']}
-                      value={campos.distritoId}
-                      disabled={!campos.provinciaId}
-                      onChange={(evento) =>
-                        cambiarCampo('distritoId', evento.target.value)
-                      }
-                    >
-                      <option value="">Seleccionar distrito</option>
-                      {distritos.map((distrito) => (
-                        <option key={distrito.id} value={distrito.id}>
-                          {distrito.nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </fieldset>
-
-              <Campo
-                id={idComentario}
-                etiqueta="Comentario"
-                obligatorio
-                anchoCompleto
-              >
-                <textarea
-                  id={idComentario}
-                  className={styles['rrhh-form__control']}
-                  rows={3}
-                  placeholder="Añade información sobre el requerimiento..."
-                  value={campos.comentario}
-                  onChange={(evento) =>
-                    cambiarCampo('comentario', evento.target.value)
-                  }
-                />
-              </Campo>
-            </div>
+            {erroresValidacion.length > 0 ? (
+              <ListaErrores
+                errores={erroresValidacion}
+                titulo="Revisa los datos antes de continuar:"
+              />
+            ) : null}
+            <FormularioRequerimiento
+              catalogos={catalogos}
+              colaboradores={colaboradores}
+              valor={estado.formulario}
+              onCambio={alCambiar}
+              plazoAdministrativoDias={plazoAdministrativoDias}
+            />
           </div>
         ) : null}
 
@@ -827,60 +409,33 @@ export function FormularioRequerimientoPreview({
             <p className={styles['rrhh-form__resumen-subtitulo']}>
               Revisa los datos antes de enviar el requerimiento.
             </p>
+            {errorOperacion ? (
+              <div className={styles['rrhh-form__error-operacion']} role="alert">
+                <p>{errorOperacion}</p>
+                <p className={styles['rrhh-form__aviso']}>
+                  Los datos se conservan; puedes corregirlos o reintentar el envío.
+                </p>
+              </div>
+            ) : null}
             <div className={styles['rrhh-form__resumen-grid']}>
-              <ResumenItem etiqueta="Motivo" valor={<Valor texto={motivoEtiqueta} />} />
-              <ResumenItem etiqueta="Empresa" valor={<Valor texto={empresaEtiqueta} />} />
-              {esReemplazo ? (
+              {estado.revision.campos.map((campo) => (
                 <ResumenItem
-                  etiqueta="Colaborador a reemplazar"
-                  valor={<Valor texto={colaboradorEtiqueta} />}
+                  key={campo.campo}
+                  etiqueta={campo.etiqueta}
+                  valor={campo.valor}
                 />
-              ) : null}
-              <ResumenItem
-                etiqueta="Departamento"
-                valor={<Valor texto={departamentoEtiqueta} />}
-              />
-              <ResumenItem
-                etiqueta="Área / Subárea"
-                valor={<Valor texto={textoAreaSubarea} />}
-              />
-              <ResumenItem
-                etiqueta="Puesto solicitado"
-                valor={<Valor texto={puestoEtiqueta} />}
-              />
-              <ResumenItem
-                etiqueta="Cantidad de vacantes"
-                valor={<Valor texto={campos.vacantes || undefined} />}
-              />
-              <ResumenItem
-                etiqueta="Remuneración mensual (S/)"
-                valor={
-                  campos.remuneracionMensual ? (
-                    formatearMonto(campos.remuneracionMensual)
-                  ) : (
-                    <ValorAusente />
-                  )
-                }
-              />
-              <ResumenItem
-                etiqueta="Ubicación"
-                valor={<Valor texto={textoUbicacion} />}
-              />
-              <ResumenItem
-                etiqueta="Responsable de aprobación"
-                valor={<Valor texto={responsableEtiqueta} />}
-              />
-              <ResumenItem
-                etiqueta="Duración del plazo"
-                valor={duracionTexto ? duracionTexto : <ValorAusente />}
-              />
-              <ResumenItem
-                etiqueta="Comentario"
-                valor={<Valor texto={campos.comentario || undefined} />}
-              />
+              ))}
             </div>
-            {!duracionTexto ? (
-              <p className={styles['rrhh-form__aviso']}>{AVISO_DURACION}</p>
+            {estado.revision.duracion ? (
+              <p className={styles['rrhh-form__aviso']}>
+                {estado.revision.duracion.aviso}
+              </p>
+            ) : null}
+            {estado.revision.errores.length > 0 ? (
+              <ListaErrores
+                errores={estado.revision.errores}
+                titulo="Corrige estos campos:"
+              />
             ) : null}
           </section>
         ) : null}
@@ -905,35 +460,15 @@ export function FormularioRequerimientoPreview({
             <div className={styles['rrhh-form__resumen-panel']}>
               <ResumenItem
                 etiqueta="Código de requerimiento"
-                valor={codigoConfirmacion ?? '—'}
+                valor={estado.confirmacion.id}
               />
               <ResumenItem
-                etiqueta="Puesto solicitado"
-                valor={<Valor texto={puestoEtiqueta} />}
+                etiqueta="Resumen"
+                valor={estado.confirmacion.resumen}
               />
               <ResumenItem
-                etiqueta="Área / Subárea"
-                valor={<Valor texto={textoAreaSubarea} />}
-              />
-              <ResumenItem etiqueta="Motivo" valor={<Valor texto={motivoEtiqueta} />} />
-              <ResumenItem
-                etiqueta="Cantidad de vacantes"
-                valor={<Valor texto={campos.vacantes || undefined} />}
-              />
-              <ResumenItem etiqueta="Empresa" valor={<Valor texto={empresaEtiqueta} />} />
-              <ResumenItem
-                etiqueta="Responsable de aprobación"
-                valor={<Valor texto={responsableEtiqueta} />}
-              />
-              <ResumenItem
-                etiqueta="Remuneración mensual (S/)"
-                valor={
-                  campos.remuneracionMensual ? (
-                    formatearMonto(campos.remuneracionMensual)
-                  ) : (
-                    <ValorAusente />
-                  )
-                }
+                etiqueta="Responsable"
+                valor={estado.confirmacion.responsable}
               />
               <ResumenItem
                 etiqueta="Estado actual"
@@ -957,7 +492,7 @@ export function FormularioRequerimientoPreview({
         ) : null}
 
         <footer className={styles['rrhh-form__pie']}>
-          {paso === 'datos' ? (
+          {paso === 'edicion' ? (
             <>
               <button
                 type="button"
@@ -969,10 +504,7 @@ export function FormularioRequerimientoPreview({
               <button
                 type="button"
                 className={styles['rrhh-form__boton-primario']}
-                onClick={() => {
-                  onRevisar()
-                  setPaso('revision')
-                }}
+                onClick={continuar}
               >
                 Continuar
               </button>
@@ -984,26 +516,18 @@ export function FormularioRequerimientoPreview({
               <button
                 type="button"
                 className={styles['rrhh-form__boton-secundario']}
-                onClick={() => setPaso('datos')}
+                onClick={volver}
+                disabled={enviando}
               >
-                Cancelar edición
-              </button>
-              <button
-                type="button"
-                className={styles['rrhh-form__boton-secundario']}
-                onClick={() => onGuardarBorrador(construirBorrador(campos))}
-              >
-                Guardar borrador
+                Volver a editar
               </button>
               <button
                 type="button"
                 className={styles['rrhh-form__boton-primario']}
-                onClick={() => {
-                  onEnviar(construirBorrador(campos))
-                  setPaso('confirmacion')
-                }}
+                onClick={enviar}
+                disabled={enviando}
               >
-                Enviar
+                {enviando ? 'Enviando…' : 'Enviar'}
               </button>
             </>
           ) : null}

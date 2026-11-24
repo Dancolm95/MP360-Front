@@ -4,7 +4,13 @@ import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { DetalleRequerimiento } from '../../../modules/rrhh/requerimientos/detail'
 import { FormularioRequerimientoPreview } from '../../../modules/rrhh/requerimientos/form'
-import { CATALOGOS, COLABORADORES, DETALLE } from './data'
+import {
+  CATALOGOS,
+  COLABORADORES,
+  DETALLE,
+  FORMULARIO_ADMINISTRATIVO,
+  PLAZO_ADMINISTRATIVO_DIAS,
+} from './data'
 import { DisenoConfirmacion } from './ux03/DisenoConfirmacion'
 import { DisenoFormulario } from './ux03/DisenoFormulario'
 import { DisenoLogin, DisenoModulos, DisenoPerfiles } from './acceso/DisenosAcceso'
@@ -191,6 +197,8 @@ export default function PreviewRequerimientos() {
         <FormularioRequerimientoPreview
           catalogos={CATALOGOS}
           colaboradores={COLABORADORES}
+          valorInicial={FORMULARIO_ADMINISTRATIVO}
+          plazoAdministrativoDias={PLAZO_ADMINISTRATIVO_DIAS}
           onCancelar={() => setModo('diseno')}
         />
       ) : null}

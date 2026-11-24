@@ -382,6 +382,36 @@
   font-size: 0.8125rem;
 }
 
+.rrhh-form__errores,
+.rrhh-form__error-operacion {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0b4b4;
+  border-radius: 0.375rem;
+  background: #fdf2f2;
+  color: #a12626;
+}
+
+.rrhh-form__error-operacion {
+  margin-top: 1rem;
+}
+
+.rrhh-form__error-operacion p {
+  margin: 0;
+}
+
+.rrhh-form__errores-titulo {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.rrhh-form__errores-lista {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.8125rem;
+}
+
 .rrhh-form__pie {
   display: flex;
   justify-content: flex-end;
