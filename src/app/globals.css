@@ -528,6 +528,16 @@ button:focus-visible,
   font-size: 0.85rem;
 }
 
+.rrhh-form__error-campo {
+  margin: 0;
+  color: #a12626;
+  font-size: 0.8rem;
+}
+
+.rrhh-form__campo [aria-invalid='true'] {
+  border-color: #a12626;
+}
+
 .rrhh-form__campo select:focus-visible,
 .rrhh-form__campo input:focus-visible,
 .rrhh-form__campo textarea:focus-visible {

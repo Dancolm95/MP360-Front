@@ -1,4 +1,5 @@
 /** @vitest-environment jsdom */
+import { useState } from 'react'
 import type { ComponentProps } from 'react'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -147,6 +148,51 @@ function renderPreview(
   )
 }
 
+function PreviewConApertura(
+  props: Partial<ComponentProps<typeof FormularioUx03>> = {},
+) {
+  const [abierto, setAbierto] = useState(false)
+  const valores = catalogos()
+  return (
+    <>
+      <button type="button" onClick={() => setAbierto(true)}>
+        Abrir formulario
+      </button>
+      {abierto ? (
+        <FormularioUx03
+          catalogos={valores}
+          colaboradores={[colaborador]}
+          puerto={crearPuertoPreview(valores)}
+          {...props}
+          onCancelar={() => setAbierto(false)}
+        />
+      ) : null}
+    </>
+  )
+}
+
+function detalleVigente(version = 8, idRequerimiento = 'req-9001') {
+  const detalle: DetalleRequerimiento = {
+    id: idRequerimiento as RequerimientoId,
+    version,
+    estado: 'borrador',
+    fechaCreacion: '2026-11-24T00:00:00Z' as InstanteISO,
+    historial: [],
+    autorizacion: {
+      requerimientoId: idRequerimiento as RequerimientoId,
+      version,
+      capacidades: [],
+      accionesPermitidas: [],
+    },
+    borrador: borradorDesdeFormulario(FORMULARIO_ADMINISTRATIVO),
+    plazo: null,
+    cobertura: null,
+    remuneracionPreviaAlta: null,
+    procesoSeleccion: null,
+  }
+  return detalle
+}
+
 describe('FormularioUx03: datos, revisión y confirmación', () => {
   it('bloquea «Continuar» con datos inválidos y muestra los errores del modelo', async () => {
     const user = userEvent.setup()
@@ -250,6 +296,9 @@ describe('FormularioUx03: datos, revisión y confirmación', () => {
 
     expect(await screen.findByText('No se pudo registrar el envío')).toBeDefined()
     expect(
+      within(screen.getByRole('alert')).getByText('No se pudo registrar el envío'),
+    ).toBeDefined()
+    expect(
       screen.queryByRole('heading', {
         name: '¡Requerimiento enviado para aprobar!',
       }),
@@ -308,6 +357,7 @@ describe('FormularioUx03: datos, revisión y confirmación', () => {
     await user.click(screen.getByRole('button', { name: 'Enviar' }))
 
     expect(await screen.findByText(/La versión cambió/)).toBeDefined()
+    expect(screen.getByRole('alert').textContent).toContain('La versión cambió')
     expect(
       screen.queryByRole('heading', {
         name: '¡Requerimiento enviado para aprobar!',
@@ -335,6 +385,7 @@ describe('FormularioUx03: datos, revisión y confirmación', () => {
         name: '¡Requerimiento enviado para aprobar!',
       }),
     ).toBeDefined()
+    expect(screen.getByRole('status').textContent).toContain('Envío confirmado')
     expect(screen.getByText('req-9001')).toBeDefined()
     expect(
       screen.getByText(
@@ -351,12 +402,12 @@ describe('FormularioUx03: datos, revisión y confirmación', () => {
 })
 
 describe('FormularioUx03: presentación', () => {
-  it('muestra «Cancelar» en el paso de datos y lo notifica al pulsarlo', async () => {
+  it('muestra «Cancelar edición» en el paso de datos y lo notifica al pulsarlo sin cambios', async () => {
     const user = userEvent.setup()
     let cancelados = 0
     renderPreview({ onCancelar: () => (cancelados += 1) })
 
-    await user.click(screen.getByRole('button', { name: 'Cancelar' }))
+    await user.click(screen.getByRole('button', { name: 'Cancelar edición' }))
 
     expect(cancelados).toBe(1)
   })
@@ -385,5 +436,440 @@ describe('FormularioUx03: presentación', () => {
     ).toBeDefined()
     expect(within(region).getByRole('combobox', { name: 'Motivo' })).toBeDefined()
     expect(within(region).getByRole('button', { name: 'Continuar' })).toBeDefined()
+  })
+})
+
+describe('FormularioUx03: foco y teclado', () => {
+  it('al abrir el modal, el foco entra en el título del diálogo', async () => {
+    const user = userEvent.setup()
+    render(<PreviewConApertura />)
+
+    await user.click(screen.getByRole('button', { name: 'Abrir formulario' }))
+
+    expect(document.activeElement).toBe(
+      screen.getByRole('heading', { name: 'Nuevo requerimiento de personal' }),
+    )
+  })
+
+  it('atrapa el tabulador dentro del modal en ambos sentidos', async () => {
+    const user = userEvent.setup()
+    renderPreview()
+
+    const cerrar = screen.getByRole('button', { name: 'Cerrar formulario' })
+    const continuar = screen.getByRole('button', { name: 'Continuar' })
+    continuar.focus()
+
+    await user.tab()
+    expect(document.activeElement).toBe(cerrar)
+
+    await user.tab({ shift: true })
+    expect(document.activeElement).toBe(continuar)
+  })
+
+  it('Esc cierra el modal y devuelve el foco al control que lo abrió', async () => {
+    const user = userEvent.setup()
+    render(<PreviewConApertura />)
+    const abrir = screen.getByRole('button', { name: 'Abrir formulario' })
+
+    await user.click(abrir)
+    expect(screen.getByRole('dialog')).toBeDefined()
+
+    await user.keyboard('{Escape}')
+
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(document.activeElement).toBe(abrir)
+  })
+
+  it('en embebido no atrapa el tabulador ni cierra con Esc', async () => {
+    const user = userEvent.setup()
+    let cancelados = 0
+    renderPreview({
+      variante: 'embebido',
+      onCancelar: () => (cancelados += 1),
+    })
+
+    await user.keyboard('{Escape}')
+    expect(cancelados).toBe(0)
+
+    screen.getByRole('button', { name: 'Continuar' }).focus()
+    await user.tab()
+    expect(document.activeElement).not.toBe(
+      screen.getByRole('button', { name: 'Cerrar formulario' }),
+    )
+  })
+
+  it('marca el paso activo con aria-current y expone los pasos como lista con texto', async () => {
+    const user = userEvent.setup()
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+    })
+
+    const pasosEdicion = screen.getAllByRole('listitem')
+    expect(pasosEdicion).toHaveLength(2)
+    expect(pasosEdicion[0].getAttribute('aria-current')).toBe('step')
+    expect(pasosEdicion[0].textContent).toContain('Datos del requerimiento')
+    expect(pasosEdicion[1].getAttribute('aria-current')).toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Continuar' }))
+
+    const pasosRevision = screen.getAllByRole('listitem')
+    expect(pasosRevision[0].getAttribute('aria-current')).toBeNull()
+    expect(pasosRevision[1].getAttribute('aria-current')).toBe('step')
+    expect(pasosRevision[1].textContent).toContain('Revisión y envío')
+    expect(screen.getByRole('status').textContent).toContain('Paso 2 de 2')
+  })
+
+  it('anuncia el resumen de errores y asocia cada error al control con aria-invalid/aria-describedby', async () => {
+    const user = userEvent.setup()
+    renderPreview()
+
+    await user.click(screen.getByRole('button', { name: 'Continuar' }))
+
+    const alerta = screen.getByRole('alert')
+    expect(
+      within(alerta).getByText('Revisa los datos antes de continuar:'),
+    ).toBeDefined()
+    expect(within(alerta).getAllByText(/Campo obligatorio/).length).toBeGreaterThan(
+      0,
+    )
+
+    const motivo = screen.getByLabelText('Motivo')
+    expect(motivo.getAttribute('aria-invalid')).toBe('true')
+    const descrito = motivo.getAttribute('aria-describedby')
+    expect(descrito).not.toBeNull()
+    expect(document.getElementById(descrito ?? '')?.textContent).toMatch(
+      /Campo obligatorio/,
+    )
+    expect(document.activeElement).toBe(motivo)
+  })
+
+  it('completa la revisión y el envío con el teclado', async () => {
+    const user = userEvent.setup()
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      solicitud: { requerimientoId: 'req-9001' as RequerimientoId, version: 7 },
+    })
+
+    screen.getByRole('button', { name: 'Continuar' }).focus()
+    await user.keyboard('{Enter}')
+    expect(
+      screen.getByRole('region', { name: 'Revisión y envío' }),
+    ).toBeDefined()
+
+    screen.getByRole('button', { name: 'Enviar' }).focus()
+    await user.keyboard('{Enter}')
+
+    expect(
+      await screen.findByRole('heading', {
+        name: '¡Requerimiento enviado para aprobar!',
+      }),
+    ).toBeDefined()
+  })
+})
+
+describe('FormularioUx03: guardar borrador', () => {
+  it('guarda por el puerto y solo confirma con un resultado confirmado', async () => {
+    const user = userEvent.setup()
+    const valores = catalogos()
+    const base = crearPuertoPreview(valores)
+    const comandos: { requerimientoId: string; version: number }[] = []
+    const puerto: ComandosRequerimientosPort = {
+      ...base,
+      guardarBorrador: async (comando) => {
+        comandos.push({
+          requerimientoId: String(comando.requerimientoId),
+          version: comando.version,
+        })
+        return base.guardarBorrador(comando)
+      },
+    }
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      solicitud: { requerimientoId: 'req-9001' as RequerimientoId, version: 7 },
+      puerto,
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Guardar borrador' }))
+
+    expect(
+      (await screen.findAllByText('Borrador guardado correctamente.')).length,
+    ).toBeGreaterThan(0)
+    expect(screen.getByRole('status').textContent).toContain(
+      'Borrador guardado correctamente.',
+    )
+    expect(screen.queryByRole('heading', { name: /enviado para aprobar/i })).toBeNull()
+    expect(comandos).toEqual([
+      { requerimientoId: 'req-9001', version: 7 },
+    ])
+
+    await user.click(screen.getByRole('button', { name: 'Guardar borrador' }))
+
+    expect(comandos).toHaveLength(2)
+    expect(comandos[1]).toEqual({
+      requerimientoId: 'req-9001',
+      version: 8,
+    })
+  })
+
+  it('«Guardar borrador» en revisión persiste y mantiene la revisión', async () => {
+    const user = userEvent.setup()
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      solicitud: { requerimientoId: 'req-9001' as RequerimientoId, version: 7 },
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Continuar' }))
+    await user.click(screen.getByRole('button', { name: 'Guardar borrador' }))
+
+    expect(
+      (await screen.findAllByText('Borrador guardado correctamente.')).length,
+    ).toBeGreaterThan(0)
+    expect(
+      screen.getByRole('region', { name: 'Revisión y envío' }),
+    ).toBeDefined()
+    expect(screen.getByRole('button', { name: 'Enviar' })).toBeDefined()
+  })
+
+  it('un fallo conserva los valores, informa y permite reintentar', async () => {
+    const user = userEvent.setup()
+    const base = crearPuertoPreview(catalogos())
+    let intentos = 0
+    const puerto: ComandosRequerimientosPort = {
+      ...base,
+      guardarBorrador: async (comando) => {
+        intentos += 1
+        if (intentos === 1) {
+          return {
+            status: 'error',
+            error: {
+              message: 'No se pudo guardar el borrador en el servidor',
+              retryable: true,
+            },
+          }
+        }
+        return base.guardarBorrador(comando)
+      },
+    }
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      puerto,
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Guardar borrador' }))
+
+    const alerta = await screen.findByRole('alert')
+    expect(
+      within(alerta).getByText('No se pudo guardar el borrador en el servidor'),
+    ).toBeDefined()
+    expect(screen.queryByText('Borrador guardado correctamente.')).toBeNull()
+    expect(
+      (screen.getByLabelText('Comentario') as HTMLTextAreaElement).value,
+    ).toBe('Cobertura del puesto administrativo de Logística.')
+
+    await user.click(screen.getByRole('button', { name: 'Guardar borrador' }))
+
+    expect(
+      (await screen.findAllByText('Borrador guardado correctamente.')).length,
+    ).toBeGreaterThan(0)
+    expect(intentos).toBe(2)
+  })
+
+  it('tras un conflicto al guardar, el reintento usa la versión vigente', async () => {
+    const user = userEvent.setup()
+    const base = crearPuertoPreview(catalogos())
+    const versiones: number[] = []
+    const puerto: ComandosRequerimientosPort = {
+      ...base,
+      guardarBorrador: async (comando) => {
+        versiones.push(comando.version)
+        if (versiones.length === 1) {
+          return {
+            status: 'conflicto-version',
+            conflicto: {
+              versionEsperada: 7,
+              versionVigente: 9,
+              datosVigentes: detalleVigente(9),
+            },
+          }
+        }
+        return base.guardarBorrador(comando)
+      },
+    }
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      solicitud: { requerimientoId: 'req-9001' as RequerimientoId, version: 7 },
+      puerto,
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Guardar borrador' }))
+    expect(await screen.findByText(/La versión cambió/)).toBeDefined()
+
+    await user.click(screen.getByRole('button', { name: 'Guardar borrador' }))
+
+    expect(
+      (await screen.findAllByText('Borrador guardado correctamente.')).length,
+    ).toBeGreaterThan(0)
+    expect(versiones).toEqual([7, 9])
+  })
+})
+
+describe('FormularioUx03: cancelar edición con confirmación de descarte', () => {
+  it('sin cambios no pide confirmación y vuelve al contexto anterior', async () => {
+    const user = userEvent.setup()
+    let cancelados = 0
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      onCancelar: () => (cancelados += 1),
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Cancelar edición' }))
+
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+    expect(cancelados).toBe(1)
+  })
+
+  it('rechazar el descarte conserva formulario y valores', async () => {
+    const user = userEvent.setup()
+    let cancelados = 0
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      onCancelar: () => (cancelados += 1),
+    })
+
+    const comentario = screen.getByLabelText('Comentario')
+    await user.clear(comentario)
+    await user.type(comentario, 'Cambio sin guardar')
+    await user.click(screen.getByRole('button', { name: 'Cancelar edición' }))
+
+    expect(
+      screen.getByRole('alertdialog', {
+        name: '¿Descartar los cambios sin guardar?',
+      }),
+    ).toBeDefined()
+
+    await user.click(screen.getByRole('button', { name: 'Seguir editando' }))
+
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+    expect(
+      (screen.getByLabelText('Comentario') as HTMLTextAreaElement).value,
+    ).toBe('Cambio sin guardar')
+    expect(cancelados).toBe(0)
+  })
+
+  it('aceptar el descarte vuelve al contexto anterior sin persistir', async () => {
+    const user = userEvent.setup()
+    let cancelados = 0
+    let guardados = 0
+    const base = crearPuertoPreview(catalogos())
+    const puerto: ComandosRequerimientosPort = {
+      ...base,
+      guardarBorrador: async (comando) => {
+        guardados += 1
+        return base.guardarBorrador(comando)
+      },
+    }
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      onCancelar: () => (cancelados += 1),
+      puerto,
+    })
+
+    await user.type(screen.getByLabelText('Comentario'), ' sin guardar')
+    await user.click(screen.getByRole('button', { name: 'Cancelar edición' }))
+    await user.click(screen.getByRole('button', { name: 'Descartar cambios' }))
+
+    expect(cancelados).toBe(1)
+    expect(guardados).toBe(0)
+  })
+
+  it('Esc cancela el descarte y devuelve el foco al botón que lo abrió', async () => {
+    const user = userEvent.setup()
+    renderPreview({ valorInicial: FORMULARIO_ADMINISTRATIVO })
+
+    await user.type(screen.getByLabelText('Comentario'), ' sin guardar')
+    const boton = screen.getByRole('button', { name: 'Cancelar edición' })
+    await user.click(boton)
+
+    const dialogo = screen.getByRole('alertdialog')
+    expect(document.activeElement).toBe(
+      within(dialogo).getByRole('heading', {
+        name: '¿Descartar los cambios sin guardar?',
+      }),
+    )
+
+    await user.keyboard('{Escape}')
+
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+    expect(document.activeElement).toBe(boton)
+    expect(
+      (screen.getByLabelText('Comentario') as HTMLTextAreaElement).value,
+    ).toBe('Cobertura del puesto administrativo de Logística. sin guardar')
+  })
+
+  it('al aceptar el descarte desde el modal, el foco vuelve al control que lo abrió', async () => {
+    const user = userEvent.setup()
+    render(
+      <PreviewConApertura valorInicial={FORMULARIO_ADMINISTRATIVO} />,
+    )
+    const abrir = screen.getByRole('button', { name: 'Abrir formulario' })
+    await user.click(abrir)
+
+    await user.type(screen.getByLabelText('Comentario'), ' sin guardar')
+    await user.click(screen.getByRole('button', { name: 'Cancelar edición' }))
+    await user.click(screen.getByRole('button', { name: 'Descartar cambios' }))
+
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(document.activeElement).toBe(abrir)
+  })
+})
+
+describe('FormularioUx03: conflicto de versión en el envío', () => {
+  it('el reintento adopta la versión vigente devuelta por el conflicto', async () => {
+    const user = userEvent.setup()
+    const base = crearPuertoPreview(catalogos())
+    const versiones: number[] = []
+    const puerto: ComandosRequerimientosPort = {
+      ...base,
+      enviarAprobacion: async (comando) => {
+        versiones.push(comando.version)
+        if (versiones.length === 1) {
+          return {
+            status: 'conflicto-version',
+            conflicto: {
+              versionEsperada: 7,
+              versionVigente: 9,
+              datosVigentes: detalleVigente(9),
+            },
+          }
+        }
+        return base.enviarAprobacion(comando)
+      },
+    }
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      solicitud: { requerimientoId: 'req-9001' as RequerimientoId, version: 7 },
+      puerto,
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Continuar' }))
+    await user.click(screen.getByRole('button', { name: 'Enviar' }))
+
+    expect(await screen.findByText(/La versión cambió/)).toBeDefined()
+
+    await user.click(screen.getByRole('button', { name: 'Enviar' }))
+
+    expect(
+      await screen.findByRole('heading', {
+        name: '¡Requerimiento enviado para aprobar!',
+      }),
+    ).toBeDefined()
+    expect(versiones).toEqual([7, 9])
   })
 })

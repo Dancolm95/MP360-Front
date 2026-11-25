@@ -25,6 +25,7 @@ import {
   aplicarCambio,
   clasificacionFormulario,
   type CambioFormulario,
+  type CampoFormulario,
 } from '../model'
 import { derivarDuracionAplicable } from '../deadlines'
 import {
@@ -44,6 +45,12 @@ export interface FormularioRequerimientoProps {
   /** Plazo administrativo ya fijado por RR. HH.; si falta, queda pendiente. */
   readonly plazoAdministrativoDias?: number | null
   readonly deshabilitado?: boolean
+  /**
+   * Errores ya calculados por el consumidor, asociados a su campo. Solo añaden
+   * `aria-invalid`/`aria-describedby` y el mensaje visible; la validación sigue
+   * siendo la de `validarParaEnvio`.
+   */
+  readonly erroresPorCampo?: Readonly<Partial<Record<CampoFormulario, string>>>
 }
 
 function comoId<T extends string>(value: string): T | null {
@@ -67,6 +74,20 @@ function EtiquetaObligatoria({
   )
 }
 
+function MensajeErrorCampo({
+  id,
+  mensaje,
+}: {
+  readonly id: string
+  readonly mensaje?: string
+}) {
+  return mensaje ? (
+    <p id={id} className="rrhh-form__error-campo">
+      {mensaje}
+    </p>
+  ) : null
+}
+
 export function FormularioRequerimiento({
   catalogos,
   valor,
@@ -74,11 +95,21 @@ export function FormularioRequerimiento({
   colaboradores = [],
   plazoAdministrativoDias,
   deshabilitado = false,
+  erroresPorCampo,
 }: FormularioRequerimientoProps) {
   const idBase = useId()
   const id = (sufijo: string) => `${idBase}-${sufijo}`
   const cambiar = (cambio: CambioFormulario) =>
     onCambio(aplicarCambio(valor, cambio))
+
+  const errorDe = (campo: CampoFormulario) => erroresPorCampo?.[campo]
+  const propsError = (campo: CampoFormulario, sufijo: string) =>
+    errorDe(campo)
+      ? {
+          'aria-invalid': true as const,
+          'aria-describedby': id(`error-${sufijo}`),
+        }
+      : {}
 
   const clasificacion = clasificacionFormulario(valor, catalogos)
   const duracion = derivarDuracionAplicable(
@@ -115,6 +146,7 @@ export function FormularioRequerimiento({
               value={valor.motivo ?? ''}
               required
               aria-required="true"
+              {...propsError('motivo', 'motivo')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'motivo',
@@ -129,6 +161,10 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo
+              id={id('error-motivo')}
+              mensaje={errorDe('motivo')}
+            />
           </div>
 
           <div className="rrhh-form__campo">
@@ -139,6 +175,7 @@ export function FormularioRequerimiento({
               value={valor.empresaId ?? ''}
               required
               aria-required="true"
+              {...propsError('empresaId', 'empresa')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'empresaId',
@@ -153,6 +190,10 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo
+              id={id('error-empresa')}
+              mensaje={errorDe('empresaId')}
+            />
           </div>
 
           {valor.motivo === 'reemplazo' ? (
@@ -166,6 +207,7 @@ export function FormularioRequerimiento({
                 value={valor.colaboradorAReemplazarId ?? ''}
                 required
                 aria-required="true"
+                {...propsError('colaboradorAReemplazarId', 'colaborador')}
                 onChange={(evento) =>
                   cambiar({
                     campo: 'colaboradorAReemplazarId',
@@ -180,6 +222,10 @@ export function FormularioRequerimiento({
                   </option>
                 ))}
               </select>
+              <MensajeErrorCampo
+                id={id('error-colaborador')}
+                mensaje={errorDe('colaboradorAReemplazarId')}
+              />
             </div>
           ) : null}
 
@@ -196,6 +242,7 @@ export function FormularioRequerimiento({
               inputMode="numeric"
               required
               aria-required="true"
+              {...propsError('vacantes', 'vacantes')}
               value={valor.vacantes ?? ''}
               onChange={(evento) =>
                 cambiar({
@@ -203,6 +250,10 @@ export function FormularioRequerimiento({
                   valor: evento.target.value === '' ? null : evento.target.value,
                 })
               }
+            />
+            <MensajeErrorCampo
+              id={id('error-vacantes')}
+              mensaje={errorDe('vacantes')}
             />
           </div>
 
@@ -217,6 +268,7 @@ export function FormularioRequerimiento({
               inputMode="decimal"
               required
               aria-required="true"
+              {...propsError('remuneracionMensual', 'remuneracion')}
               value={valor.remuneracionMensual ?? ''}
               onChange={(evento) =>
                 cambiar({
@@ -224,6 +276,10 @@ export function FormularioRequerimiento({
                   valor: evento.target.value === '' ? null : evento.target.value,
                 })
               }
+            />
+            <MensajeErrorCampo
+              id={id('error-remuneracion')}
+              mensaje={errorDe('remuneracionMensual')}
             />
           </div>
 
@@ -237,6 +293,7 @@ export function FormularioRequerimiento({
               value={valor.usuarioProximaTareaId ?? ''}
               required
               aria-required="true"
+              {...propsError('usuarioProximaTareaId', 'usuario')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'usuarioProximaTareaId',
@@ -251,6 +308,10 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo
+              id={id('error-usuario')}
+              mensaje={errorDe('usuarioProximaTareaId')}
+            />
           </div>
         </div>
       </fieldset>
@@ -268,6 +329,7 @@ export function FormularioRequerimiento({
               value={valor.departamentoId ?? ''}
               required
               aria-required="true"
+              {...propsError('departamentoId', 'departamento')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'departamentoId',
@@ -282,6 +344,10 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo
+              id={id('error-departamento')}
+              mensaje={errorDe('departamentoId')}
+            />
           </div>
 
           <div className="rrhh-form__campo">
@@ -293,6 +359,7 @@ export function FormularioRequerimiento({
               disabled={sinDepartamento}
               required
               aria-required="true"
+              {...propsError('areaId', 'area')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'areaId',
@@ -307,6 +374,7 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo id={id('error-area')} mensaje={errorDe('areaId')} />
           </div>
 
           <div className="rrhh-form__campo">
@@ -316,6 +384,7 @@ export function FormularioRequerimiento({
               name="subarea"
               value={valor.subareaId ?? ''}
               disabled={sinArea}
+              {...propsError('subareaId', 'subarea')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'subareaId',
@@ -330,6 +399,10 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo
+              id={id('error-subarea')}
+              mensaje={errorDe('subareaId')}
+            />
           </div>
 
           <div className="rrhh-form__campo">
@@ -341,6 +414,7 @@ export function FormularioRequerimiento({
               disabled={sinArea}
               required
               aria-required="true"
+              {...propsError('puestoId', 'puesto')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'puestoId',
@@ -359,6 +433,10 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo
+              id={id('error-puesto')}
+              mensaje={errorDe('puestoId')}
+            />
           </div>
         </div>
 
@@ -398,6 +476,7 @@ export function FormularioRequerimiento({
               value={valor.departamentoUbicacionId ?? ''}
               required
               aria-required="true"
+              {...propsError('departamentoUbicacionId', 'departamento-ubicacion')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'departamentoUbicacionId',
@@ -412,6 +491,10 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo
+              id={id('error-departamento-ubicacion')}
+              mensaje={errorDe('departamentoUbicacionId')}
+            />
           </div>
 
           <div className="rrhh-form__campo">
@@ -425,6 +508,7 @@ export function FormularioRequerimiento({
               disabled={sinUbicacionDepartamento}
               required
               aria-required="true"
+              {...propsError('provinciaId', 'provincia')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'provinciaId',
@@ -442,6 +526,10 @@ export function FormularioRequerimiento({
                 </option>
               ))}
             </select>
+            <MensajeErrorCampo
+              id={id('error-provincia')}
+              mensaje={errorDe('provinciaId')}
+            />
           </div>
 
           <div className="rrhh-form__campo">
@@ -455,6 +543,7 @@ export function FormularioRequerimiento({
               disabled={sinProvincia}
               required
               aria-required="true"
+              {...propsError('distritoId', 'distrito')}
               onChange={(evento) =>
                 cambiar({
                   campo: 'distritoId',
@@ -471,6 +560,10 @@ export function FormularioRequerimiento({
                 ),
               )}
             </select>
+            <MensajeErrorCampo
+              id={id('error-distrito')}
+              mensaje={errorDe('distritoId')}
+            />
           </div>
         </div>
       </fieldset>
@@ -487,6 +580,7 @@ export function FormularioRequerimiento({
             rows={4}
             required
             aria-required="true"
+            {...propsError('comentario', 'comentario')}
             value={valor.comentario ?? ''}
             onChange={(evento) =>
               cambiar({
@@ -494,6 +588,10 @@ export function FormularioRequerimiento({
                 valor: evento.target.value === '' ? null : evento.target.value,
               })
             }
+          />
+          <MensajeErrorCampo
+            id={id('error-comentario')}
+            mensaje={errorDe('comentario')}
           />
         </div>
       </fieldset>
