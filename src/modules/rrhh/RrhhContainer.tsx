@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import type { Capability } from '../../shared'
 import type {
   DestinationResolution,
@@ -16,12 +17,18 @@ import {
   CAP_RRHH_REQUERIMIENTOS_READ,
   DEST_RRHH_ALTA,
   DEST_RRHH_REQUERIMIENTOS_BANDEJA,
+  DEST_RRHH_REQUERIMIENTOS_NUEVO,
   DEST_RRHH_SELECCION,
   RRHH_MODULE_ID,
   SECTION_ALTA,
   SECTION_REQUERIMIENTOS,
   SECTION_SELECCION,
 } from './identifiers'
+import type {
+  ContextoBandeja,
+  RequerimientoId,
+  SeleccionRequerimiento,
+} from './requerimientos'
 import { ContainerShell } from '../../container/components/ContainerShell'
 import { useFocusOnMount } from '../../container/accessibility'
 
@@ -49,6 +56,30 @@ type ViewState =
   | { readonly status: 'not-found' }
   | { readonly status: 'error' }
 
+type ZonaRequerimientos = 'bandeja' | 'detalle' | 'formulario'
+
+/** Acciones y contexto que el contenedor aporta a la vista de bandeja. */
+export interface AccionesBandejaContenedor {
+  readonly onAbrirDetalle?: (seleccion: SeleccionRequerimiento) => void
+  readonly onNuevo?: () => void
+  readonly contextoInicial?: ContextoBandeja
+  readonly restaurarFocoEn?: RequerimientoId
+}
+
+/**
+ * Vistas reales de Requerimientos que el punto de composición de `src/app`
+ * inyecta en la zona central. El contenedor decide qué zona mostrar y conserva
+ * el contexto y el foco; el módulo no importa componentes de `src/app`.
+ */
+export interface VistasRequerimientos {
+  readonly bandeja: (acciones: AccionesBandejaContenedor) => ReactNode
+  readonly detalle?: (
+    seleccion: SeleccionRequerimiento,
+    onVolver: () => void,
+  ) => ReactNode
+  readonly formulario?: (onCerrar: () => void) => ReactNode
+}
+
 export interface RrhhContainerProps {
   readonly catalog: SectionCatalog
   readonly capabilities: readonly Capability[]
@@ -58,6 +89,7 @@ export interface RrhhContainerProps {
   readonly onSignedOut: (destination: SignOutDestination) => void
   readonly onSessionEnded: () => void
   readonly initialDestination?: LogicalDestination
+  readonly vistas?: VistasRequerimientos
 }
 
 function getRrhhSections(catalog: SectionCatalog): readonly Section[] {
@@ -153,12 +185,16 @@ export function RrhhContainer({
   onSignedOut,
   onSessionEnded,
   initialDestination = DEST_RRHH_REQUERIMIENTOS_BANDEJA,
+  vistas,
 }: RrhhContainerProps) {
   const sections = getRrhhSections(catalog)
   const canReadUx02 = hasUx02Read(capabilities, sections)
   const [view, setView] = useState<ViewState>(
     canReadUx02 ? { status: 'loading' } : { status: 'forbidden' },
   )
+  const [zonaRequerimientos, setZonaRequerimientos] =
+    useState<ZonaRequerimientos>('bandeja')
+  const [seleccion, setSeleccion] = useState<SeleccionRequerimiento>()
   const requestRef = useRef(0)
 
   const resolve = useCallback(
@@ -183,9 +219,29 @@ export function RrhhContainer({
         onSessionEnded()
         return
       }
-      setView(classifyResolution(resolution, sections))
+
+      if (
+        resolution.status === 'ok' &&
+        resolution.destination === DEST_RRHH_REQUERIMIENTOS_NUEVO &&
+        vistas?.formulario
+      ) {
+        const section = findSection(sections, DEST_RRHH_REQUERIMIENTOS_BANDEJA)
+        if (section?.visible && section.status === 'implemented') {
+          setSeleccion(undefined)
+          setZonaRequerimientos('formulario')
+          setView({ status: 'tray', section })
+          return
+        }
+      }
+
+      const siguiente = classifyResolution(resolution, sections)
+      if (siguiente.status === 'tray') {
+        setSeleccion(undefined)
+        setZonaRequerimientos('bandeja')
+      }
+      setView(siguiente)
     },
-    [canReadUx02, navigation, onSessionEnded, sections],
+    [canReadUx02, navigation, onSessionEnded, sections, vistas],
   )
 
   useEffect(() => {
@@ -206,6 +262,17 @@ export function RrhhContainer({
         (section) => section.visible && SECTION_PRESENTATION[String(section.id)],
       )
     : []
+
+  const abrirDetalle = vistas?.detalle
+    ? (siguiente: SeleccionRequerimiento) => {
+        setSeleccion(siguiente)
+        setZonaRequerimientos('detalle')
+      }
+    : undefined
+  const abrirFormulario = vistas?.formulario
+    ? () => setZonaRequerimientos('formulario')
+    : undefined
+  const volverABandeja = () => setZonaRequerimientos('bandeja')
 
   return (
     <ContainerShell
@@ -272,11 +339,24 @@ export function RrhhContainer({
       ) : null}
       {view.status === 'tray' ? (
         <section>
-          <ViewHeading>Requerimientos</ViewHeading>
-          <p>
-            Frontera de integración de UX-02. La bandeja operativa aún no está
-            implementada.
-          </p>
+          {zonaRequerimientos === 'detalle' && seleccion && vistas?.detalle ? (
+            vistas.detalle(seleccion, volverABandeja)
+          ) : (
+            <>
+              <ViewHeading>Requerimientos</ViewHeading>
+              {vistas
+                ? vistas.bandeja({
+                    onAbrirDetalle: abrirDetalle,
+                    onNuevo: abrirFormulario,
+                    contextoInicial: seleccion?.contexto,
+                    restaurarFocoEn: seleccion?.requerimiento.id,
+                  })
+                : null}
+              {zonaRequerimientos === 'formulario' && vistas?.formulario
+                ? vistas.formulario(volverABandeja)
+                : null}
+            </>
+          )}
         </section>
       ) : null}
       {view.status === 'upcoming' ? (

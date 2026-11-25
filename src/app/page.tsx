@@ -9,6 +9,7 @@ import {
 } from '../container'
 import { createNotImplementedVisibleFixture } from '../container/fixtures'
 import { RrhhContainer } from '../modules/rrhh'
+import { VISTAS_REQUERIMIENTOS_DEMO } from './requerimientos-vistas'
 
 const MOCK_FIXTURE = createNotImplementedVisibleFixture()
 const MOCK_SESSION_KEY = 'core-01-t07-contract-fixture'
@@ -128,6 +129,7 @@ export default function Page() {
                 signOut={MOCK_FIXTURE.signOut}
                 onSignedOut={session.endSession}
                 onSessionEnded={session.endSessionFromNavigation}
+                vistas={VISTAS_REQUERIMIENTOS_DEMO}
               />
             )}
           </CatalogBoundary>

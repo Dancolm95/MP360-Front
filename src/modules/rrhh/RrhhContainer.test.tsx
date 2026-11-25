@@ -4,6 +4,18 @@ import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { LogicalDestination, SectionCatalog } from '../../container/contracts'
+import type { AccionesBandejaContenedor } from './RrhhContainer'
+import type {
+  ContextoBandeja,
+  ResumenRequerimientoCompleto,
+} from './requerimientos'
+import type {
+  AreaId,
+  EmpresaId,
+  InstanteISO,
+  PuestoId,
+  RequerimientoId,
+} from './requerimientos/contracts'
 import {
   CAP_RRHH_REQUERIMIENTOS_READ,
   DEST_RRHH_REQUERIMIENTOS_NUEVO,
@@ -158,5 +170,128 @@ describe('RrhhContainer (CORE-01 §7 criterios 1–3)', () => {
     renderContainer(catalog, { capabilities: [], navigation: fixture.navigation })
 
     expect(await screen.findByRole('heading', { name: 'Sin permisos' })).toBeDefined()
+  })
+})
+
+describe('RrhhContainer · vistas inyectadas (T-CORE-09)', () => {
+  const contexto: ContextoBandeja = {
+    filtros: { estados: ['aprobado'] },
+    orden: { campo: 'id', direccion: 'asc' },
+    paginacion: { pagina: 2, tamanoPagina: 4 },
+  }
+  const fila: ResumenRequerimientoCompleto = {
+    id: 'req-x' as RequerimientoId,
+    version: 1,
+    fechaCreacion: '2026-01-02T10:00:00Z' as InstanteISO,
+    estado: 'aprobado',
+    motivo: 'nueva-vacante',
+    empresa: { id: 'emp-x' as EmpresaId, nombre: 'Empresa de prueba' },
+    puesto: {
+      id: 'puesto-x' as PuestoId,
+      nombre: 'Puesto de prueba',
+      areaId: 'area-x' as AreaId,
+      subareaId: null,
+      clasificacion: 'operativo',
+    },
+    solicitadas: 1,
+    cubiertas: 0,
+    pendientes: 1,
+    fechaObjetivo: null,
+    duracionAplicable: null,
+    responsable: null,
+    alerta: null,
+    autorizacion: {
+      requerimientoId: 'req-x' as RequerimientoId,
+      version: 1,
+      capacidades: [],
+      accionesPermitidas: [],
+    },
+  }
+
+  it('compone la bandeja y el detalle inyectados y vuelve con contexto y foco', async () => {
+    const fixture = createSessionWithUx02Fixture()
+    const catalog = await readCatalog(fixture)
+    const user = userEvent.setup()
+    const bandeja = vi.fn((acciones: AccionesBandejaContenedor) => (
+      <button
+        type="button"
+        onClick={() =>
+          acciones.onAbrirDetalle?.({ requerimiento: fila, contexto })
+        }
+      >
+        Abrir detalle de prueba
+      </button>
+    ))
+
+    renderContainer(catalog, {
+      navigation: fixture.navigation,
+      vistas: {
+        bandeja,
+        detalle: (seleccion, onVolver) => (
+          <>
+            <p>Detalle de {String(seleccion.requerimiento.id)}</p>
+            <button type="button" onClick={onVolver}>
+              Volver de prueba
+            </button>
+          </>
+        ),
+      },
+    })
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Abrir detalle de prueba' }),
+    )
+    expect(screen.getByText('Detalle de req-x')).toBeDefined()
+    expect(
+      screen.queryByRole('button', { name: 'Abrir detalle de prueba' }),
+    ).toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Volver de prueba' }))
+    await screen.findByRole('button', { name: 'Abrir detalle de prueba' })
+
+    const acciones = bandeja.mock.calls.at(-1)?.[0]
+    expect(acciones?.contextoInicial).toEqual(contexto)
+    expect(acciones?.restaurarFocoEn).toBe(fila.id)
+  })
+
+  it('alcanza el formulario por el destino nuevo y por la acción de la bandeja', async () => {
+    const fixture = createSessionWithUx02Fixture()
+    const catalog = await readCatalog(fixture)
+    const user = userEvent.setup()
+    const vistas = {
+      bandeja: ({ onNuevo }: AccionesBandejaContenedor) => (
+        <button type="button" onClick={onNuevo}>
+          Nuevo de prueba
+        </button>
+      ),
+      formulario: (onCerrar: () => void) => (
+        <>
+          <p>Formulario de prueba</p>
+          <button type="button" onClick={onCerrar}>
+            Cerrar de prueba
+          </button>
+        </>
+      ),
+    }
+
+    const directo = renderContainer(catalog, {
+      navigation: fixture.navigation,
+      initialDestination: DEST_RRHH_REQUERIMIENTOS_NUEVO,
+      vistas,
+    })
+    expect(await screen.findByText('Formulario de prueba')).toBeDefined()
+    directo.unmount()
+
+    renderContainer(catalog, { navigation: fixture.navigation, vistas })
+    await user.click(
+      await screen.findByRole('button', { name: 'Nuevo de prueba' }),
+    )
+    expect(screen.getByText('Formulario de prueba')).toBeDefined()
+
+    await user.click(screen.getByRole('button', { name: 'Cerrar de prueba' }))
+    expect(screen.queryByText('Formulario de prueba')).toBeNull()
+    expect(
+      screen.getByRole('button', { name: 'Nuevo de prueba' }),
+    ).toBeDefined()
   })
 })
