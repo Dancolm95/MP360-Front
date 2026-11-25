@@ -473,6 +473,57 @@ describe('FormularioUx03: foco y teclado', () => {
     expect(document.activeElement).toBe(continuar)
   })
 
+  it('Tab desde el título del modal va al primer control', () => {
+    renderPreview()
+
+    const dialogo = screen.getByRole('dialog')
+    const titulo = within(dialogo).getByRole('heading', {
+      name: 'Nuevo requerimiento de personal',
+    })
+    expect(document.activeElement).toBe(titulo)
+
+    fireEvent.keyDown(titulo, { key: 'Tab' })
+
+    expect(document.activeElement).toBe(
+      within(dialogo).getByRole('button', { name: 'Cerrar formulario' }),
+    )
+  })
+
+  it('Shift+Tab desde el título del modal va al último control del diálogo', () => {
+    renderPreview()
+
+    const dialogo = screen.getByRole('dialog')
+    const titulo = within(dialogo).getByRole('heading', {
+      name: 'Nuevo requerimiento de personal',
+    })
+
+    fireEvent.keyDown(titulo, { key: 'Tab', shiftKey: true })
+
+    expect(document.activeElement).toBe(
+      within(dialogo).getByRole('button', { name: 'Continuar' }),
+    )
+    expect(dialogo.contains(document.activeElement)).toBe(true)
+  })
+
+  it('un clic en el velo del modal devuelve el foco dentro del diálogo', () => {
+    renderPreview()
+
+    const dialogo = screen.getByRole('dialog')
+    const velo = dialogo.parentElement
+    expect(velo).not.toBeNull()
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    expect(document.activeElement).toBe(document.body)
+
+    fireEvent.click(velo as HTMLElement)
+
+    expect(document.activeElement).toBe(
+      within(dialogo).getByRole('heading', {
+        name: 'Nuevo requerimiento de personal',
+      }),
+    )
+    expect(dialogo.contains(document.activeElement)).toBe(true)
+  })
+
   it('Esc cierra el modal y devuelve el foco al control que lo abrió', async () => {
     const user = userEvent.setup()
     render(<PreviewConApertura />)
@@ -917,6 +968,50 @@ describe('FormularioUx03: cancelar edición con confirmación de descarte', () =
     expect(dialogo.contains(document.activeElement)).toBe(true)
   })
 
+  it('Shift+Tab desde el título del descarte va al último control, no al documento', async () => {
+    const user = userEvent.setup()
+    renderPreview({ valorInicial: FORMULARIO_ADMINISTRATIVO })
+
+    await user.type(screen.getByLabelText('Comentario'), ' sin guardar')
+    await user.click(screen.getByRole('button', { name: 'Cancelar edición' }))
+
+    const dialogo = screen.getByRole('alertdialog')
+    const titulo = within(dialogo).getByRole('heading', {
+      name: '¿Descartar los cambios sin guardar?',
+    })
+    expect(document.activeElement).toBe(titulo)
+
+    fireEvent.keyDown(titulo, { key: 'Tab', shiftKey: true })
+
+    expect(document.activeElement).toBe(
+      within(dialogo).getByRole('button', { name: 'Descartar cambios' }),
+    )
+    expect(dialogo.contains(document.activeElement)).toBe(true)
+  })
+
+  it('un clic en el velo del descarte devuelve el foco dentro del diálogo', async () => {
+    const user = userEvent.setup()
+    renderPreview({ valorInicial: FORMULARIO_ADMINISTRATIVO })
+
+    await user.type(screen.getByLabelText('Comentario'), ' sin guardar')
+    await user.click(screen.getByRole('button', { name: 'Cancelar edición' }))
+
+    const dialogo = screen.getByRole('alertdialog')
+    const velo = dialogo.parentElement
+    expect(velo).not.toBeNull()
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    expect(document.activeElement).toBe(document.body)
+
+    fireEvent.click(velo as HTMLElement)
+
+    expect(document.activeElement).toBe(
+      within(dialogo).getByRole('heading', {
+        name: '¿Descartar los cambios sin guardar?',
+      }),
+    )
+    expect(dialogo.contains(document.activeElement)).toBe(true)
+  })
+
   it('si el descarte se abre con Esc, rechazarlo devuelve el foco al control que lo tenía', async () => {
     const user = userEvent.setup()
     renderPreview({ valorInicial: FORMULARIO_ADMINISTRATIVO })
@@ -984,5 +1079,73 @@ describe('FormularioUx03: conflicto de versión en el envío', () => {
     ).toBeDefined()
     expect(versiones).toEqual([7, 9])
     expect(identificadores).toEqual(['req-9001', 'req-9100'])
+  })
+})
+
+describe('FormularioUx03: una sola operación en curso', () => {
+  it('no dispara dos guardados aunque se vuelva a pulsar mientras guarda', async () => {
+    const user = userEvent.setup()
+    const base = crearPuertoPreview(catalogos())
+    let llamadas = 0
+    let liberar: (() => void) | undefined
+    const puerto: ComandosRequerimientosPort = {
+      ...base,
+      guardarBorrador: (comando) => {
+        llamadas += 1
+        return new Promise((resolve) => {
+          liberar = () => resolve(base.guardarBorrador(comando))
+        })
+      },
+    }
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      puerto,
+    })
+
+    const guardar = screen.getByRole('button', { name: 'Guardar borrador' })
+    await user.click(guardar)
+    fireEvent.click(guardar)
+
+    expect(llamadas).toBe(1)
+
+    await act(async () => {
+      liberar?.()
+    })
+    expect(llamadas).toBe(1)
+  })
+
+  it('no dispara dos envíos aunque se vuelva a pulsar mientras envía', async () => {
+    const user = userEvent.setup()
+    const base = crearPuertoPreview(catalogos())
+    let llamadas = 0
+    let liberar: (() => void) | undefined
+    const puerto: ComandosRequerimientosPort = {
+      ...base,
+      enviarAprobacion: (comando) => {
+        llamadas += 1
+        return new Promise((resolve) => {
+          liberar = () => resolve(base.enviarAprobacion(comando))
+        })
+      },
+    }
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      solicitud: { requerimientoId: 'req-9001' as RequerimientoId, version: 7 },
+      puerto,
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Continuar' }))
+    const enviar = screen.getByRole('button', { name: 'Enviar' })
+    await user.click(enviar)
+    fireEvent.click(enviar)
+
+    expect(llamadas).toBe(1)
+
+    await act(async () => {
+      liberar?.()
+    })
+    expect(llamadas).toBe(1)
   })
 })

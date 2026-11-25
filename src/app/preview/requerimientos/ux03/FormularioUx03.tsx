@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useId, useRef, useState } from 'react'
-import type { KeyboardEvent, ReactNode } from 'react'
+import type { KeyboardEvent, MouseEvent, ReactNode } from 'react'
 import type {
   CatalogosRequerimientos,
   ColaboradorReemplazo,
@@ -298,15 +298,10 @@ function erroresPorCampoDe(
   )
 }
 
-function primerFocalizable(contenedor: HTMLElement | null): HTMLElement | null {
-  return contenedor?.querySelector<HTMLElement>(FOCALIZABLES) ?? null
-}
-
-function ultimoFocalizable(contenedor: HTMLElement | null): HTMLElement | null {
-  const elementos = contenedor?.querySelectorAll<HTMLElement>(FOCALIZABLES)
-  return elementos && elementos.length > 0
-    ? elementos[elementos.length - 1]
-    : null
+function focalizablesDe(contenedor: HTMLElement | null): HTMLElement[] {
+  return contenedor
+    ? Array.from(contenedor.querySelectorAll<HTMLElement>(FOCALIZABLES))
+    : []
 }
 
 export function FormularioUx03({
@@ -578,28 +573,46 @@ export function FormularioUx03({
     setAnuncio('Se conservaron los cambios.')
   }
 
+  const enfocarDialogoActivo = () => {
+    const destino = edicion.descartePendiente
+      ? (descarteTituloRef.current ?? descarteContenedorRef.current)
+      : (tituloRef.current ?? contenedorRef.current)
+    destino?.focus()
+  }
+
+  const alPulsarVelo = (evento: MouseEvent<HTMLDivElement>) => {
+    if (evento.target !== evento.currentTarget || !modal) return
+    enfocarDialogoActivo()
+  }
+
+  const alPulsarVeloDescarte = (evento: MouseEvent<HTMLDivElement>) => {
+    if (evento.target !== evento.currentTarget) return
+    enfocarDialogoActivo()
+  }
+
   const atraparTabulador = (
     evento: KeyboardEvent<HTMLDivElement>,
     contenedor: HTMLElement | null,
   ) => {
-    const primero = primerFocalizable(contenedor)
-    const ultimo = ultimoFocalizable(contenedor)
-    if (!primero || !ultimo) {
+    const focalizables = focalizablesDe(contenedor)
+    if (!contenedor || focalizables.length === 0) {
       evento.preventDefault()
+      contenedor?.focus()
       return
     }
-    const activo = document.activeElement
-    const fueraDelContenedor = !contenedor?.contains(activo)
+    // El título se enfoca con tabIndex=-1 y no entra en `focalizables`: sin
+    // tratarlo como «fuera», el primer Tab o Shift+Tab escaparía al documento.
+    const indice = focalizables.indexOf(document.activeElement as HTMLElement)
     if (evento.shiftKey) {
-      if (activo === primero || fueraDelContenedor) {
+      if (indice <= 0) {
         evento.preventDefault()
-        ultimo.focus()
+        focalizables[focalizables.length - 1].focus()
       }
       return
     }
-    if (activo === ultimo || fueraDelContenedor) {
+    if (indice === -1 || indice === focalizables.length - 1) {
       evento.preventDefault()
-      primero.focus()
+      focalizables[0].focus()
     }
   }
 
@@ -645,11 +658,13 @@ export function FormularioUx03({
       className={
         embebido ? styles['rrhh-form__embebido'] : styles['rrhh-form__velo']
       }
+      onClick={alPulsarVelo}
     >
       <div
         ref={contenedorRef}
         className={styles['rrhh-form__modal']}
         role={embebido ? 'region' : 'dialog'}
+        tabIndex={-1}
         aria-modal={embebido || edicion.descartePendiente ? undefined : true}
         inert={edicion.descartePendiente ? true : undefined}
         aria-labelledby={idTitulo}
@@ -901,12 +916,16 @@ export function FormularioUx03({
       </div>
 
       {edicion.descartePendiente ? (
-        <div className={styles['rrhh-form__descarte-velo']}>
+        <div
+          className={styles['rrhh-form__descarte-velo']}
+          onClick={alPulsarVeloDescarte}
+        >
           <div
             ref={descarteContenedorRef}
             className={styles['rrhh-form__descarte']}
             role="alertdialog"
             aria-modal="true"
+            tabIndex={-1}
             aria-labelledby={idDescarte}
             aria-describedby={idDescarteTexto}
             onKeyDown={alPulsarTeclaDescarte}
