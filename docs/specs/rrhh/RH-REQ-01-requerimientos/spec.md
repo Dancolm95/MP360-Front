@@ -16,6 +16,7 @@
 - Decisiones funcionales de integración Selección/Alta (INT-01) transmitidas por el usuario el 9 de noviembre de 2026: apertura del proceso confirmada por Selección antes de cambiar de estado, iniciada por RR. HH. con capacidad desde un requerimiento Aprobado mediante la acción explícita «Abrir proceso en Selección»; primer día real registrado por Alta y consumido en solo lectura para la cobertura; reversión de cobertura originada por evento auditado de Selección; y ajuste trazable de la remuneración previo al alta, sin trasladar a Alta la excepción `0.00` de Practicante, que conserva su validación >0 sin excepción y no confirma el ingreso con importe `0.00`.
 - Correcciones de revisión aplicadas el 9 de noviembre de 2026 sobre la v0.5: B-01 (UX-07 mantiene >0 sin excepción y no confirma con `0.00`), B-02 (acción explícita «Abrir proceso en Selección» desde Aprobado, con error reintentable en Requerimientos), B-03 (el primer día real solo alimenta cobertura y se muestra en solo lectura) y B-04 (criterio verificable de solicitud de reversión); además S-02, S-03 y S-04.
 - Correcciones del segundo ciclo de revisión aplicadas el 9 de noviembre de 2026 sobre la v0.6: H-01 (en §7.3 el primer día real se muestra en solo lectura y no se edita; el ajuste de remuneración previo al alta no se edita y, si se muestra, es de solo lectura, sin alterar con ello fecha objetivo ni cómputo de plazos), H-02 (la forma de planificación no se prejuzga: se habla del plan que se acuerde para el corte) y H-03 («Abrir proceso en Selección» se incorpora a los comandos versionados y a su criterio verificable).
+- 25-nov-2026: el campo «Usuario de próxima tarea» pasa a denominarse «Responsable de aprobación» (decisión del usuario; el texto del PDF prevalece). El resto de etiquetas de UX-03 no cambia: «Remuneración mensual (PEN)» se conserva.
 
 **Objetivo:** registrar una necesidad de personal, someterla a aprobación del Jefe de Operaciones y seguir su cobertura hasta cubrir todas las vacantes o cancelar el requerimiento.
 
@@ -70,7 +71,7 @@ La matriz y política técnica final de roles, ámbitos y permisos continúa com
 | Cantidad de vacantes | Entero mayor o igual que 1. |
 | Remuneración mensual | Obligatoria en PEN, no negativa y con máximo dos decimales. Solo Motivo = Practicante admite `0.00`; los demás motivos exigen un valor mayor que cero. |
 | Ubicación | Departamento → Provincia → Distrito, obligatorios. |
-| Usuario de próxima tarea | Jefe de Operaciones seleccionado por defecto; obligatorio. |
+| Responsable de aprobación | Jefe de Operaciones seleccionado por defecto; obligatorio. |
 | Comentario/justificación | Obligatorio. |
 
 Un borrador puede estar incompleto. Guardarlo persiste realmente los valores admitidos por el contrato y solo se confirma después de la respuesta del backend. Un fallo conserva el contenido introducido y no se sustituye información ausente por datos ficticios.
