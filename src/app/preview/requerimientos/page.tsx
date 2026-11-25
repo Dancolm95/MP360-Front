@@ -188,6 +188,11 @@ export default function PreviewRequerimientos() {
 
       {modo === 'crear' || modo === 'detalle' ? (
         <main className={styles['preview']}>
+          {modo === 'crear' ? (
+            <h1 className={styles['preview__titulo']}>
+              Nuevo requerimiento de personal
+            </h1>
+          ) : null}
           <p className={styles['preview__nota']} role="note">
             Vista funcional experimental: usa datos de ejemplo y no representa
             sesión, autorización ni persistencia reales.

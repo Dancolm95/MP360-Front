@@ -1,7 +1,14 @@
 /** @vitest-environment jsdom */
 import { useState } from 'react'
 import type { ComponentProps } from 'react'
-import { cleanup, render, screen, within } from '@testing-library/react'
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import type {
@@ -683,17 +690,19 @@ describe('FormularioUx03: guardar borrador', () => {
     const user = userEvent.setup()
     const base = crearPuertoPreview(catalogos())
     const versiones: number[] = []
+    const identificadores: string[] = []
     const puerto: ComandosRequerimientosPort = {
       ...base,
       guardarBorrador: async (comando) => {
         versiones.push(comando.version)
+        identificadores.push(String(comando.requerimientoId))
         if (versiones.length === 1) {
           return {
             status: 'conflicto-version',
             conflicto: {
               versionEsperada: 7,
               versionVigente: 9,
-              datosVigentes: detalleVigente(9),
+              datosVigentes: detalleVigente(9, 'req-9100'),
             },
           }
         }
@@ -716,6 +725,40 @@ describe('FormularioUx03: guardar borrador', () => {
       (await screen.findAllByText('Borrador guardado correctamente.')).length,
     ).toBeGreaterThan(0)
     expect(versiones).toEqual([7, 9])
+    expect(identificadores).toEqual(['req-9001', 'req-9100'])
+  })
+
+  it('al guardar conserva el foco en el botón en vez de perderlo al deshabilitarse', async () => {
+    const user = userEvent.setup()
+    const base = crearPuertoPreview(catalogos())
+    let liberar: (() => void) | undefined
+    const puerto: ComandosRequerimientosPort = {
+      ...base,
+      guardarBorrador: (comando) =>
+        new Promise((resolve) => {
+          liberar = () => resolve(base.guardarBorrador(comando))
+        }),
+    }
+    renderPreview({
+      valorInicial: FORMULARIO_ADMINISTRATIVO,
+      plazoAdministrativoDias: PLAZO_ADMINISTRATIVO,
+      puerto,
+    })
+
+    const guardar = screen.getByRole('button', { name: 'Guardar borrador' })
+    await user.click(guardar)
+
+    expect(guardar.getAttribute('aria-disabled')).toBe('true')
+    expect(document.activeElement).toBe(guardar)
+
+    await act(async () => {
+      liberar?.()
+    })
+
+    expect(
+      (await screen.findAllByText('Borrador guardado correctamente.')).length,
+    ).toBeGreaterThan(0)
+    expect(guardar.getAttribute('aria-disabled')).toBe('false')
   })
 })
 
@@ -827,6 +870,73 @@ describe('FormularioUx03: cancelar edición con confirmación de descarte', () =
     expect(screen.queryByRole('dialog')).toBeNull()
     expect(document.activeElement).toBe(abrir)
   })
+
+  it('aceptar el descarte cierra el diálogo y restaura los valores de partida sin depender del padre', async () => {
+    const user = userEvent.setup()
+    renderPreview({ valorInicial: FORMULARIO_ADMINISTRATIVO })
+
+    const comentario = screen.getByLabelText('Comentario') as HTMLTextAreaElement
+    await user.clear(comentario)
+    await user.type(comentario, 'Cambio descartable')
+    const cancelar = screen.getByRole('button', { name: 'Cancelar edición' })
+    await user.click(cancelar)
+    await user.click(screen.getByRole('button', { name: 'Descartar cambios' }))
+
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+    expect(
+      (screen.getByLabelText('Comentario') as HTMLTextAreaElement).value,
+    ).toBe('Cobertura del puesto administrativo de Logística.')
+    expect(document.activeElement).toBe(cancelar)
+  })
+
+  it('mantiene el tabulador dentro del descarte en ambos sentidos, sin alcanzar el fondo', async () => {
+    const user = userEvent.setup()
+    renderPreview({ valorInicial: FORMULARIO_ADMINISTRATIVO })
+
+    await user.type(screen.getByLabelText('Comentario'), ' sin guardar')
+    await user.click(screen.getByRole('button', { name: 'Cancelar edición' }))
+
+    const dialogo = screen.getByRole('alertdialog')
+    const fondo = screen.getByRole('dialog', { hidden: true })
+    expect(fondo.hasAttribute('inert')).toBe(true)
+    expect(fondo.getAttribute('aria-modal')).toBeNull()
+    expect(dialogo.getAttribute('aria-modal')).toBe('true')
+
+    const seguir = within(dialogo).getByRole('button', { name: 'Seguir editando' })
+    const descartar = within(dialogo).getByRole('button', {
+      name: 'Descartar cambios',
+    })
+
+    descartar.focus()
+    fireEvent.keyDown(descartar, { key: 'Tab' })
+    expect(document.activeElement).toBe(seguir)
+
+    seguir.focus()
+    fireEvent.keyDown(seguir, { key: 'Tab', shiftKey: true })
+    expect(document.activeElement).toBe(descartar)
+    expect(dialogo.contains(document.activeElement)).toBe(true)
+  })
+
+  it('si el descarte se abre con Esc, rechazarlo devuelve el foco al control que lo tenía', async () => {
+    const user = userEvent.setup()
+    renderPreview({ valorInicial: FORMULARIO_ADMINISTRATIVO })
+
+    const comentario = screen.getByLabelText('Comentario')
+    await user.click(comentario)
+    await user.type(comentario, ' sin guardar')
+    expect(document.activeElement).toBe(comentario)
+
+    await user.keyboard('{Escape}')
+    expect(screen.getByRole('alertdialog')).toBeDefined()
+    expect(document.activeElement).toBe(
+      screen.getByRole('heading', { name: '¿Descartar los cambios sin guardar?' }),
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Seguir editando' }))
+
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+    expect(document.activeElement).toBe(comentario)
+  })
 })
 
 describe('FormularioUx03: conflicto de versión en el envío', () => {
@@ -834,17 +944,19 @@ describe('FormularioUx03: conflicto de versión en el envío', () => {
     const user = userEvent.setup()
     const base = crearPuertoPreview(catalogos())
     const versiones: number[] = []
+    const identificadores: string[] = []
     const puerto: ComandosRequerimientosPort = {
       ...base,
       enviarAprobacion: async (comando) => {
         versiones.push(comando.version)
+        identificadores.push(String(comando.requerimientoId))
         if (versiones.length === 1) {
           return {
             status: 'conflicto-version',
             conflicto: {
               versionEsperada: 7,
               versionVigente: 9,
-              datosVigentes: detalleVigente(9),
+              datosVigentes: detalleVigente(9, 'req-9100'),
             },
           }
         }
@@ -871,5 +983,6 @@ describe('FormularioUx03: conflicto de versión en el envío', () => {
       }),
     ).toBeDefined()
     expect(versiones).toEqual([7, 9])
+    expect(identificadores).toEqual(['req-9001', 'req-9100'])
   })
 })

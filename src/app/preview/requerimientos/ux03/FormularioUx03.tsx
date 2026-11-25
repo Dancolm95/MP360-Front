@@ -326,7 +326,8 @@ export function FormularioUx03({
   const descarteTituloRef = useRef<HTMLHeadingElement>(null)
   const revisionRef = useRef<HTMLHeadingElement>(null)
   const confirmacionRef = useRef<HTMLHeadingElement>(null)
-  const disparadorDescarteRef = useRef<HTMLElement | null>(null)
+  const origenFocoDescarteRef = useRef<HTMLElement | null>(null)
+  const descarteAbiertoPrevio = useRef(false)
   const primerRender = useRef(true)
 
   const [edicion, setEdicion] = useState<EdicionEnCurso>(() =>
@@ -379,8 +380,16 @@ export function FormularioUx03({
   }, [paso, modal])
 
   useEffect(() => {
-    if (!edicion.descartePendiente) return
-    descarteTituloRef.current?.focus()
+    if (edicion.descartePendiente) {
+      descarteAbiertoPrevio.current = true
+      descarteTituloRef.current?.focus()
+      return
+    }
+    if (!descarteAbiertoPrevio.current) return
+    descarteAbiertoPrevio.current = false
+    const origen = origenFocoDescarteRef.current
+    if (origen?.isConnected) origen.focus()
+    else tituloRef.current?.focus()
   }, [edicion.descartePendiente])
 
   useEffect(() => {
@@ -400,6 +409,7 @@ export function FormularioUx03({
   }
 
   const continuar = () => {
+    if (guardando || enviando) return
     const resultado = revisar(estado, catalogos, {
       plazoAdministrativoDias,
       colaboradores,
@@ -421,6 +431,7 @@ export function FormularioUx03({
   }
 
   const volver = () => {
+    if (enviando || guardando) return
     const resultado = volverAEditar(estado)
     if (!resultado.ok) return
     setAvisoGuardado(null)
@@ -437,7 +448,7 @@ export function FormularioUx03({
   }
 
   const enviar = async () => {
-    if (estado.paso !== 'revision' || enviando) return
+    if (estado.paso !== 'revision' || enviando || guardando) return
     setEnviando(true)
     try {
       const resultado: ResultadoOperacion = await enviarAprobacion(
@@ -532,11 +543,6 @@ export function FormularioUx03({
     }
   }
 
-  const devolverFocoDelDescarte = () => {
-    const destino = disparadorDescarteRef.current ?? tituloRef.current
-    destino?.focus()
-  }
-
   const solicitarCancelar = (disparador?: HTMLElement | null) => {
     if (estado.paso === 'confirmacion') {
       onCancelar()
@@ -548,7 +554,12 @@ export function FormularioUx03({
       return
     }
     if (resultado.status === 'confirmacion-pendiente') {
-      disparadorDescarteRef.current = disparador ?? null
+      const activo = document.activeElement
+      origenFocoDescarteRef.current =
+        disparador ??
+        (activo instanceof HTMLElement && contenedorRef.current?.contains(activo)
+          ? activo
+          : tituloRef.current)
       setEdicion(resultado.edicion)
       setAnuncio('Hay cambios sin guardar. Confirma si deseas descartarlos.')
       return
@@ -558,26 +569,19 @@ export function FormularioUx03({
 
   const resolverDescarteActual = (decision: DecisionDescarte) => {
     const resultado = resolverDescarte(edicion, decision)
+    setEdicion(resultado.edicion)
     if (resultado.status === 'descartado') {
+      setAnuncio('Se descartaron los cambios sin guardar.')
       onCancelar()
       return
     }
-    setEdicion(resultado.edicion)
     setAnuncio('Se conservaron los cambios.')
-    devolverFocoDelDescarte()
   }
 
-  const alPulsarTecla = (evento: KeyboardEvent<HTMLDivElement>) => {
-    if (!modal) return
-    if (evento.key === 'Escape') {
-      evento.stopPropagation()
-      if (!edicion.descartePendiente) solicitarCancelar()
-      return
-    }
-    if (evento.key !== 'Tab') return
-    const contenedor = edicion.descartePendiente
-      ? descarteContenedorRef.current
-      : contenedorRef.current
+  const atraparTabulador = (
+    evento: KeyboardEvent<HTMLDivElement>,
+    contenedor: HTMLElement | null,
+  ) => {
     const primero = primerFocalizable(contenedor)
     const ultimo = ultimoFocalizable(contenedor)
     if (!primero || !ultimo) {
@@ -599,11 +603,32 @@ export function FormularioUx03({
     }
   }
 
+  const alPulsarTecla = (evento: KeyboardEvent<HTMLDivElement>) => {
+    if (!modal) return
+    if (evento.key === 'Escape') {
+      evento.stopPropagation()
+      if (!edicion.descartePendiente) solicitarCancelar()
+      return
+    }
+    if (evento.key !== 'Tab') return
+    atraparTabulador(
+      evento,
+      edicion.descartePendiente
+        ? descarteContenedorRef.current
+        : contenedorRef.current,
+    )
+  }
+
   const alPulsarTeclaDescarte = (evento: KeyboardEvent<HTMLDivElement>) => {
-    if (evento.key !== 'Escape') return
-    evento.stopPropagation()
-    evento.preventDefault()
-    resolverDescarteActual('cancelar')
+    if (evento.key === 'Escape') {
+      evento.stopPropagation()
+      evento.preventDefault()
+      resolverDescarteActual('cancelar')
+      return
+    }
+    if (evento.key === 'Tab') {
+      atraparTabulador(evento, descarteContenedorRef.current)
+    }
   }
 
   const embebido = !modal
@@ -625,7 +650,8 @@ export function FormularioUx03({
         ref={contenedorRef}
         className={styles['rrhh-form__modal']}
         role={embebido ? 'region' : 'dialog'}
-        aria-modal={embebido ? undefined : true}
+        aria-modal={embebido || edicion.descartePendiente ? undefined : true}
+        inert={edicion.descartePendiente ? true : undefined}
         aria-labelledby={idTitulo}
         onKeyDown={alPulsarTecla}
       >
@@ -818,7 +844,7 @@ export function FormularioUx03({
                 type="button"
                 className={styles['rrhh-form__boton-secundario']}
                 onClick={guardar}
-                disabled={guardando || enviando}
+                aria-disabled={guardando || enviando}
               >
                 {guardando ? 'Guardando…' : 'Guardar borrador'}
               </button>
@@ -826,7 +852,7 @@ export function FormularioUx03({
                 type="button"
                 className={styles['rrhh-form__boton-primario']}
                 onClick={continuar}
-                disabled={guardando}
+                aria-disabled={guardando || enviando}
               >
                 Continuar
               </button>
@@ -839,7 +865,7 @@ export function FormularioUx03({
                 type="button"
                 className={styles['rrhh-form__boton-secundario']}
                 onClick={volver}
-                disabled={enviando || guardando}
+                aria-disabled={enviando || guardando}
               >
                 Volver a editar
               </button>
@@ -847,7 +873,7 @@ export function FormularioUx03({
                 type="button"
                 className={styles['rrhh-form__boton-secundario']}
                 onClick={guardar}
-                disabled={enviando || guardando}
+                aria-disabled={enviando || guardando}
               >
                 {guardando ? 'Guardando…' : 'Guardar borrador'}
               </button>
@@ -855,7 +881,7 @@ export function FormularioUx03({
                 type="button"
                 className={styles['rrhh-form__boton-primario']}
                 onClick={enviar}
-                disabled={enviando || guardando}
+                aria-disabled={enviando || guardando}
               >
                 {enviando ? 'Enviando…' : 'Enviar'}
               </button>
