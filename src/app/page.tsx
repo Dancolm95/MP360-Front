@@ -6,6 +6,7 @@ import {
   useFocusOnMount,
   type CatalogPort,
   type CatalogResult,
+  type LogicalDestination,
 } from '../container'
 import { createNotImplementedVisibleFixture } from '../container/fixtures'
 import { RrhhContainer } from '../modules/rrhh'
@@ -107,11 +108,20 @@ function CatalogError({
   )
 }
 
-export default function Page() {
+export interface PaginaRequerimientosProps {
+  /** Destino lógico inicial; permite componer la demo para un destino directo. */
+  readonly initialDestination?: LogicalDestination
+}
+
+export function PaginaRequerimientos({
+  initialDestination,
+}: PaginaRequerimientosProps) {
   return (
     <>
       <p role="note">
-        Entorno de contrato mock: no representa una sesión ni autorización reales.
+        Entorno de contrato mock: no representa una sesión ni autorización
+        reales. Los filtros de solicitante y periodo de aprobación no están
+        simulados.
       </p>
       <SessionStateBoundary
         session={MOCK_FIXTURE.session}
@@ -129,6 +139,7 @@ export default function Page() {
                 signOut={MOCK_FIXTURE.signOut}
                 onSignedOut={session.endSession}
                 onSessionEnded={session.endSessionFromNavigation}
+                initialDestination={initialDestination}
                 vistas={VISTAS_REQUERIMIENTOS_DEMO}
               />
             )}
@@ -137,4 +148,8 @@ export default function Page() {
       </SessionStateBoundary>
     </>
   )
+}
+
+export default function Page() {
+  return <PaginaRequerimientos />
 }

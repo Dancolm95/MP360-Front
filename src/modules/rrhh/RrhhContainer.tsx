@@ -89,7 +89,7 @@ export interface RrhhContainerProps {
   readonly onSignedOut: (destination: SignOutDestination) => void
   readonly onSessionEnded: () => void
   readonly initialDestination?: LogicalDestination
-  readonly vistas?: VistasRequerimientos
+  readonly vistas: VistasRequerimientos
 }
 
 function getRrhhSections(catalog: SectionCatalog): readonly Section[] {
@@ -196,6 +196,16 @@ export function RrhhContainer({
     useState<ZonaRequerimientos>('bandeja')
   const [seleccion, setSeleccion] = useState<SeleccionRequerimiento>()
   const requestRef = useRef(0)
+  const viewRef = useRef(view)
+  useEffect(() => {
+    viewRef.current = view
+  }, [view])
+  // `vistas` se lee por ref: un objeto nuevo por render no debe cambiar la
+  // identidad de `resolve` ni devolver la zona abierta a la bandeja.
+  const vistasRef = useRef(vistas)
+  useEffect(() => {
+    vistasRef.current = vistas
+  }, [vistas])
 
   const resolve = useCallback(
     async (destination: LogicalDestination) => {
@@ -205,7 +215,13 @@ export function RrhhContainer({
       }
 
       const request = ++requestRef.current
-      setView({ status: 'loading' })
+      // Abrir el formulario desde la bandeja no vacía la vista: así el foco
+      // sigue en el control que lo abrió y el formulario puede devolverlo.
+      const conservaBandeja =
+        destination === DEST_RRHH_REQUERIMIENTOS_NUEVO &&
+        Boolean(vistasRef.current.formulario) &&
+        viewRef.current.status === 'tray'
+      if (!conservaBandeja) setView({ status: 'loading' })
       let resolution: DestinationResolution
       try {
         resolution = await navigation.resolve(destination)
@@ -223,7 +239,7 @@ export function RrhhContainer({
       if (
         resolution.status === 'ok' &&
         resolution.destination === DEST_RRHH_REQUERIMIENTOS_NUEVO &&
-        vistas?.formulario
+        vistasRef.current.formulario
       ) {
         const section = findSection(sections, DEST_RRHH_REQUERIMIENTOS_BANDEJA)
         if (section?.visible && section.status === 'implemented') {
@@ -241,7 +257,7 @@ export function RrhhContainer({
       }
       setView(siguiente)
     },
-    [canReadUx02, navigation, onSessionEnded, sections, vistas],
+    [canReadUx02, navigation, onSessionEnded, sections],
   )
 
   useEffect(() => {
@@ -263,13 +279,13 @@ export function RrhhContainer({
       )
     : []
 
-  const abrirDetalle = vistas?.detalle
+  const abrirDetalle = vistas.detalle
     ? (siguiente: SeleccionRequerimiento) => {
         setSeleccion(siguiente)
         setZonaRequerimientos('detalle')
       }
     : undefined
-  const abrirFormulario = vistas?.formulario
+  const abrirFormulario = vistas.formulario
     ? () => setZonaRequerimientos('formulario')
     : undefined
   const volverABandeja = () => setZonaRequerimientos('bandeja')
@@ -339,20 +355,18 @@ export function RrhhContainer({
       ) : null}
       {view.status === 'tray' ? (
         <section>
-          {zonaRequerimientos === 'detalle' && seleccion && vistas?.detalle ? (
+          {zonaRequerimientos === 'detalle' && seleccion && vistas.detalle ? (
             vistas.detalle(seleccion, volverABandeja)
           ) : (
             <>
               <ViewHeading>Requerimientos</ViewHeading>
-              {vistas
-                ? vistas.bandeja({
-                    onAbrirDetalle: abrirDetalle,
-                    onNuevo: abrirFormulario,
-                    contextoInicial: seleccion?.contexto,
-                    restaurarFocoEn: seleccion?.requerimiento.id,
-                  })
-                : null}
-              {zonaRequerimientos === 'formulario' && vistas?.formulario
+              {vistas.bandeja({
+                onAbrirDetalle: abrirDetalle,
+                onNuevo: abrirFormulario,
+                contextoInicial: seleccion?.contexto,
+                restaurarFocoEn: seleccion?.requerimiento.id,
+              })}
+              {zonaRequerimientos === 'formulario' && vistas.formulario
                 ? vistas.formulario(volverABandeja)
                 : null}
             </>

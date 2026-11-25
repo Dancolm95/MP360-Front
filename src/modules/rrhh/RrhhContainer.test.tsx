@@ -4,7 +4,10 @@ import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { LogicalDestination, SectionCatalog } from '../../container/contracts'
-import type { AccionesBandejaContenedor } from './RrhhContainer'
+import type {
+  AccionesBandejaContenedor,
+  VistasRequerimientos,
+} from './RrhhContainer'
 import type {
   ContextoBandeja,
   ResumenRequerimientoCompleto,
@@ -36,6 +39,26 @@ async function readCatalog(fixture: ReturnType<typeof createSessionWithUx02Fixtu
   return result.catalog
 }
 
+const VISTAS_STUB: VistasRequerimientos = {
+  bandeja: () => <p>Bandeja inyectada</p>,
+  detalle: (seleccion, onVolver) => (
+    <>
+      <p>Detalle inyectado de {String(seleccion.requerimiento.id)}</p>
+      <button type="button" onClick={onVolver}>
+        Volver del detalle inyectado
+      </button>
+    </>
+  ),
+  formulario: (onCerrar) => (
+    <>
+      <p>Formulario inyectado</p>
+      <button type="button" onClick={onCerrar}>
+        Cerrar el formulario inyectado
+      </button>
+    </>
+  ),
+}
+
 function renderContainer(
   catalog: SectionCatalog,
   options: Partial<ComponentProps<typeof RrhhContainer>> = {},
@@ -49,6 +72,7 @@ function renderContainer(
       signOut={mockSignOutSuccess('provider')}
       onSignedOut={() => undefined}
       onSessionEnded={() => undefined}
+      vistas={VISTAS_STUB}
       {...options}
     />,
   )
@@ -63,6 +87,7 @@ describe('RrhhContainer (CORE-01 §7 criterios 1–3)', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Requerimientos' }),
     ).toBeDefined()
+    expect(screen.getByText('Bandeja inyectada')).toBeDefined()
     expect(screen.getByText(/Sección: Requerimientos/)).toBeDefined()
     expect(screen.queryByText(/Dashboard/i)).toBeNull()
   })
@@ -133,12 +158,13 @@ describe('RrhhContainer (CORE-01 §7 criterios 1–3)', () => {
     const catalog = await readCatalog(fixture)
     renderContainer(catalog, {
       navigation: fixture.navigation,
-      initialDestination: DEST_RRHH_REQUERIMIENTOS_NUEVO,
+      initialDestination: 'rrhh:destino-inexistente' as LogicalDestination,
     })
 
     expect(await screen.findByRole('heading', { name: 'Destino no encontrado' })).toBeDefined()
     expect(screen.queryByText('Próximamente')).toBeNull()
     expect(screen.queryByRole('form')).toBeNull()
+    expect(screen.queryByText('Bandeja inyectada')).toBeNull()
   })
 
   it('un destino directo denegado no se convierte en Próximamente', async () => {
@@ -293,5 +319,44 @@ describe('RrhhContainer · vistas inyectadas (T-CORE-09)', () => {
     expect(
       screen.getByRole('button', { name: 'Nuevo de prueba' }),
     ).toBeDefined()
+  })
+
+  it('conserva la zona abierta cuando el padre entrega un objeto de vistas nuevo', async () => {
+    const fixture = createSessionWithUx02Fixture()
+    const catalog = await readCatalog(fixture)
+    const user = userEvent.setup()
+    const base = {
+      catalog,
+      capabilities: [CAP_RRHH_REQUERIMIENTOS_READ],
+      navigation: fixture.navigation,
+      signOut: mockSignOutSuccess('provider'),
+      onSignedOut: () => undefined,
+      onSessionEnded: () => undefined,
+    } as const
+    const vistasA: VistasRequerimientos = {
+      bandeja: ({ onNuevo }) => (
+        <button type="button" onClick={onNuevo}>
+          Nuevo A
+        </button>
+      ),
+      formulario: () => <p>Formulario A</p>,
+    }
+    const { rerender } = render(<RrhhContainer {...base} vistas={vistasA} />)
+
+    await user.click(await screen.findByRole('button', { name: 'Nuevo A' }))
+    expect(screen.getByText('Formulario A')).toBeDefined()
+
+    const vistasB: VistasRequerimientos = {
+      bandeja: ({ onNuevo }) => (
+        <button type="button" onClick={onNuevo}>
+          Nuevo B
+        </button>
+      ),
+      formulario: () => <p>Formulario B</p>,
+    }
+    rerender(<RrhhContainer {...base} vistas={vistasB} />)
+
+    expect(screen.getByText('Formulario B')).toBeDefined()
+    expect(screen.queryByText('Formulario A')).toBeNull()
   })
 })

@@ -7,10 +7,28 @@ import {
   within,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { useState } from 'react'
 import { afterEach, describe, expect, it } from 'vitest'
-import Page from './page'
+import type { LogicalDestination } from '../container/contracts'
+import { DEST_RRHH_REQUERIMIENTOS_NUEVO } from '../modules/rrhh/identifiers'
+import Page, { PaginaRequerimientos } from './page'
 
 afterEach(cleanup)
+
+function PaginaConDestinoDirecto() {
+  const [destino, setDestino] = useState<LogicalDestination>()
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setDestino(DEST_RRHH_REQUERIMIENTOS_NUEVO)}
+      >
+        Ir al formulario por destino
+      </button>
+      <PaginaRequerimientos initialDestination={destino} />
+    </>
+  )
+}
 
 async function renderBandeja() {
   const user = userEvent.setup()
@@ -53,6 +71,9 @@ describe('integración de la página con la bandeja real', () => {
     expect(screen.getByRole('note').textContent).toMatch(/contrato mock/i)
     expect(screen.queryByRole('complementary')).toBeNull()
     expect(screen.queryByText(/Dashboard/i)).toBeNull()
+    expect(
+      screen.getByRole('button', { name: /RR\. HH\. \(módulo activo\)/ }),
+    ).toBeDefined()
 
     const principal = within(screen.getByRole('main'))
     expect(principal.getByText(/Alerta: Crítica/)).toBeDefined()
@@ -136,8 +157,9 @@ describe('integración de la página con la bandeja real', () => {
 
   it('alcanza el formulario de alta desde la acción de la bandeja y vuelve al cerrarlo', async () => {
     const user = await renderBandeja()
+    const nuevo = screen.getByRole('button', { name: 'Nuevo' })
 
-    await user.click(screen.getByRole('button', { name: 'Nuevo' }))
+    await user.click(nuevo)
     const formulario = await screen.findByRole('dialog', {
       name: 'Nuevo requerimiento de personal',
     })
@@ -154,5 +176,45 @@ describe('integración de la página con la bandeja real', () => {
       }),
     ).toBeDefined()
     expect(filaDe('req-1001')).toBeDefined()
+    await waitFor(() => expect(document.activeElement).toBe(nuevo))
+  })
+
+  it('abre el formulario por el destino nuevo y devuelve el foco al control que lo abrió', async () => {
+    const user = userEvent.setup()
+    render(<PaginaConDestinoDirecto />)
+    const control = screen.getByRole('button', {
+      name: 'Ir al formulario por destino',
+    })
+    await screen.findByRole('heading', {
+      level: 2,
+      name: 'Bandeja de requerimientos',
+    })
+
+    await user.click(control)
+    const formulario = await screen.findByRole('dialog', {
+      name: 'Nuevo requerimiento de personal',
+    })
+    expect(within(formulario).getByText('Datos del requerimiento')).toBeDefined()
+
+    await user.click(
+      within(formulario).getByRole('button', { name: 'Cancelar edición' }),
+    )
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    await waitFor(() => expect(document.activeElement).toBe(control))
+  })
+
+  it('abre el detalle con un clic en el cuerpo de la fila', async () => {
+    const user = await renderBandeja()
+
+    const fila = filaDe('req-1001')
+    await user.click(within(fila).getAllByRole('cell')[0])
+
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Detalle de requerimiento',
+      }),
+    ).toBeDefined()
   })
 })

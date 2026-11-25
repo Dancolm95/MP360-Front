@@ -1,8 +1,10 @@
 'use client'
 
 import type { VistasRequerimientos } from '../modules/rrhh'
-import { DetalleRequerimiento } from '../modules/rrhh/requerimientos/detail'
-import { BandejaRequerimientos } from '../modules/rrhh/requerimientos/tray'
+import {
+  BandejaRequerimientos,
+  DetalleRequerimientoVista as DetalleRequerimiento,
+} from '../modules/rrhh/requerimientos'
 import {
   CATALOGOS,
   COLABORADORES,

@@ -13,7 +13,7 @@ import type {
   ResumenRequerimiento,
   ResumenRequerimientoCanceladoCompleto,
   ResumenRequerimientoCompleto,
-} from '../modules/rrhh/requerimientos/contracts'
+} from '../modules/rrhh/requerimientos'
 import {
   CATALOGOS,
   COLABORADORES,
@@ -26,8 +26,8 @@ import {
 /**
  * Adaptación de los datos del preview para la demo de `/`. No es un adaptador
  * real: no persiste, no autoriza y solo resuelve los filtros y el orden que el
- * resumen del contrato expone. Se mantiene en `src/app` para no inventar
- * puertos ni reglas dentro de `modules/`.
+ * resumen del contrato expone; área y subárea se derivan de su puesto. Se
+ * mantiene en `src/app` para no inventar puertos ni reglas dentro de `modules/`.
  */
 export {
   CATALOGOS,
@@ -63,8 +63,20 @@ function filaCoincide(
   ) {
     return false
   }
-  // El resumen del contrato no expone área, subárea, solicitante ni fecha de
-  // aprobación; el demo no inventa esas referencias y deja pasar esas consultas.
+  // El resumen solo expone la jerarquía del puesto; el demo filtra área y
+  // subárea por esa referencia porque no transporta las suyas propias.
+  if (filtros.areas?.length) {
+    if (fila.puesto === null || !filtros.areas.includes(fila.puesto.areaId)) {
+      return false
+    }
+  }
+  if (filtros.subareas?.length) {
+    const subareaId = fila.puesto?.subareaId
+    if (!subareaId || !filtros.subareas.includes(subareaId)) return false
+  }
+  // `solicitantes` y `periodoAprobacion` no tienen dato en el resumen del
+  // contrato; el demo no inventa usuarios ni fechas de aprobación y deja pasar
+  // esas consultas. La interfaz lo advierte de forma visible.
   return true
 }
 
@@ -197,10 +209,15 @@ function alertaAdministrativa(
   }
 }
 
-function plazoDemo(resumen: ResumenConPlazo): PlazoRequerimiento {
+function plazoDemo(
+  resumen: ResumenConPlazo,
+  usaDatosDeEjemplo: boolean,
+): PlazoRequerimiento {
   const alerta = resumen.alerta
-  const fechaAprobacion = resumen.fechaObjetivo ? DETALLE.plazo.fechaAprobacion : null
-  const cumplimiento = resumen.fechaObjetivo ? DETALLE.plazo.cumplimiento : 'pendiente'
+  // La fecha de aprobación y el cumplimiento solo existen en el ejemplo; el
+  // resumen de la fila no los transporta y no se les atribuyen a otras filas.
+  const fechaAprobacion = usaDatosDeEjemplo ? DETALLE.plazo.fechaAprobacion : null
+  const cumplimiento = usaDatosDeEjemplo ? DETALLE.plazo.cumplimiento : 'pendiente'
 
   if (resumen.puesto.clasificacion === 'operativo') {
     return {
@@ -243,9 +260,12 @@ function plazoDemo(resumen: ResumenConPlazo): PlazoRequerimiento {
 }
 
 /**
- * Detalle de demo derivado de la fila abierta. Reutiliza el contenido de
- * ejemplo del preview para los campos que el resumen no transporta; no
- * reproduce ninguna regla de negocio.
+ * Detalle de demo derivado de la fila abierta. Área, subárea y departamento se
+ * derivan del puesto de la fila; el historial y el colaborador a reemplazar son
+ * los de ejemplo de `req-1001` y solo se usan ahí: en el resto quedan vacíos en
+ * vez de atribuir a la fila datos que su resumen no transporta. Remuneración,
+ * ubicación y comentario siguen siendo contenido de ejemplo y el detalle no
+ * reproduce reglas de negocio.
  */
 export function detalleDemo(resumen: ResumenRequerimiento): DetalleRequerimiento {
   if (resumen.estado === 'borrador') {
@@ -281,11 +301,21 @@ export function detalleDemo(resumen: ResumenRequerimiento): DetalleRequerimiento
     }
   }
 
+  const area = CATALOGOS.areas.find((item) => item.id === resumen.puesto.areaId)
+  const subareaId = resumen.puesto.subareaId
+  const subarea = subareaId
+    ? (CATALOGOS.subareas.find((item) => item.id === subareaId) ?? null)
+    : null
+  const departamento = area
+    ? CATALOGOS.departamentos.find((item) => item.id === area.departamentoId)
+    : undefined
+  const usaDatosDeEjemplo = resumen.id === DETALLE.id
+
   const detalleCompleto = {
     id: resumen.id,
     version: resumen.version,
     fechaCreacion: resumen.fechaCreacion,
-    historial: DETALLE.historial,
+    historial: usaDatosDeEjemplo ? DETALLE.historial : [],
     autorizacion: resumen.autorizacion,
     motivo: resumen.motivo,
     empresa: resumen.empresa,
@@ -296,11 +326,14 @@ export function detalleDemo(resumen: ResumenRequerimiento): DetalleRequerimiento
       pendientes: resumen.pendientes,
       primerosDiasReales: [],
     },
-    plazo: plazoDemo(resumen),
-    colaboradorAReemplazar: DETALLE.colaboradorAReemplazar,
-    departamento: DETALLE.departamento,
-    area: DETALLE.area,
-    subarea: DETALLE.subarea,
+    plazo: plazoDemo(resumen, usaDatosDeEjemplo),
+    colaboradorAReemplazar:
+      usaDatosDeEjemplo && resumen.motivo === 'reemplazo'
+        ? DETALLE.colaboradorAReemplazar
+        : null,
+    departamento: departamento ?? DETALLE.departamento,
+    area: area ?? DETALLE.area,
+    subarea,
     remuneracion: DETALLE.remuneracion,
     ubicacion: DETALLE.ubicacion,
     usuarioProximaTarea: resumen.responsable ?? DETALLE.usuarioProximaTarea,
