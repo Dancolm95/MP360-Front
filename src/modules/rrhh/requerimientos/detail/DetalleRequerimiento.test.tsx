@@ -1,9 +1,16 @@
 /** @vitest-environment jsdom */
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Capability } from '../../../../shared'
 import { CAP_RRHH_REQUERIMIENTOS_READ } from '../../identifiers'
 import type {
+  AlertaPlazoOperativo,
   Area,
   AreaId,
   AutorizacionRequerimiento,
@@ -20,6 +27,7 @@ import type {
   DistritoId,
   Empresa,
   EmpresaId,
+  EventoCambioEstado,
   EventoCreacion,
   EventoHistorialId,
   FechaISO,
@@ -124,6 +132,23 @@ function eventoCreacion(): EventoCreacion {
   }
 }
 
+const eventoAprobacion: EventoCambioEstado = {
+  id: 'evento-2' as EventoHistorialId,
+  usuario: solicitante,
+  fechaHora: '2026-01-03T09:00:00Z' as InstanteISO,
+  accion: 'aprobacion',
+  estadoAnterior: 'pendiente-aprobacion',
+  estadoNuevo: 'aprobado',
+  comentario: 'Aprobación registrada',
+}
+
+const alertaCritica: AlertaPlazoOperativo = {
+  nivel: 'critica',
+  umbral: { tipo: 'dias-fijos', clasificacion: 'operativo', diaHabil: 9 },
+  diaHabil: 9,
+  fecha: '2026-01-16' as FechaISO,
+}
+
 function detalleCompleto(
   overrides: Partial<DetalleRequerimientoCompleto> = {},
 ): DetalleRequerimientoCompleto {
@@ -225,5 +250,152 @@ describe('DetalleRequerimiento (UX-04, presentacional)', () => {
     ).toBeDefined()
     expect(screen.getByText('Borrador')).toBeDefined()
     expect(screen.getAllByText(/Sin dato/).length).toBeGreaterThan(0)
+  })
+
+  it('estructura el resumen y la cobertura con encabezados y listas de definición', () => {
+    render(<DetalleRequerimiento detalle={detalleCompleto()} />)
+
+    expect(
+      screen.getAllByRole('heading', { level: 2 }).map((h2) => h2.textContent),
+    ).toEqual(['Resumen', 'Cobertura', 'Plazo', 'Historial', 'Postulantes'])
+
+    const resumen = screen.getByRole('heading', { name: 'Resumen' }).closest('section')
+    expect(resumen).not.toBeNull()
+    const resumenDl = within(resumen as HTMLElement).getByText('Motivo')
+    expect(resumenDl.tagName).toBe('DT')
+    expect(resumenDl.closest('dl')).not.toBeNull()
+    expect(
+      within(resumen as HTMLElement).getByText('Reemplazo').tagName,
+    ).toBe('DD')
+
+    const coberturaSeccion = screen
+      .getByRole('heading', { name: 'Cobertura' })
+      .closest('section')
+    expect(coberturaSeccion).not.toBeNull()
+    expect(
+      within(coberturaSeccion as HTMLElement).getByText('Vacantes solicitadas')
+        .tagName,
+    ).toBe('DT')
+    expect(
+      within(coberturaSeccion as HTMLElement).getByText('4').tagName,
+    ).toBe('DD')
+  })
+
+  it('expone el invariante de cobertura por texto y no lo deja al color', () => {
+    const { rerender } = render(
+      <DetalleRequerimiento detalle={detalleCompleto()} />,
+    )
+    expect(
+      screen.getByText(
+        'Cobertura consistente: pendientes = solicitadas − cubiertas (2).',
+      ),
+    ).toBeDefined()
+
+    rerender(
+      <DetalleRequerimiento
+        detalle={detalleCompleto({
+          cobertura: {
+            solicitadas: 4,
+            cubiertas: 2,
+            pendientes: 3,
+            primerosDiasReales: [],
+          },
+        })}
+      />,
+    )
+    expect(screen.getByText(/Cobertura inconsistente/)).toBeDefined()
+  })
+
+  it('presenta la alerta con texto e icono y la distingue del incumplimiento del plazo', () => {
+    render(
+      <DetalleRequerimiento
+        detalle={detalleCompleto({
+          plazo: {
+            ...plazoOperativo,
+            cumplimiento: 'incumplido',
+            alerta: alertaCritica,
+          },
+        })}
+      />,
+    )
+
+    const alerta = screen.getByText(/Alerta: Crítica/)
+    expect(alerta.querySelector('[aria-hidden="true"]')?.textContent).toBe('▲')
+
+    const plazoSeccion = screen.getByRole('heading', { name: 'Plazo' }).closest('section')
+    expect(plazoSeccion).not.toBeNull()
+    expect(within(plazoSeccion as HTMLElement).getByText('Incumplido').tagName)
+      .toBe('DD')
+    expect(within(plazoSeccion as HTMLElement).queryByText(/Alerta/)).toBeNull()
+  })
+
+  it('ordena el historial del más reciente al más antiguo y muestra estado y comentario', () => {
+    render(
+      <DetalleRequerimiento
+        detalle={detalleCompleto({
+          estado: 'aprobado',
+          historial: [eventoCreacion(), eventoAprobacion],
+        })}
+      />,
+    )
+
+    const historial = screen
+      .getByRole('heading', { name: 'Historial' })
+      .closest('section')
+    expect(historial).not.toBeNull()
+    expect(
+      within(historial as HTMLElement).getByText(
+        'Orden: del más reciente al más antiguo.',
+      ),
+    ).toBeDefined()
+
+    const entradas = within(historial as HTMLElement).getAllByRole('listitem')
+    expect(entradas).toHaveLength(2)
+    expect(entradas[0].textContent).toContain('Aprobación')
+    expect(entradas[0].textContent).toContain(
+      'Pendiente de aprobación → Aprobado',
+    )
+    expect(entradas[0].textContent).toContain('Aprobación registrada')
+    expect(entradas[0].textContent).toContain('03/01/2026 09:00')
+    expect(entradas[1].textContent).toContain('Creación')
+    expect(entradas[1].textContent).toContain('Borrador')
+  })
+
+  it('lleva el foco al título del detalle al abrirse', () => {
+    render(<DetalleRequerimiento detalle={detalleCompleto()} />)
+
+    expect(document.activeElement).toBe(
+      screen.getByRole('heading', { name: 'Detalle de requerimiento' }),
+    )
+  })
+
+  it('anuncia la carga, el error con reintento y la lectura sin permisos', () => {
+    const reintentar = vi.fn()
+    const { rerender } = render(<DetalleRequerimiento estado="cargando" />)
+
+    expect(screen.getByRole('status').textContent).toContain(
+      'Cargando requerimiento',
+    )
+    expect(screen.queryByRole('heading', { name: 'Resumen' })).toBeNull()
+
+    rerender(
+      <DetalleRequerimiento
+        estado="error"
+        mensajeError="Fallo de red"
+        onReintentar={reintentar}
+      />,
+    )
+    const error = screen.getByRole('alert')
+    expect(error.textContent).toContain('No se pudo cargar el requerimiento')
+    expect(error.textContent).toContain('Fallo de red')
+    fireEvent.click(within(error).getByRole('button', { name: 'Reintentar' }))
+    expect(reintentar).toHaveBeenCalledTimes(1)
+
+    rerender(<DetalleRequerimiento estado="sin-permisos" />)
+    const sinPermisos = screen.getByRole('alert')
+    expect(sinPermisos.textContent).toContain('Sin permisos')
+    expect(sinPermisos.textContent).toContain(
+      'No tienes acceso de lectura a este requerimiento.',
+    )
   })
 })

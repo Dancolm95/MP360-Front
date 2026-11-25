@@ -1,14 +1,13 @@
 'use client'
 
-import { useId, useState } from 'react'
-import type { ReactNode } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import type {
   AccionHistorial,
-  DetalleRequerimiento,
+  DetalleRequerimiento as DetalleRequerimientoContrato,
   DetalleRequerimientoCanceladoCompleto,
   DetalleRequerimientoCompleto,
   EstadoRequerimiento,
-  EventoHistorial,
   NivelAlerta,
   PlazoRequerimiento,
 } from '../contracts'
@@ -19,13 +18,26 @@ import {
   MOTIVO_LABELS,
 } from '../model/etiquetas'
 import { formatearFecha } from '../model/formato'
+import { crearDetalleUx04, type EntradaHistorial } from './model'
 import styles from './DetalleRequerimiento.module.css'
 
-export interface DetalleRequerimientoProps {
-  readonly detalle: DetalleRequerimiento
+interface DetalleRequerimientoPropsComunes {
   readonly onAsociarCandidato?: () => void
   readonly onVolver?: () => void
 }
+
+export type DetalleRequerimientoProps =
+  | (DetalleRequerimientoPropsComunes & {
+      readonly estado?: 'listo'
+      readonly detalle: DetalleRequerimientoContrato
+    })
+  | (DetalleRequerimientoPropsComunes & { readonly estado: 'cargando' })
+  | (DetalleRequerimientoPropsComunes & {
+      readonly estado: 'error'
+      readonly mensajeError?: string
+      readonly onReintentar?: () => void
+    })
+  | (DetalleRequerimientoPropsComunes & { readonly estado: 'sin-permisos' })
 
 type DetalleConDatosCompletos =
   | DetalleRequerimientoCompleto
@@ -50,18 +62,11 @@ const ACCION_LABELS: Readonly<Record<AccionHistorial, string>> = {
 }
 
 function tieneDatosCompletos(
-  detalle: DetalleRequerimiento,
+  detalle: DetalleRequerimientoContrato,
 ): detalle is DetalleConDatosCompletos {
   if (detalle.estado === 'borrador') return false
   if (detalle.estado === 'cancelado') return detalle.datos === 'completos'
   return true
-}
-
-function formatearFechaHora(valor: string): string {
-  const [fecha, hora] = valor.split('T')
-  const fechaFormateada = formatearFecha(fecha)
-  if (!hora) return fechaFormateada
-  return `${fechaFormateada} ${hora.slice(0, 5)}`
 }
 
 function formatearMonto(monto: number): string {
@@ -125,39 +130,196 @@ function Item({
 }) {
   return (
     <div className={styles['rrhh-detail__item']}>
-      <span className={styles['rrhh-detail__item-etiqueta']}>{etiqueta}</span>
-      <span className={styles['rrhh-detail__item-valor']}>{valor}</span>
+      <dt className={styles['rrhh-detail__item-etiqueta']}>{etiqueta}</dt>
+      <dd className={styles['rrhh-detail__item-valor']}>{valor}</dd>
     </div>
   )
 }
 
-function HistorialItem({ evento }: { readonly evento: EventoHistorial }) {
+function DatoHistorial({
+  etiqueta,
+  valor,
+}: {
+  readonly etiqueta: string
+  readonly valor: string
+}) {
+  return (
+    <div className={styles['rrhh-detail__historial-dato']}>
+      <dt>{etiqueta}</dt>
+      <dd>{valor}</dd>
+    </div>
+  )
+}
+
+function textoEstado(entrada: EntradaHistorial): string | null {
+  if (entrada.estadoAnteriorEtiqueta === null) {
+    return entrada.estadoNuevoEtiqueta
+  }
+  return `${entrada.estadoAnteriorEtiqueta} → ${
+    entrada.estadoNuevoEtiqueta ?? 'Sin estado'
+  }`
+}
+
+function HistorialItem({ entrada }: { readonly entrada: EntradaHistorial }) {
+  const estado = textoEstado(entrada)
+  const tieneDetalles =
+    estado !== null || entrada.comentario !== null || entrada.detalles.length > 0
+
   return (
     <li className={styles['rrhh-detail__historial-item']}>
-      <span className={styles['rrhh-detail__historial-accion']}>
-        {ACCION_LABELS[evento.accion]}
-      </span>
-      <span className={styles['rrhh-detail__historial-meta']}>
-        {evento.usuario.nombre} · {formatearFechaHora(evento.fechaHora)}
-      </span>
+      <div className={styles['rrhh-detail__historial-cabecera']}>
+        <span className={styles['rrhh-detail__historial-accion']}>
+          <span className="sr-only">Acción: </span>
+          {ACCION_LABELS[entrada.accion]}
+        </span>
+        <span className={styles['rrhh-detail__historial-meta']}>
+          <span className="sr-only">Usuario: </span>
+          {entrada.usuario.nombre}
+          <span aria-hidden="true"> · </span>
+          <span className="sr-only">Fecha y hora: </span>
+          {entrada.fechaHoraTexto}
+        </span>
+      </div>
+      {tieneDetalles ? (
+        <dl className={styles['rrhh-detail__historial-datos']}>
+          {estado !== null ? <DatoHistorial etiqueta="Estado" valor={estado} /> : null}
+          {entrada.comentario !== null ? (
+            <DatoHistorial etiqueta="Comentario" valor={entrada.comentario} />
+          ) : null}
+          {entrada.detalles.map((detalle) => (
+            <DatoHistorial
+              key={`${String(entrada.id)}-${detalle.etiqueta}`}
+              etiqueta={detalle.etiqueta}
+              valor={detalle.valor}
+            />
+          ))}
+        </dl>
+      ) : null}
     </li>
   )
 }
 
-export function DetalleRequerimiento({
-  detalle,
-  onAsociarCandidato = () => {},
-  onVolver = () => {},
-}: DetalleRequerimientoProps) {
+function textoInvarianteCobertura(
+  invariante: { readonly esperado: number; readonly consistente: boolean },
+): string {
+  return invariante.consistente
+    ? `Cobertura consistente: pendientes = solicitadas − cubiertas (${invariante.esperado}).`
+    : `Cobertura inconsistente: pendientes no coincide con solicitadas − cubiertas (${invariante.esperado}).`
+}
+
+function CabeceraEstado({
+  idTitulo,
+  tituloRef,
+  onVolver,
+}: {
+  readonly idTitulo: string
+  readonly tituloRef: RefObject<HTMLHeadingElement | null>
+  readonly onVolver: () => void
+}) {
+  return (
+    <header className={styles['rrhh-detail__cabecera']}>
+      <div>
+        <p className={styles['rrhh-detail__breadcrumb']}>
+          R.R.H.H / Requerimiento / Detalle
+        </p>
+        <h1
+          id={idTitulo}
+          ref={tituloRef}
+          tabIndex={-1}
+          className={styles['rrhh-detail__titulo']}
+        >
+          Detalle de requerimiento
+        </h1>
+      </div>
+      <button
+        type="button"
+        className={styles['rrhh-detail__volver']}
+        onClick={onVolver}
+        aria-label="Volver a la bandeja de requerimientos"
+      >
+        <span aria-hidden="true">←</span> Volver a bandeja
+      </button>
+    </header>
+  )
+}
+
+export function DetalleRequerimiento(props: DetalleRequerimientoProps) {
+  const { onAsociarCandidato = () => {}, onVolver = () => {} } = props
   const idBase = useId()
+  const tituloRef = useRef<HTMLHeadingElement>(null)
   const [historialVisible, setHistorialVisible] = useState(true)
 
+  useEffect(() => {
+    tituloRef.current?.focus()
+  }, [props.estado])
+
+  const idTitulo = `${idBase}-titulo`
+
+  if (props.estado === 'cargando') {
+    return (
+      <section className={styles['rrhh-detail']} aria-labelledby={idTitulo}>
+        <CabeceraEstado
+          idTitulo={idTitulo}
+          tituloRef={tituloRef}
+          onVolver={onVolver}
+        />
+        <p role="status" aria-live="polite" className={styles['rrhh-detail__vacio']}>
+          Cargando requerimiento…
+        </p>
+      </section>
+    )
+  }
+
+  if (props.estado === 'error') {
+    return (
+      <section className={styles['rrhh-detail']} aria-labelledby={idTitulo}>
+        <CabeceraEstado
+          idTitulo={idTitulo}
+          tituloRef={tituloRef}
+          onVolver={onVolver}
+        />
+        <div role="alert" className={styles['rrhh-detail__tarjeta']}>
+          <h2 className={styles['rrhh-detail__tarjeta-titulo']}>
+            No se pudo cargar el requerimiento
+          </h2>
+          <p>{props.mensajeError ?? 'Inténtalo de nuevo.'}</p>
+          {props.onReintentar ? (
+            <button
+              type="button"
+              className={styles['rrhh-detail__volver']}
+              onClick={props.onReintentar}
+            >
+              Reintentar
+            </button>
+          ) : null}
+        </div>
+      </section>
+    )
+  }
+
+  if (props.estado === 'sin-permisos') {
+    return (
+      <section className={styles['rrhh-detail']} aria-labelledby={idTitulo}>
+        <CabeceraEstado
+          idTitulo={idTitulo}
+          tituloRef={tituloRef}
+          onVolver={onVolver}
+        />
+        <div role="alert" className={styles['rrhh-detail__tarjeta']}>
+          <h2 className={styles['rrhh-detail__tarjeta-titulo']}>Sin permisos</h2>
+          <p>No tienes acceso de lectura a este requerimiento.</p>
+        </div>
+      </section>
+    )
+  }
+
+  const detalle = props.detalle
+  const modelo = crearDetalleUx04(detalle)
   const datosCompletos = tieneDatosCompletos(detalle) ? detalle : null
   const alerta = detalle.plazo?.alerta ?? null
   const cobertura = detalle.cobertura
   const plazo = detalle.plazo
 
-  const idTitulo = `${idBase}-titulo`
   const idResumen = `${idBase}-resumen`
   const idCobertura = `${idBase}-cobertura`
   const idPlazo = `${idBase}-plazo`
@@ -172,7 +334,12 @@ export function DetalleRequerimiento({
           <p className={styles['rrhh-detail__breadcrumb']}>
             R.R.H.H / Requerimiento / Detalle
           </p>
-          <h1 id={idTitulo} className={styles['rrhh-detail__titulo']}>
+          <h1
+            id={idTitulo}
+            ref={tituloRef}
+            tabIndex={-1}
+            className={styles['rrhh-detail__titulo']}
+          >
             Detalle de requerimiento
           </h1>
           <p className={styles['rrhh-detail__subtitulo']}>
@@ -207,7 +374,7 @@ export function DetalleRequerimiento({
             </p>
           </div>
         </div>
-        <div className={styles['rrhh-detail__resumen-grid']}>
+        <dl className={styles['rrhh-detail__resumen-grid']}>
           <Item
             etiqueta="Motivo"
             valor={
@@ -270,7 +437,7 @@ export function DetalleRequerimiento({
               datosCompletos ? textoUbicacion(datosCompletos) : <ValorAusente />
             }
           />
-        </div>
+        </dl>
       </section>
 
       <section
@@ -280,7 +447,7 @@ export function DetalleRequerimiento({
         <h2 id={idCobertura} className={styles['rrhh-detail__tarjeta-titulo']}>
           Cobertura
         </h2>
-        <div className={styles['rrhh-detail__cobertura']}>
+        <dl className={styles['rrhh-detail__cobertura']}>
           <Item
             etiqueta="Vacantes solicitadas"
             valor={
@@ -295,7 +462,12 @@ export function DetalleRequerimiento({
             etiqueta="Pendientes"
             valor={cobertura ? cobertura.pendientes : <ValorAusente />}
           />
-        </div>
+        </dl>
+        {modelo.cobertura.invariante ? (
+          <p className={styles['rrhh-detail__nota']}>
+            {textoInvarianteCobertura(modelo.cobertura.invariante)}
+          </p>
+        ) : null}
       </section>
 
       <section
@@ -305,7 +477,7 @@ export function DetalleRequerimiento({
         <h2 id={idPlazo} className={styles['rrhh-detail__tarjeta-titulo']}>
           Plazo
         </h2>
-        <div className={styles['rrhh-detail__plazo']}>
+        <dl className={styles['rrhh-detail__plazo']}>
           <Item
             etiqueta="Días hábiles"
             valor={plazo ? textoDiasHabiles(plazo) : <ValorAusente />}
@@ -322,10 +494,14 @@ export function DetalleRequerimiento({
               )
             }
           />
-          {!plazo?.fechaObjetivo ? (
-            <p className={styles['rrhh-detail__aviso']}>{AVISO_DURACION}</p>
-          ) : null}
-        </div>
+          <Item
+            etiqueta="Cumplimiento"
+            valor={plazo ? modelo.plazo.cumplimientoEtiqueta : <ValorAusente />}
+          />
+        </dl>
+        {!plazo?.fechaObjetivo ? (
+          <p className={styles['rrhh-detail__aviso']}>{AVISO_DURACION}</p>
+        ) : null}
       </section>
 
       <section
@@ -347,16 +523,24 @@ export function DetalleRequerimiento({
           </button>
         </div>
         {historialVisible ? (
-          detalle.historial.length === 0 ? (
+          modelo.historial.vacio ? (
             <p className={styles['rrhh-detail__vacio']}>
               Sin eventos registrados.
             </p>
           ) : (
-            <ul id={idHistorialLista} className={styles['rrhh-detail__historial']}>
-              {detalle.historial.map((evento) => (
-                <HistorialItem key={String(evento.id)} evento={evento} />
-              ))}
-            </ul>
+            <>
+              <p className={styles['rrhh-detail__nota']}>
+                Orden: del más reciente al más antiguo.
+              </p>
+              <ul
+                id={idHistorialLista}
+                className={styles['rrhh-detail__historial']}
+              >
+                {modelo.historial.entradas.map((entrada) => (
+                  <HistorialItem key={String(entrada.id)} entrada={entrada} />
+                ))}
+              </ul>
+            </>
           )
         ) : null}
       </section>

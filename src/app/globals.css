@@ -314,6 +314,11 @@ button:focus-visible,
   background: #f5f7fa;
 }
 
+.rrhh-tray__tabla tbody tr[tabindex='0']:focus-visible {
+  outline: 3px solid #1f6feb;
+  outline-offset: -3px;
+}
+
 .rrhh-tray__orden {
   display: inline-flex;
   align-items: center;

@@ -1,4 +1,5 @@
 /** @vitest-environment jsdom */
+import { useState } from 'react'
 import {
   cleanup,
   fireEvent,
@@ -224,6 +225,45 @@ function pagina(
   }
 }
 
+function FlujoBandejaDetalle({
+  port,
+}: {
+  readonly port: MockBandejaRequerimientosPort
+}) {
+  const [abierto, setAbierto] = useState<ResumenRequerimiento | null>(null)
+  const [restaurarFocoEn, setRestaurarFocoEn] = useState<
+    RequerimientoId | undefined
+  >()
+
+  if (abierto) {
+    return (
+      <div>
+        <p>Detalle de {String(abierto.id)}</p>
+        <button
+          type="button"
+          onClick={() => {
+            setRestaurarFocoEn(abierto.id)
+            setAbierto(null)
+          }}
+        >
+          Volver a bandeja
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <BandejaRequerimientos
+      port={port}
+      catalogos={catalogos}
+      solicitantes={[usuarioA, usuarioB]}
+      tamanoPaginaInicial={10}
+      onAbrirDetalle={(seleccion) => setAbierto(seleccion.requerimiento)}
+      restaurarFocoEn={restaurarFocoEn}
+    />
+  )
+}
+
 function renderBandeja(
   port: MockBandejaRequerimientosPort,
   opciones: {
@@ -279,6 +319,16 @@ describe('consulta inicial y filtros (RH-REQ-01 §7.1, §10-13)', () => {
         .getByRole('columnheader', { name: 'Fecha de creación' })
         .getAttribute('aria-sort'),
     ).toBe('descending')
+    expect(
+      screen
+        .getByRole('columnheader', { name: 'Motivo' })
+        .getAttribute('aria-sort'),
+    ).toBe('none')
+    expect(
+      screen
+        .getAllByRole('columnheader')
+        .every((columna) => columna.getAttribute('scope') === 'col'),
+    ).toBe(true)
   })
 
   it('envía todos los filtros y el periodo por fecha de aprobación', async () => {
@@ -298,6 +348,9 @@ describe('consulta inicial y filtros (RH-REQ-01 §7.1, §10-13)', () => {
     expect(screen.getByLabelText('Solicitante')).toBeDefined()
     expect(screen.getByLabelText('Aprobado desde')).toBeDefined()
     expect(screen.getByLabelText('Aprobado hasta')).toBeDefined()
+    expect(
+      screen.getByRole('group', { name: 'Periodo de aprobación' }),
+    ).toBeDefined()
 
     await user.selectOptions(screen.getByLabelText('Estado'), 'aprobado')
     await user.selectOptions(screen.getByLabelText('Motivo'), 'reemplazo')
@@ -772,7 +825,8 @@ describe('columnas y estados de la fila (RH-REQ-01 §7.1, §10-13 y §10-24)', (
 
     const tabla = within(screen.getByRole('table'))
     expect(tabla.getByText('Aprobado')).toBeDefined()
-    expect(tabla.getByText(/Alerta: Crítica/)).toBeDefined()
+    const alerta = tabla.getByText(/Alerta: Crítica/)
+    expect(alerta.querySelector('[aria-hidden="true"]')?.textContent).toBe('▲')
     expect(tabla.queryByText('Urgente')).toBeNull()
   })
 })
@@ -822,6 +876,9 @@ describe('estados de interfaz (RH-REQ-01 §8)', () => {
     expect(
       await screen.findByText('No hay requerimientos registrados.'),
     ).toBeDefined()
+    expect(screen.getByRole('status').textContent).toContain(
+      'No hay requerimientos registrados.',
+    )
 
     await user.selectOptions(screen.getByLabelText('Estado'), 'aprobado')
     await user.click(screen.getByRole('button', { name: 'Aplicar filtros' }))
@@ -831,6 +888,9 @@ describe('estados de interfaz (RH-REQ-01 §8)', () => {
         'No hay requerimientos que coincidan con los filtros.',
       ),
     ).toBeDefined()
+    expect(screen.getByRole('status').textContent).toContain(
+      'No hay requerimientos que coincidan con los filtros.',
+    )
   })
 
   it('muestra error recuperable y reintenta la misma consulta', async () => {
@@ -959,6 +1019,31 @@ describe('teclado y accesibilidad (RH-REQ-01 §8)', () => {
     ).toBe(true)
     expect(document.activeElement).toBe(
       screen.getByRole('button', { name: 'Página anterior' }),
+    )
+  })
+
+  it('anuncia el orden aplicado en una región en vivo', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    const user = userEvent.setup()
+    renderBandeja(port)
+    await screen.findByRole('table')
+
+    const anuncio = document.querySelector('[data-anuncio-orden]')
+    expect(anuncio).not.toBeNull()
+    expect(anuncio?.textContent).toBe('')
+
+    await user.click(screen.getByRole('button', { name: 'Ordenar por Motivo' }))
+    await waitFor(() => expect(port.calls).toHaveLength(2))
+    expect(anuncio?.textContent).toBe(
+      'Ordenado por Motivo en orden ascendente.',
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Ordenar por Motivo' }))
+    await waitFor(() => expect(port.calls).toHaveLength(3))
+    expect(anuncio?.textContent).toBe(
+      'Ordenado por Motivo en orden descendente.',
     )
   })
 })
@@ -1271,6 +1356,49 @@ describe('apertura de fila con contexto (RH-REQ-01 §7.1, §10-23)', () => {
     expect(fila.hasAttribute('aria-label')).toBe(false)
     expect(fila.hasAttribute('aria-keyshortcuts')).toBe(false)
     expect(fila.hasAttribute('data-requerimiento')).toBe(false)
+  })
+
+  it('devuelve el foco a la fila de origen al volver del detalle', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    const user = userEvent.setup()
+    render(<FlujoBandejaDetalle port={port} />)
+    await screen.findByRole('table')
+
+    const filaOrigen = within(screen.getByRole('table')).getAllByRole('row')[1]
+    filaOrigen.focus()
+    await user.keyboard('{Enter}')
+
+    expect(screen.getByText('Detalle de req-1')).toBeDefined()
+    await user.click(screen.getByRole('button', { name: 'Volver a bandeja' }))
+
+    const filaRestaurada = within(await screen.findByRole('table')).getAllByRole(
+      'row',
+    )[1]
+    expect(filaRestaurada.getAttribute('data-requerimiento')).toBe('req-1')
+    await waitFor(() => expect(document.activeElement).toBe(filaRestaurada))
+  })
+
+  it('devuelve el foco a la fila también cuando el detalle se abrió con el botón', async () => {
+    const port = createMockBandejaRequerimientos(
+      lecturaFixture.ok(pagina([filaCompleta()])),
+    )
+    const user = userEvent.setup()
+    render(<FlujoBandejaDetalle port={port} />)
+    await screen.findByRole('table')
+
+    await user.click(
+      screen.getByRole('button', { name: 'Detalle requerimiento req-1' }),
+    )
+    expect(screen.getByText('Detalle de req-1')).toBeDefined()
+
+    await user.click(screen.getByRole('button', { name: 'Volver a bandeja' }))
+
+    const filaRestaurada = within(await screen.findByRole('table')).getAllByRole(
+      'row',
+    )[1]
+    await waitFor(() => expect(document.activeElement).toBe(filaRestaurada))
   })
 })
 

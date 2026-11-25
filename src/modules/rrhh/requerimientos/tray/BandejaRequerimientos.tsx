@@ -14,6 +14,7 @@ import type {
   FiltrosBandeja,
   OrdenBandeja,
   PaginaRequerimientos,
+  RequerimientoId,
   ResumenRequerimiento,
   ResultadoConsultaBandeja,
   SubareaId,
@@ -106,8 +107,6 @@ function FilaRequerimiento({
 
   return (
     <tr
-      // El estilo de foco visible (`tr:focus-visible`) queda para la
-      // integración (T-CORE-09); aquí solo se garantiza el foco operable.
       tabIndex={interactiva ? 0 : undefined}
       aria-label={interactiva ? `Abrir requerimiento ${id}` : undefined}
       aria-keyshortcuts={interactiva ? 'Enter Space' : undefined}
@@ -192,6 +191,12 @@ export interface BandejaRequerimientosProps {
    * son interactivas ni anuncian una navegación inexistente.
    */
   readonly onAbrirDetalle?: (seleccion: SeleccionRequerimiento) => void
+  /**
+   * Fila que debe recibir el foco al volver del detalle. El consumidor guarda
+   * el `requerimiento.id` de la selección que abrió la vista y lo aporta al
+   * remontar la bandeja; se consume una vez por valor.
+   */
+  readonly restaurarFocoEn?: RequerimientoId
   /**
    * Acciones de bandeja y de fila. Sin consumidor no se muestran ni se anuncia
    * un destino inexistente. La visibilidad por capacidad la decide el backend:
@@ -436,11 +441,13 @@ export function BandejaRequerimientos({
   contextoInicial,
   onContextoCambia,
   onAbrirDetalle,
+  restaurarFocoEn,
   onNuevo,
   onEditar,
   onCancelar,
 }: BandejaRequerimientosProps) {
   const idBase = useId()
+  const [anuncio, setAnuncio] = useState('')
   const [filtros, setFiltros] = useState<EstadoFiltrosFormulario>(() =>
     formularioDesdeFiltros(contextoInicial?.filtros ?? {}),
   )
@@ -458,6 +465,7 @@ export function BandejaRequerimientos({
   const refHasta = useRef<HTMLInputElement>(null)
   /** El control accionado se desmonta durante la carga; se enfoca al volver. */
   const focoPendienteRef = useRef<DestinoFoco | null>(null)
+  const focoRestauradoRef = useRef<RequerimientoId | null>(null)
   const onContextoCambiaRef = useRef(onContextoCambia)
   useEffect(() => {
     onContextoCambiaRef.current = onContextoCambia
@@ -546,6 +554,27 @@ export function BandejaRequerimientos({
         ?.focus()
     }
   }, [resultado])
+
+  useEffect(() => {
+    if (restaurarFocoEn === undefined) return
+    if (resultado.status !== 'ok') return
+    if (focoRestauradoRef.current === restaurarFocoEn) return
+
+    const filas = seccionRef.current?.querySelectorAll<HTMLElement>(
+      'tr[data-requerimiento]',
+    )
+    const fila = filas
+      ? Array.from(filas).find(
+          (elemento) =>
+            elemento.getAttribute('data-requerimiento') ===
+            String(restaurarFocoEn),
+        )
+      : undefined
+    if (!fila) return
+
+    focoRestauradoRef.current = restaurarFocoEn
+    fila.focus()
+  }, [restaurarFocoEn, resultado])
 
   useEffect(
     () => () => {
@@ -638,10 +667,15 @@ export function BandejaRequerimientos({
   }
 
   const ordenarPor = (campo: CampoOrdenBandeja) => {
+    const orden = siguienteOrden(consulta.orden, campo)
+    const etiqueta =
+      COLUMNAS.find((columna) => columna.campo === campo)?.etiqueta ?? campo
+    const sentido = orden.direccion === 'asc' ? 'ascendente' : 'descendente'
+    setAnuncio(`Ordenado por ${etiqueta} en orden ${sentido}.`)
     focoPendienteRef.current = { tipo: 'orden', campo }
     setConsulta({
       ...consulta,
-      orden: siguienteOrden(consulta.orden, campo),
+      orden,
       paginacion: {
         pagina: 1,
         tamanoPagina: consulta.paginacion.tamanoPagina,
@@ -718,6 +752,14 @@ export function BandejaRequerimientos({
       aria-labelledby={idTitulo}
     >
       <h2 id={idTitulo}>Bandeja de requerimientos</h2>
+      <p
+        className="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        data-anuncio-orden
+      >
+        {anuncio}
+      </p>
 
       {resultado.status === 'ok' &&
       onNuevo &&

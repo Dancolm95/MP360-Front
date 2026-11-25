@@ -159,10 +159,17 @@
 }
 
 .rrhh-detail__item-valor {
+  margin: 0;
   font-size: 0.9375rem;
   font-weight: 600;
   color: #1c1c1c;
   overflow-wrap: anywhere;
+}
+
+.rrhh-detail__nota {
+  margin: 0.75rem 0 0;
+  color: #52606d;
+  font-size: 0.8125rem;
 }
 
 .rrhh-detail__badge-empresa {
@@ -190,7 +197,7 @@
 }
 
 .rrhh-detail__aviso {
-  margin: 0;
+  margin: 0.75rem 0 0;
   color: #808080;
   font-size: 0.8125rem;
 }
@@ -205,10 +212,6 @@
 
 .rrhh-detail__plazo {
   align-items: start;
-}
-
-.rrhh-detail__plazo .rrhh-detail__aviso {
-  grid-column: 1 / -1;
 }
 
 .rrhh-detail__toggle {
@@ -244,6 +247,12 @@
   border-bottom: 1px solid #efefef;
 }
 
+.rrhh-detail__historial-cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
 .rrhh-detail__historial-accion {
   font-weight: 600;
 }
@@ -251,6 +260,28 @@
 .rrhh-detail__historial-meta {
   color: #808080;
   font-size: 0.8125rem;
+}
+
+.rrhh-detail__historial-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+}
+
+.rrhh-detail__historial-dato {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.rrhh-detail__historial-dato dt {
+  color: #52606d;
+  font-weight: 600;
+}
+
+.rrhh-detail__historial-dato dd {
+  margin: 0;
 }
 
 @media (max-width: 900px) {
