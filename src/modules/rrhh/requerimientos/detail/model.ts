@@ -180,7 +180,7 @@ export const ETIQUETAS_RESUMEN: Readonly<Record<CampoResumen, string>> = {
   clasificacion: 'Clasificación',
   remuneracion: 'Remuneración mensual',
   ubicacion: 'Ubicación',
-  usuarioProximaTarea: 'Responsable de la próxima tarea',
+  usuarioProximaTarea: 'Responsable de aprobación',
   comentario: 'Comentario',
 }
 

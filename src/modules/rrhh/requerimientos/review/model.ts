@@ -113,7 +113,7 @@ export const ETIQUETAS_CAMPO_REVISION: Readonly<
   departamentoUbicacion: 'Departamento de ubicación',
   provincia: 'Provincia',
   distrito: 'Distrito',
-  usuarioProximaTarea: 'Responsable de la próxima tarea',
+  usuarioProximaTarea: 'Responsable de aprobación',
   comentario: 'Comentario',
   duracionAplicable: 'Duración aplicable',
 }
@@ -133,7 +133,7 @@ export const ETIQUETAS_ERROR_CAMPO: Readonly<
   departamentoUbicacionId: 'Departamento de ubicación',
   provinciaId: 'Provincia',
   distritoId: 'Distrito',
-  usuarioProximaTareaId: 'Responsable de la próxima tarea',
+  usuarioProximaTareaId: 'Responsable de aprobación',
   comentario: 'Comentario',
 }
 

@@ -385,7 +385,7 @@ describe('revisión: instantánea de datos', () => {
     })
     expect(
       revision.errores.map((error) => error.etiqueta),
-    ).toContain('Responsable de la próxima tarea')
+    ).toContain('Responsable de aprobación')
     expect(revision.errores.map((error) => error.etiqueta)).toContain(
       'Remuneración mensual',
     )

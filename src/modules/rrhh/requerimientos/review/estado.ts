@@ -190,7 +190,7 @@ const ETIQUETAS_CAMPO_OPERACION: Readonly<Record<CampoRequerimiento, string>> = 
   vacantes: 'Vacantes',
   remuneracion: 'Remuneración mensual',
   ubicacion: 'Ubicación',
-  'usuario-proxima-tarea': 'Responsable de la próxima tarea',
+  'usuario-proxima-tarea': 'Responsable de aprobación',
   comentario: 'Comentario',
   'plazo-administrativo': 'Plazo administrativo',
   general: 'General',

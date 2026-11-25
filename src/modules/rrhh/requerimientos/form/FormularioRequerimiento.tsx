@@ -285,7 +285,7 @@ export function FormularioRequerimiento({
 
           <div className="rrhh-form__campo">
             <EtiquetaObligatoria htmlFor={id('usuario')}>
-              Usuario de próxima tarea
+              Responsable de aprobación
             </EtiquetaObligatoria>
             <select
               id={id('usuario')}

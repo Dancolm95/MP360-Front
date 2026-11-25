@@ -183,7 +183,7 @@ describe('formulario UX-03: campos y jerarquías (RH-REQ-01 §7.2)', () => {
       'Empresa',
       'Cantidad de vacantes',
       'Remuneración mensual (PEN)',
-      'Usuario de próxima tarea',
+      'Responsable de aprobación',
       'Departamento',
       'Área',
       'Subárea',
@@ -196,7 +196,7 @@ describe('formulario UX-03: campos y jerarquías (RH-REQ-01 §7.2)', () => {
       expect(screen.getByLabelText(etiqueta)).toBeDefined()
     }
 
-    expect(valorDe('Usuario de próxima tarea')).toBe(String(usuarioA.id))
+    expect(valorDe('Responsable de aprobación')).toBe(String(usuarioA.id))
     expect(screen.queryByLabelText('Colaborador a reemplazar')).toBeNull()
   })
 
@@ -208,7 +208,7 @@ describe('formulario UX-03: campos y jerarquías (RH-REQ-01 §7.2)', () => {
       'Empresa',
       'Cantidad de vacantes',
       'Remuneración mensual (PEN)',
-      'Usuario de próxima tarea',
+      'Responsable de aprobación',
       'Departamento',
       'Área',
       'Puesto',
@@ -487,7 +487,7 @@ describe('formulario UX-03: estados y accesibilidad', () => {
     expect(
       (screen.getByLabelText('Empresa') as HTMLSelectElement).options,
     ).toHaveLength(1)
-    expect(valorDe('Usuario de próxima tarea')).toBe('')
+    expect(valorDe('Responsable de aprobación')).toBe('')
     expect((screen.getByLabelText('Área') as HTMLSelectElement).disabled).toBe(true)
     expect(screen.queryByLabelText('Colaborador a reemplazar')).toBeNull()
   })
